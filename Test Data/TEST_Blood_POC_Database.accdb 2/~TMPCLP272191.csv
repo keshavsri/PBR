@@ -1,0 +1,98 @@
+Species,Strain,DateTest,AgePeriod,ProductionType,Gender,AgeNum,Source,Healthy,Comments,Bird_ID
+turkey,not recorded,Fri Aug 20 00:00:00 EDT 2021,D,meet,female,8,TAU,true,,141
+turkey,not recorded,Fri Aug 20 00:00:00 EDT 2021,D,meet,female,8,TAU,true,,142
+turkey,not recorded,Fri Aug 20 00:00:00 EDT 2021,D,meet,female,8,TAU,true,,143
+turkey,not recorded,Fri Aug 20 00:00:00 EDT 2021,D,meet,female,8,TAU,true,,144
+turkey,not reported,Tue Aug 17 00:00:00 EDT 2021,d,meat,female,5,TAU,true,,95
+turkey,not reported,Tue Aug 17 00:00:00 EDT 2021,d,meat,female,5,TAU,true,,96
+turkey,not reported,Tue Aug 17 00:00:00 EDT 2021,d,meat,female,5,TAU,true,,97
+turkey,not reported,Tue Aug 17 00:00:00 EDT 2021,d,meat,female,5,TAU,true,,98
+turkey,not reported,Tue Aug 17 00:00:00 EDT 2021,d,meat,female,5,TAU,true,,99
+turkey,not reported,Tue Aug 17 00:00:00 EDT 2021,d,meat,female,5,TAU,true,,100
+turkey,not reported,Tue Aug 17 00:00:00 EDT 2021,d,meat,female,5,TAU,true,,101
+turkey,not reported,Tue Aug 17 00:00:00 EDT 2021,d,meat,female,5,TAU,false,downer,102
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",103
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",104
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",105
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",106
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",107
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",108
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",109
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",110
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",111
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",112
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",113
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",114
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",115
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",116
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",117
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",118
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",119
+turkey,not reported,Wed Aug 18 00:00:00 EDT 2021,d,meat,female,6,TAU,true,"hot, panting",120
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",121
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",122
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",123
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",124
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",125
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",126
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",127
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",128
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",129
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",130
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",131
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",132
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",133
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",134
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",135
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",136
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",137
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",138
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",139
+turkey,not reported,Thu Aug 19 00:00:00 EDT 2021,d,meat,female,7,TAU,true,"hot, panting",140
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,2
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,3
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,4
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,5
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,6
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,7
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,8
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,9
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,10
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,11
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,12
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,13
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,14
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,15
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,16
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,17
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,18
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,19
+turkey,not reported,Fri Aug 13 00:00:00 EDT 2021,d,meat,female,1,TAU,true,,20
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,21
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,22
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,23
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,24
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,25
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,26
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,27
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,28
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,29
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,30
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,31
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,32
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,33
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,34
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,35
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,36
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,37
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,38
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,39
+turkey,not reported,Sat Aug 14 00:00:00 EDT 2021,d,meat,female,2,TAU,true,,40
+turkey,not reported,Sun Aug 15 00:00:00 EDT 2021,d,meat,female,3,TAU,true,,41
+turkey,not reported,Sun Aug 15 00:00:00 EDT 2021,d,meat,female,3,TAU,true,,42
+turkey,not reported,Sun Aug 15 00:00:00 EDT 2021,d,meat,female,3,TAU,true,,43
+turkey,not reported,Sun Aug 15 00:00:00 EDT 2021,d,meat,female,3,TAU,true,,44
+turkey,not reported,Sun Aug 15 00:00:00 EDT 2021,d,meat,female,3,TAU,true,,45
+turkey,not reported,Sun Aug 15 00:00:00 EDT 2021,d,meat,female,3,TAU,true,,46
+turkey,not reported,Sun Aug 15 00:00:00 EDT 2021,d,meat,female,3,TAU,true,,47
+turkey,not reported,Sun Aug 15 00
