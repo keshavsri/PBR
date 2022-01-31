@@ -1,27 +1,24 @@
 from flask import Flask
-from flask_restx import Api, Resource, fields
+from flask_restx import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
 import os
+from api import api
 
 load_dotenv(find_dotenv())
 
 app = Flask(__name__)
-api = Api(app,
-    version="1.0",
-    title="PBR API",
-    description="API for the PBR Application",
-)
+api.init_app(app)
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 
 db = SQLAlchemy(app)
 
-
-app.run(
-    host= os.environ.get("SERVER_NAME"),
-    debug= os.environ.get("DEBUG_MODE"),
-    port = os.environ.get("BACKEND_PORT")
-)
+if __name__ == '__main__':
+    app.run(
+        host= os.environ.get("SERVER_NAME"),
+        debug= os.environ.get("DEBUG_MODE"),
+        port = os.environ.get("BACKEND_PORT")
+    )
+    
