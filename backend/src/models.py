@@ -1,18 +1,5 @@
-from flask import Flask, render_template
-from flask_wtf import FlaskForm
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from server import db
 
-# Create a Flask Instance
-app = Flask(__name__)
-# Add Database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-# Secret Key
-app.config['SECRET_KEY'] = "my secret key"
-# Initialize the Database
-db = SQLAlchemy(app)
-
-# Create Models
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), nullable=False, unique=True)
