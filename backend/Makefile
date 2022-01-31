@@ -7,6 +7,14 @@ REQUIREMENTS ?= requirements.txt
 
 all: help
 
+.PHONY: source-gb
+source-windows: ## Runs the server (Windows GitBash)
+	source env/Scripts/activate
+
+.PHONY: source
+source: ## Runs the server
+	source env/bin/activate
+
 .PHONY: run
 run: ## Runs the server
 	python src/server.py
