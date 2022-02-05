@@ -1,0 +1,18 @@
+body {
+    height: 100%;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+}
+body{
+    background-image: "../images/CVM-Building.jpeg";
+    background-position: "center";
+    background-size: "cover";
+    background-repeat: "no-repeat";
+    height: 100%;
+    position: absolute;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+}
