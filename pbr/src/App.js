@@ -1,28 +1,40 @@
-import React, { useState, createContext, useContext } from "react";
+import React, { useContext } from "react";
+import { ThemeProvider } from "@mui/material";
+
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { useRoutes } from "react-router-dom";
+import routes from "./routes";
+
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import GlobalStyles from "./layouts/GlobalStyles";
 import Login from "./components/Login";
-import DataView from "./components/DataView";
+import { themes } from "./theme";
 
-// defaultState = {
-//   loggedInUser: null,
-// };
+const defaultState = {
+  loggedInUser: null,
+};
 
-const AuthContext = React.createContext();
+const AppContext = React.createContext(defaultState);
 
 function App() {
+  const routing = useRoutes(routes);
+  const context = useContext(AppContext);
+  context.loggedInUser = null;
+  console.log(themes);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/data-view" element={<Login />} />
-        <Route path="/generate-reports" element={<Login />} />
-        <Route path="/manage-users" element={<Login />} />
-        <Route path="/manage-organization" element={<Login />} />
-        <Route path="/settings" element={<Login />} />
-      </Routes>
+      <AppContext.Provider
+        value={{
+          loggedInUser: context.partner,
+        }}
+      >
+        <ThemeProvider theme={themes.mainTheme}>
+          <GlobalStyles />
+          {routing}
+        </ThemeProvider>
+      </AppContext.Provider>
     </LocalizationProvider>
   );
 }
