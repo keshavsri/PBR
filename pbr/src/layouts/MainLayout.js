@@ -1,12 +1,18 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import { makeStyles, createStyles } from "@mui/styles";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { AppContext } from "../App";
 
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
 import {
   Box,
   Toolbar,
+  Tooltip,
+  Avatar,
+  Menu,
+  MenuItem,
   List,
   CssBaseline,
   Typography,
@@ -24,7 +30,6 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDatabase } from "@fortawesome/free-solid-svg-icons";
-import DataViewIcon from "@mui/icons-material/Toc";
 import ReportsIcon from "@mui/icons-material/Assessment";
 
 import UsersIcon from "@mui/icons-material/Group";
@@ -109,6 +114,9 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
+  "& .MuiButtonBase-root": {
+    borderRadius: "0px !important",
+  },
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
@@ -158,8 +166,20 @@ const Drawer = styled(MuiDrawer, {
 export default function MainLayout() {
   const theme = useTheme();
   const classes = useStyles();
+  const navigate = useNavigate();
+  const context = useContext(AppContext);
   const [open, setOpen] = React.useState(true);
   const [currentPage, setCurrentPage] = React.useState(pageData[0][0]);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+  const handleLogout = () => {
+    context.authenticated = false;
+    context.loggedInUser = {
+      firstname: "",
+      lastname: "",
+    };
+    navigate("/login");
+  };
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -167,6 +187,14 @@ export default function MainLayout() {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
   return (
@@ -195,6 +223,36 @@ export default function MainLayout() {
           >
             {currentPage.title}
           </Typography>
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar
+                  alt={`${context.loggedInUser.firstname} ${context.loggedInUser.lastname}`}
+                  src="/static/images/avatar/2.jpg"
+                />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: "45px" }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              <MenuItem onClick={handleLogout}>
+                <Typography textAlign="center">Logout</Typography>
+              </MenuItem>
+            </Menu>
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open} sx={{ backgroundColor: "grey" }}>
@@ -232,28 +290,21 @@ export default function MainLayout() {
         <Divider />
         {pageData.map((section, index) => {
           return (
-            <>
-              <List key={index}>
+            <Box key={index}>
+              <List>
                 {section.map((page, pageIndex) => {
                   return (
-                    <ListItem
-                      button
-                      key={page.path}
-                      // style={{
-                      //   selected:
-                      //     this.state.driverDetails.firstName != undefined
-                      //       ? "visible"
-                      //       : "hidden",
-                      // }}
-                    >
-                      <ListItemIcon>{page.icon}</ListItemIcon>
-                      <ListItemText primary={page.title} />
-                    </ListItem>
+                    <Link key={page.path} to={`/${page.path}`}>
+                      <ListItem button>
+                        <ListItemIcon>{page.icon}</ListItemIcon>
+                        <ListItemText primary={page.title} />
+                      </ListItem>
+                    </Link>
                   );
                 })}
               </List>
               {index != pageData.length - 1 && <Divider />}
-            </>
+            </Box>
           );
         })}
       </Drawer>

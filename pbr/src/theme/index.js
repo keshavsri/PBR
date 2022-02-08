@@ -15,7 +15,7 @@ let mainTheme = createTheme({
     MuiButtonBase: {
       styleOverrides: {
         root: {
-          borderRadius: "333px !important",
+          borderRadius: "333px",
           height: "42px",
         },
       },
