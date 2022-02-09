@@ -1,26 +1,7 @@
-from flask import request, jsonify, Blueprint
+from flask import Blueprint
 
 
 sourceBlueprint = Blueprint('source', __name__)
-
-SOURCES = [
-    {
-        "id": "1",
-        'name': 'CVM',
-        'street_address': '123 Main St',
-        'city': 'Raleigh',
-        'state': 'NC',
-        'zip': '27606'
-    },
-    {
-        'id': '2',
-        'name': 'CVM Alternative',
-        'street_address': '123 Main St',
-        'city': 'Raleigh',
-        'state': 'NC',
-        'zip': '27606'
-    }
-] 
 
 @sourceBlueprint.route('/<int:item_id>', methods=['GET', 'PUT', 'DELETE', 'POST'])
 @sourceBlueprint.route('/', methods=['GET', 'POST'])

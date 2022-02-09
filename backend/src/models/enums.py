@@ -55,6 +55,7 @@ class States (Enum):
     WY = 'Wyoming'
 
 class Roles(Enum):
+    Super_Admin = 0
     Admin = 1
     Supervisor = 2
     Data_Collector = 3
