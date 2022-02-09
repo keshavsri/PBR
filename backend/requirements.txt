@@ -8,6 +8,7 @@ connexion==2.10.0
 Flask==2.0.2
 flask-restx==0.5.1
 Flask-SQLAlchemy==2.5.1
+flask-serialize==2.0.3
 greenlet==1.1.2
 idna==3.3
 inflection==0.5.1

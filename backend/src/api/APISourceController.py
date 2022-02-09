@@ -1,59 +1,54 @@
-from flask_restx import Namespace, Resource, fields
+from flask import request, jsonify, Blueprint
 
 
-ns = Namespace("sources", description="Source-related operations")
-
-# Document API for Swagger
-source = ns.model(
-  "source",
-  {
-    "id": fields.Integer(required=True, description="The Source's identifier"),
-    "name": fields.String(required=True, description="The Source's name"),
-    "street_address": fields.String(required=True, description="The Source's street address"),
-    "city": fields.String(required=True, description="The Source's city"),
-    "state": fields.String(required=True, description="The Source's state"),
-    "zip": fields.String(required=True, description="The Source's zip"),
-  }
-)
+sourceBlueprint = Blueprint('source', __name__)
 
 SOURCES = [
-  {
-    "id": "1",
-    'name': 'CVM',
-    'street_address': '123 Main St',
-    'city': 'Raleigh',
-    'state': 'NC',
-    'zip': '27606'
-  },
-  {
-    'id': '2',
-    'name': 'CVM Alternative',
-    'street_address': '123 Main St',
-    'city': 'Raleigh',
-    'state': 'NC',
-    'zip': '27606'
-  }
+    {
+        "id": "1",
+        'name': 'CVM',
+        'street_address': '123 Main St',
+        'city': 'Raleigh',
+        'state': 'NC',
+        'zip': '27606'
+    },
+    {
+        'id': '2',
+        'name': 'CVM Alternative',
+        'street_address': '123 Main St',
+        'city': 'Raleigh',
+        'state': 'NC',
+        'zip': '27606'
+    }
 ]
 
+# @sourceBlueprint.route('/', methods=['GET', 'POST'])
+# def sources(sourceJSON=None):
+#   from models.source import Source
+#   if request.method == 'GET':
+#     return Source.fs_get_delete_put_post()
+#   elif request.method == 'POST':
+#     from server import db
+#     sourceJSON = request.get_json()
+#     newSource = Source(sourceJSON.get('name'), sourceJSON.get('street_address'), sourceJSON.get('city'), sourceJSON.get('state'), sourceJSON.get('zip'))
+#     # TODO: check if source already exists in db before adding
+#     db.session.add(newSource)
+#     db.session.commit()
+#     return 'Success', 201
 
-@ns.route("/", methods=['GET', 'POST'])
-class SourceList(Resource):
-  @ns.doc("list_sources")
-  def get(self):
-    return SOURCES
+# @sourceBlueprint.route('/<id>', methods=['GET', 'DELETE', 'PUT'])
+# def getSource(id):
+#   from models.source import Source
+#   if request.method == 'GET':
+#     return Source.fs_get_delete_put_post(id)
+#   elif request.method == 'DELETE':
+#     return Source.fs_get_delete_put_post(id)
+#   elif request.method == 'PUT':
+#     return Source.fs_get_delete_put_post(id)
   
-  @ns.doc("create_source")
-  @ns.expect(source)
-  def post(self):
-    return 'not implemented'
 
-@ns.route("/<id>")
-@ns.param("id", "The source's identifier")
-@ns.response(404, "Source not found")
-class Source(Resource):
-  @ns.doc("get_source")
-  def get(self, id):
-    for source in SOURCES:
-      if source['id'] == id:
-        return source
-    ns.abort(404)
+@sourceBlueprint.route('/<int:item_id>', methods=['GET', 'PUT', 'DELETE', 'POST'])
+@sourceBlueprint.route('/', methods=['GET', 'POST'])
+def route_setting_all(item_id=None):
+    from models.source import Source
+    return Source.fs_get_delete_put_post(item_id)
