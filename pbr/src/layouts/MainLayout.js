@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import { makeStyles, createStyles } from "@mui/styles";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
 import { AppContext } from "../App";
 
 import MuiDrawer from "@mui/material/Drawer";
@@ -80,7 +80,13 @@ const pageData = [
   ],
 ];
 
-const useStyles = makeStyles((theme) => createStyles({}));
+const useStyles = makeStyles((theme) =>
+  createStyles({
+    "navbar-active": {
+      backgroundColor: "red !IMPORTANT",
+    },
+  })
+);
 const openedMixin = (theme) => ({
   width: drawerWidth,
   transition: theme.transitions.create("width", {
@@ -106,6 +112,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "flex-end",
+  transition: "all .6s",
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
@@ -150,6 +157,9 @@ const Drawer = styled(MuiDrawer, {
   "& svg": {
     color: "rgba(255,255,255,0.8)",
   },
+  a: {
+    color: "rgba(255,255,255,0.8)",
+  },
   "& MuiDivider-root": {
     borderBottomColor: "red !IMPORTANT",
   },
@@ -173,11 +183,9 @@ export default function MainLayout() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const handleLogout = () => {
-    context.authenticated = false;
-    context.loggedInUser = {
-      firstname: "",
-      lastname: "",
-    };
+    context.setAuthenticated(false);
+    context.setUser(null);
+
     navigate("/login");
   };
 
@@ -219,40 +227,51 @@ export default function MainLayout() {
             variant="h5"
             noWrap
             component="div"
-            sx={{ fontWeight: 700, ml: 1, fontFamily: "UniversCondensed" }}
+            sx={{
+              fontWeight: 700,
+              ml: 1,
+              fontFamily: "UniversCondensed",
+              flexGrow: 1,
+            }}
           >
             {currentPage.title}
           </Typography>
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar
-                  alt={`${context.loggedInUser.firstname} ${context.loggedInUser.lastname}`}
-                  src="/static/images/avatar/2.jpg"
-                />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              <MenuItem onClick={handleLogout}>
-                <Typography textAlign="center">Logout</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
+          {true && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    alt={
+                      context.user
+                        ? `${context.user.firstname} ${context.user.lastname}`
+                        : ""
+                    }
+                    src="/static/images/avatar/2.jpg"
+                  />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem onClick={handleLogout}>
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open} sx={{ backgroundColor: "grey" }}>
@@ -294,12 +313,18 @@ export default function MainLayout() {
               <List>
                 {section.map((page, pageIndex) => {
                   return (
-                    <Link key={page.path} to={`/${page.path}`}>
+                    <NavLink
+                      key={page.path}
+                      to={`/${page.path}`}
+                      className={({ isActive }) =>
+                        isActive ? "navbar-active" : ""
+                      }
+                    >
                       <ListItem button>
                         <ListItemIcon>{page.icon}</ListItemIcon>
                         <ListItemText primary={page.title} />
                       </ListItem>
-                    </Link>
+                    </NavLink>
                   );
                 })}
               </List>

@@ -48,7 +48,7 @@ const routes = [
     element: <MainLayout />,
   },
   {
-    path: "/manage-organiztion",
+    path: "/manage-organization",
     element: <MainLayout />,
   },
   {

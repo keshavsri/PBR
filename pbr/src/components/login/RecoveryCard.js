@@ -104,7 +104,6 @@ export default function RecoveryCard() {
           maxWidth: "sm",
           textAlign: "center",
           padding: 5,
-          maxHeight: "100vh",
           overflow: "scroll",
         }}
       >

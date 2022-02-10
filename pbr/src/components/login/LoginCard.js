@@ -63,11 +63,8 @@ export default function LoginCard() {
   const [loginErrorToggle, setLoginErrorToggle] = React.useState(false);
 
   const authenticate = () => {
-    context.authenticated = true;
-    context.loggedInUser = {
-      firstname: "Aaron",
-      lastname: "Penny",
-    };
+    context.setAuthenticated(true);
+    context.setUser(null);
   };
 
   const submitLogin = () => {
@@ -93,7 +90,7 @@ export default function LoginCard() {
     //     setSnackbar(true);
     //   }
     // });
-    if (values.email === "arpenny@ncsu.edu" && values.password === "123") {
+    if (values.email.toLowerCase() === "123@a.a" && values.password === "123") {
       authenticate();
       navigate("/data-view");
     } else {
@@ -174,7 +171,6 @@ export default function LoginCard() {
           maxWidth: "sm",
           textAlign: "center",
           padding: 5,
-          maxHeight: "100vh",
           overflow: "scroll",
         }}
       >

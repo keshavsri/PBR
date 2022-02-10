@@ -165,7 +165,6 @@ export default function RegisterCard() {
           maxWidth: "sm",
           textAlign: "center",
           padding: 5,
-          maxHeight: "100vh",
           overflow: "scroll",
         }}
       >

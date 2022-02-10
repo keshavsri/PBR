@@ -12,13 +12,10 @@ const useStyles = makeStyles((theme) =>
         fontFamily: '"Open-Sans", "Helvetica", "Arial", sans-serif',
         "-webkit-font-smoothing": "antialiased",
         "-moz-osx-font-smoothing": "grayscale",
-        height: "100%",
-        width: "100%",
       },
       body: {
         backgroundColor: "rgb(45, 45, 45)",
-        height: "100%",
-        width: "100%",
+        minHeight: "-webkit-fill-available",
       },
       a: {
         color: theme.palette.primary.main,
@@ -27,10 +24,10 @@ const useStyles = makeStyles((theme) =>
         },
         textDecoration: "none",
       },
-      "#root": {
-        height: "100%",
-        width: "100%",
-      },
+      // "#root": {
+      //   height: "100%",
+      //   width: "100%",
+      // },
     },
   })
 );

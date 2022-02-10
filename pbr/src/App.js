@@ -10,21 +10,11 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import GlobalStyles from "./layouts/GlobalStyles";
 import { themes } from "./theme";
-
-const defaultState = {
-  authenticated: false,
-  loggedInUser: {
-    firstname: "",
-    lastname: "",
-  },
-};
-
-const AppContext = React.createContext(defaultState);
+import { AppContextProvider, AppContext } from "./AppContextManagement";
 
 function App() {
   const routing = useRoutes(routes);
   const context = useContext(AppContext);
-  console.log("Context", context);
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -35,16 +25,12 @@ function App() {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <AppContext.Provider
-        value={{
-          loggedInUser: context.loggedInUser,
-        }}
-      >
+      <AppContextProvider>
         <ThemeProvider theme={themes.mainTheme}>
           <GlobalStyles />
           {routing}
         </ThemeProvider>
-      </AppContext.Provider>
+      </AppContextProvider>
     </LocalizationProvider>
   );
 }

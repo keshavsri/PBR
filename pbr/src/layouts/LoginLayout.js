@@ -7,7 +7,7 @@ import backgroundImage from "../images/CVM-Building.jpeg";
 
 const useStyles = (theme) => ({
   loginBackdrop: {
-    backgroundImage: `url("${backgroundImage}")`,
+    backgroundImage: `url("${backgroundImage}") !important`,
     backgroundPosition: "center",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
@@ -27,6 +27,12 @@ const useStyles = (theme) => ({
     textAlign: "center",
     width: "100%",
   },
+  loginGrid: {
+    overflow: "scroll",
+    [theme.breakpoints.down("sm")]: {
+      overflow: "inherit",
+    },
+  },
 });
 
 class LoginBackdrop extends Component {
@@ -40,8 +46,9 @@ class LoginBackdrop extends Component {
           container
           direction="row"
           justifyContent="center"
+          className={classes.loginGrid}
           alignItems="center"
-          sx={{ height: "100%" }}
+          sx={{ height: "100vh" }}
         >
           <Grow in={true}>
             <Box>{this.props.children}</Box>
