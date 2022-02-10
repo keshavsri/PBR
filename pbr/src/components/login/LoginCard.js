@@ -90,7 +90,10 @@ export default function LoginCard() {
     //     setSnackbar(true);
     //   }
     // });
-    if (values.email.toLowerCase() === "123@a.a" && values.password === "123") {
+    if (
+      values.email.toLowerCase() === "arpenny@ncsu.edu" &&
+      values.password === "123"
+    ) {
       authenticate();
       navigate("/data-view");
     } else {
