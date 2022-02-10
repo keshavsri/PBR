@@ -1,5 +1,6 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Redirect, Navigate } from "react-router-dom";
+import useAuth from "./useAuth";
 
 import MainLayout from "./layouts/MainLayout";
 import DataView from "./layouts/LoginLayout";
@@ -9,6 +10,13 @@ import Error404 from "./layouts/404Error";
 import LoginCard from "./components/login/LoginCard";
 import RegisterCard from "./components/login/RegisterCard";
 import RecoveryCard from "./components/login/RecoveryCard";
+
+function RequireAuth({ children }) {
+  const { authenticated } = useAuth();
+  console.log("Authed?", authenticated);
+
+  return authenticated === true ? children : <Navigate to="/login" replace />;
+}
 
 const routes = [
   {
@@ -37,26 +45,54 @@ const routes = [
   },
   {
     path: "/data-view",
-    element: <MainLayout card={<DataView />} />,
+    element: (
+      <RequireAuth>
+        <MainLayout card={<DataView />} />
+      </RequireAuth>
+    ),
   },
   {
     path: "/generate-reports",
-    element: <MainLayout view={<DataView />} />,
+    element: (
+      <RequireAuth>
+        <MainLayout view={<DataView />} />
+      </RequireAuth>
+    ),
   },
   {
     path: "/manage-users",
-    element: <MainLayout />,
+    element: (
+      <RequireAuth>
+        <MainLayout />
+      </RequireAuth>
+    ),
   },
   {
     path: "/manage-organization",
-    element: <MainLayout />,
+    element: (
+      <RequireAuth>
+        <MainLayout />
+      </RequireAuth>
+    ),
   },
   {
     path: "/settings",
-    element: <MainLayout />,
+    element: (
+      <RequireAuth>
+        <MainLayout />
+      </RequireAuth>
+    ),
   },
   {
-    path: "*",
+    path: "/",
+    element: (
+      <RequireAuth>
+        <MainLayout card={<DataView />} />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/*",
     element: <Error404 />,
   },
 ];

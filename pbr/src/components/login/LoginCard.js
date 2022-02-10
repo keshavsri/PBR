@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import LoginIcon from "@mui/icons-material/Login";
 import { makeStyles, createStyles } from "@mui/styles";
 import { Link, useNavigate } from "react-router-dom";
-import { AppContext } from "../../App";
+import useAuth from "../../useAuth";
 
 import {
   Grid,
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) =>
 export default function LoginCard() {
   const classes = useStyles();
   const navigate = useNavigate();
-  const context = useContext(AppContext);
+  const { login, authenticated, user } = useAuth();
 
   const [values, setValues] = React.useState({
     email: "",
@@ -62,45 +62,24 @@ export default function LoginCard() {
   const [loginErrorMessage, setLoginErrorMessage] = React.useState("Error.");
   const [loginErrorToggle, setLoginErrorToggle] = React.useState(false);
 
-  const authenticate = () => {
-    context.setAuthenticated(true);
-    context.setUser(null);
-  };
-
   const submitLogin = () => {
-    // fetch("/api/login", {
-    //   method: "POST",
-    //   headers: {
-    //     Accept: "application/json",
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     username: username,
-    //     password: password,
-    //   }),
-    // }).then((response) => {
-    //   if (response.status == 400) {
-    //     setSnackbarMessage("Incorrect login credentials!");
-    //     setSnackbar(true);
-    //   } else if (response.status == 200) {
-    //     authenticate();
-    //     history.push("/dashboard");
-    //   } else {
-    //     setSnackbarMessage("Server Error! Please reload the page.");
-    //     setSnackbar(true);
-    //   }
-    // });
     if (
       values.email.toLowerCase() === "arpenny@ncsu.edu" &&
       values.password === "123"
     ) {
-      authenticate();
-      navigate("/data-view");
+      login().then(() => {
+        navigate("/data-view");
+      });
     } else {
       setLoginErrorMessage("Your Email or Password are Incorrect!");
       setLoginErrorToggle(true);
-      context.authenticated = false;
     }
+  };
+
+  const bypassAuth = () => {
+    login().then(() => {
+      navigate("/data-view");
+    });
   };
 
   const handleChange = (prop) => (event) => {
@@ -267,6 +246,18 @@ export default function LoginCard() {
               variant="contained"
             >
               Login
+            </LoadingButton>
+            <LoadingButton
+              onClick={bypassAuth}
+              endIcon={<LoginIcon />}
+              loading={loading}
+              fullWidth={true}
+              sx={{ mt: 2 }}
+              loadingPosition="end"
+              variant="contained"
+              color="warning"
+            >
+              Bypass Login (Dev)
             </LoadingButton>
           </Grid>
         </Box>

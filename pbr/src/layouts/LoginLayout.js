@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import { withStyles } from "@mui/styles";
-import { Outlet } from "react-router-dom";
-
 import { Grid, Box, Grow } from "@mui/material";
 import backgroundImage from "../images/CVM-Building.jpeg";
 

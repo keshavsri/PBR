@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { useNavigate } from "react-router-dom";
 import { makeStyles, createStyles } from "@mui/styles";
+import useAuth from "../useAuth";
 
 import image1 from "../images/404images/birds.jpg";
 import image2 from "../images/404images/cows.jpg";
@@ -119,6 +120,7 @@ const useStyles = makeStyles((theme) =>
 
 export default function Error404() {
   const classes = useStyles();
+  const { authenticated } = useAuth();
 
   const navigate = useNavigate();
   return (
@@ -154,18 +156,34 @@ export default function Error404() {
                 Page Not Found
               </Typography>
             </Box>
-            <Fab
-              className={classes.returnButton}
-              variant="extended"
-              color="primary"
-              aria-label="Return"
-              onClick={() => {
-                navigate(-1);
-              }}
-            >
-              <ArrowBackIcon sx={{ mr: 1 }} />
-              Return to Previous Page
-            </Fab>
+            {authenticated && (
+              <Fab
+                className={classes.returnButton}
+                variant="extended"
+                color="primary"
+                aria-label="Return"
+                onClick={() => {
+                  navigate(-1);
+                }}
+              >
+                <ArrowBackIcon sx={{ mr: 1 }} />
+                Return to Previous Page
+              </Fab>
+            )}
+            {!authenticated && (
+              <Fab
+                className={classes.returnButton}
+                variant="extended"
+                color="primary"
+                aria-label="Return"
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
+                <ArrowBackIcon sx={{ mr: 1 }} />
+                Go to Login Screen
+              </Fab>
+            )}
             <img className={classes.egg} src={egg} />
           </Grid>
         </Grow>

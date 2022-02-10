@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import { makeStyles, createStyles } from "@mui/styles";
-import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
-import { AppContext } from "../App";
+import { NavLink, useNavigate } from "react-router-dom";
+import useAuth from "../useAuth";
 
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -36,8 +36,6 @@ import UsersIcon from "@mui/icons-material/Group";
 import OrganizationIcon from "@mui/icons-material/Apartment";
 
 import SettingsIcon from "@mui/icons-material/Settings";
-
-import NCSULogo from "../images/NCSU Logo.png";
 
 const drawerWidth = 250;
 
@@ -83,7 +81,10 @@ const pageData = [
 const useStyles = makeStyles((theme) =>
   createStyles({
     "navbar-active": {
-      backgroundColor: "red !IMPORTANT",
+      backgroundColor: "red",
+    },
+    "MuiMenuItem-root": {
+      borderRadius: "0px",
     },
   })
 );
@@ -160,6 +161,14 @@ const Drawer = styled(MuiDrawer, {
   a: {
     color: "rgba(255,255,255,0.8)",
   },
+  "& .MuiListItemText-primary": {
+    color: "rgb(255, 255, 255)",
+    fontWeight: "500",
+  },
+  "& .MuiListItemText-secondary": {
+    color: "rgba(255, 255, 255, 0.7)",
+    fontFamily: "UniversCondensed",
+  },
   "& MuiDivider-root": {
     borderBottomColor: "red !IMPORTANT",
   },
@@ -177,16 +186,14 @@ export default function MainLayout() {
   const theme = useTheme();
   const classes = useStyles();
   const navigate = useNavigate();
-  const context = useContext(AppContext);
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(pageData[0][0]);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const { authenticated, user, logout } = useAuth();
 
   const handleLogout = () => {
-    context.setAuthenticated(false);
-    context.setUser(null);
-
-    navigate("/login");
+    logout();
+    navigate("/");
   };
 
   const handleDrawerOpen = () => {
@@ -198,6 +205,7 @@ export default function MainLayout() {
   };
 
   const handleOpenUserMenu = (event) => {
+    console.log(event.currentTarget);
     setAnchorElUser(event.currentTarget);
   };
 
@@ -236,41 +244,6 @@ export default function MainLayout() {
           >
             {currentPage.title}
           </Typography>
-          {true && (
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar
-                    alt={
-                      context.user
-                        ? `${context.user.firstname} ${context.user.lastname}`
-                        : ""
-                    }
-                  />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                <MenuItem onClick={handleLogout}>
-                  <Typography textAlign="center">Logout</Typography>
-                </MenuItem>
-              </Menu>
-            </Box>
-          )}
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open} sx={{ backgroundColor: "grey" }}>
@@ -306,31 +279,96 @@ export default function MainLayout() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        {pageData.map((section, index) => {
-          return (
-            <Box key={index}>
-              <List>
-                {section.map((page, pageIndex) => {
-                  return (
-                    <NavLink
-                      key={page.path}
-                      to={`/${page.path}`}
-                      className={({ isActive }) =>
-                        isActive ? "navbar-active" : ""
+        <Box sx={{ flexGrow: 1 }}>
+          {pageData.map((section, index) => {
+            return (
+              <Box key={index}>
+                <List>
+                  {section.map((page, pageIndex) => {
+                    return (
+                      <NavLink
+                        key={page.path}
+                        to={`/${page.path}`}
+                        className={({ isActive }) =>
+                          isActive ? "navbar-active" : ""
+                        }
+                      >
+                        <ListItem button>
+                          <ListItemIcon>{page.icon}</ListItemIcon>
+                          <ListItemText primary={page.title} />
+                        </ListItem>
+                      </NavLink>
+                    );
+                  })}
+                </List>
+                {index != pageData.length - 1 && <Divider />}
+              </Box>
+            );
+          })}
+        </Box>
+        <Box>
+          {authenticated && (
+            <Box sx={{ flexGrow: 1 }}>
+              <Tooltip title="User Actions">
+                <ListItem
+                  button
+                  onClick={handleOpenUserMenu}
+                  sx={{
+                    height: "60px",
+                    pl: "8px",
+                    pr: "8px",
+                    backgroundColor: "rgba(0, 0, 0, 0.25)",
+                  }}
+                >
+                  <ListItemIcon>
+                    <Avatar
+                      alt={user ? `${user.firstname} ${user.lastname}` : ""}
+                    />
+                  </ListItemIcon>
+                  <Box
+                    sx={{
+                      overflow: "hidden",
+                      display: "inline-block",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    <ListItemText
+                      primary={
+                        user
+                          ? `${user.firstname} ${user.lastname}`
+                          : user && user.email
+                          ? user.email
+                          : ""
                       }
-                    >
-                      <ListItem button>
-                        <ListItemIcon>{page.icon}</ListItemIcon>
-                        <ListItemText primary={page.title} />
-                      </ListItem>
-                    </NavLink>
-                  );
-                })}
-              </List>
-              {index != pageData.length - 1 && <Divider />}
+                      secondary={user ? `${user.email}` : ""}
+                    />
+                  </Box>
+                </ListItem>
+              </Tooltip>
+
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem onClick={handleLogout} sx={{ borderRadius: 0 }}>
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
+              </Menu>
             </Box>
-          );
-        })}
+          )}
+        </Box>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3, height: "100%" }}>
         <DrawerHeader />

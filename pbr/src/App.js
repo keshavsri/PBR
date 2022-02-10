@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import React from "react";
 import { ThemeProvider } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 import "./App.css";
 import { useRoutes } from "react-router-dom";
@@ -10,30 +9,21 @@ import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import GlobalStyles from "./layouts/GlobalStyles";
 import { themes } from "./theme";
-import { AppContextProvider, AppContext } from "./AppContextManagement";
+import { AuthProvider } from "./useAuth";
 
 function App() {
   const routing = useRoutes(routes);
-  const context = useContext(AppContext);
-  const navigate = useNavigate();
-
-  React.useEffect(() => {
-    if (!context.authenticated) {
-      navigate("/login");
-    }
-  }, []);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <AppContextProvider>
+      <AuthProvider>
         <ThemeProvider theme={themes.mainTheme}>
           <GlobalStyles />
           {routing}
         </ThemeProvider>
-      </AppContextProvider>
+      </AuthProvider>
     </LocalizationProvider>
   );
 }
 
 export default App;
-export { AppContext };
