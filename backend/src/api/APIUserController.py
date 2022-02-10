@@ -8,5 +8,18 @@ def route_setting_all(item_id=None):
   from models.user import User
   return User.fs_get_delete_put_post(item_id)
 
-# TODO: Add login route
-# TODO: Add logout route
+@userBlueprint.route('/login', methods=['POST'])
+def login():
+  from models.user import User
+  loggedIn = False
+  # TODO: Add login logic
+  if loggedIn:
+    return "Login", 200
+  else:
+    return "Not Logged in", 401
+
+@userBlueprint.route('/logout', methods=['POST'])
+def logout():
+  from models.user import User
+  # TODO: Add logout logic
+  return 'Logout', 200
