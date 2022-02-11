@@ -1,4 +1,10 @@
 {
+<<<<<<< HEAD
     "python.linting.pylintEnabled": true,
     "python.linting.enabled": true
+=======
+    "python.analysis.extraPaths": [
+        "./backend/src/models"
+    ]
+>>>>>>> master
 }

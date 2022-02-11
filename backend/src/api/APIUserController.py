@@ -1,43 +1,25 @@
-from flask_restx import Namespace, Resource, fields
+from flask import Blueprint
 
-api = Namespace("users", description="Users-related operations")
+userBlueprint = Blueprint('user', __name__)
 
-# Document API for Swagger
-user = api.model(
-  "User",
-  {
-    "id": fields.Integer(required=True, description="The User's identifier"),
-    "username": fields.String(required=True, description="The User's username"),
-    "email": fields.String(required=True, description="The User's email"),
-  }
-)
+@userBlueprint.route('/<int:item_id>', methods=['GET', 'PUT', 'DELETE', 'POST'])
+@userBlueprint.route('/', methods=['GET', 'POST'])
+def route_setting_all(item_id=None):
+  from models.user import User
+  return User.fs_get_delete_put_post(item_id)
 
-USERS = [
-  {
-    "id": "1",
-    "username": "aaronp",
-    "email": "arpenny@ncsu.edu"
-  },
-  {
-    "id": "2",
-    "username": "loganp",
-    "email": "lppenny@ncsu.edu"
-  }
-]
+@userBlueprint.route('/login', methods=['POST'])
+def login():
+  from models.user import User
+  loggedIn = False
+  # TODO: Add login logic
+  if loggedIn:
+    return "Login", 200
+  else:
+    return "Not Logged in", 401
 
-@api.route("/")
-class UserList(Resource):
-  @api.doc("list_users")
-  def get(self):
-    return USERS
-
-@api.route("/<id>")
-@api.param("id", "The user's identifier")
-@api.response(404, "User not found")
-class User(Resource):
-  @api.doc("get_user")
-  def get(self, id):
-    for user in USERS:
-      if user['id'] == id:
-        return user
-    api.abort(404)
+@userBlueprint.route('/logout', methods=['POST'])
+def logout():
+  from models.user import User
+  # TODO: Add logout logic
+  return 'Logout', 200

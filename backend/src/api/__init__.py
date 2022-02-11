@@ -1,7 +1,11 @@
-from flask_restx import Api
+from flask import Blueprint
 
-from .APIUserController import api as user_api
+apiBlueprint = Blueprint('api', __name__)
 
-api = Api(title="PBR API", version="1.0", description="A simple demo API",)
+@apiBlueprint.route('/')
+def home():
+    return 'CVM + CSC API Home'
 
-api.add_namespace(user_api)
+
+
+
