@@ -63,23 +63,26 @@ export default function LoginCard() {
   const [loginErrorToggle, setLoginErrorToggle] = React.useState(false);
 
   const submitLogin = () => {
-    if (
-      values.email.toLowerCase() === "arpenny@ncsu.edu" &&
-      values.password === "123"
-    ) {
-      login().then(() => {
+    login(values.email, values.password)
+      .then((msg) => {
+        console.log(msg);
         navigate("/data-view");
+      })
+      .catch(() => {
+        setLoginErrorMessage("Error");
+        setLoginErrorToggle(true);
       });
-    } else {
-      setLoginErrorMessage("Your Email or Password are Incorrect!");
-      setLoginErrorToggle(true);
-    }
   };
 
   const bypassAuth = () => {
-    login().then(() => {
-      navigate("/data-view");
-    });
+    login(null, null, true)
+      .then(() => {
+        navigate("/data-view");
+      })
+      .catch(() => {
+        setLoginErrorMessage("Error");
+        setLoginErrorToggle(true);
+      });
   };
 
   const handleChange = (prop) => (event) => {

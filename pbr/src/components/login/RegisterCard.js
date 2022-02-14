@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles, createStyles } from "@mui/styles";
 import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../../useAuth";
 
 import {
   Grid,
@@ -40,6 +41,8 @@ const useStyles = makeStyles((theme) =>
 
 export default function RegisterCard() {
   const classes = useStyles();
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const [values, setValues] = React.useState({
     email: "",
@@ -132,6 +135,43 @@ export default function RegisterCard() {
 
   function signUp() {
     console.log("Signing up user!");
+    fetch("/api/user/register", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: values.email,
+        firstname: values.firstname,
+        lastname: values.lastname,
+        password: values.password,
+        orgCode: values.orgCode,
+      }),
+    })
+      .then((response) => {
+        console.log(response);
+        if (!response.ok) {
+          let err = "Failed. Try again.";
+          if ([422].indexOf(response.status) !== -1) {
+            err = "User already exists with this email.";
+          }
+          if ([400].indexOf(response.status) !== -1) {
+            err = "Invalid Request!";
+          }
+          setSignUpErrorToggle(true);
+          setSignUpErrorMessage(err);
+        } else {
+          login(values.email, values.password).then(() => {
+            navigate("/data-view");
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setSignUpErrorToggle(true);
+        setSignUpErrorMessage("Error");
+      });
   }
 
   const [loading, setLoading] = React.useState(false);

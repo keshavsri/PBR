@@ -12,6 +12,8 @@ import { themes } from "./theme";
 import { AuthProvider } from "./useAuth";
 
 function App() {
+  React.useEffect(() => {}, []);
+
   const routing = useRoutes(routes);
 
   return (

@@ -9,14 +9,17 @@ class User(db.Model, fs_mixin):
     id = db.Column(db.Integer, primary_key=True)
     organization = db.Column(db.Integer, db.ForeignKey('Organization.id'))
 
+    email = db.Column(db.String(120), index=True, unique=True)
     password = db.Column(db.String(120))
     first_name = db.Column(db.String(120))
     last_name = db.Column(db.String(120))
-    email = db.Column(db.String(120), index=True, unique=True)
     phone_number = db.Column(db.String(20))
     role = db.Column(db.Integer)
     notes = db.Column(db.String(500))
     
-    __fs_create_fields__ = __fs_update_fields__ = ['username', 'password', 'first_name', 'last_name', 'email', 'phone_number', 'role', 'notes']
+    __fs_create_fields__ = __fs_update_fields__ = ['email', 'password', 'first_name', 'last_name', 'phone_number', 'role', 'notes']
+    
+    def __repr__(self):
+        return f'id: {id}, email: {email}, password: {password}, first_name: {first_name}, last_name: {last_name}, phone_number: {phone_number}'
 
 db.create_all()
