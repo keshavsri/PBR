@@ -5,7 +5,7 @@ from flask_serialize import FlaskSerialize
 fs_mixin = FlaskSerialize(db)
 
 class Organization(db.Model, fs_mixin):
-    userTable = 'Organization'
+    __tablename__ = 'organization'
     # need to add other one to many 
     id = db.Column(db.Integer, primary_key=True)
     street_address = db.Column(db.String(120))
@@ -14,9 +14,10 @@ class Organization(db.Model, fs_mixin):
     zip = db.Column(db.String(10))
     notes = db.Column(db.String(500))
 
-    users = db.relationship("User")
+    #users = db.relationship("User", backref="organization")
 
     
     __fs_create_fields__ = __fs_update_fields__ = ['ID', 'street_address', 'city', 'state', 'zip', 'notes']
+    #__fs_relationship_fields__ = ['users']
 
 db.create_all()
