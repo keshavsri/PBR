@@ -9,11 +9,18 @@ fs_mixin = FlaskSerialize(db)
 class Machine(db.Model, fs_mixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120))
+    type = db.Column(db.Integer, db.ForeignKey('machine_type.id'))
     #data = db.Column(db.Integer, db.foreign_key('machinedatatype.id'))
+    
+    __fs_create_fields__ = __fs_update_fields__ = ['name', 'type']
+
+class MachineType(db.Model, fs_mixin):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120))
     
     __fs_create_fields__ = __fs_update_fields__ = ['name']
 
-class MachineDataType(db.Model, fs_mixin):
+class DataType(db.Model, fs_mixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120))
     abbreviation = db.Column(db.String(120))
@@ -24,17 +31,10 @@ class MachineDataType(db.Model, fs_mixin):
 
 class DataWrapper(db.Model, fs_mixin):
     id = db.Column(db.Integer, primary_key=True)
-    #machinedatatype = db.relationship('MachineDataType', backref='data')
     value = db.Column(db.Float)
+    datatype = db.Column(db.Integer, db.ForeignKey('datatype.id'))
     
-    __fs_create_fields__ = __fs_update_fields__ = ['value']
-    
-class MachineData(db.Model, fs_mixin):
-    id = db.Column(db.Integer, primary_key=True)
-    test_timestamp = db.Column(db.DateTime)
-    #machine = db.relationship('Machine', backref='data')
-    #data = db.relationship('DataWrapper', backref='data')
-    
-    __fs_create_fields__ = __fs_update_fields__ = ['test_timestamp']
-    
+    __fs_create_fields__ = __fs_update_fields__ = ['value', 'datatype']
+
+
 db.create_all()

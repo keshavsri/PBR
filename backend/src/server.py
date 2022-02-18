@@ -27,7 +27,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pbrDatabase.sqlite3'
 
 
 if __name__ == '__main__':
-    db.create_all()
     app.run(
         host= os.environ.get("SERVER_NAME"),
         debug= os.environ.get("DEBUG_MODE"),
