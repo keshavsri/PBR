@@ -6,6 +6,7 @@ fs_mixin = FlaskSerialize(db)
 
 class User(db.Model, fs_mixin):
     __tablename__ = 'user'
+    __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     organization = db.Column(db.Integer, db.ForeignKey('organization.id'))
     email = db.Column(db.String(120), index=True, unique=True)
@@ -18,4 +19,5 @@ class User(db.Model, fs_mixin):
     
     __fs_create_fields__ = __fs_update_fields__ = ['password', 'organization', 'first_name', 'last_name', 'email', 'phone_number', 'role', 'notes']
 
-db.create_all()
+def createTable():
+    db.create_all()

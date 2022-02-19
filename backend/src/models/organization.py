@@ -7,6 +7,7 @@ fs_mixin = FlaskSerialize(db)
 
 class Organization(db.Model, fs_mixin):
     __tablename__ = 'organization'
+    __table_args__ = {'extend_existing': True}
     # need to add other one to many 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120))
@@ -16,8 +17,10 @@ class Organization(db.Model, fs_mixin):
     zip = db.Column(db.String(10))
     mainContact = db.Column(db.Integer, db.ForeignKey('user.id'))
     notes = db.Column(db.String(500))
+    sources = None
 
     
-    __fs_create_fields__ = __fs_update_fields__ = ['name','street_address', 'city', 'state', 'zip', 'mainContact','notes']
+    __fs_create_fields__ = __fs_update_fields__ = ['name','street_address', 'city', 'state', 'zip', 'mainContact','notes', 'sources']
 
-db.create_all()
+def createTable():
+        db.create_all()

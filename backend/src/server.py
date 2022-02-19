@@ -20,7 +20,7 @@ app.register_blueprint(organizationBlueprint, url_prefix='/api/organization')
 
 @app.route('/')
 def testMethod():
-    return 'Hello World'
+    return 'CVM + CSC Home'
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pbrDatabase.sqlite3'
