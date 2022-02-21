@@ -25,10 +25,10 @@ function useAuth() {
         }),
       })
         .then(handleResponse)
-        .then((user) => {
+        .then((response) => {
+          console.log(response);
           setAuthenticated(true);
-          localStorage.setItem("user", JSON.stringify(user));
-          setUser(user);
+          setUser(response.user);
           resolve("Success. Logging in.");
         })
         .catch((err) => {
@@ -41,7 +41,6 @@ function useAuth() {
     console.log("useAuth(): Logging out.");
 
     return new Promise((res) => {
-      localStorage.removeItem("user");
       setAuthenticated(false);
       setUser(null);
       res();
