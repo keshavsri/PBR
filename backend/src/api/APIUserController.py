@@ -1,8 +1,10 @@
 from flask import request, Blueprint, jsonify, Response, make_response
 import bcrypt
+from datetime import datetime, timedelta, timezone
+import os
 import uuid
 import json
-import auth_token
+from auth_token import Auth_Token
 from functools import wraps
 
 userBlueprint = Blueprint('user', __name__)
@@ -17,14 +19,14 @@ def token_required(f):
   def decorated(*args, **kwargs):
     token = None
     # jwt is passed in the request header
-    if 'x-access-token' in request.headers:
-      token = request.headers['x-access-token']
+    if 'Authorization' in request.headers:
+      token = request.headers['Authorization'].replace("Bearer ", "")
     # return 401 if token is not passed
     if not token:
       return jsonify({'message' : 'Token is missing!'}), 401
     try:
       # PULL OUT DATA FROM TOKEN
-      data = auth_token.decode_token(token)
+      data = Auth_Token.decode_token(token)
       # GET AND RETURN CURRENT USER
       for user in users:
         if user["email"] == data["email"]:
@@ -47,8 +49,40 @@ def route_setting_all(item_id=None):
   from models.user import User
   return User.fs_get_delete_put_post(item_id)
 
+@userBlueprint.route('/me', methods=['GET'])
+def me():
+  if 'pbr_token' in request.cookies:
+    token = request.cookies['pbr_token']
+    try:
+      data = Auth_Token.decode_token(token)
+      print(data)
+      ret_user = None
+      print(f"Users: {users}")
+      for user in users:
+        print(user["email"])
+        print(data["email"])
+        if user["email"] == data["email"]:
+          print("HIT")
+          ret_user = {
+            "email": user["email"],
+            "firstname": user["firstname"],
+            "lastname": user["lastname"],
+          }
+      if ret_user is None:
+        return jsonify({"message":"Unauthorized"}), 401
+      else:
+        print("User:", ret_user)
+        return jsonify(ret_user), 200
+    except Exception as error:
+      print(f'Token invalid. {error}')
+  return jsonify({"message":"Unauthorized"}), 401
+
 @userBlueprint.route('/login', methods=['POST'])
 def login():
+  """
+  Logs the current user in, getting email and password from payload
+  If user doesn't exist, if fields are missing/invalid, incorrect password, return 401 
+  """
   from models.user import User
   loggedIn = False
 
@@ -56,54 +90,39 @@ def login():
   if (content_type == 'application/json'):
       data = request.json
 
-  # Temp Bypass
-  if data['bypass'] is True:
-    demoUserObj = {
-      "email": "test@email.com",
-      "firstname": "Test",
-      "lastname": "User",
-    }
-    return jsonify(demoUserObj), 200
-
-  for user in users:
-    if user["email"] == data["email"]:
-      if bcrypt.checkpw(data["password"].encode('utf8'), user["hashedPW"].encode('utf8')):
-        print("MATCH")
-        print(user)
-        print(data)
-        retUser = {
-          "email": user["email"],
-          "firstname": user["firstname"],
-          "lastname": user["lastname"],
-        }
-        token = auth_token.create_token(user)
-        retObj = {
-          "user": retUser,
-          "token": token
-        }
-        response = make_response(jsonify(retObj), 200)
-        response.headers["Content-Type"] = "application/json"
-        response.set_cookie(key='pbr_token', value=token, max_age=auth_token.decode_token(token)["exp"], secure=True, httponly=True, samesite="Strict")
-
-        return response
-      else:
-        print("FAIL")
-        return "Not Logged in", 401
+  if data["email"] and data["password"]:
+    for user in users:
+      if user["email"] == data["email"]:
+        if bcrypt.checkpw(data["password"].encode('utf8'), user["hashedPW"].encode('utf8')):
+          print("MATCH")
+          print(user)
+          print(data)
+          ret_user = {
+            "email": user["email"],
+            "firstname": user["firstname"],
+            "lastname": user["lastname"],
+          }
+          response = make_response(jsonify(ret_user), 200)
+          response.set_cookie(key="pbr_token", value=Auth_Token.create_token(user), expires=datetime.now(tz=timezone.utc) + timedelta(minutes=int(os.environ.get("JWT_TTL"))), secure=True, httponly = True, samesite="Strict")
+          return response
+        else:
+          print("FAIL")
+          return "Not Logged in", 401
 
   return "Not Logged in", 401
   
 
 @userBlueprint.route('/logout', methods=['POST'])
-@token_required
-def logout(current_user):
+# @token_required
+def logout():
+  print("Logging out.")
   from models.user import User
-  console.log(current_user)
-  console.log(current_user["email"])
-  console.log()
-  content_type = request.headers.get('Content-Type')
-  auth_token.destroy_token(token)
-  # TODO: Add logout logic
-  return 'Logout', 200
+  if 'Authorization' in request.headers:
+    token = request.headers['Authorization'].replace("Bearer ", "")
+    Auth_Token.invalidate_token(token)
+  response = make_response("Logged out.", 200)
+  response.set_cookie(key="pbr_token", value="", expires=datetime.now(tz=timezone.utc), secure=True, httponly = True, samesite="Strict")
+  return response
 
 @userBlueprint.route('/register', methods=['POST'])
 def register():
@@ -143,9 +162,5 @@ def register():
   }
 
   users.append(userObj)
-  # newUser = User(email=data["email"], first_name = data["firstname"], last_name = data["lastname"], password = hashedPW)
-  
-  # db.session.add(newUser)
-  # db.session.commit()
-  print("------")
+
   return 'Success', 200

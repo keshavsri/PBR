@@ -21,7 +21,7 @@ def testMethod():
     return 'Hello World'
 
 app.config['SECRET_KEY'] = os.environ.get("JWT_SECRET")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sources.sqlite3'
 
 
