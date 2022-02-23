@@ -20,7 +20,7 @@ class Organization(db.Model, fs_mixin):
     sources = None
 
     
-    __fs_create_fields__ = __fs_update_fields__ = ['name','street_address', 'city', 'state', 'zip', 'mainContact','notes', 'sources']
+    __fs_create_fields__ = __fs_update_fields__ = ['name','street_address', 'city', 'state', 'zip', 'mainContact','notes']
 
 def createTable():
         db.create_all()

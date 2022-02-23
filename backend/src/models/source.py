@@ -15,7 +15,8 @@ class Source(db.Model, fs_mixin):
     zip = db.Column(db.String(10))
     organizations = None
     
-    __fs_create_fields__ = __fs_update_fields__ = ['name', 'street_address', 'city', 'state', 'zip', 'organizations']
+    __fs_create_fields__ = __fs_update_fields__ = ['name', 'street_address', 'city', 'state', 'zip']
+    #__fs_relationship_fields__ = __fs_update_fields__ = ['organizations']
 
 def createTable():
     db.create_all()

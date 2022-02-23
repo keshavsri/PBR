@@ -11,6 +11,8 @@ from api.APIUserController import userBlueprint
 from api.APIOrganizationController import organizationBlueprint
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pbrDatabase.sqlite3'
 db = SQLAlchemy(app)
 
 app.register_blueprint(apiBlueprint, url_prefix='/api')
@@ -22,8 +24,6 @@ app.register_blueprint(organizationBlueprint, url_prefix='/api/organization')
 def testMethod():
     return 'CVM + CSC Home'
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pbrDatabase.sqlite3'
 
 
 if __name__ == '__main__':
