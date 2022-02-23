@@ -182,7 +182,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function MainLayout() {
+export default function MainLayout(props) {
   const theme = useTheme();
   const classes = useStyles();
   const navigate = useNavigate();
@@ -373,7 +373,7 @@ export default function MainLayout() {
       <Box component="main" sx={{ flexGrow: 1, p: 3, height: "100%" }}>
         <DrawerHeader />
         <Box sx={{ width: "100%", backgroundColor: "grey" }}>
-          <Paper></Paper>
+          <Box>{props.children}</Box>
         </Box>
       </Box>
     </Box>

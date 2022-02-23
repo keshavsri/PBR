@@ -10,6 +10,8 @@ import Error404 from "./layouts/404Error";
 import LoginCard from "./components/login/LoginCard";
 import RegisterCard from "./components/login/RegisterCard";
 import RecoveryCard from "./components/login/RecoveryCard";
+import ManageUsers from "./components/ManageUsers";
+
 
 function RequireAuth({ children }) {
   const { authenticated } = useAuth();
@@ -19,6 +21,7 @@ function RequireAuth({ children }) {
 }
 
 const routes = [
+
   {
     path: "/login",
     element: (
@@ -63,7 +66,9 @@ const routes = [
     path: "/manage-users",
     element: (
       <RequireAuth>
-        <MainLayout />
+        <MainLayout>
+          <ManageUsers />
+        </MainLayout>
       </RequireAuth>
     ),
   },
