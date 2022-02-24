@@ -6,7 +6,6 @@ import uuid
 import json
 from auth_token import Auth_Token
 from functools import wraps
-from models.enums import Roles
 
 
 userBlueprint = Blueprint('user', __name__)
@@ -28,7 +27,7 @@ def token_required(f):
       # PULL OUT DATA FROM TOKEN
       data = Auth_Token.decode_token(token)
       # GET AND RETURN CURRENT USER
-      dbUser = User.query.filter_by(email=data["email"]).first()
+      current_user = User.query.filter_by(email=data["email"]).first()
     except jwt.ExpiredSignatureError as error:
       return jsonify({
         'message' : 'Token is expired!'
@@ -54,7 +53,7 @@ def me():
     token = request.cookies['pbr_token']
     try:
       data = Auth_Token.decode_token(token)
-      dbUser = User.query.filter_by(email=data["email"]).first()
+      dbUser = User.query.filter_by(id=data["id"]).first()
       if dbUser:
         ret_user = {
           "email": dbUser.email,
