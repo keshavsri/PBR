@@ -19,13 +19,11 @@ class Auth_Token:
         :param user: user obwject to create a token for
         :returns: a JWT token for the user
         """
-        print(f"Creating token for {user['email']}")
-        print(user)
         now = datetime.now(tz=timezone.utc)
         token_data = {
-            "email": user["email"],
-            "id": user["id"],
-            "role": user["role"],
+            "email": user.email,
+            "id": user.id,
+            "role": user.role,
             "iat": now,
             "nbf": now,
             "exp": now + timedelta(minutes=int(os.environ.get("JWT_TTL")))
@@ -41,7 +39,6 @@ class Auth_Token:
         """
 
         token = jwt.encode(payload=token_data, key=os.environ.get("JWT_SECRET"), algorithm=os.environ.get("JWT_SIGN_ALGORITHM"))
-        print("Created token: ", token)
         return token
 
     @staticmethod
@@ -51,9 +48,7 @@ class Auth_Token:
         :param token: the token to invalidate
         :returns: void
         """
-        print("Destroying token")
         BLACKLIST.append(token)
-        print(BLACKLIST)
 
     @staticmethod
     def replace_token(token):

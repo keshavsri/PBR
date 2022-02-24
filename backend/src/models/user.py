@@ -7,19 +7,18 @@ fs_mixin = FlaskSerialize(db)
 class User(db.Model, fs_mixin):
     userTable = 'User'
     id = db.Column(db.Integer, primary_key=True)
-    organization = db.Column(db.Integer, db.ForeignKey('Organization.id'))
+    # organization = db.Column(db.Integer, db.ForeignKey('Organization.id'))
 
     email = db.Column(db.String(120), index=True, unique=True)
     password = db.Column(db.String(120))
     first_name = db.Column(db.String(120))
     last_name = db.Column(db.String(120))
-    phone_number = db.Column(db.String(20))
     role = db.Column(db.Integer)
     notes = db.Column(db.String(500))
     
-    __fs_create_fields__ = __fs_update_fields__ = ['email', 'password', 'first_name', 'last_name', 'phone_number', 'role', 'notes']
+    __fs_create_fields__ = __fs_update_fields__ = ['email', 'password', 'first_name', 'last_name', 'role', 'notes']
     
     def __repr__(self):
-        return f'id: {id}, email: {email}, password: {password}, first_name: {first_name}, last_name: {last_name}, phone_number: {phone_number}'
+        return f'id: {self.id}, email: {self.email}, password: {self.password}, first_name: {self.first_name}, last_name: {self.last_name}, role: {self.role}, notes: {self.notes}'
 
 db.create_all()
