@@ -130,10 +130,12 @@ def register():
 
   if not data["email"] or not data["firstname"] or not data["lastname"] or not data["password"] or not data["orgCode"]:
     print("MISSING FIELDS.")
+    db.session.rollback()
     return "Invalid Request!", 400
   
   if User.query.filter_by(email=data["email"]).first():
     print("USER ALREADY EXISTS.")
+    db.session.rollback()
     return "User Already Exists", 422
 
   salt = bcrypt.gensalt()
