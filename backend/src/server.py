@@ -8,6 +8,7 @@ load_dotenv(find_dotenv())
 from api import apiBlueprint
 from api.APISourceController import sourceBlueprint
 from api.APIUserController import userBlueprint
+from api.APIOrganizationController import organizationBlueprint
 
 app = Flask(__name__)
 app.register_blueprint(apiBlueprint, url_prefix='/api')
@@ -21,13 +22,11 @@ db = SQLAlchemy(app)
 
 @app.route('/')
 def testMethod():
-    return 'Hello World'
-
+    return 'CVM + CSC Home'
 
 
 
 if __name__ == '__main__':
-    db.create_all()
     app.run(
         host= os.environ.get("SERVER_NAME"),
         debug= os.environ.get("DEBUG_MODE"),
