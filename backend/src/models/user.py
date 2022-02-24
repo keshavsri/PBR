@@ -8,7 +8,7 @@ class User(db.Model, fs_mixin):
     __tablename__ = 'user'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    organization = db.Column(db.Integer, db.ForeignKey('organization.id'))
+    # organization = db.Column(db.Integer, db.ForeignKey('organization.id'))
     email = db.Column(db.String(120), index=True, unique=True)
     password = db.Column(db.String(120))
     first_name = db.Column(db.String(120))
