@@ -4,4 +4,4 @@ env
 .DS_Store
 .vscode/*
 *.pyc
-*.sqlite3
+src/*.sqlite3
