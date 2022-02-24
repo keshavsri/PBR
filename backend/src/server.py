@@ -16,7 +16,7 @@ app.register_blueprint(sourceBlueprint, url_prefix='/api/source')
 app.register_blueprint(userBlueprint, url_prefix='/api/user')
 app.config['SECRET_KEY'] = os.environ.get("JWT_SECRET")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///sources.sqlite3'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 db = SQLAlchemy(app)
 
 
