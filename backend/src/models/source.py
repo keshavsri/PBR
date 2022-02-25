@@ -1,12 +1,19 @@
 from server import db
 from models.enums import States
-from flask_serialize import FlaskSerialize
+from dataclasses import dataclass
 
-fs_mixin = FlaskSerialize(db)
 
-class Source(db.Model, fs_mixin):
+@dataclass
+class Source(db.Model):
     __tablename__ = 'source'
     __table_args__ = {'extend_existing': True}
+    
+    id: int
+    name: str
+    street_address: str
+    state: States
+    zip: str
+    
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), index=True, unique=True)
     street_address = db.Column(db.String(120))
@@ -15,8 +22,14 @@ class Source(db.Model, fs_mixin):
     zip = db.Column(db.String(10))
     organizations = None
     
-    __fs_create_fields__ = __fs_update_fields__ = ['name', 'street_address', 'city', 'state', 'zip']
-    #__fs_relationship_fields__ = __fs_update_fields__ = ['organizations']
+
+    def __init__(self, requestJSON: dict):
+        self.id = requestJSON.get('id')
+        self.name = requestJSON.get('name')
+        self.street_address = requestJSON.get('street_address')
+        self.city = requestJSON.get('city')
+        self.state = requestJSON.get('state')
+        self.zip = requestJSON.get('zip')
 
 def createTable():
     db.create_all()
