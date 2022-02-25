@@ -11,14 +11,15 @@ from api.APIUserController import userBlueprint
 from api.APIOrganizationController import organizationBlueprint
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///pbrDatabase.sqlite3'
-db = SQLAlchemy(app)
-
 app.register_blueprint(apiBlueprint, url_prefix='/api')
 app.register_blueprint(sourceBlueprint, url_prefix='/api/source')
 app.register_blueprint(userBlueprint, url_prefix='/api/user')
 app.register_blueprint(organizationBlueprint, url_prefix='/api/organization')
+app.config['SECRET_KEY'] = os.environ.get("JWT_SECRET")
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
+db = SQLAlchemy(app)
+
 
 @app.route('/')
 def testMethod():

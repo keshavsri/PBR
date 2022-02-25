@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 // import "./Login.css";
 import LoginIcon from "@mui/icons-material/Login";
 import { makeStyles, createStyles } from "@mui/styles";
-import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../useAuth";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import useAuth from "../../services/useAuth";
 
 import {
   Grid,
@@ -45,7 +45,9 @@ const useStyles = makeStyles((theme) =>
 export default function LoginCard() {
   const classes = useStyles();
   const navigate = useNavigate();
-  const { login, authenticated, user } = useAuth();
+  const location = useLocation();
+  const { login } = useAuth();
+  const { state } = useLocation();
 
   const [values, setValues] = React.useState({
     email: "",
@@ -62,25 +64,18 @@ export default function LoginCard() {
   const [loginErrorMessage, setLoginErrorMessage] = React.useState("Error.");
   const [loginErrorToggle, setLoginErrorToggle] = React.useState(false);
 
-  const submitLogin = () => {
-    if (
-      values.email.toLowerCase() === "arpenny@ncsu.edu" &&
-      values.password === "123"
-    ) {
-      login().then(() => {
-        navigate("/data-view");
+  async function submitLogin() {
+    await login(values.email, values.password)
+      .then(() => {
+        setLoading(false);
+        navigate(state?.path || "/data-view");
+      })
+      .catch((error) => {
+        setLoginErrorMessage("Error: " + error);
+        setLoginErrorToggle(true);
+        setLoading(false);
       });
-    } else {
-      setLoginErrorMessage("Your Email or Password are Incorrect!");
-      setLoginErrorToggle(true);
-    }
-  };
-
-  const bypassAuth = () => {
-    login().then(() => {
-      navigate("/data-view");
-    });
-  };
+  }
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -91,9 +86,6 @@ export default function LoginCard() {
       ...values,
       showPassword: !values.showPassword,
     });
-    if (values.showPassword) {
-    } else {
-    }
   };
 
   const handleMouseDownPassword = (event) => {
@@ -102,14 +94,14 @@ export default function LoginCard() {
 
   function checkFormFields() {
     let tempErrors = {};
-    if (values.email == "") {
+    if (values.email === "") {
       tempErrors.email = "Your Email is required.";
       console.log("Email Required.");
     } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(values.email)) {
       tempErrors.email = "Email is not valid.";
       console.log("Email Invalid.");
     }
-    if (values.password == "") {
+    if (values.password === "") {
       tempErrors.password = "Your Password is required.";
       console.log("Password Required.");
     }
@@ -123,16 +115,14 @@ export default function LoginCard() {
   }
 
   function handleLoginClick() {
-    console.log("Handling Login.");
     setLoginErrorToggle(false);
     setLoginErrorMessage("");
     setLoading(true);
     // See if Required Fields are Entered
     if (checkFormFields()) {
-      console.log("Form was Valid.");
-      submitLogin(); // Login Action
+      // Login Action
+      submitLogin();
     }
-    setLoading(false);
   }
 
   const onKeyDown = (event) => {
@@ -164,7 +154,11 @@ export default function LoginCard() {
             alignItems="center"
             onKeyDown={onKeyDown}
           >
-            <img className={classes.ncsuBrickLogo} src={brickLogoNCSU} />
+            <img
+              className={classes.ncsuBrickLogo}
+              src={brickLogoNCSU}
+              alt="NCSU Brick Logo"
+            />
 
             <Typography variant="h1" sx={{ fontWeight: "bold", width: "100%" }}>
               Poultry Bloodwork Reporting Tool
@@ -246,18 +240,6 @@ export default function LoginCard() {
               variant="contained"
             >
               Login
-            </LoadingButton>
-            <LoadingButton
-              onClick={bypassAuth}
-              endIcon={<LoginIcon />}
-              loading={loading}
-              fullWidth={true}
-              sx={{ mt: 2 }}
-              loadingPosition="end"
-              variant="contained"
-              color="warning"
-            >
-              Bypass Login (Dev)
             </LoadingButton>
           </Grid>
         </Box>
