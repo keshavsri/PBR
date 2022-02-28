@@ -48,7 +48,7 @@ const rows2 = [
   createData('Oreo', 437, 18.0, 63, 4.0),
 ];
 
-let rows = [
+let rows3 = [
   {id: "1", 
   entered_by: "Organization 1", 
   organization: "123 Main Street, Raleigh, NC 27606",
@@ -61,7 +61,9 @@ let rows = [
   sample_type: "reference",
   data: [
       {
-      measurement: "3",
+      measurement: {
+
+      },
       sample: "1",
       value:  "40"
       }
@@ -69,6 +71,77 @@ let rows = [
   }
 ];
 
+let rows = [
+  {id: "1", 
+  bird_type: "Turkey", 
+  source: "USERNAME",
+  timestamp: "2022-12-10T13:45:00.000Z",
+  age: "2022-11-13T11:30:00.000Z",
+  gender: "Male",
+  comments: "days",
+  status: "Validated",
+  sample_type: "Reference",
+  machines: [
+      {
+        machineName: "",
+        measurement: [
+          {type: {name: "", units: "" }, value:  "40"}
+        ]
+      }
+    ]
+  },
+];
+
+const headCells = [
+  {
+    id: 'id',
+    numeric: false,
+    disablePadding: true,
+    label: 'ID',
+  },
+  {
+    id: 'bird_type',
+    numeric: false,
+    disablePadding: true,
+    label: 'Bird Type',
+  },
+  {
+    id: 'source',
+    numeric: false,
+    disablePadding: true,
+    label: 'Source',
+  },
+  {
+    id: 'timestamp',
+    numeric: false,
+    disablePadding: true,
+    label: 'Date Entered',
+  },
+  {
+    id: 'age',
+    numeric: false,
+    disablePadding: true,
+    label: 'Age',
+  },
+  {
+    id: 'gender',
+    numeric: false,
+    disablePadding: true,
+    label: 'Gender',
+  },
+  {
+    id: 'status',
+    numeric: false,
+    disablePadding: true,
+    label: 'Status',
+  },
+  {
+    id: 'sample_type',
+    numeric: false,
+    disablePadding: true,
+    label: 'Sample Type',
+  },
+];
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -132,26 +205,6 @@ const headCells2 = [
   },
 ];
 
-const headCells = [
-  {
-    id: 'id',
-    numeric: false,
-    disablePadding: true,
-    label: 'ID',
-  },
-  {
-    id: 'entered_by',
-    numeric: false,
-    disablePadding: false,
-    label: 'Entered By',
-  },
-  {
-    id: 'organization',
-    numeric: false,
-    disablePadding: false,
-    label: 'Organization',
-  },
-];
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
@@ -378,11 +431,15 @@ export default function EnhancedTable() {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {row.id}
                       </TableCell>
-                      <TableCell align="right">{row.id}</TableCell>
-                      <TableCell align="right">{row.entered_by}</TableCell>
-                      <TableCell align="right">{row.organization}</TableCell>
+                      <TableCell padding="none" align="left">{row.bird_type}</TableCell>
+                      <TableCell padding="none" align="left">{row.source}</TableCell>
+                      <TableCell padding="none" align="left">{new Date(row.timestamp).toLocaleString()}</TableCell>
+                      <TableCell padding="none" align="left">{new Date(row.age).toLocaleString()}</TableCell>
+                      <TableCell padding="none" align="left">{row.gender}</TableCell>
+                      <TableCell padding="none" align="left">{row.status}</TableCell>
+                      <TableCell padding="none" align="left">{row.sample_type}</TableCell>
                     </TableRow>
                   );
                 })}
