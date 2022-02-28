@@ -3,10 +3,9 @@ import { Navigate, useLocation } from "react-router-dom";
 import useAuth from "./services/useAuth";
 
 import MainLayout from "./layouts/MainLayout";
-import DataView from "./layouts/LoginLayout";
 import LoginBackdrop from "./layouts/LoginLayout";
 import Error404 from "./layouts/404Error";
-
+import DataView from "./components/DataView";
 import LoginCard from "./components/login/LoginCard";
 import RegisterCard from "./components/login/RegisterCard";
 import RecoveryCard from "./components/login/RecoveryCard";
@@ -69,16 +68,17 @@ const routes = [
   {
     path: "/data-view",
     element: (
-      <RequireAuth>
-        <MainLayout card={<DataView />} />
-      </RequireAuth>
+
+        <MainLayout>
+          <DataView/>
+        </MainLayout>
     ),
   },
   {
     path: "/generate-reports",
     element: (
       <RequireAuth>
-        <MainLayout view={<DataView />} />
+        <MainLayout/>
       </RequireAuth>
     ),
   },
@@ -112,7 +112,7 @@ const routes = [
     path: "/",
     element: (
       <RequireAuth>
-        <MainLayout card={<DataView />} />
+        <MainLayout />
       </RequireAuth>
     ),
   },
