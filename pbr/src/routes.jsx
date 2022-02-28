@@ -3,10 +3,9 @@ import { useLocation, Redirect, Navigate } from "react-router-dom";
 import useAuth from "./useAuth";
 
 import MainLayout from "./layouts/MainLayout";
-import DataView from "./layouts/LoginLayout";
 import LoginBackdrop from "./layouts/LoginLayout";
 import Error404 from "./layouts/404Error";
-
+import DataView from "./components/DataView";
 import LoginCard from "./components/login/LoginCard";
 import RegisterCard from "./components/login/RegisterCard";
 import RecoveryCard from "./components/login/RecoveryCard";
@@ -17,7 +16,8 @@ function RequireAuth({ children }) {
   const { authenticated } = useAuth();
   console.log("Authed?", authenticated);
 
-  return authenticated === true ? children : <Navigate to="/login" replace />;
+  //return authenticated === true ? children : <Navigate to="/login" replace />;
+  return children;
 }
 
 const routes = [
@@ -49,16 +49,17 @@ const routes = [
   {
     path: "/data-view",
     element: (
-      <RequireAuth>
-        <MainLayout card={<DataView />} />
-      </RequireAuth>
+
+        <MainLayout>
+          <DataView/>
+        </MainLayout>
     ),
   },
   {
     path: "/generate-reports",
     element: (
       <RequireAuth>
-        <MainLayout view={<DataView />} />
+        <MainLayout/>
       </RequireAuth>
     ),
   },
@@ -92,7 +93,7 @@ const routes = [
     path: "/",
     element: (
       <RequireAuth>
-        <MainLayout card={<DataView />} />
+        <MainLayout />
       </RequireAuth>
     ),
   },
