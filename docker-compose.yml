@@ -1,0 +1,41 @@
+version: '3.5'
+
+services:
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    restart: unless-stopped
+
+
+  api:
+    build: ./backend
+    container_name: backend
+    restart: unless-stopped
+    volumes:
+      - ./backend/src:/backend/src
+
+  app:
+    build: ./pbr
+    container_name: pbr
+    restart: unless-stopped
+    volumes:
+      - ./pbr/src:/pbr/src
+      - ./pbr/public:/pbr/public
+
+  db:
+    image: mysql
+    container_name: db
+    ports:
+      - "3306:3306" #Expose the port so that you can connect to it directly, like from HeidiSQL
+    volumes:
+      - ./dbdata:/var/lib/mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=choose_a_password # I suggest you set this via a .env file

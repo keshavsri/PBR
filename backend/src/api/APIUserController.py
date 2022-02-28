@@ -66,7 +66,7 @@ def me():
     except Exception as error:
       print(f'Token invalid. {error}')
 
-  print(f'UNAUTHORIZED. {error}')
+  print(f'UNAUTHORIZED.')
   return jsonify({"message":"Unauthorized"}), 401
 
 @userBlueprint.route('/login', methods=['POST'])
