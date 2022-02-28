@@ -1,6 +1,6 @@
 import React from "react";
-import { useLocation, Redirect, Navigate } from "react-router-dom";
-import useAuth from "./useAuth";
+import { Navigate, useLocation } from "react-router-dom";
+import useAuth from "./services/useAuth";
 
 import MainLayout from "./layouts/MainLayout";
 import LoginBackdrop from "./layouts/LoginLayout";
@@ -11,55 +11,71 @@ import RegisterCard from "./components/login/RegisterCard";
 import RecoveryCard from "./components/login/RecoveryCard";
 import ManageUsers from "./components/ManageUsers";
 
-
 function RequireAuth({ children }) {
-  const { authenticated } = useAuth();
-  console.log("Authed?", authenticated);
+  const { user } = useAuth();
+  const location = useLocation();
 
-  //return authenticated === true ? children : <Navigate to="/login" replace />;
-  return children;
+  return user ? (
+    children
+  ) : (
+    <Navigate to="/login" replace state={{ path: location.pathname }} />
+  );
+}
+function NonAuth({ children }) {
+  const { user } = useAuth();
+  const location = useLocation();
+
+  return user ? (
+    <Navigate to="/data-view" replace state={{ path: location.pathname }} />
+  ) : (
+    children
+  );
 }
 
 const routes = [
-
   {
     path: "/login",
     element: (
-      <LoginBackdrop>
-        <LoginCard />
-      </LoginBackdrop>
+      <NonAuth>
+        <LoginBackdrop>
+          <LoginCard />
+        </LoginBackdrop>
+      </NonAuth>
     ),
   },
   {
     path: "/register",
     element: (
-      <LoginBackdrop>
-        <RegisterCard />
-      </LoginBackdrop>
+      <NonAuth>
+        <LoginBackdrop>
+          <RegisterCard />
+        </LoginBackdrop>
+      </NonAuth>
     ),
   },
   {
     path: "/forgot-password",
     element: (
-      <LoginBackdrop>
-        <RecoveryCard />
-      </LoginBackdrop>
+      <NonAuth>
+        <LoginBackdrop>
+          <RecoveryCard />
+        </LoginBackdrop>
+      </NonAuth>
     ),
   },
   {
     path: "/data-view",
     element: (
-
-        <MainLayout>
-          <DataView/>
-        </MainLayout>
+      <MainLayout>
+        <DataView />
+      </MainLayout>
     ),
   },
   {
     path: "/generate-reports",
     element: (
       <RequireAuth>
-        <MainLayout/>
+        <MainLayout />
       </RequireAuth>
     ),
   },

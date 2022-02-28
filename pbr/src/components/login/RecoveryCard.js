@@ -51,7 +51,7 @@ export default function RecoveryCard() {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  function sendResetEmail() {
+  async function sendResetEmail() {
     setMessageToggle(true);
     console.log("Sending Password Reset Email to ", values.email);
   }
@@ -81,9 +81,10 @@ export default function RecoveryCard() {
     // See if Required Fields are Entered
     if (checkFormFields()) {
       console.log("Form was Valid.");
-      sendResetEmail(); // Login Action
+      sendResetEmail().then(() => {
+        setLoading(false);
+      });
     }
-    setLoading(false);
   }
 
   const onKeyDown = (event) => {

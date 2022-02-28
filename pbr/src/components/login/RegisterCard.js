@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles, createStyles } from "@mui/styles";
 import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../../services/useAuth";
 
 import {
   Grid,
@@ -40,6 +41,8 @@ const useStyles = makeStyles((theme) =>
 
 export default function RegisterCard() {
   const classes = useStyles();
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const [values, setValues] = React.useState({
     email: "",
@@ -82,39 +85,39 @@ export default function RegisterCard() {
 
   function checkFormFields() {
     let tempErrors = {};
-    if (values.email == "") {
+    if (values.email === "") {
       tempErrors.email = "Your Email is required.";
       console.log("Email Required.");
     } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(values.email)) {
       tempErrors.email = "Email is not valid.";
       console.log("Email Invalid.");
     }
-    if (values.firstname == "") {
+    if (values.firstname === "") {
       tempErrors.firstname = "Your First Name is required.";
       console.log("First Name Required.");
     }
-    if (values.lastname == "") {
+    if (values.lastname === "") {
       tempErrors.lastname = "Your Last Name is required.";
       console.log("Last Name Required.");
     }
-    if (values.password == "") {
+    if (values.password === "") {
       tempErrors.password = "Your Password is required.";
       console.log("Password Required.");
     }
-    if (values.password2 == "") {
+    if (values.password2 === "") {
       tempErrors.password2 = "Confirm your Password.";
       console.log("Password Not Confirmed.");
     }
     if (
-      values.password != "" &&
-      values.password2 != "" &&
-      values.password != values.password2
+      values.password !== "" &&
+      values.password2 !== "" &&
+      values.password !== values.password2
     ) {
       tempErrors.password = "Passwords do not match.";
       tempErrors.password2 = "Passwords do not match.";
       console.log("Password do not match.");
     }
-    if (values.orgCode == "") {
+    if (values.orgCode === "") {
       tempErrors.orgCode = "Organization Code Required.";
       console.log("Organization Code Required.");
     } else if (!validateOrgCode(values.orgCode)) {
@@ -130,8 +133,47 @@ export default function RegisterCard() {
     }
   }
 
-  function signUp() {
+  async function signUp() {
     console.log("Signing up user!");
+    await fetch("/api/user/register", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: values.email,
+        firstname: values.firstname,
+        lastname: values.lastname,
+        password: values.password,
+        orgCode: values.orgCode,
+      }),
+    })
+      .then((response) => {
+        console.log(response);
+        setLoading(false);
+        if (!response.ok) {
+          let err = "Failed. Try again.";
+          if ([422].indexOf(response.status) !== -1) {
+            err = "User already exists with this email.";
+          }
+          if ([400].indexOf(response.status) !== -1) {
+            err = "Invalid Request!";
+          }
+          setSignUpErrorToggle(true);
+          setSignUpErrorMessage(err);
+        } else {
+          login(values.email, values.password).then(() => {
+            navigate("/data-view");
+          });
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+        setSignUpErrorToggle(true);
+        setSignUpErrorMessage("Error");
+      });
   }
 
   const [loading, setLoading] = React.useState(false);
@@ -142,9 +184,10 @@ export default function RegisterCard() {
     setLoading(true);
     if (checkFormFields()) {
       console.log("Form was Valid.");
-      signUp(); // Login Action
+      signUp();
+    } else {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   const onKeyDown = (event) => {
@@ -176,7 +219,11 @@ export default function RegisterCard() {
             alignItems="center"
             onKeyDown={onKeyDown}
           >
-            <img className={classes.ncsuBrickLogo} src={brickLogoNCSU} />
+            <img
+              className={classes.ncsuBrickLogo}
+              src={brickLogoNCSU}
+              alt="NCSU Brick Logo"
+            />
             <Typography variant="h1" sx={{ fontWeight: "bold" }}>
               Poultry Bloodwork Reporting Tool
             </Typography>

@@ -1,5 +1,7 @@
 env
+.env
 .vscode
 .DS_Store
 .vscode/*
 *.pyc
+src/*.sqlite3
