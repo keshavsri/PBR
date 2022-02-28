@@ -8,18 +8,12 @@ class Source(db.Model):
     __tablename__ = 'source'
     __table_args__ = {'extend_existing': True}
     
-    id: int
-    name: str
-    street_address: str
-    state: States
-    zip: str
-    
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), index=True, unique=True)
-    street_address = db.Column(db.String(120))
-    city = db.Column(db.String(120))
-    state = db.Column(db.String(20))
-    zip = db.Column(db.String(10))
+    id: int = db.Column(db.Integer, primary_key=True)
+    name: str = db.Column(db.String(120), index=True, unique=True)
+    street_address: str = db.Column(db.String(120))
+    city: str = db.Column(db.String(120))
+    state: States = db.Column(db.String(20))
+    zip: str = db.Column(db.String(10))
     organizations = None
     
 

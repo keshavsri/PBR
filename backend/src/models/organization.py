@@ -12,26 +12,17 @@ class Organization(db.Model):
     __tablename__ = 'organization'
     __table_args__ = {'extend_existing': True}
     
-    id: int
-    name: str
-    street_address: str
-    city: str
-    state: States
-    zip: str
-    mainContact: User
-    notes: str
-    sources: List[Source]
-    
     # need to add other one to many 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120))
-    street_address = db.Column(db.String(120))
-    city = db.Column(db.String(120))
-    state = db.Column(db.String(20))
-    zip = db.Column(db.String(10))
-    mainContact = db.Column(db.Integer, db.ForeignKey('user.id'))
-    notes = db.Column(db.String(500))
-    sources = None
+    id:int = db.Column(db.Integer, primary_key=True)
+    name: str = db.Column(db.String(120))
+    street_address: str = db.Column(db.String(120))
+    city: str = db.Column(db.String(120))
+    state: States = db.Column(db.String(20))
+    zip: str = db.Column(db.String(10))
+    mainContact: User = db.Column(db.Integer, db.ForeignKey('user.id'))
+    notes: str = db.Column(db.String(500))
+    organizationCode: str = db.Column(db.String(6), unique=True)
+    sources: List[Source] = None
 
     def __init__ (self, requestJSON):
         self.name = requestJSON.get('name')
@@ -42,3 +33,5 @@ class Organization(db.Model):
 
 def createTable():
         db.create_all()
+        
+
