@@ -1,6 +1,9 @@
 import * as React from "react";
+import { styled } from "@mui/material/styles";
+
 import PropTypes from "prop-types";
 import { visuallyHidden } from "@mui/utils";
+import { makeStyles } from "@mui/styles";
 
 import {
   TableCell,
@@ -10,7 +13,34 @@ import {
   Box,
   Checkbox,
 } from "@mui/material";
+import { tableCellClasses } from "@mui/material/TableCell";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& .MuiTableCell-head": {
+      color: theme.palette.secondaryLight.main,
+      textTransform: "uppercase",
+      fontWeight: 700,
+      lineHeight: 1,
+      backgroundColor: theme.palette.primary.main,
+    },
+    "& .MuiSvgIcon-root": {
+      color: theme.palette.secondaryLight.main,
+    },
+    "& .MuiTableSortLabel-root.Mui-active": {
+      color: "white",
+      "& .MuiTableSortLabel-icon": {
+        color: "white",
+      },
+    },
+    "& .MuiTableSortLabel-root:hover": {
+      color: "rgba(255,255,255,0.95)",
+    },
+  },
+}));
+
 export default function EnhancedTableHead(props) {
+  let classes = useStyles();
   const {
     onSelectAllClick,
     order,
@@ -26,10 +56,10 @@ export default function EnhancedTableHead(props) {
 
   return (
     <TableHead>
-      <TableRow>
+      <TableRow className={classes.root}>
         <TableCell padding="checkbox">
           <Checkbox
-            color="primary"
+            color="secondaryLight"
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
@@ -46,6 +76,7 @@ export default function EnhancedTableHead(props) {
             sortDirection={orderBy === headCell.id ? order : false}
           >
             <TableSortLabel
+              sx={{ color: "#ffffff" }}
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}

@@ -1,24 +1,35 @@
 import * as React from "react";
+import { styled } from "@mui/material/styles";
+
 import {
   Table,
   Box,
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TablePagination,
   TableRow,
-  TableSortLabel,
-  Toolbar,
-  Typography,
-  Paper,
   Checkbox,
-  IconButton,
-  Tooltip,
-  Button,
 } from "@mui/material";
+import { tableCellClasses } from "@mui/material/TableCell";
+
 import EnhancedTableHead from "./EnhancedTableHead";
 import EnhancedTableToolbar from "./EnhancedTableToolbar";
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    lineHeight: 1,
+    paddingLeft: "5px",
+    paddingRight: "5px",
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd):not(.Mui-selected)": {
+    backgroundColor: "rgba(0,0,0,0.025)",
+  },
+}));
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -67,7 +78,7 @@ export default function EnhancedTable(props) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -77,7 +88,7 @@ export default function EnhancedTable(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => n.id);
       setSelected(newSelecteds);
       return;
     }
@@ -117,7 +128,7 @@ export default function EnhancedTable(props) {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name) => selected.indexOf(name) !== -1;
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -150,24 +161,24 @@ export default function EnhancedTable(props) {
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                  rows.slice().sort(getComparator(order, orderBy)) */}
+                 rows.slice().sort(getComparator(order, orderBy)) */}
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
-                    <TableRow
+                    <StyledTableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={index}
                       selected={isItemSelected}
                     >
-                      <TableCell padding="checkbox">
+                      <StyledTableCell padding="checkbox">
                         <Checkbox
                           color="primary"
                           checked={isItemSelected}
@@ -175,19 +186,37 @@ export default function EnhancedTable(props) {
                             "aria-labelledby": labelId,
                           }}
                         />
-                      </TableCell>
-                      <TableCell
+                      </StyledTableCell>
+                      <StyledTableCell
                         component="th"
                         id={labelId}
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="right">{row.id}</TableCell>
-                      <TableCell align="right">{row.entered_by}</TableCell>
-                      <TableCell align="right">{row.organization}</TableCell>
-                    </TableRow>
+                        {row.id}
+                      </StyledTableCell>
+                      <StyledTableCell padding="none" align="left">
+                        {row.bird_type}
+                      </StyledTableCell>
+                      <StyledTableCell padding="none" align="left">
+                        {row.source}
+                      </StyledTableCell>
+                      <StyledTableCell padding="none" align="left">
+                        {new Date(row.timestamp).toLocaleString()}
+                      </StyledTableCell>
+                      <StyledTableCell padding="none" align="left">
+                        {new Date(row.age).toLocaleString()}
+                      </StyledTableCell>
+                      <StyledTableCell padding="none" align="left">
+                        {row.gender}
+                      </StyledTableCell>
+                      <StyledTableCell padding="none" align="left">
+                        {row.status}
+                      </StyledTableCell>
+                      <StyledTableCell padding="none" align="left">
+                        {row.sample_type}
+                      </StyledTableCell>
+                    </StyledTableRow>
                   );
                 })}
               {emptyRows > 0 && (
@@ -203,7 +232,7 @@ export default function EnhancedTable(props) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 25, 50, 100]}
           component="div"
           count={rows.length}
           rowsPerPage={rowsPerPage}

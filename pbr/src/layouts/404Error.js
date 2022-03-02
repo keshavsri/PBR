@@ -167,7 +167,7 @@ export default function Error404() {
                 }}
               >
                 <ArrowBackIcon sx={{ mr: 1 }} />
-                Return to Previous Page
+                Go Back
               </Fab>
             )}
             {!authenticated && (
@@ -181,7 +181,7 @@ export default function Error404() {
                 }}
               >
                 <ArrowBackIcon sx={{ mr: 1 }} />
-                Go to Login Screen
+                Go Back
               </Fab>
             )}
             <img className={classes.egg} src={egg} alt="Cracked Eggs" />

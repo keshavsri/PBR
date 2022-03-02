@@ -370,7 +370,10 @@ export default function MainLayout(props) {
           )}
         </Box>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, height: "100%" }}>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, height: "100%", minWidth: "0px" }}
+      >
         <DrawerHeader />
         <Box sx={{ width: "100%", backgroundColor: "grey" }}>
           <Box>{props.children}</Box>

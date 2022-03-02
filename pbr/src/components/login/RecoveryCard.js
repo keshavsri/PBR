@@ -98,72 +98,61 @@ export default function RecoveryCard() {
 
   return (
     <>
-      <Paper
-        elevation={12}
-        sx={{
-          raised: true,
-          maxWidth: "sm",
-          textAlign: "center",
-          padding: 5,
-          overflow: "scroll",
-        }}
-      >
-        <Box component="form">
-          <Grid
-            justifyContent="center"
-            container
-            direction="row"
-            alignItems="center"
-            onKeyDown={onKeyDown}
-          >
-            <img className={classes.ncsuBrickLogo} src={brickLogoNCSU} />
-            <Typography variant="h1" sx={{ fontWeight: "bold", width: "100%" }}>
-              Reset Password
-            </Typography>
-            <Box sx={{ mt: 6, mb: 6, width: "100%" }}>
-              {messageToggle && (
-                <Alert severity="info" color="info">
-                  If this email is in our system, we have sent it a password
-                  reset link.
-                </Alert>
-              )}
-              <FormControl
-                sx={{ mt: 2, width: "100%" }}
-                required
-                variant="outlined"
-                error={errors["email"] ? true : false}
-              >
-                <InputLabel>Email</InputLabel>
-                <OutlinedInput
-                  value={values.email}
-                  onChange={handleChange("email")}
-                  label="Email"
-                />
-                {errors["email"] && (
-                  <FormHelperText>{errors["email"]}</FormHelperText>
-                )}
-              </FormControl>
-            </Box>
-            <Stack direction="row" spacing={2}>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Sign Up</Link>
-            </Stack>
-
-            <LoadingButton
-              onClick={handleSubmit}
-              endIcon={<SendIcon />}
-              loading={loading}
-              fullWidth={true}
-              sx={{ mt: 2 }}
-              loadingPosition="end"
-              variant="contained"
-              color="secondary"
+      <Box component="form">
+        <Grid
+          justifyContent="center"
+          container
+          direction="row"
+          alignItems="center"
+          onKeyDown={onKeyDown}
+        >
+          <img className={classes.ncsuBrickLogo} src={brickLogoNCSU} />
+          <Typography variant="h1" sx={{ fontWeight: "bold", width: "100%" }}>
+            Reset Password
+          </Typography>
+          <Box sx={{ mt: 6, mb: 6, width: "100%" }}>
+            {messageToggle && (
+              <Alert severity="info" color="info">
+                If this email is in our system, we have sent it a password reset
+                link.
+              </Alert>
+            )}
+            <FormControl
+              sx={{ mt: 2, width: "100%" }}
+              required
+              variant="outlined"
+              error={errors["email"] ? true : false}
             >
-              Send Recovery Email
-            </LoadingButton>
-          </Grid>
-        </Box>
-      </Paper>
+              <InputLabel>Email</InputLabel>
+              <OutlinedInput
+                value={values.email}
+                onChange={handleChange("email")}
+                label="Email"
+              />
+              {errors["email"] && (
+                <FormHelperText>{errors["email"]}</FormHelperText>
+              )}
+            </FormControl>
+          </Box>
+          <Stack direction="row" spacing={2}>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Sign Up</Link>
+          </Stack>
+
+          <LoadingButton
+            onClick={handleSubmit}
+            endIcon={<SendIcon />}
+            loading={loading}
+            fullWidth={true}
+            sx={{ mt: 2 }}
+            loadingPosition="end"
+            variant="contained"
+            color="secondary"
+          >
+            Send Recovery Email
+          </LoadingButton>
+        </Grid>
+      </Box>
     </>
   );
 }

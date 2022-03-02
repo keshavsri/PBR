@@ -58,6 +58,159 @@ let rows = [
       },
     ],
   },
+  {
+    id: "2",
+    bird_type: "Turkey",
+    source: "USERNAME",
+    timestamp: "2022-12-10T13:45:00.000Z",
+    age: "2022-11-13T11:30:00.000Z",
+    gender: "Male",
+    comments: "days",
+    status: "Validated",
+    sample_type: "Reference",
+    machines: [
+      {
+        machineName: "",
+        measurement: [{ type: { name: "", units: "" }, value: "40" }],
+      },
+    ],
+  },
+  {
+    id: "3",
+    bird_type: "Turkey",
+    source: "USERNAME",
+    timestamp: "2022-12-10T13:45:00.000Z",
+    age: "2022-11-13T11:30:00.000Z",
+    gender: "Male",
+    comments: "days",
+    status: "Validated",
+    sample_type: "Reference",
+    machines: [
+      {
+        machineName: "",
+        measurement: [{ type: { name: "", units: "" }, value: "40" }],
+      },
+    ],
+  },
+  {
+    id: "4",
+    bird_type: "Turkey",
+    source: "USERNAME",
+    timestamp: "2022-12-10T13:45:00.000Z",
+    age: "2022-11-13T11:30:00.000Z",
+    gender: "Male",
+    comments: "days",
+    status: "Validated",
+    sample_type: "Reference",
+    machines: [
+      {
+        machineName: "",
+        measurement: [{ type: { name: "", units: "" }, value: "40" }],
+      },
+    ],
+  },
+  {
+    id: "5",
+    bird_type: "Turkey",
+    source: "USERNAME",
+    timestamp: "2022-12-10T13:45:00.000Z",
+    age: "2022-11-13T11:30:00.000Z",
+    gender: "Male",
+    comments: "days",
+    status: "Validated",
+    sample_type: "Reference",
+    machines: [
+      {
+        machineName: "",
+        measurement: [{ type: { name: "", units: "" }, value: "40" }],
+      },
+    ],
+  },
+  {
+    id: "6",
+    bird_type: "Turkey",
+    source: "USERNAME",
+    timestamp: "2022-12-10T13:45:00.000Z",
+    age: "2022-11-13T11:30:00.000Z",
+    gender: "Male",
+    comments: "days",
+    status: "Validated",
+    sample_type: "Reference",
+    machines: [
+      {
+        machineName: "",
+        measurement: [{ type: { name: "", units: "" }, value: "40" }],
+      },
+    ],
+  },
+  {
+    id: "7",
+    bird_type: "Turkey",
+    source: "USERNAME",
+    timestamp: "2022-12-10T13:45:00.000Z",
+    age: "2022-11-13T11:30:00.000Z",
+    gender: "Male",
+    comments: "days",
+    status: "Validated",
+    sample_type: "Reference",
+    machines: [
+      {
+        machineName: "",
+        measurement: [{ type: { name: "", units: "" }, value: "40" }],
+      },
+    ],
+  },
+  {
+    id: "8",
+    bird_type: "Turkey",
+    source: "USERNAME",
+    timestamp: "2022-12-10T13:45:00.000Z",
+    age: "2022-11-13T11:30:00.000Z",
+    gender: "Male",
+    comments: "days",
+    status: "Validated",
+    sample_type: "Reference",
+    machines: [
+      {
+        machineName: "",
+        measurement: [{ type: { name: "", units: "" }, value: "40" }],
+      },
+    ],
+  },
+  {
+    id: "9",
+    bird_type: "Turkey",
+    source: "USERNAME",
+    timestamp: "2022-12-10T13:45:00.000Z",
+    age: "2022-11-13T11:30:00.000Z",
+    gender: "Male",
+    comments: "days",
+    status: "Validated",
+    sample_type: "Reference",
+    machines: [
+      {
+        machineName: "",
+        measurement: [{ type: { name: "", units: "" }, value: "40" }],
+      },
+    ],
+  },
+  {
+    id: "10",
+    bird_type: "Turkey",
+    source: "USERNAME",
+    timestamp: "2022-12-10T13:45:00.000Z",
+    age: "2022-11-13T11:30:00.000Z",
+    gender: "Male",
+    comments: "days",
+    status: "Validated",
+    sample_type: "Reference",
+    machines: [
+      {
+        machineName: "",
+        measurement: [{ type: { name: "", units: "" }, value: "40" }],
+      },
+    ],
+  },
 ];
 
 const headCells = [
@@ -131,7 +284,7 @@ export default function DataView() {
 
   return (
     <>
-      <Paper sx={{ p: 3 }}>
+      <Paper>
         <EnhancedTable
           openFilterModal={openFilterModal}
           openSampleAddModal={openSampleAddModal}
@@ -182,7 +335,6 @@ export default function DataView() {
               variant="contained"
               color="secondaryLight"
               onClick={handleCloseSampleAddModal}
-              startIcon={<BackIcon />}
             >
               Cancel
             </Button>
@@ -192,13 +344,11 @@ export default function DataView() {
               autoFocus
               endIcon={<NextIcon />}
             >
-              Apply
+              Next
             </Button>
           </>
         }
-      >
-        <DataViewFilterContent />
-      </CustomDialog>
+      ></CustomDialog>
     </>
   );
 }
