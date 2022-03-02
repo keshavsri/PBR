@@ -1,19 +1,138 @@
 import React from "react";
+import { useTheme } from "@mui/material/styles";
 import {
   Typography,
+  Grid,
   Box,
   FormControl,
   InputLabel,
   Select,
+  Divider,
+  OutlinedInput,
+  Chip,
+  Button,
+  ListItem,
+  ListItemIcon,
+  Checkbox,
+  ListItemText,
   MenuItem,
   IconButton,
 } from "@mui/material";
-import RestoreIcon from "@mui/icons-material/Restore";
+import { makeStyles } from "@mui/styles";
 
-export default function OrgCodeContent() {
-  const [filterState, setFilterState] = React.useState({});
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
-  const getOrgCode = () => {
+const useStyles = makeStyles({});
+
+function getStyles(name, filterList, theme) {
+  return {
+    fontWeight:
+      filterList.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
+export default function DataViewFilterContent() {
+  const classes = useStyles();
+  const theme = useTheme();
+
+  // General Section Data
+
+  const [generalFilterState, setGeneralFilterState] = React.useState({
+    flockID: null,
+    species: null,
+    strain: null,
+    gender: null,
+    ageRange: null,
+    validationStatus: null,
+    sampleType: null,
+    batch: null,
+    dataCollector: null,
+    organiztion: null,
+  });
+
+  const handleGeneralFilterChange = (prop) => (event) => {
+    console.log("General Filter changed: ", event.target.value);
+    setGeneralFilterState({
+      ...generalFilterState,
+      [prop]: event.target.value,
+    });
+    console.log(generalFilterState);
+  };
+
+  // Sources Section Data
+
+  const [sourcesList, setSourcesList] = React.useState(
+    Array.from(Array(50).keys()).map((x) => `Checkbox ${x}`)
+  );
+  const [sourcesFilter, setSourcesFilter] = React.useState([]);
+
+  const handleSourcesFilterChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setSourcesFilter(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
+
+  // Production Types Section Data
+
+  const [prodTypesList, setProdTypesList] = React.useState(
+    Array.from(Array(5).keys()).map((x) => `Checkbox ${x}`)
+  );
+  const [prodTypesFilter, setProdTypesFilter] = React.useState([]);
+
+  const handleProdTypesFilterChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setProdTypesFilter(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
+
+  // Supervisory Section Data
+
+  const [dataCollectorsList, setDataCollectorsList] = React.useState([]);
+  const [dataCollectorsFilter, setDataCollectorsFilter] = React.useState([]);
+  const [organizationsList, setOrganizationsList] = React.useState([]);
+  const [organizationsFilter, setOrganizationsFilter] = React.useState([]);
+
+  const handleDataCollectorsFilterChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setDataCollectorsFilter(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
+  const handleOrganizationsFilterChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setOrganizationsFilter(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
+
+  // API Call Example
+
+  const getSomethingAPICall = () => {
     // fetch(`/api/organization/orgCode/${selectedOrganization.id}`, {method: "GET",})
     //   .then((response) => {
     //     return response.json();
@@ -29,103 +148,266 @@ export default function OrgCodeContent() {
     // setOrgCodeData(mockedOrgCode);
   };
 
+  // Always run
+
   React.useEffect(() => {}, []);
 
   return (
     <>
       <Typography variant="h3">Filter Table Data</Typography>
-      <Typography variant="p">General</Typography>
-      <Box>
+      <Typography variant="h4">General</Typography>
+      <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
-              <InputLabel>Select Organization</InputLabel>
+          <Grid item xs={12} sm={6}>
+            <FormControl sx={{ width: "100%", mb: 2 }}>
+              <InputLabel>Flock ID</InputLabel>
               <Select
-                value={selectedOrganization}
-                label="Select Organization"
-                onChange={handleOrgChange}
+                value={generalFilterState.flockID}
+                label="Flock ID"
+                onChange={handleGeneralFilterChange("flockID")}
               ></Select>
             </FormControl>
-            <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
-              <InputLabel>Select Organization</InputLabel>
+            <FormControl sx={{ width: "100%", mb: 2 }}>
+              <InputLabel>Species</InputLabel>
               <Select
-                value={selectedOrganization}
-                label="Select Organization"
-                onChange={handleOrgChange}
+                value={generalFilterState.species}
+                label="Species"
+                onChange={handleGeneralFilterChange("species")}
               ></Select>
             </FormControl>
-            <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
-              <InputLabel>Select Organization</InputLabel>
+            <FormControl sx={{ width: "100%", mb: 2 }}>
+              <InputLabel>Strain</InputLabel>
               <Select
-                value={selectedOrganization}
-                label="Select Organization"
-                onChange={handleOrgChange}
+                value={generalFilterState.strain}
+                label="Strain"
+                onChange={handleGeneralFilterChange("strain")}
               ></Select>
             </FormControl>
-            <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
-              <InputLabel>Select Organization</InputLabel>
+            <FormControl sx={{ width: "100%" }}>
+              <InputLabel>Gender</InputLabel>
               <Select
-                value={selectedOrganization}
-                label="Select Organization"
-                onChange={handleOrgChange}
+                value={generalFilterState.gender}
+                label="Gender"
+                onChange={handleGeneralFilterChange("gender")}
               ></Select>
             </FormControl>
           </Grid>
-          <Grid item xs={6}>
-            <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
-              <InputLabel>Select Organization</InputLabel>
+          <Grid item xs={12} sm={6}>
+            <FormControl sx={{ width: "100%", mb: 2 }}>
+              <InputLabel>Age Range</InputLabel>
               <Select
-                value={selectedOrganization}
-                label="Select Organization"
-                onChange={handleOrgChange}
+                value={generalFilterState.ageRange}
+                label="Age Range"
+                onChange={handleGeneralFilterChange("ageRange")}
               ></Select>
             </FormControl>
-            <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
-              <InputLabel>Select Organization</InputLabel>
+            <FormControl sx={{ width: "100%", mb: 2 }}>
+              <InputLabel>Validation Status</InputLabel>
               <Select
-                value={selectedOrganization}
-                label="Select Organization"
-                onChange={handleOrgChange}
+                value={generalFilterState.validationStatus}
+                label="Validation Status"
+                onChange={handleGeneralFilterChange("validationStatus")}
               ></Select>
             </FormControl>
-            <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
-              <InputLabel>Select Organization</InputLabel>
+            <FormControl
+              sx={{ width: "100%", mb: 2 }}
+              disabled={!generalFilterState.validationStatus}
+            >
+              <InputLabel>Sample Type</InputLabel>
               <Select
-                value={selectedOrganization}
-                label="Select Organization"
-                onChange={handleOrgChange}
+                value={generalFilterState.sampleType}
+                label="Sample Type"
+                onChange={handleGeneralFilterChange("sampleType")}
               ></Select>
             </FormControl>
-            <FormControl sx={{ m: 1, width: 300, mt: 3 }}>
-              <InputLabel>Select Organization</InputLabel>
+            <FormControl sx={{ width: "100%" }}>
+              <InputLabel>Batch</InputLabel>
               <Select
-                value={selectedOrganization}
-                label="Select Organization"
-                onChange={handleOrgChange}
+                value={generalFilterState.batch}
+                label="Batch"
+                onChange={handleGeneralFilterChange("batch")}
               ></Select>
             </FormControl>
           </Grid>
         </Grid>
       </Box>
-      <Box></Box>
-      {orgCodeData.orgCode && (
-        <Box>
-          <Typography variant="p">
-            The join code for {selectedOrganization.name} is:
-          </Typography>
+      <Divider />
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Typography sx={{ flexGrow: 1, marginBottom: 0 }} variant="h4">
+          Sources
+        </Typography>
 
-          <Typography variant="h4">
-            {orgCodeData.orgCode}
-            <IconButton aria-label="Refresh Code" onClick={refreshCode}>
-              <RestoreIcon />
-            </IconButton>
-          </Typography>
+        {sourcesFilter.length > 0 && (
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => setSourcesFilter([])}
+          >
+            Clear All
+          </Button>
+        )}
+        {sourcesFilter.length == 0 && (
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => setSourcesFilter(sourcesList)}
+          >
+            Select All
+          </Button>
+        )}
+      </Box>
+      <FormControl sx={{ mt: 2, width: "100%" }}>
+        <InputLabel id="demo-multiple-chip-label">
+          Sources to Display
+        </InputLabel>
+        <Select
+          labelId="demo-multiple-chip-label"
+          id="demo-multiple-chip"
+          multiple
+          value={sourcesFilter}
+          onChange={handleSourcesFilterChange}
+          input={
+            <OutlinedInput
+              id="select-multiple-chip"
+              label="Sources to Display"
+            />
+          }
+          renderValue={(selected) => (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {selected.length != sourcesList.length && (
+                <>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value} />
+                  ))}
+                </>
+              )}
+              {selected.length == sourcesList.length && (
+                <>All Available Sources</>
+              )}
+            </Box>
+          )}
+          MenuProps={MenuProps}
+        >
+          {sourcesList.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+              style={getStyles(name, sourcesFilter, theme)}
+            >
+              <Checkbox checked={sourcesFilter.indexOf(name) > -1} />
+              <ListItemText primary={name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <Divider />
 
-          <Typography variant="p">
-            Valid till: {new Date(orgCodeData.validTill).toLocaleString()}
-          </Typography>
-        </Box>
-      )}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Typography sx={{ flexGrow: 1, marginBottom: 0 }} variant="h4">
+          Production Types
+        </Typography>
+
+        {prodTypesFilter.length > 0 && (
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => setProdTypesFilter([])}
+          >
+            Clear All
+          </Button>
+        )}
+        {prodTypesFilter.length == 0 && (
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => setProdTypesFilter(prodTypesList)}
+          >
+            Select All
+          </Button>
+        )}
+      </Box>
+      <FormControl sx={{ mt: 2, width: "100%" }}>
+        <InputLabel id="demo-multiple-chip-label">
+          Production Types to Display
+        </InputLabel>
+        <Select
+          labelId="demo-multiple-chip-label"
+          id="demo-multiple-chip"
+          multiple
+          value={prodTypesFilter}
+          onChange={handleProdTypesFilterChange}
+          input={
+            <OutlinedInput
+              id="select-multiple-chip"
+              label="Production Types to Display"
+            />
+          }
+          renderValue={(selected) => (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {selected.length != prodTypesList.length && (
+                <>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value} />
+                  ))}
+                </>
+              )}
+              {selected.length == prodTypesList.length && (
+                <>All Available Production Types</>
+              )}
+            </Box>
+          )}
+          MenuProps={MenuProps}
+        >
+          {prodTypesList.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+              style={getStyles(name, prodTypesFilter, theme)}
+            >
+              <Checkbox checked={prodTypesFilter.indexOf(name) > -1} />
+              <ListItemText primary={name} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      <Divider />
+
+      <Typography variant="h4">Additional Filters</Typography>
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <FormControl sx={{ width: "100%" }}>
+              <InputLabel>Data Collector</InputLabel>
+              <Select
+                value={generalFilterState.gender}
+                label="Data Collector"
+                onChange={handleGeneralFilterChange("gender")}
+              ></Select>
+            </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <FormControl sx={{ width: "100%" }}>
+              <InputLabel>Organization</InputLabel>
+              <Select
+                value={generalFilterState.batch}
+                label="Organization"
+                onChange={handleGeneralFilterChange("batch")}
+              ></Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+      </Box>
     </>
   );
 }

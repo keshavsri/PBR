@@ -3,7 +3,6 @@ import { Button } from "@mui/material";
 import OrganizationIcon from "@mui/icons-material/Apartment";
 import CustomDialog from "./CustomDialog";
 import OrgCodeContent from "./OrgCodeContent";
-import DataViewFilterContent from "./DataViewFilterContent";
 
 export default function ManageUsers() {
   const [openModal, setOpenModal] = React.useState(false);
@@ -31,7 +30,7 @@ export default function ManageUsers() {
         title="Get Organization Share Code"
         handleClose={handleCloseModal}
       >
-        <DataViewFilterContent />
+        <OrgCodeContent />
       </CustomDialog>
     </>
   );

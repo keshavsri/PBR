@@ -80,10 +80,10 @@ const pageData = [
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    "navbar-active": {
+    ".navbar-active": {
       backgroundColor: "red",
     },
-    "MuiMenuItem-root": {
+    ".MuiMenuItem-root": {
       borderRadius: "0px",
     },
   })

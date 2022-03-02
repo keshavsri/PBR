@@ -2,6 +2,17 @@ import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
 let mainTheme = createTheme({
   components: {
+    MuiToolbar: {
+      styleOverrides: {
+        MuiButtonBase: {
+          styleOverrides: {
+            root: {
+              borderRadius: "333px",
+            },
+          },
+        },
+      },
+    },
     MuiIcon: {
       styleOverrides: {
         root: {
@@ -15,7 +26,6 @@ let mainTheme = createTheme({
     MuiButtonBase: {
       styleOverrides: {
         root: {
-          borderRadius: "333px",
           height: "42px",
         },
       },
@@ -28,6 +38,9 @@ let mainTheme = createTheme({
     },
     secondary: {
       main: "#2E3B52",
+    },
+    secondaryLight: {
+      main: "#EEEEEE",
     },
     warning: {
       main: "#FFC700",
@@ -45,7 +58,8 @@ let mainTheme = createTheme({
   typography: {
     button: {
       fontSize: "1.15rem", // works
-      fontWeight: 700,
+      fontWeight: 600,
+      textTransform: "none",
     },
     fontFamily: [
       "Univers",
