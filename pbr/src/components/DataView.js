@@ -43,55 +43,20 @@ const rows2 = [
 let rows = [
   {
     id: "1",
-    entered_by: "Organization 1",
-    organization: "123 Main Street, Raleigh, NC 27606",
-    batch_id: "30",
-    timestamp: "",
-    flock: "101",
-    flock_age: "",
-    flock_age_unit: "days",
-    validation_status: "validated",
-    sample_type: "reference",
-    data: [
+    bird_type: "Turkey",
+    source: "USERNAME",
+    timestamp: "2022-12-10T13:45:00.000Z",
+    age: "2022-11-13T11:30:00.000Z",
+    gender: "Male",
+    comments: "days",
+    status: "Validated",
+    sample_type: "Reference",
+    machines: [
       {
-        measurement: "3",
-        sample: "1",
-        value: "40",
+        machineName: "",
+        measurement: [{ type: { name: "", units: "" }, value: "40" }],
       },
     ],
-  },
-];
-
-const headCells2 = [
-  {
-    id: "name",
-    numeric: false,
-    disablePadding: true,
-    label: "Dessert (100g serving)",
-  },
-  {
-    id: "calories",
-    numeric: true,
-    disablePadding: false,
-    label: "Calories",
-  },
-  {
-    id: "fat",
-    numeric: true,
-    disablePadding: false,
-    label: "Fat (g)",
-  },
-  {
-    id: "carbs",
-    numeric: true,
-    disablePadding: false,
-    label: "Carbs (g)",
-  },
-  {
-    id: "protein",
-    numeric: true,
-    disablePadding: false,
-    label: "Protein (g)",
   },
 ];
 
@@ -103,16 +68,46 @@ const headCells = [
     label: "ID",
   },
   {
-    id: "entered_by",
+    id: "bird_type",
     numeric: false,
-    disablePadding: false,
-    label: "Entered By",
+    disablePadding: true,
+    label: "Bird Type",
   },
   {
-    id: "organization",
+    id: "source",
     numeric: false,
-    disablePadding: false,
-    label: "Organization",
+    disablePadding: true,
+    label: "Source",
+  },
+  {
+    id: "timestamp",
+    numeric: false,
+    disablePadding: true,
+    label: "Date Entered",
+  },
+  {
+    id: "age",
+    numeric: false,
+    disablePadding: true,
+    label: "Age",
+  },
+  {
+    id: "gender",
+    numeric: false,
+    disablePadding: true,
+    label: "Gender",
+  },
+  {
+    id: "status",
+    numeric: false,
+    disablePadding: true,
+    label: "Status",
+  },
+  {
+    id: "sample_type",
+    numeric: false,
+    disablePadding: true,
+    label: "Sample Type",
   },
 ];
 
