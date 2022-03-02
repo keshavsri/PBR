@@ -65,3 +65,24 @@ class Bird_Genders(Enum):
     Female = 1
     Male = 2
     Not_Reported = 3
+
+class Age_Units(Enum):
+    Days = 0
+    Weeks = 1
+    Months = 2
+    Years = 3
+
+class Validation_Types(Enum):
+    Pending = 0
+    Accepted = 1
+    Rejected = 2
+
+class Sample_Types(Enum):
+    # Healthy
+    Surveillance = 0
+    # Unhealthy
+    Diagnostic = 1
+
+class Species(Enum):
+    Turkey = 0
+    Chicken = 1
