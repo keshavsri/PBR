@@ -7,22 +7,13 @@ import NextIcon from "@mui/icons-material/ArrowForwardIos";
 import BackIcon from "@mui/icons-material/ArrowBackIosNew";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import DataViewFilterContent from "./DataViewFilterContent";
+import DataViewAddSample from "./DataViewAddSample";
 import EnhancedTable from "./DataViewTable/EnhancedTable";
 
 import CustomDialog from "./CustomDialog";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({});
-
-function createData(name, calories, fat, carbs, protein) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-  };
-}
 
 // Mocked API JSON Object
 let rows = [
@@ -360,7 +351,9 @@ export default function DataView() {
             </Button>
           </>
         }
-      ></CustomDialog>
+      >
+        <DataViewAddSample />
+      </CustomDialog>
     </>
   );
 }

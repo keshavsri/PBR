@@ -22,6 +22,8 @@ const useStyles = makeStyles((theme) => ({
       textTransform: "uppercase",
       fontWeight: 700,
       lineHeight: 1,
+      paddingLeft: "5px",
+      paddingRight: "5px",
       backgroundColor: theme.palette.primary.main,
     },
     "& .MuiSvgIcon-root": {

@@ -19,6 +19,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import { genders, validationStates, sampleTypes } from "../models/enums";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -49,25 +50,41 @@ export default function DataViewFilterContent() {
   // General Section Data
 
   const [generalFilterState, setGeneralFilterState] = React.useState({
-    flockID: null,
-    species: null,
-    strain: null,
-    gender: null,
-    ageRange: null,
-    validationStatus: null,
-    sampleType: null,
-    batch: null,
-    dataCollector: null,
-    organiztion: null,
+    flockID: "",
+    species: "",
+    strain: "",
+    gender: "",
+    ageRange: "",
+    validationStatus: "",
+    sampleType: "",
+    batch: "",
+    dataCollector: "",
+    organiztion: "",
   });
 
   const handleGeneralFilterChange = (prop) => (event) => {
-    console.log("General Filter changed: ", event.target.value);
+    console.log("General Filter changed: ", prop, event.target.value);
     setGeneralFilterState({
       ...generalFilterState,
       [prop]: event.target.value,
     });
     console.log(generalFilterState);
+  };
+
+  const handleValidationStatusChange = () => (event) => {
+    if (event.target.value != validationStates.VALIDATED) {
+      setGeneralFilterState({
+        ...generalFilterState,
+        ...{ sampleType: "", validationStatus: event.target.value },
+      });
+      console.log("Remove Sample Types from Filter", generalFilterState);
+    } else {
+      setGeneralFilterState({
+        ...generalFilterState,
+        validationStatus: event.target.value,
+      });
+      console.log("Change Validation State", generalFilterState);
+    }
   };
 
   // Sources Section Data
@@ -165,7 +182,9 @@ export default function DataViewFilterContent() {
                 value={generalFilterState.flockID}
                 label="Flock ID"
                 onChange={handleGeneralFilterChange("flockID")}
-              ></Select>
+              >
+                <MenuItem value={""}></MenuItem>
+              </Select>
             </FormControl>
             <FormControl sx={{ width: "100%", mb: 2 }}>
               <InputLabel>Species</InputLabel>
@@ -173,7 +192,9 @@ export default function DataViewFilterContent() {
                 value={generalFilterState.species}
                 label="Species"
                 onChange={handleGeneralFilterChange("species")}
-              ></Select>
+              >
+                <MenuItem value={""}></MenuItem>
+              </Select>
             </FormControl>
             <FormControl sx={{ width: "100%", mb: 2 }}>
               <InputLabel>Strain</InputLabel>
@@ -181,7 +202,9 @@ export default function DataViewFilterContent() {
                 value={generalFilterState.strain}
                 label="Strain"
                 onChange={handleGeneralFilterChange("strain")}
-              ></Select>
+              >
+                <MenuItem value={""}></MenuItem>
+              </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
               <InputLabel>Gender</InputLabel>
@@ -189,7 +212,16 @@ export default function DataViewFilterContent() {
                 value={generalFilterState.gender}
                 label="Gender"
                 onChange={handleGeneralFilterChange("gender")}
-              ></Select>
+              >
+                <MenuItem value={""}></MenuItem>
+                {Object.values(genders).map((gender, index) => {
+                  return (
+                    <MenuItem value={gender} key={index}>
+                      {gender}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -199,26 +231,49 @@ export default function DataViewFilterContent() {
                 value={generalFilterState.ageRange}
                 label="Age Range"
                 onChange={handleGeneralFilterChange("ageRange")}
-              ></Select>
+              >
+                <MenuItem value={""}></MenuItem>
+              </Select>
             </FormControl>
             <FormControl sx={{ width: "100%", mb: 2 }}>
               <InputLabel>Validation Status</InputLabel>
               <Select
                 value={generalFilterState.validationStatus}
                 label="Validation Status"
-                onChange={handleGeneralFilterChange("validationStatus")}
-              ></Select>
+                onChange={handleValidationStatusChange()}
+              >
+                <MenuItem value={""}></MenuItem>
+                {Object.values(validationStates).map((state, index) => {
+                  return (
+                    <MenuItem value={state} key={index}>
+                      {state}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </FormControl>
             <FormControl
               sx={{ width: "100%", mb: 2 }}
-              disabled={!generalFilterState.validationStatus}
+              disabled={
+                generalFilterState.validationStatus !==
+                validationStates.VALIDATED
+              }
             >
               <InputLabel>Sample Type</InputLabel>
               <Select
                 value={generalFilterState.sampleType}
                 label="Sample Type"
                 onChange={handleGeneralFilterChange("sampleType")}
-              ></Select>
+              >
+                <MenuItem value={""}></MenuItem>
+                {Object.values(sampleTypes).map((type, index) => {
+                  return (
+                    <MenuItem value={type} key={index}>
+                      {type}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
               <InputLabel>Batch</InputLabel>
@@ -226,7 +281,9 @@ export default function DataViewFilterContent() {
                 value={generalFilterState.batch}
                 label="Batch"
                 onChange={handleGeneralFilterChange("batch")}
-              ></Select>
+              >
+                <MenuItem value={""}></MenuItem>
+              </Select>
             </FormControl>
           </Grid>
         </Grid>
@@ -390,20 +447,24 @@ export default function DataViewFilterContent() {
             <FormControl sx={{ width: "100%" }}>
               <InputLabel>Data Collector</InputLabel>
               <Select
-                value={generalFilterState.gender}
+                value={generalFilterState.dataCollector}
                 label="Data Collector"
-                onChange={handleGeneralFilterChange("gender")}
-              ></Select>
+                onChange={handleGeneralFilterChange("dataCollector")}
+              >
+                <MenuItem value={""}></MenuItem>
+              </Select>
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={6}>
             <FormControl sx={{ width: "100%" }}>
               <InputLabel>Organization</InputLabel>
               <Select
-                value={generalFilterState.batch}
+                value={generalFilterState.organization}
                 label="Organization"
-                onChange={handleGeneralFilterChange("batch")}
-              ></Select>
+                onChange={handleGeneralFilterChange("organization")}
+              >
+                <MenuItem value={""}></MenuItem>
+              </Select>
             </FormControl>
           </Grid>
         </Grid>
