@@ -52,6 +52,19 @@ const useStyles = makeStyles({
     "& .MuiTextField-root": {
       width: "100%",
     },
+    "& .MuiAccordion-root": {
+      backgroundColor: "rgba(0, 0, 0, 0.03)",
+      paddingTop: "10px",
+      paddingBottom: "10px",
+      "& .MuiFormControl-root": {
+        backgroundColor: "#ffffff",
+      },
+      "& .MuiDivider-vertical": {
+        height: "50px",
+        marginLeft: "15px",
+        marginRight: "15px",
+      },
+    },
   },
 });
 
@@ -171,7 +184,7 @@ export default function DataViewAddSample() {
   }, []);
 
   return (
-    <>
+    <Box className={classes.root}>
       <Typography variant="h3">Add Sample Entry</Typography>
       <Typography paragraph>
         Add data directly, or alternatively upload a file or photo of a machine
@@ -180,7 +193,7 @@ export default function DataViewAddSample() {
       <Typography paragraph>
         Files must be in .txt, .pdf, .jpg/.jpeg, or .heic format.
       </Typography>
-      <Box sx={{ flexGrow: 1 }} className={classes.root}>
+      <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <FormControl sx={{ width: "100%" }}>
@@ -319,12 +332,26 @@ export default function DataViewAddSample() {
       {machineList.map((machine, machineIndex) => {
         return (
           <Accordion key={machineIndex}>
-            <AccordionSummary
-              sx={{ alignItems: "center" }}
-              expandIcon={<ExpandMoreIcon />}
-            >
-              <Typography sx={{ flexGrow: 1 }}>{machine.name} Data</Typography>
-              <Stack direction="row" alignItems="center" spacing={2}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                spacing={2}
+                sx={{ width: "100%" }}
+              >
+                <Typography sx={{ flexGrow: 1 }}>
+                  {machine.name} Data
+                </Typography>
+                <label htmlFor="icon-button-file">
+                  <Input accept="image/*" id="icon-button-file" type="file" />
+                  <IconButton
+                    color="primary"
+                    aria-label="upload picture"
+                    component="span"
+                  >
+                    <PhotoCamera />
+                  </IconButton>
+                </label>
                 <label htmlFor="contained-button-file">
                   <Input
                     accept="image/*"
@@ -336,19 +363,8 @@ export default function DataViewAddSample() {
                     Upload
                   </Button>
                 </label>
-                <label htmlFor="icon-button-file">
-                  <Input accept="image/*" id="icon-button-file" type="file" />
-                  <IconButton
-                    size="small"
-                    color="primary"
-                    aria-label="upload picture"
-                    component="span"
-                  >
-                    <PhotoCamera />
-                  </IconButton>
-                </label>
               </Stack>
-              <Divider sx={{ height: 28, m: 1 }} orientation="vertical" />
+              <Divider orientation="vertical" />
             </AccordionSummary>
             <AccordionDetails>
               <Grid container spacing={2}>
@@ -398,6 +414,6 @@ export default function DataViewAddSample() {
           </Grid>
         </Grid>
       </Box>
-    </>
+    </Box>
   );
 }
