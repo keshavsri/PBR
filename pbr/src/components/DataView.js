@@ -32,45 +32,7 @@ function createData(name, calories, fat, carbs, protein) {
   };
 }
 
-const rows2 = [
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Donut', 452, 25.0, 51, 4.9),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-  createData('Honeycomb', 408, 3.2, 87, 6.5),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Jelly Bean', 375, 0.0, 94, 0.0),
-  createData('KitKat', 518, 26.0, 65, 7.0),
-  createData('Lollipop', 392, 0.2, 98, 0.0),
-  createData('Marshmallow', 318, 0, 81, 2.0),
-  createData('Nougat', 360, 19.0, 9, 37.0),
-  createData('Oreo', 437, 18.0, 63, 4.0),
-];
-
-let rows3 = [
-  {id: "1", 
-  entered_by: "Organization 1", 
-  organization: "123 Main Street, Raleigh, NC 27606",
-  batch_id: "30",
-  timestamp: "",
-  flock: "101",
-  flock_age: "",
-  flock_age_unit: "days",
-  validation_status: "validated",
-  sample_type: "reference",
-  data: [
-      {
-      measurement: {
-
-      },
-      sample: "1",
-      value:  "40"
-      }
-    ]
-  }
-];
-
+// Mocked API JSON Object
 let rows = [
   {id: "1", 
   bird_type: "Turkey", 
@@ -85,12 +47,23 @@ let rows = [
       {
         machineName: "",
         measurement: [
-          {type: {name: "", units: "" }, value:  "40"}
+          {type: {name: "PH", units: "mg" }, value:  "40"},
+          {type: {name: "PC02", units: "mg" }, value:  "40"},
+          {type: {name: "BE", units: "mg" }, value:  "40"},
+          {type: {name: "HC03", units: "mg" }, value:  "40"},
+          {type: {name: "TCO2", units: "mg" }, value:  "40"},
+          {type: {name: "S02", units: "mg" }, value:  "40"},
+          {type: {name: "NAK", units: "mg" }, value:  "40"},
+          {type: {name: "ICA", units: "mg" }, value:  "40"},
+          {type: {name: "GLU", units: "mg" }, value:  "40"},
+          {type: {name: "HCT", units: "mg" }, value:  "40"},
+          {type: {name: "HB", units: "mg" }, value:  "40"},
         ]
       }
     ]
   },
 ];
+
 
 const headCells = [
   {
@@ -142,6 +115,21 @@ const headCells = [
     label: 'Sample Type',
   },
 ];
+
+// PH
+// PCO2
+// BE
+// HCO3
+// TCO2
+// SO2
+// NAK
+// ICA
+// GLU
+// HCT
+// HB
+// function addHeadCellsFromAPI(measurements){
+//   headCellsToAdd = measurements.map((measurement) => [measurement]);
+// }
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -171,40 +159,6 @@ function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
-
-const headCells2 = [
-  {
-    id: 'name',
-    numeric: false,
-    disablePadding: true,
-    label: 'Dessert (100g serving)',
-  },
-  {
-    id: 'calories',
-    numeric: true,
-    disablePadding: false,
-    label: 'Calories',
-  },
-  {
-    id: 'fat',
-    numeric: true,
-    disablePadding: false,
-    label: 'Fat (g)',
-  },
-  {
-    id: 'carbs',
-    numeric: true,
-    disablePadding: false,
-    label: 'Carbs (g)',
-  },
-  {
-    id: 'protein',
-    numeric: true,
-    disablePadding: false,
-    label: 'Protein (g)',
-  },
-];
-
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
