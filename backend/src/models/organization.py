@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import List
 from server import db
 from models.enums import States
 
@@ -22,6 +21,8 @@ class Organization(db.Model):
     mainContact: User = db.Column(db.Integer, db.ForeignKey('user.id'))
     notes: str = db.Column(db.String(500))
     organizationCode: str = db.Column(db.String(6), unique=True)
+    # TODO: sort this out
+    #organizationCodeExpiry = db.Column(db.DateTime)
     sources: List[Source] = None
 
     # initialize the class from a json object from the frontend

@@ -7,7 +7,7 @@ organizationBlueprint = Blueprint('organization', __name__)
 @organizationBlueprint.route('/', methods=['GET', 'POST'])
 # This is hitting an id of an organization, it will return the organization with the id, or update the organization with the id if the request is a PUT or DELETE
 @organizationBlueprint.route('/<int:item_id>', methods=['GET', 'PUT', 'DELETE'])
-def route_setting_all(item_id=None):
+def handleOrganization(item_id=None):
     # Importing the model
     from models.organization import Organization
     # Handling the GET requests
