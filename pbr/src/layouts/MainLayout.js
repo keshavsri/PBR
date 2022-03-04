@@ -2,7 +2,7 @@ import React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import { makeStyles, createStyles } from "@mui/styles";
 import { NavLink, useNavigate } from "react-router-dom";
-import useAuth from "../useAuth";
+import useAuth from "../services/useAuth";
 
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -184,12 +184,12 @@ const Drawer = styled(MuiDrawer, {
 
 export default function MainLayout(props) {
   const theme = useTheme();
-  const classes = useStyles();
+  useStyles();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(pageData[0][0]);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { authenticated, user, logout } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -301,13 +301,13 @@ export default function MainLayout(props) {
                     );
                   })}
                 </List>
-                {index != pageData.length - 1 && <Divider />}
+                {index !== pageData.length - 1 && <Divider />}
               </Box>
             );
           })}
         </Box>
         <Box>
-          {authenticated && (
+          {user && (
             <Box sx={{ flexGrow: 1 }}>
               <Tooltip title="User Actions">
                 <ListItem

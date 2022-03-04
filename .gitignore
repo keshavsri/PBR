@@ -1,3 +1,4 @@
 .env
 .settings
-*.sqlite3
+.vscode
+.project
