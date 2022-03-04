@@ -2,87 +2,67 @@ from dataclasses import dataclass
 from glob import glob
 from typing import List
 from server import db
-from models.enums import States
 from datetime import datetime
 
 from models.user import User
 from models.flock import Flock
 from models.source import Source
 from models.organization import Organization
-# Needs to be implemented
-from models.machineType import MachineType
-from models.enums import Age_Units
-from models.enums import Validation_Types
-from models.enums import Sample_Types
-from models.enums import Bird_Genders
-from models.enums import Species
+from models.enums import AgeUnits, ValidationTypes, SampleTypes, BirdGenders, Species
 
 @dataclass
 class Sample(db.Model):
-    id: int
-    entered_by_user: User
-    data_entry_timestamp: datetime.now().timestamp()
-    flock: Flock
-    flock_age: int
-    flock_age_units_used: Age_Units
-    species: Species
-    source: Source
-    organization: Organization
-    validation_status: Validation_Types
-    flock_gender: Bird_Genders
-    sample_type: Sample_Types
-    # need to figure this out
-    strain: Strains
-    # need to create MachineType
-    machine_data: List[MachineType]
-    comments: str
+    id: int = db.Column(db.Integer, primary_key=True)
+    entered_by_user: User = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
+    data_entry_timestamp: datetime = db.Column(db.DateTime, default=datetime.now, nullable=False)
+    flock: Flock = db.Column(db.Integer, db.ForeignKey(Flock.id), nullable=False)
+    flock_age: int = db.Column(db.Integer, nullable=False)
+    flock_age_units_used: AgeUnits = db.Column(db.Enum(AgeUnits), nullable=False)
+    species: Species = db.Column(db.Integer, db.ForeignKey(Flock.id), nullable=False)
+    source: Source = db.Column(db.Integer, db.ForeignKey(Source.id), nullable=False)
+    organization: Organization = db.Column(db.Integer, db.ForeignKey(Flock.id), nullable=False)
+    validation_status: ValidationTypes = db.Column(db.Enum(ValidationTypes), nullable=False)
+    flock_gender: BirdGenders = db.Column(db.Enum(BirdGenders), nullable=False)
+    sample_type: SampleTypes = db.Column(db.Enum(SampleTypes), nullable=False)
+    strain: str = db.Column(db.String(120), nullable=False)
+    comments: str = db.Column(db.String(500))
 
     ## VetScan VS2 ##
     date_of_VS2: datetime.date
     time_of_VS2: datetime.time
 
-    ast: int
-    ba: int
-    ck: int
-    ua: int
-    glucose: int
-    total_ca: int
-    phos: int
-    tp: int
-    alb: int
-    glob: int
-    potassium: int
-    sodium: int
-    qc: int
-    hem: int
-    lip: int
-    ict: int
+    ast: float
+    ba: float
+    ck: float
+    ua: float
+    glucose: float
+    total_ca: float
+    phos: float
+    tp: float
+    alb: float
+    glob: float
+    potassium: float
+    sodium: float
+    qc: float
+    hem: float
+    lip: float
+    ict: float
 
     ## i-Stat Data ##
     date_of_iStat: datetime.date
     time_of_iStat: datetime.time
 
-    ph: int
-    pco2: int
-    po2: int
-    be: int
-    hco3: int
-    tco2: int
-    so2: int
-    na: int
-    k: int
-    ica: int
-    glu: int
-    hct: int
-    hb: int
-    istat_num: int
-
-    def __init__ (self, requestJSON):
-        self.flock = requestJSON.get('flock_ID')
-        self.strain = requestJSON.get('strain')
-        self.species = requestJSON.get('species')
-        self.gender = requestJSON.get('gender')
-        self.source = requestJSON.get('source')
-        self.sample_type = requestJSON.get('sample_type')
-        self.flock_age = requestJSON.get('age')
-        self.flock_age_units_used = requestJSON.get('age_unit')
+    ph: float
+    pco2: float
+    po2: float
+    be: float
+    hco3: float
+    tco2: float
+    so2: float
+    na: float
+    k: float
+    ica: float
+    glu: float
+    hct: float
+    hb: float
+    istat_num: float

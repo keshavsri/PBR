@@ -1,20 +1,15 @@
+from dataclasses import dataclass
 from server import db
-from enums import Bird_Gender
-from flask_serialize import FlaskSerialize
 
-fs_mixin = FlaskSerialize(db)
+from models.organization import Organization
+from models.source import Source
+from models.enums import Species, BirdGenders
 
-
-
-class Flock(db.Model, fs_mixin):
-    id = db.Column(db.Integer, primary_key=True)
-    associated_organization = db.Column(db.Integer, db.ForeignKey('organization.id'))
-    strain = db.Column(db.String(120))
-    species = db.Column(db.String(120))
-    gender = db.Column(db.Integer)
-    source = db.Column(db.Integer, db.ForeignKey('organization.id'))
-    production_type = db.Column(db.String(120))
+class Flock(db.Model):
+    id: int = db.Column(db.Integer, primary_key=True)
+    associated_organization: Organization = db.Column(db.Integer, db.ForeignKey('organization.id'))
+    strain: str = db.Column(db.String(120))
+    species: Species = db.Column(db.Enum(Species), nullable=False)
+    gender: BirdGenders = db.Column(db.Enum(BirdGenders), nullable=False)
+    source: Source = db.Column(db.Integer, db.ForeignKey(Source.id), nullable=False)
     
-    __fs_create_fields__ = __fs_update_fields__ = ['associated_organization', 'strain', 'species', 'gender', 'source', 'production_type']
-
-db.create_all()

@@ -1,7 +1,8 @@
 from enum import Enum
+from enum import IntEnum
 
 
-class States (Enum):
+class States (str, Enum):
     AL = "Alabama"
     AK = "Alaska"
     AZ = "Arizona"
@@ -20,69 +21,69 @@ class States (Enum):
     IA = "Iowa"
     KS = "Kansas"
     KY = "Kentucky"
-    LA = 'Louisiana'
-    MA = 'Massachusetts'
-    MD = 'Maryland'
-    ME = 'Maine'
-    MI = 'Michigan'
-    MN = 'Minnesota'
-    MO = 'Missouri'
-    MS = 'Mississippi'
-    MT = 'Montana'
-    NC = 'North Carolina'
-    ND = 'North Dakota'
-    NE = 'Nebraska'
-    NH = 'New Hampshire'
-    NJ = 'New Jersey'
-    NM = 'New Mexico'
-    NV = 'Nevada'
-    NY = 'New York'
-    OH = 'Ohio'
-    OK = 'Oklahoma'
-    OR = 'Oregon'
-    PA = 'Pennsylvania'
-    RI = 'Rhode Island'
-    SC = 'South Carolina'
-    SD = 'South Dakota'
-    TN = 'Tennessee'
-    TX = 'Texas'
-    UT = 'Utah'
-    VA = 'Virginia'
-    VT = 'Vermont'
-    WA = 'Washington'
-    WI = 'Wisconsin'
-    WV = 'West Virginia'
-    WY = 'Wyoming'
+    LA = "Louisiana"
+    MA = "Massachusetts"
+    MD = "Maryland"
+    ME = "Maine"
+    MI = "Michigan"
+    MN = "Minnesota"
+    MO = "Missouri"
+    MS = "Mississippi"
+    MT = "Montana"
+    NC = "North Carolina"
+    ND = "North Dakota"
+    NE = "Nebraska"
+    NH = "New Hampshire"
+    NJ = "New Jersey"
+    NM = "New Mexico"
+    NV = "Nevada"
+    NY = "New York"
+    OH = "Ohio"
+    OK = "Oklahoma"
+    OR = "Oregon"
+    PA = "Pennsylvania"
+    RI = "Rhode Island"
+    SC = "South Carolina"
+    SD = "South Dakota"
+    TN = "Tennessee"
+    TX = "Texas"
+    UT = "Utah"
+    VA = "Virginia"
+    VT = "Vermont"
+    WA = "Washington"
+    WI = "Wisconsin"
+    WV = "West Virginia"
+    WY = "Wyoming"
 
-class Roles(Enum):
+class Roles(IntEnum):
     Super_Admin = 0
     Admin = 1
     Supervisor = 2
     Data_Collector = 3
     Guest = 4
     
-class Bird_Genders(Enum):
+class BirdGenders(IntEnum):
     Female = 1
     Male = 2
     Not_Reported = 3
 
-class Age_Units(Enum):
+class AgeUnits(IntEnum):
     Days = 0
     Weeks = 1
     Months = 2
     Years = 3
 
-class Validation_Types(Enum):
+class ValidationTypes(IntEnum):
     Pending = 0
     Accepted = 1
     Rejected = 2
 
-class Sample_Types(Enum):
+class SampleTypes(IntEnum):
     # Healthy
     Surveillance = 0
     # Unhealthy
     Diagnostic = 1
 
-class Species(Enum):
+class Species(IntEnum):
     Turkey = 0
     Chicken = 1
