@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { makeStyles, createStyles } from "@mui/styles";
-import useAuth from "../useAuth";
+import useAuth from "../services/useAuth";
 
 import image1 from "../images/404images/birds.jpg";
 import image2 from "../images/404images/cows.jpg";
@@ -184,11 +184,15 @@ export default function Error404() {
                 Go to Login Screen
               </Fab>
             )}
-            <img className={classes.egg} src={egg} />
+            <img className={classes.egg} src={egg} alt="Cracked Eggs" />
           </Grid>
         </Grow>
 
-        <img className={classes.ncsuBrickLogo} src={brickLogoNCSU} />
+        <img
+          className={classes.ncsuBrickLogo}
+          src={brickLogoNCSU}
+          alt="NCSU Brick Logo"
+        />
         <a
           className={classes.credits}
           href="https://www.freepik.com/vectors/birthday"
