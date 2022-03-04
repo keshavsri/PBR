@@ -1,23 +1,17 @@
 from server import db
+from dataclasses import dataclass
+
 from models.enums import Roles
-from flask_serialize import FlaskSerialize
+from models.organization import Organization
 
-fs_mixin = FlaskSerialize(db)
-
-class User(db.Model, fs_mixin):
-    __tablename__ = 'user'
-    __table_args__ = {'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True)
-    organization = db.Column(db.Integer, db.ForeignKey('organization.id'))
-    email = db.Column(db.String(120), index=True, unique=True)
-    password = db.Column(db.String(120))
-    first_name = db.Column(db.String(120))
-    last_name = db.Column(db.String(120))
-    phone_number = db.Column(db.String(20))
-    role = db.Column(db.Integer)
-    notes = db.Column(db.String(500))
-    
-    __fs_create_fields__ = __fs_update_fields__ = ['password', 'organization', 'first_name', 'last_name', 'email', 'phone_number', 'role', 'notes']
-
-def createTable():
-    db.create_all()
+@dataclass
+class User(db.Model):
+    id: int = db.Column(db.Integer, primary_key=True)
+    organization: Organization = db.Column(db.Integer, db.ForeignKey(Organization.id), nullable=False)
+    email: str = db.Column(db.String(120), index=True, unique=True, nullable=False)
+    password: str = db.Column(db.String(120), nullable=False)
+    first_name: str = db.Column(db.String(120), nullable=False)
+    last_name: str = db.Column(db.String(120), nullable=False)
+    phone_number: str = db.Column(db.String(20), nullable=False)
+    roles: list[Roles] = None
+    notes: str = db.Column(db.String(500))

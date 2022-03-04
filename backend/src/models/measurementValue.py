@@ -3,6 +3,7 @@ from server import db
 
 from models.measurement import Measurement
 from models.sample import Sample
+
 @dataclass
 class MeasurementValue(db.Model):
     id: int = db.Column(db.Integer, primary_key=True)

@@ -23,7 +23,7 @@ class Organization(db.Model):
     organizationCode: str = db.Column(db.String(6), unique=True)
     # TODO: sort this out
     #organizationCodeExpiry = db.Column(db.DateTime)
-    sources: List[Source] = None
+    sources: list[Source] = None
 
     # initialize the class from a json object from the frontend
     def __init__ (self, requestJSON):
