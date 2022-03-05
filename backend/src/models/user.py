@@ -13,5 +13,8 @@ class User(db.Model):
     first_name: str = db.Column(db.String(120), nullable=False)
     last_name: str = db.Column(db.String(120), nullable=False)
     phone_number: str = db.Column(db.String(20), nullable=False)
-    roles: list[Roles] = None
+    role: Roles = db.Column(db.Enum(Roles), nullable=False)
     notes: str = db.Column(db.String(500))
+    
+def createTable():
+    db.create_all()

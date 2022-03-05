@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from server import db
 from models.enums import States
 
-from models.user import User
 from models.source import Source
 
 
@@ -16,9 +15,8 @@ class Organization(db.Model):
     name: str = db.Column(db.String(120), unique=True)
     street_address: str = db.Column(db.String(120))
     city: str = db.Column(db.String(120))
-    state: States = db.Column(db.String(20))
+    state: States = db.Column(db.Enum(States))
     zip: str = db.Column(db.String(10))
-    mainContact: User = db.Column(db.Integer, db.ForeignKey('user.id'))
     notes: str = db.Column(db.String(500))
     organizationCode: str = db.Column(db.String(6), unique=True)
     # TODO: sort this out

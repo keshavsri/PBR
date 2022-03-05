@@ -1,5 +1,6 @@
 from flask import request, Blueprint, jsonify, Response, make_response
 import bcrypt
+import jwt
 from datetime import datetime, timedelta, timezone
 import os
 import uuid
@@ -27,14 +28,10 @@ def token_required(f):
       # PULL OUT DATA FROM TOKEN
       data = Auth_Token.decode_token(token)
       # GET AND RETURN CURRENT USER
-      current_user = User.query.filter_by(email=data["email"]).first()
+      current_user = User.query.filter_by(id=data["id"]).first()
     except jwt.ExpiredSignatureError as error:
       return jsonify({
         'message' : 'Token is expired!'
-      }), 401
-    else:
-      return jsonify({
-        'message' : 'Token is invalid!'
       }), 401
     # returns the current logged in users contex to the routes
     return  f(current_user, *args, **kwargs)

@@ -1,3 +1,5 @@
+
+from api.APIUserController import token_required
 from flask import Blueprint, jsonify, request
 
 # Flask blueprint for the organization routes, this is the blueprint that is registered in the app.py file with a prefix of /organization
@@ -7,9 +9,12 @@ organizationBlueprint = Blueprint('organization', __name__)
 @organizationBlueprint.route('/', methods=['GET', 'POST'])
 # This is hitting an id of an organization, it will return the organization with the id, or update the organization with the id if the request is a PUT or DELETE
 @organizationBlueprint.route('/<int:item_id>', methods=['GET', 'PUT', 'DELETE'])
-def handleOrganization(item_id=None):
+@token_required
+def handleOrganization(current_user, item_id=None):
     # Importing the model
     from models.organization import Organization
+    from models.log import createLog
+    from models.enums import LogActions
     # Handling the GET requests
     if request.method == 'GET':
         # response json is created here and gets returned at the end of the block for GET requests.
@@ -36,6 +41,7 @@ def handleOrganization(item_id=None):
             # stages and then commits the new organization to the database
             db.session.add(newOrganization)
             db.session.commit()
+            createLog(current_user, LogActions.ADD_ORGANIZATION, 'Created new organization: ' + newOrganization.name)
             return jsonify(Organization.query.get(request.json.get('id'))), 201
         # if the organization already exists then return a 409 conflict
         else:
@@ -50,7 +56,9 @@ def handleOrganization(item_id=None):
             from server import db
             Organization.query.filter_by(id=item_id).update(request.json)
             db.session.commit()
-            return jsonify(Organization.query.get(item_id)), 200
+            editedOrganization = Organization.query.get(item_id)
+            createLog(current_user, LogActions.EDIT_ORGANIZATION, 'Edited Organization: ' + editedOrganization.name)
+            return jsonify(editedOrganization), 200
     
     # Handling the DELETE requests
     elif request.method == 'DELETE':
@@ -59,8 +67,10 @@ def handleOrganization(item_id=None):
             return jsonify({'message': 'Organization does not exist'}), 404
         else:
             from server import db
+            deletedOrganization = Organization.query.get(item_id)
             db.session.delete(Organization.query.get(item_id))
             db.session.commit()
+            createLog(current_user, LogActions.DELETE_ORGANIZATION, 'Deleted Organization: ' + deletedOrganization.name)
             return jsonify({'message': 'Organization deleted'}), 200
     
     # If the request is not a GET, POST, PUT, or DELETE then return a 405 Method Not Allowed
