@@ -88,7 +88,13 @@ class SampleTypes(IntEnum):
 class Species(IntEnum):
     Turkey = 0
     Chicken = 1
-
+    
+class ProductionTypes(IntEnum):
+    Meat = 0
+    Broiler = 1
+    Layer = 2
+    Breeder = 3
+    Broiler_Breeder = 4
 class LogActions(IntEnum):
     # User
     ACCOUNT_CREATED = 101
@@ -132,3 +138,8 @@ class LogActions(IntEnum):
     EDIT_USER = 803
     ASSIGN_ROLE = 813
     DELETE_USER = 804
+    
+    # Flock
+    ADD_FLOCK = 901
+    EDIT_FLOCK = 903
+    DELETE_FLOCK = 904

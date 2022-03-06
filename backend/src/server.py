@@ -9,12 +9,14 @@ from api import apiBlueprint
 from api.APIUserController import userBlueprint
 from api.APIOrganizationController import organizationBlueprint
 from api.APILogController import logBlueprint
+from api.APIFlockController import flockBlueprint
 
 app = Flask(__name__)
 app.register_blueprint(apiBlueprint, url_prefix='/api')
 app.register_blueprint(userBlueprint, url_prefix='/api/user')
 app.register_blueprint(organizationBlueprint, url_prefix='/api/organization')
 app.register_blueprint(logBlueprint, url_prefix='/api/log')
+app.register_blueprint(flockBlueprint, url_prefix='/api/flock')
 app.config['SECRET_KEY'] = os.environ.get("JWT_SECRET")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
