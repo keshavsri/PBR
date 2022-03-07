@@ -27,159 +27,6 @@ function createData(name, calories, fat, carbs, protein) {
 // Mocked API JSON Object
 let rows = [
   {
-    id: "1",
-    bird_type: "Turkey",
-    source: "USERNAME",
-    timestamp: "2022-12-10T13:45:00.000Z",
-    age: "2022-11-13T11:30:00.000Z",
-    gender: "Male",
-    comments: "days",
-    status: "Validated",
-    sample_type: "Reference",
-    machines: [
-      {
-        machineName: "",
-        measurement: [{ type: { name: "", units: "" }, value: "40" }],
-      },
-    ],
-  },
-  {
-    id: "2",
-    bird_type: "Turkey",
-    source: "USERNAME",
-    timestamp: "2022-12-10T13:45:00.000Z",
-    age: "2022-11-13T11:30:00.000Z",
-    gender: "Male",
-    comments: "days",
-    status: "Validated",
-    sample_type: "Reference",
-    machines: [
-      {
-        machineName: "",
-        measurement: [{ type: { name: "", units: "" }, value: "40" }],
-      },
-    ],
-  },
-  {
-    id: "3",
-    bird_type: "Turkey",
-    source: "USERNAME",
-    timestamp: "2022-12-10T13:45:00.000Z",
-    age: "2022-11-13T11:30:00.000Z",
-    gender: "Male",
-    comments: "days",
-    status: "Validated",
-    sample_type: "Reference",
-    machines: [
-      {
-        machineName: "",
-        measurement: [{ type: { name: "", units: "" }, value: "40" }],
-      },
-    ],
-  },
-  {
-    id: "4",
-    bird_type: "Turkey",
-    source: "USERNAME",
-    timestamp: "2022-12-10T13:45:00.000Z",
-    age: "2022-11-13T11:30:00.000Z",
-    gender: "Male",
-    comments: "days",
-    status: "Validated",
-    sample_type: "Reference",
-    machines: [
-      {
-        machineName: "",
-        measurement: [{ type: { name: "", units: "" }, value: "40" }],
-      },
-    ],
-  },
-  {
-    id: "5",
-    bird_type: "Turkey",
-    source: "USERNAME",
-    timestamp: "2022-12-10T13:45:00.000Z",
-    age: "2022-11-13T11:30:00.000Z",
-    gender: "Male",
-    comments: "days",
-    status: "Validated",
-    sample_type: "Reference",
-    machines: [
-      {
-        machineName: "",
-        measurement: [{ type: { name: "", units: "" }, value: "40" }],
-      },
-    ],
-  },
-  {
-    id: "6",
-    bird_type: "Turkey",
-    source: "USERNAME",
-    timestamp: "2022-12-10T13:45:00.000Z",
-    age: "2022-11-13T11:30:00.000Z",
-    gender: "Male",
-    comments: "days",
-    status: "Validated",
-    sample_type: "Reference",
-    machines: [
-      {
-        machineName: "",
-        measurement: [{ type: { name: "", units: "" }, value: "40" }],
-      },
-    ],
-  },
-  {
-    id: "7",
-    bird_type: "Turkey",
-    source: "USERNAME",
-    timestamp: "2022-12-10T13:45:00.000Z",
-    age: "2022-11-13T11:30:00.000Z",
-    gender: "Male",
-    comments: "days",
-    status: "Validated",
-    sample_type: "Reference",
-    machines: [
-      {
-        machineName: "",
-        measurement: [{ type: { name: "", units: "" }, value: "40" }],
-      },
-    ],
-  },
-  {
-    id: "8",
-    bird_type: "Turkey",
-    source: "USERNAME",
-    timestamp: "2022-12-10T13:45:00.000Z",
-    age: "2022-11-13T11:30:00.000Z",
-    gender: "Male",
-    comments: "days",
-    status: "Validated",
-    sample_type: "Reference",
-    machines: [
-      {
-        machineName: "",
-        measurement: [{ type: { name: "", units: "" }, value: "40" }],
-      },
-    ],
-  },
-  {
-    id: "9",
-    bird_type: "Turkey",
-    source: "USERNAME",
-    timestamp: "2022-12-10T13:45:00.000Z",
-    age: "2022-11-13T11:30:00.000Z",
-    gender: "Male",
-    comments: "days",
-    status: "Validated",
-    sample_type: "Reference",
-    machines: [
-      {
-        machineName: "",
-        measurement: [{ type: { name: "", units: "" }, value: "40" }],
-      },
-    ],
-  },
-  {
     id: "10",
     bird_type: "Turkey",
     source: "USERNAME",
@@ -189,10 +36,10 @@ let rows = [
     comments: "days",
     status: "Validated",
     sample_type: "Reference",
-    machines: [
+    machines:[
       {
-        machineName: "",
-        measurement: [
+        machineName: "iStat",
+        data: [
           { type: { name: "PH", units: "mg" }, value: "40" },
           { type: { name: "PC02", units: "mg" }, value: "40" },
           { type: { name: "BE", units: "mg" }, value: "40" },
@@ -204,11 +51,30 @@ let rows = [
           { type: { name: "GLU", units: "mg" }, value: "40" },
           { type: { name: "HCT", units: "mg" }, value: "40" },
           { type: { name: "HB", units: "mg" }, value: "40" },
-        ],
+        ]
       },
-    ],
+    ] ,
   },
 ];
+
+let headCellNamesFromAPI = [
+      {
+        machineName: "iStat",
+        data: [
+          { type: { name: "PH", units: "mg" }},
+          { type: { name: "PC02", units: "mg" }},
+          { type: { name: "BE", units: "mg" }},
+          { type: { name: "HC03", units: "mg" }},
+          { type: { name: "TCO2", units: "mg" } },
+          { type: { name: "S02", units: "mg" }},
+          { type: { name: "NAK", units: "mg" }},
+          { type: { name: "ICA", units: "mg" }},
+          { type: { name: "GLU", units: "mg" }},
+          { type: { name: "HCT", units: "mg" }},
+          { type: { name: "HB", units: "mg" }},
+        ]
+      },
+]
 
 const headCells = [
   {
@@ -261,6 +127,47 @@ const headCells = [
   },
 ];
 
+let machineHeadCells = []
+const addApiColumnNamesToHeadCells = () => {
+  headCellNamesFromAPI.map(item => {
+    item.data.map((point, index) => {
+      headCells.push(createHeadCell(point, item.machineName))
+      machineHeadCells.push(createHeadCell(point, item.machineName))
+      }
+
+    )
+  })
+}
+
+function createHeadCell(point, machineName) {
+  return {
+    machineName: machineName,
+    name: point.type.name,
+    numeric: false,
+    disablePadding: true,
+    label: "" + point.type.name + " (" + point.type.units + ")",
+  }
+
+}
+
+addApiColumnNamesToHeadCells()
+
+
+const getSomethingAPICall = () => {
+  // fetch(`/api/organization/orgCode/${selectedOrganization.id}`, {method: "GET",})
+  //   .then((response) => {
+  //     return response.json();
+  //   }).then((data) => {
+  //     console.log(data);
+  //     setOrgCodeData(data);
+  //   })
+  // let mockedOrgCode = {
+  //   orgCode: "873450",
+  //   validTill: "2021-12-10T13:45:00.000Z",
+  // };
+  // console.log(mockedOrgCode);
+  // setOrgCodeData(mockedOrgCode);
+};
 export default function DataView() {
   const [openFilterModal, setOpenFilterModal] = React.useState(false);
   const [openSampleAddModal, setOpenSampleAddModal] = React.useState(false);
@@ -306,6 +213,7 @@ export default function DataView() {
           handleCloseSampleAddModal={handleCloseSampleAddModal}
           headCells={headCells}
           rows={rows}
+          machineHeadCells={machineHeadCells}
         ></EnhancedTable>
       </Paper>
       <CustomDialog
