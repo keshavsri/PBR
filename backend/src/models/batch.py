@@ -4,13 +4,16 @@ from typing import List
 from server import db
 from datetime import datetime
 
-from models.user import User
-from models.flock import Flock
-from models.source import Source
-from models.organization import Organization
-from models.enums import AgeUnits, ValidationTypes, SampleTypes, BirdGenders, Species
+from models.sample import Sample
 
 @dataclass
-class Sample(db.Model):
+class Batch(db.Model):
+    __tablename__ = 'batch'
+    __table_args__ = {'extend_existing': True}
+
     id: int = db.Column(db.Integer, primary_key=True)
     name: str = db.Column(db.String(120), nullable=False)
+    entries: list[Sample] = None
+   
+def createTable():
+    db.create_all()

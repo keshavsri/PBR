@@ -11,6 +11,9 @@ from models.enums import AgeUnits, ValidationTypes, SampleTypes, BirdGenders, Sp
 
 @dataclass
 class Sample(db.Model):
+    __tablename__ = 'sample'
+    __table_args__ = {'extend_existing': True}
+
     id: int = db.Column(db.Integer, primary_key=True)
     entered_by_user: User = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
     data_entry_timestamp: datetime = db.Column(db.DateTime, default=datetime.now, nullable=False)
@@ -26,3 +29,7 @@ class Sample(db.Model):
     strain: str = db.Column(db.String(120), nullable=False)
     machines: list[Machine] = None
     comments: str = db.Column(db.String(500))
+
+
+def createTable():
+        db.create_all()
