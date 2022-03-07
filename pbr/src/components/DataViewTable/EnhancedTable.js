@@ -63,12 +63,13 @@ function stableSort(array, comparator) {
 
 function generateRows() {
   if (this.props.loading === false) {
-    var cols = Object.keys(this.props.books[0]), data = this.props.books;
-    return data.map(function(item) {
-        var cells = cols.map(function(colData) {
-            return <td> {item[colData]} </td>;
-        });
-        return <tr key={item.id}> {cells} </tr>;
+    var cols = Object.keys(this.props.books[0]),
+      data = this.props.books;
+    return data.map(function (item) {
+      var cells = cols.map(function (colData) {
+        return <td> {item[colData]} </td>;
+      });
+      return <tr key={item.id}> {cells} </tr>;
     });
   }
 }
@@ -84,6 +85,7 @@ export default function EnhancedTable(props) {
     rows,
     headCells,
     machineHeadCells,
+    toolbarButtons,
   } = props;
 
   const [order, setOrder] = React.useState("asc");
@@ -92,17 +94,18 @@ export default function EnhancedTable(props) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [loading, setLoading] = React.useState(false) ;
+  const [loading, setLoading] = React.useState(false);
   let rowComponents = generateRows();
 
   function generateRows() {
-      var cols = Object.keys(rows[0]), data = rows;
-      return rows.map(function(item) {
-          var cells = cols.map(function(colData) {
-              return <td> {item[colData]} </td>;
-          });
-          return <tr key={item.id}> {cells} </tr>;
+    var cols = Object.keys(rows[0]),
+      data = rows;
+    return rows.map(function (item) {
+      var cells = cols.map(function (colData) {
+        return <td> {item[colData]} </td>;
       });
+      return <tr key={item.id}> {cells} </tr>;
+    });
   }
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -112,7 +115,8 @@ export default function EnhancedTable(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.id);
+      let newSelecteds = rows.filter((n) => !n.deletable).map((n) => n.id);
+
       setSelected(newSelecteds);
       return;
     }
@@ -152,14 +156,14 @@ export default function EnhancedTable(props) {
     setDense(event.target.checked);
   };
 
-  const findMachineDataPoint = ( row, machineName, fieldName)  => {
-    for (var i=0, iLen=row.machines.length; i<iLen; i++) {
-      if (row.machines[i].machineName == machineName){
-        console.log(machineName)
-        for (var j=0, jLen = row.machines[i].data.length; j<jLen;j++){
-          if(row.machines[i].data[j].type.name == fieldName) {
-            console.log(row.machines[i].data[j].value)
-            return row.machines[i].data[j].value
+  const findMachineDataPoint = (row, machineName, fieldName) => {
+    for (var i = 0, iLen = row.machines.length; i < iLen; i++) {
+      if (row.machines[i].machineName == machineName) {
+        console.log(machineName);
+        for (var j = 0, jLen = row.machines[i].data.length; j < jLen; j++) {
+          if (row.machines[i].data[j].type.name == fieldName) {
+            console.log(row.machines[i].data[j].value);
+            return row.machines[i].data[j].value;
           }
         }
       }
@@ -177,10 +181,7 @@ export default function EnhancedTable(props) {
       <Box sx={{ width: "100%" }}>
         <EnhancedTableToolbar
           numSelected={selected.length}
-          handleOpenFilterModal={handleOpenFilterModal}
-          handleCloseFilterModal={handleOpenFilterModal}
-          handleOpenSampleAddModal={handleOpenSampleAddModal}
-          handleCloseSampleAddModal={handleOpenSampleAddModal}
+          toolbarButtons={toolbarButtons}
         />
         <TableContainer>
           <Table
@@ -203,27 +204,55 @@ export default function EnhancedTable(props) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  
+                  console.log(row);
+                  let onClickFxn = (event, deletable, id) => {
+                    if (!deletable) {
+                      handleClick(event, id);
+                    }
+                  };
                   return (
                     <StyledTableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
+                      onClick={(event) =>
+                        onClickFxn(event, row.deletable, row.id)
+                      }
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={index}
                       selected={isItemSelected}
                     >
-                      <StyledTableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            "aria-labelledby": labelId,
-                          }}
-                        />
-                      </StyledTableCell>
-                      <StyledTableCell
+                      {Object.entries(row).map(([key, value], index) => {
+                        let ret = null;
+                        console.log(row);
+
+                        if (key == "deletable") {
+                          return (
+                            <StyledTableCell padding="checkbox">
+                              <Checkbox
+                                color="primary"
+                                disabled={value}
+                                checked={isItemSelected}
+                                inputProps={{
+                                  "aria-labelledby": labelId,
+                                }}
+                              />
+                            </StyledTableCell>
+                          );
+                        } else {
+                          return (
+                            <StyledTableCell
+                              padding="none"
+                              align="left"
+                              id={index}
+                            >
+                              {value}
+                            </StyledTableCell>
+                          );
+                        }
+                      })}
+
+                      {/* <StyledTableCell
                         component="th"
                         id={labelId}
                         scope="row"
@@ -252,16 +281,18 @@ export default function EnhancedTable(props) {
                       <StyledTableCell padding="none" align="left">
                         {row.sample_type}
                       </StyledTableCell>
-                         {
-                            machineHeadCells.map((columnHead, index) => {
-                              const field = columnHead.id;
-                              return (
-                                <StyledTableCell padding="none" align="left">
-                                  {findMachineDataPoint(row, columnHead.machineName, columnHead.name)}
-                                </StyledTableCell>
-                              );
-                            })
-                          };
+                      {machineHeadCells.map((columnHead, index) => {
+                        const field = columnHead.id;
+                        return (
+                          <StyledTableCell padding="none" align="left">
+                            {findMachineDataPoint(
+                              row,
+                              columnHead.machineName,
+                              columnHead.name
+                            )}
+                          </StyledTableCell>
+                        );
+                      })} */}
                     </StyledTableRow>
                   );
                 })}

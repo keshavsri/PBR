@@ -2,10 +2,6 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
-import SampleIcon from "@mui/icons-material/Science";
-import BulkIcon from "@mui/icons-material/UploadFile";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import ReportIcon from "@mui/icons-material/Assessment";
 import { makeStyles } from "@mui/styles";
 import {
   Toolbar,
@@ -34,12 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function EnhancedTableToolbar(props) {
-  const {
-    numSelected,
-    handleOpenFilterModal,
-    handleOpenBatchModal,
-    handleOpenSampleAddModal,
-  } = props;
+  const { numSelected, toolbarButtons } = props;
   let classes = useStyles();
 
   return (
@@ -82,38 +73,7 @@ export default function EnhancedTableToolbar(props) {
           </IconButton>
         </Tooltip>
       ) : (
-        <>
-          <Tooltip title="Generate Group Report">
-            <IconButton sx={{ ml: -0.5 }}>
-              <ReportIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Filter list">
-            <IconButton onClick={handleOpenFilterModal} sx={{ ml: -0.5 }}>
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Batch Import">
-            <Button
-              variant="contained"
-              onClick={handleOpenBatchModal}
-              startIcon={<BulkIcon />}
-              sx={{ ml: 1 }}
-            >
-              Batch Import
-            </Button>
-          </Tooltip>
-          <Tooltip title="Add Sample Entry">
-            <Button
-              variant="contained"
-              onClick={handleOpenSampleAddModal}
-              startIcon={<SampleIcon />}
-              sx={{ ml: 1 }}
-            >
-              Add Sample
-            </Button>
-          </Tooltip>
-        </>
+        toolbarButtons
       )}
     </Toolbar>
   );

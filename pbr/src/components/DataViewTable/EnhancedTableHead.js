@@ -12,6 +12,7 @@ import {
   TableSortLabel,
   Box,
   Checkbox,
+  Chip,
 } from "@mui/material";
 import { tableCellClasses } from "@mui/material/TableCell";
 
@@ -84,6 +85,9 @@ export default function EnhancedTableHead(props) {
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
+              {headCell.sublabel && (
+                <Chip label={headCell.sublabel} size="small" />
+              )}
               {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
                   {order === "desc" ? "sorted descending" : "sorted ascending"}
