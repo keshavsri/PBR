@@ -61,6 +61,18 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
+function generateRows() {
+  if (this.props.loading === false) {
+    var cols = Object.keys(this.props.books[0]), data = this.props.books;
+    return data.map(function(item) {
+        var cells = cols.map(function(colData) {
+            return <td> {item[colData]} </td>;
+        });
+        return <tr key={item.id}> {cells} </tr>;
+    });
+  }
+}
+
 export default function EnhancedTable(props) {
   const {
     openFilterModal,
@@ -71,6 +83,7 @@ export default function EnhancedTable(props) {
     handleCloseSampleAddModal,
     rows,
     headCells,
+    machineHeadCells,
   } = props;
 
   const [order, setOrder] = React.useState("asc");
@@ -79,7 +92,18 @@ export default function EnhancedTable(props) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [loading, setLoading] = React.useState(false) ;
+  let rowComponents = generateRows();
 
+  function generateRows() {
+      var cols = Object.keys(rows[0]), data = rows;
+      return rows.map(function(item) {
+          var cells = cols.map(function(colData) {
+              return <td> {item[colData]} </td>;
+          });
+          return <tr key={item.id}> {cells} </tr>;
+      });
+  }
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -128,6 +152,20 @@ export default function EnhancedTable(props) {
     setDense(event.target.checked);
   };
 
+  const findMachineDataPoint = ( row, machineName, fieldName)  => {
+    for (var i=0, iLen=row.machines.length; i<iLen; i++) {
+      if (row.machines[i].machineName == machineName){
+        console.log(machineName)
+        for (var j=0, jLen = row.machines[i].data.length; j<jLen;j++){
+          if(row.machines[i].data[j].type.name == fieldName) {
+            console.log(row.machines[i].data[j].value)
+            return row.machines[i].data[j].value
+          }
+        }
+      }
+    }
+  };
+
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -160,14 +198,12 @@ export default function EnhancedTable(props) {
               headCells={headCells}
             />
             <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.slice().sort(getComparator(order, orderBy)) */}
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
+                  
                   return (
                     <StyledTableRow
                       hover
@@ -216,6 +252,16 @@ export default function EnhancedTable(props) {
                       <StyledTableCell padding="none" align="left">
                         {row.sample_type}
                       </StyledTableCell>
+                         {
+                            machineHeadCells.map((columnHead, index) => {
+                              const field = columnHead.id;
+                              return (
+                                <StyledTableCell padding="none" align="left">
+                                  {findMachineDataPoint(row, columnHead.machineName, columnHead.name)}
+                                </StyledTableCell>
+                              );
+                            })
+                          };
                     </StyledTableRow>
                   );
                 })}
@@ -228,6 +274,8 @@ export default function EnhancedTable(props) {
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
+
+              {/* {rowComponents} */}
             </TableBody>
           </Table>
         </TableContainer>
