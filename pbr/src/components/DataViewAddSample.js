@@ -12,7 +12,9 @@ import {
   Divider,
   OutlinedInput,
   Accordion,
+  Autocomplete,
   AccordionSummary,
+  Tooltip,
   Stack,
   AccordionDetails,
   TextField,
@@ -29,8 +31,19 @@ import {
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import { makeStyles } from "@mui/styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { genders, ageUnits } from "../models/enums";
+import {
+  genders,
+  ageUnits,
+  productionTypes,
+  speciesTypes,
+} from "../models/enums";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
+import FlagIcon from "@mui/icons-material/Flag";
+import OutlinedFlagIcon from "@mui/icons-material/OutlinedFlag";
+import { tooltipClasses } from "@mui/material/Tooltip";
+import { createFilterOptions } from "@mui/material/Autocomplete";
+
+const filter = createFilterOptions();
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -66,7 +79,30 @@ const useStyles = makeStyles({
       },
     },
   },
+  headerWithButton: {
+    marginBottom: "20px",
+    "& .MuiTypography-h3": {
+      marginBottom: "0px !IMPORTANT",
+      flexGrow: 1,
+    },
+    "& .MuiTypography-h4": {
+      marginBottom: "0px !IMPORTANT",
+      flexGrow: 1,
+    },
+  },
 });
+
+const HtmlTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: "1px solid #dadde9",
+  },
+}));
 
 export default function DataViewAddSample() {
   const classes = useStyles();
@@ -75,6 +111,13 @@ export default function DataViewAddSample() {
   // General Section Data
 
   const [timestamp, setTimestamp] = React.useState(Date.now());
+
+  const handleFlagChange = () => {
+    setGeneralDetails({
+      ...generalDetails,
+      flagged: !generalDetails.flagged,
+    });
+  };
 
   const [generalDetails, setGeneralDetails] = React.useState({
     organization: "",
@@ -86,6 +129,7 @@ export default function DataViewAddSample() {
     productionType: "",
     ageNumber: "",
     ageUnit: "",
+    flagged: false,
     comments: "",
   });
 
@@ -94,6 +138,15 @@ export default function DataViewAddSample() {
     setGeneralDetails({
       ...generalDetails,
       [prop]: event.target.value,
+    });
+    console.log(generalDetails);
+  };
+
+  const handleFlockChange = (flock) => {
+    console.log("Flock changed: ", flock);
+    setGeneralDetails({
+      ...generalDetails,
+      flockID: flock.id,
     });
     console.log(generalDetails);
   };
@@ -175,9 +228,18 @@ export default function DataViewAddSample() {
     setMachineList(mockMachineList);
   };
 
+  const [flocks, setFlocks] = React.useState([]);
+
+  const getFlocks = () => {
+    let mockFlocks = [{ id: 1852 }, { id: 2531 }, { id: 3491 }];
+
+    setFlocks(mockFlocks);
+  };
+
   // Always run
   React.useEffect(() => {
     getMachineList();
+    getFlocks();
     setInterval(() => {
       setTimestamp(Date.now());
     }, 1000);
@@ -185,7 +247,36 @@ export default function DataViewAddSample() {
 
   return (
     <Box className={classes.root}>
-      <Typography variant="h3">Add Sample Entry</Typography>
+      <Box
+        className={classes.headerWithButton}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h3">Add Sample Entry</Typography>
+        <HtmlTooltip
+          title={
+            <React.Fragment>
+              <Typography color="inherit">FLAG SAMPLE</Typography>
+              <u>
+                {"Click this to draw a"} <b>{"Validator"}</b> {"or"}{" "}
+                <b>{"Admin's"}</b> {"attention to this sample."}
+              </u>{" "}
+              {
+                "Append any concerns or issues to the end of the Comments section of this sample entry."
+              }
+            </React.Fragment>
+          }
+        >
+          <Checkbox
+            icon={<OutlinedFlagIcon />}
+            checked={generalDetails.flagged}
+            onChange={handleFlagChange}
+            checkedIcon={<FlagIcon />}
+          />
+        </HtmlTooltip>
+      </Box>
       <Typography paragraph>
         Add data directly, or alternatively upload a file or photo of a machine
         report to autofill bloodwork data for that machine.
@@ -193,7 +284,7 @@ export default function DataViewAddSample() {
       <Typography paragraph>
         Files must be in .txt, .pdf, .jpg/.jpeg, or .heic format.
       </Typography>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <FormControl sx={{ width: "100%" }}>
@@ -226,16 +317,44 @@ export default function DataViewAddSample() {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <FormControl sx={{ width: "100%", mb: 2 }}>
-              <InputLabel>Flock ID</InputLabel>
-              <Select
-                value={generalDetails.flockID}
-                label="Flock ID"
-                onChange={handleGeneralDetailsChange("flockID")}
-              >
-                <MenuItem value={""}></MenuItem>
-              </Select>
-            </FormControl>
+            <Autocomplete
+              value={generalDetails.flockID}
+              sx={{ width: "100%", mb: 2 }}
+              onChange={(event, newValue) => {
+                handleFlockChange(newValue);
+              }}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+
+                const { inputValue } = params;
+                // Suggest the creation of a new value
+                const isExisting = options.some(
+                  (option) => inputValue === option.id
+                );
+                if (inputValue !== "" && !isExisting) {
+                  filtered.push({
+                    inputValue,
+                    title: `Add Flock "${inputValue}"`,
+                  });
+                }
+
+                return filtered;
+              }}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              options={flocks}
+              getOptionLabel={(option) => {
+                // Value selected with enter, right from the input
+                // Regular option
+                return `Flock ${option.id}`;
+              }}
+              renderOption={(props, option) => <li {...props}>{option.id}</li>}
+              freeSolo
+              renderInput={(params) => (
+                <TextField {...params} label="Flock ID" />
+              )}
+            />
             <FormControl sx={{ width: "100%", mb: 2 }}>
               <InputLabel>Species</InputLabel>
               <Select
@@ -243,7 +362,13 @@ export default function DataViewAddSample() {
                 label="Species"
                 onChange={handleGeneralDetailsChange("species")}
               >
-                <MenuItem value={""}></MenuItem>
+                {Object.values(speciesTypes).map((species, index) => {
+                  return (
+                    <MenuItem value={species} key={index}>
+                      {species}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%", mb: 2 }}>
@@ -293,6 +418,13 @@ export default function DataViewAddSample() {
                 onChange={handleGeneralDetailsChange("productionType")}
               >
                 <MenuItem value={""}></MenuItem>
+                {Object.values(productionTypes).map((productionType, index) => {
+                  return (
+                    <MenuItem value={productionType} key={index}>
+                      {productionType}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
             <Grid container spacing={2}>
@@ -369,35 +501,73 @@ export default function DataViewAddSample() {
             <AccordionDetails>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                  {machine.measurements.map((measurement, measurementIndex) => {
-                    return (
-                      <FormControl
-                        key={measurementIndex}
-                        sx={{ mb: 2, width: "100%" }}
-                        variant="outlined"
-                      >
-                        <InputLabel>
-                          {measurement.name
-                            ? `${measurement.name} (${measurement.abbrev})`
-                            : `${measurement.abbrev}`}
-                        </InputLabel>
-                        <OutlinedInput
-                          type={measurement.datatype}
-                          value={""}
-                          label={
-                            measurement.name
+                  {machine.measurements
+                    .slice(0, Math.ceil(machine.measurements.length / 2))
+                    .map((measurement, measurementIndex) => {
+                      return (
+                        <FormControl
+                          key={measurementIndex}
+                          sx={{ mb: 2, width: "100%" }}
+                          variant="outlined"
+                        >
+                          <InputLabel>
+                            {measurement.name
                               ? `${measurement.name} (${measurement.abbrev})`
-                              : `${measurement.abbrev}`
-                          }
-                          endAdornment={
-                            <InputAdornment position="end">
-                              {measurement.units}
-                            </InputAdornment>
-                          }
-                        />
-                      </FormControl>
-                    );
-                  })}
+                              : `${measurement.abbrev}`}
+                          </InputLabel>
+                          <OutlinedInput
+                            type={measurement.datatype}
+                            value={""}
+                            label={
+                              measurement.name
+                                ? `${measurement.name} (${measurement.abbrev})`
+                                : `${measurement.abbrev}`
+                            }
+                            endAdornment={
+                              <InputAdornment position="end">
+                                {measurement.units}
+                              </InputAdornment>
+                            }
+                          />
+                        </FormControl>
+                      );
+                    })}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  {machine.measurements
+                    .slice(
+                      Math.ceil(machine.measurements.length / 2),
+                      machine.measurements.length
+                    )
+                    .map((measurement, measurementIndex) => {
+                      return (
+                        <FormControl
+                          key={measurementIndex}
+                          sx={{ mb: 2, width: "100%" }}
+                          variant="outlined"
+                        >
+                          <InputLabel>
+                            {measurement.name
+                              ? `${measurement.name} (${measurement.abbrev})`
+                              : `${measurement.abbrev}`}
+                          </InputLabel>
+                          <OutlinedInput
+                            type={measurement.datatype}
+                            value={""}
+                            label={
+                              measurement.name
+                                ? `${measurement.name} (${measurement.abbrev})`
+                                : `${measurement.abbrev}`
+                            }
+                            endAdornment={
+                              <InputAdornment position="end">
+                                {measurement.units}
+                              </InputAdornment>
+                            }
+                          />
+                        </FormControl>
+                      );
+                    })}
                 </Grid>
               </Grid>
             </AccordionDetails>
@@ -405,12 +575,46 @@ export default function DataViewAddSample() {
         );
       })}
       <Divider />
-
-      <Typography variant="h4">Comments</Typography>
+      <Box
+        className={classes.headerWithButton}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h4">Comments</Typography>
+        <HtmlTooltip
+          title={
+            <React.Fragment>
+              <Typography color="inherit">FLAG SAMPLE</Typography>
+              <u>
+                {"Click this to draw a"} <b>{"Validator"}</b> {"or"}{" "}
+                <b>{"Admin's"}</b> {"attention to this sample."}
+              </u>{" "}
+              {
+                "Append any concerns or issues to the end of the Comments section of this sample entry."
+              }
+            </React.Fragment>
+          }
+        >
+          <Checkbox
+            icon={<OutlinedFlagIcon />}
+            checked={generalDetails.flagged}
+            onChange={handleFlagChange}
+            checkedIcon={<FlagIcon />}
+          />
+        </HtmlTooltip>
+      </Box>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <TextField multiline rows={4} fullWidth />
+            <TextField
+              multiline
+              rows={4}
+              fullWidth
+              value={generalDetails.comments}
+              onChange={handleGeneralDetailsChange("comments")}
+            />
           </Grid>
         </Grid>
       </Box>

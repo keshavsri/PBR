@@ -19,7 +19,12 @@ import {
   IconButton,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { genders, validationStates, sampleTypes } from "../models/enums";
+import {
+  genders,
+  validationStates,
+  sampleTypes,
+  productionTypes,
+} from "../models/enums";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -105,10 +110,8 @@ export default function DataViewFilterContent() {
   };
 
   // Production Types Section Data
-
-  const [prodTypesList, setProdTypesList] = React.useState(
-    Array.from(Array(5).keys()).map((x) => `Checkbox ${x}`)
-  );
+  let prodTypesArray = Object.values(productionTypes);
+  const [prodTypesList, setProdTypesList] = React.useState(prodTypesArray);
   const [prodTypesFilter, setProdTypesFilter] = React.useState([]);
 
   const handleProdTypesFilterChange = (event) => {

@@ -20,12 +20,12 @@ let rows = [
   {
     id: "1",
     bird_type: "Turkey",
-    source: "USERNAME",
+    source: "SOURCE B",
     timestamp: "2022-12-10T13:45:00.000Z",
     age: "2022-11-13T11:30:00.000Z",
-    gender: "Male",
+    gender: "Female",
     comments: "days",
-    status: "Validated",
+    status: "Pending Validation",
     sample_type: "Reference",
     machines: [
       {
@@ -37,7 +37,7 @@ let rows = [
   {
     id: "2",
     bird_type: "Turkey",
-    source: "USERNAME",
+    source: "SOURCE A",
     timestamp: "2022-12-10T13:45:00.000Z",
     age: "2022-11-13T11:30:00.000Z",
     gender: "Male",
@@ -54,7 +54,7 @@ let rows = [
   {
     id: "3",
     bird_type: "Turkey",
-    source: "USERNAME",
+    source: "SOURCE C",
     timestamp: "2022-12-10T13:45:00.000Z",
     age: "2022-11-13T11:30:00.000Z",
     gender: "Male",
@@ -71,7 +71,7 @@ let rows = [
   {
     id: "4",
     bird_type: "Turkey",
-    source: "USERNAME",
+    source: "SOURCE A",
     timestamp: "2022-12-10T13:45:00.000Z",
     age: "2022-11-13T11:30:00.000Z",
     gender: "Male",
@@ -88,7 +88,7 @@ let rows = [
   {
     id: "5",
     bird_type: "Turkey",
-    source: "USERNAME",
+    source: "SOURCE A",
     timestamp: "2022-12-10T13:45:00.000Z",
     age: "2022-11-13T11:30:00.000Z",
     gender: "Male",
@@ -105,7 +105,7 @@ let rows = [
   {
     id: "6",
     bird_type: "Turkey",
-    source: "USERNAME",
+    source: "SOURCE A",
     timestamp: "2022-12-10T13:45:00.000Z",
     age: "2022-11-13T11:30:00.000Z",
     gender: "Male",
@@ -122,7 +122,7 @@ let rows = [
   {
     id: "7",
     bird_type: "Turkey",
-    source: "USERNAME",
+    source: "SOURCE C",
     timestamp: "2022-12-10T13:45:00.000Z",
     age: "2022-11-13T11:30:00.000Z",
     gender: "Male",
@@ -139,7 +139,7 @@ let rows = [
   {
     id: "8",
     bird_type: "Turkey",
-    source: "USERNAME",
+    source: "SOURCE A",
     timestamp: "2022-12-10T13:45:00.000Z",
     age: "2022-11-13T11:30:00.000Z",
     gender: "Male",
@@ -156,12 +156,12 @@ let rows = [
   {
     id: "9",
     bird_type: "Turkey",
-    source: "USERNAME",
+    source: "SOURCE B",
     timestamp: "2022-12-10T13:45:00.000Z",
     age: "2022-11-13T11:30:00.000Z",
-    gender: "Male",
+    gender: "Female",
     comments: "days",
-    status: "Validated",
+    status: "Pending Validation",
     sample_type: "Reference",
     machines: [
       {
@@ -173,7 +173,7 @@ let rows = [
   {
     id: "10",
     bird_type: "Turkey",
-    source: "USERNAME",
+    source: "SOURCE C",
     timestamp: "2022-12-10T13:45:00.000Z",
     age: "2022-11-13T11:30:00.000Z",
     gender: "Male",

@@ -10,12 +10,29 @@ export const ageUnits = Object.freeze({
 export const genders = Object.freeze({
   MALE: "Male",
   FEMALE: "Female",
+  MIXED: "Mixed",
+  UNKNOWN: "Unknown",
 });
 
 // Stores the choices for a bird sample type
 export const sampleTypes = Object.freeze({
   SURVEILLANCE: "Surveillance Sample",
   DIAGNOSTIC: "Diagnostic Sample",
+});
+
+// Stores the potential production types
+export const productionTypes = Object.freeze({
+  MEAT: "Meat",
+  BROILER: "Broiler",
+  BREEDER: "Breeder",
+  BROILER_BREEDER: "Broiler Breeder",
+  BYP: "BYP, layer",
+});
+
+// Stores the potential production types
+export const speciesTypes = Object.freeze({
+  CHICKEN: "Chicken",
+  TURKEY: "Turkey",
 });
 
 // Stores the choices for a bird sample type

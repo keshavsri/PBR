@@ -14,7 +14,7 @@ import ManageUsers from "./components/ManageUsers";
 function RequireAuth({ children }) {
   const { user } = useAuth();
   const location = useLocation();
-
+  console.log("requireauth");
   return user ? (
     children
   ) : (
@@ -24,7 +24,7 @@ function RequireAuth({ children }) {
 function NonAuth({ children }) {
   const { user } = useAuth();
   const location = useLocation();
-
+  console.log("nonauth");
   return user ? (
     <Navigate to="/data-view" replace state={{ path: location.pathname }} />
   ) : (
@@ -66,9 +66,11 @@ const routes = [
   {
     path: "/data-view",
     element: (
-      <MainLayout>
-        <DataView />
-      </MainLayout>
+      <RequireAuth>
+        <MainLayout>
+          <DataView />
+        </MainLayout>
+      </RequireAuth>
     ),
   },
   {

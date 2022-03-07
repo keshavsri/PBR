@@ -70,6 +70,7 @@ export function useAuth() {
       })
       .catch((err) => {
         return new Promise((rej) => {
+          setUser(null);
           rej(err);
         });
       });
