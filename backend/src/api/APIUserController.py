@@ -83,7 +83,10 @@ def login():
       data = request.json
 
   if data["email"] and data["password"]:
+    data["email"] = data["email"].lower()
+    print(data["email"])
     dbUser = User.query.filter_by(email=data["email"]).first()
+    print(dbUser)
     if not dbUser:
       print("USER DOES NOT EXIST.")
       return "Not Logged in", 401
@@ -140,7 +143,7 @@ def register():
   salt = bcrypt.gensalt()
   hashedPW = bcrypt.hashpw(data["password"].encode('utf8'), salt)
 
-  user = User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=None )
+  user = User(email=data["email"].lower(), first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=None )
   db.session.add(user)
   db.session.commit()
   print("User was successfully added.")
