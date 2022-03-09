@@ -104,6 +104,7 @@ class LogActions(IntEnum):
     ADD_SAMPLE = 201
     ADD_BATCH = 211
     EDIT_SAMPLE = 203
+    EDIT_BATCH = 213
     DELETE_SAMPLE = 204
     DELETE_MULTIPLE_SAMPLES = 214
     
