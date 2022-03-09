@@ -115,7 +115,7 @@ export default function EnhancedTable(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      let newSelecteds = rows.filter((n) => !n.deletable).map((n) => n.id);
+      let newSelecteds = rows.filter((n) => n.deletable).map((n) => n.id);
 
       setSelected(newSelecteds);
       return;
@@ -222,34 +222,28 @@ export default function EnhancedTable(props) {
                       key={index}
                       selected={isItemSelected}
                     >
-                      {Object.entries(row).map(([key, value], index) => {
-                        let ret = null;
-                        console.log(row);
-
-                        if (key == "deletable") {
-                          return (
-                            <StyledTableCell padding="checkbox">
+                    <StyledTableCell padding="checkbox">
                               <Checkbox
                                 color="primary"
-                                disabled={value}
+                                disabled={!row.deletable}
                                 checked={isItemSelected}
                                 inputProps={{
                                   "aria-labelledby": labelId,
                                 }}
                               />
-                            </StyledTableCell>
-                          );
-                        } else {
+                    </StyledTableCell> 
+                      {
+                      headCells.map((headCell, index) => {
                           return (
                             <StyledTableCell
                               padding="none"
                               align="left"
                               id={index}
                             >
-                              {value}
+                              {row[headCell.id]}
                             </StyledTableCell>
                           );
-                        }
+                        
                       })}
 
                       {/* <StyledTableCell

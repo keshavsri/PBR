@@ -11,6 +11,9 @@ import DataViewAddSample from "./DataViewAddSample";
 import EnhancedTable from "./DataViewTable/EnhancedTable";
 import BulkIcon from "@mui/icons-material/UploadFile";
 import ReportIcon from "@mui/icons-material/Assessment";
+import EditIcon from '@mui/icons-material/Edit';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
+
 
 import CustomDialog from "./CustomDialog";
 import { makeStyles } from "@mui/styles";
@@ -20,6 +23,7 @@ const useStyles = makeStyles({});
 // Mocked API JSON Object
 let rows = [
   {
+    deletable: true,
     id: "1",
     bird_type: "Turkey",
     source: "SOURCE C",
@@ -49,6 +53,7 @@ let rows = [
     ],
   },
   {
+    deletable: false,
     id: "2",
     bird_type: "Turkey",
     source: "SOURCE C",
@@ -78,6 +83,7 @@ let rows = [
     ],
   },
   {
+    deletable: false,
     id: "3",
     bird_type: "Turkey",
     source: "SOURCE B",
@@ -107,6 +113,7 @@ let rows = [
     ],
   },
   {
+    deletable: false,
     id: "4",
     bird_type: "Chicken",
     source: "SOURCE C",
@@ -136,6 +143,7 @@ let rows = [
     ],
   },
   {
+    deletable: false,
     id: "5",
     bird_type: "Turkey",
     source: "SOURCE C",
@@ -165,6 +173,7 @@ let rows = [
     ],
   },
   {
+    deletable: false,
     id: "6",
     bird_type: "Chicken",
     source: "SOURCE A",
@@ -194,6 +203,7 @@ let rows = [
     ],
   },
   {
+    deletable: false,
     id: "7",
     bird_type: "Turkey",
     source: "SOURCE C",
@@ -369,7 +379,7 @@ let newRows = [
     ),
     sample_type: "Surveillance",
     iStat_PH: "142" + "mg",
-    iStat_PH2: "142" + "mg",
+    iStat_PH2: "" + "mg",
     iStat_PH3: "142" + "mg",
     iStat_PH4: "142" + "mg",
     iStat_PH5: "132" + "mg",
@@ -383,6 +393,9 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: "ID",
+  },
+  {
+    id: "buttons",
   },
   {
     id: "bird_type",
@@ -442,7 +455,7 @@ function createHeadCell(point, machineName, index) {
   return {
     machineName: machineName,
     name: point.type.name,
-    id: index,
+    id: machineName + "_" + point.type.name,
     numeric: false,
     disablePadding: true,
     label: " " + point.type.name + " (" + point.type.units + ")",
@@ -451,6 +464,55 @@ function createHeadCell(point, machineName, index) {
 }
 
 addApiColumnNamesToHeadCells();
+console.log(headCells)
+
+const denestMachineData = (rows) => {
+  rows.map((row, index) => {
+      row.machines.map((machine, index2)=> {
+        machine.data.map((dataPoint, index3) => {
+          let temp = machine.machineName + '_' + dataPoint.type.name
+          row[temp] = dataPoint.value + " " + dataPoint.type.units 
+        })
+      })
+    }
+  )
+}
+
+const assignRowHtml = () => {
+
+  rows.map((row, index) => {
+    if(row.status.toUpperCase() === "VALIDATED") {
+      row.status = (
+        <>
+          <Chip label={"Validated"} color = "primary" size="small" />
+        </>
+      )
+    } else {
+      row.status = (
+        <>
+          <Chip label={"Pending Validation"} color = "secondary" size="small" />
+        </>
+      )
+    }
+    row.buttons = (
+      <>
+      <IconButton aria-label="edit" size="small">
+          <EditIcon />
+      </IconButton>
+      <IconButton aria-label="validate" size="small">
+          <FactCheckIcon />
+      </IconButton>
+      </>
+      
+    )
+    row.timestamp = new Date(row.timestamp).toLocaleString()
+    row.age = new Date(row.age).toLocaleString()
+  })
+}
+
+denestMachineData(rows)
+assignRowHtml()
+console.log(rows)
 
 const getSomethingAPICall = () => {
   // fetch(`/api/organization/orgCode/${selectedOrganization.id}`, {method: "GET",})
@@ -511,7 +573,7 @@ export default function DataView() {
           handleCloseFilterModal={handleCloseFilterModal}
           handleCloseSampleAddModal={handleCloseSampleAddModal}
           headCells={headCells}
-          rows={newRows}
+          rows={rows}
           machineHeadCells={machineHeadCells}
           toolbarButtons={
             <>
