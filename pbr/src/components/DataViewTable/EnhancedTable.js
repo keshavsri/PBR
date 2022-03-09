@@ -159,10 +159,10 @@ export default function EnhancedTable(props) {
   const findMachineDataPoint = (row, machineName, fieldName) => {
     for (var i = 0, iLen = row.machines.length; i < iLen; i++) {
       if (row.machines[i].machineName == machineName) {
-        console.log(machineName);
+        // console.log(machineName);
         for (var j = 0, jLen = row.machines[i].data.length; j < jLen; j++) {
           if (row.machines[i].data[j].type.name == fieldName) {
-            console.log(row.machines[i].data[j].value);
+            // console.log(row.machines[i].data[j].value);
             return row.machines[i].data[j].value;
           }
         }
@@ -204,7 +204,6 @@ export default function EnhancedTable(props) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  console.log(row);
                   let onClickFxn = (event, deletable, id) => {
                     if (!deletable) {
                       handleClick(event, id);
@@ -224,7 +223,6 @@ export default function EnhancedTable(props) {
                     >
                       {Object.entries(row).map(([key, value], index) => {
                         let ret = null;
-                        console.log(row);
 
                         if (key == "deletable") {
                           return (

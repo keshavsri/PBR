@@ -117,6 +117,7 @@ export default function DataViewAddSample() {
       ...generalDetails,
       flagged: !generalDetails.flagged,
     });
+    console.log(machineDetails);
   };
 
   const [generalDetails, setGeneralDetails] = React.useState({
@@ -157,74 +158,149 @@ export default function DataViewAddSample() {
 
   const [machineDetails, setMachineDetails] = React.useState([]);
 
+  const getMachineByID = (machineID) => {
+    return machineDetails.find((m) => m.id === machineID);
+  };
+  const getMeasurementByID = (machine, measID) => {
+    return machine.measurements.find((meas) => meas.metadata.id === measID);
+  };
+  const handleMachineDetailsChange = (machineID, measID) => (event) => {
+    let newMachineDetails = [...machineDetails];
+    console.log("Machine ID: " + machineID + " | Measurement ID" + measID);
+    let machine = getMachineByID(machineID);
+    getMeasurementByID(machine, measID).value = event.target.value;
+
+    console.log(machine);
+    for (let i = 0; i < newMachineDetails.length; i++) {
+      if (newMachineDetails.id == machineID) {
+        newMachineDetails[i] = machine;
+        break;
+      }
+    }
+    setMachineDetails(newMachineDetails);
+  };
+
+  const uploadMachineFile = (machineName) => (event) => {
+    console.log("uploading machine file for: ", machineName);
+    let files = event.target.files;
+    parseFiles(files);
+  };
+
+  let parseFiles = (files) => {
+    console.log("Parsing files -> Sending to API");
+    var data = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      data.append("file", files[i]);
+    }
+
+    fetch("/api/sample/parse", {
+      method: "POST",
+      body: data,
+    })
+      .then(() => {})
+      .catch((err) => {});
+  };
+
   // Machine List
   const [machineList, setMachineList] = React.useState([]);
+
+  const parseMachineDetails = () => {
+    let tmpMachineDetails = [];
+    for (let i = 0; i < machineList.length; i++) {
+      console.log(machineList[i].name);
+      let currentMachine = machineList[i];
+      let currentMachineDetails = {
+        name: currentMachine.name,
+        id: currentMachine.id,
+        measurements: [],
+      };
+      for (let j = 0; j < currentMachine.measurements.length; j++) {
+        let currentMeasurement = currentMachine.measurements[j];
+        let currentMeasurementData = {
+          metadata: currentMeasurement,
+          value: null,
+        };
+        currentMachineDetails.measurements.push(currentMeasurementData);
+      }
+      tmpMachineDetails.push(currentMachineDetails);
+    }
+    console.log(tmpMachineDetails);
+    setMachineDetails(tmpMachineDetails);
+  };
 
   const getMachineList = () => {
     let mockMachineList = [
       {
         name: "VetScan VS2",
+        id: 12415,
         measurements: [
-          { abbrev: "AST", units: "U/L", datatype: "number" },
-          { abbrev: "BA", units: "umol/L", datatype: "number" },
-          { abbrev: "CK", units: "U/L", datatype: "number" },
-          { abbrev: "UA", units: "mg/dL", datatype: "number" },
+          { id: 1, abbrev: "AST", units: "U/L", datatype: "number" },
+          { id: 2, abbrev: "BA", units: "umol/L", datatype: "number" },
+          { id: 3, abbrev: "CK", units: "U/L", datatype: "number" },
+          { id: 4, abbrev: "UA", units: "mg/dL", datatype: "number" },
           {
+            id: 5,
             name: "Glucose",
             abbrev: "GLU",
             units: "mg/dL",
             datatype: "number",
           },
           {
+            id: 6,
             name: "Total Calcium",
             abbrev: "CA",
             units: "mg/dL",
             datatype: "number",
           },
           {
+            id: 7,
             name: "Phosphorus",
             abbrev: "PHOS",
             units: "mg/dL",
             datatype: "number",
           },
           {
+            id: 8,
             name: "Total Protein",
             abbrev: "TP",
             units: "g/dL",
             datatype: "number",
           },
           {
+            id: 9,
             name: "Albumen",
             abbrev: "ALB",
             units: "g/dL",
             datatype: "number",
           },
           {
+            id: 10,
             name: "Globulin",
             abbrev: "GLOB",
             units: "g/dL",
             datatype: "number",
           },
           {
+            id: 11,
             name: "Potassium",
             abbrev: "K+",
             units: "mmol/L",
             datatype: "number",
           },
           {
+            id: 12,
             name: "Sodium",
             abbrev: "NA+",
             units: "mmol/L",
             datatype: "number",
           },
-          { abbrev: "QC", datatype: "number" },
-          { abbrev: "HEM", datatype: "number" },
-          { abbrev: "LIP", datatype: "number" },
-          { abbrev: "ICT", datatype: "number" },
+          { id: 13, abbrev: "QC", datatype: "number" },
+          { id: 14, abbrev: "HEM", datatype: "number" },
+          { id: 15, abbrev: "LIP", datatype: "number" },
+          { id: 16, abbrev: "ICT", datatype: "number" },
         ],
       },
     ];
-
     setMachineList(mockMachineList);
   };
 
@@ -239,7 +315,10 @@ export default function DataViewAddSample() {
   // Always run
   React.useEffect(() => {
     getMachineList();
+    parseMachineDetails();
     getFlocks();
+
+    // Keep the timestamp live
     setInterval(() => {
       setTimestamp(Date.now());
     }, 1000);
@@ -461,7 +540,7 @@ export default function DataViewAddSample() {
       <Divider />
       <Typography variant="h4">Machine Data</Typography>
 
-      {machineList.map((machine, machineIndex) => {
+      {machineDetails.map((machine, machineIndex) => {
         return (
           <Accordion key={machineIndex}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -472,7 +551,7 @@ export default function DataViewAddSample() {
                 sx={{ width: "100%" }}
               >
                 <Typography sx={{ flexGrow: 1 }}>
-                  {machine.name} Data
+                  {machine.name} ({machine.id}) Data
                 </Typography>
                 <label htmlFor="icon-button-file">
                   <Input accept="image/*" id="icon-button-file" type="file" />
@@ -480,16 +559,18 @@ export default function DataViewAddSample() {
                     color="primary"
                     aria-label="upload picture"
                     component="span"
+                    disabled
                   >
                     <PhotoCamera />
                   </IconButton>
                 </label>
                 <label htmlFor="contained-button-file">
                   <Input
-                    accept="image/*"
+                    accept=".txt"
                     id="contained-button-file"
                     multiple
                     type="file"
+                    onChange={uploadMachineFile(machine.name)}
                   />
                   <Button variant="contained" size="small" component="span">
                     Upload
@@ -511,21 +592,25 @@ export default function DataViewAddSample() {
                           variant="outlined"
                         >
                           <InputLabel>
-                            {measurement.name
-                              ? `${measurement.name} (${measurement.abbrev})`
-                              : `${measurement.abbrev}`}
+                            {measurement.metadata.name
+                              ? `${measurement.metadata.name} (${measurement.metadata.abbrev})`
+                              : `${measurement.metadata.abbrev}`}
                           </InputLabel>
                           <OutlinedInput
-                            type={measurement.datatype}
-                            value={""}
+                            type={measurement.metadata.datatype}
+                            value={measurement.value}
+                            onChange={handleMachineDetailsChange(
+                              machine.id,
+                              measurement.metadata.id
+                            )}
                             label={
-                              measurement.name
-                                ? `${measurement.name} (${measurement.abbrev})`
-                                : `${measurement.abbrev}`
+                              measurement.metadata.name
+                                ? `${measurement.metadata.name} (${measurement.metadata.abbrev})`
+                                : `${measurement.metadata.abbrev}`
                             }
                             endAdornment={
                               <InputAdornment position="end">
-                                {measurement.units}
+                                {measurement.metadata.units}
                               </InputAdornment>
                             }
                           />
@@ -547,21 +632,25 @@ export default function DataViewAddSample() {
                           variant="outlined"
                         >
                           <InputLabel>
-                            {measurement.name
-                              ? `${measurement.name} (${measurement.abbrev})`
-                              : `${measurement.abbrev}`}
+                            {measurement.metadata.name
+                              ? `${measurement.metadata.name} (${measurement.metadata.abbrev})`
+                              : `${measurement.metadata.abbrev}`}
                           </InputLabel>
                           <OutlinedInput
-                            type={measurement.datatype}
-                            value={""}
+                            type={measurement.metadata.datatype}
+                            value={measurement.value}
+                            onChange={handleMachineDetailsChange(
+                              machine.id,
+                              measurement.metadata.id
+                            )}
                             label={
-                              measurement.name
-                                ? `${measurement.name} (${measurement.abbrev})`
-                                : `${measurement.abbrev}`
+                              measurement.metadata.name
+                                ? `${measurement.metadata.name} (${measurement.metadata.abbrev})`
+                                : `${measurement.metadata.abbrev}`
                             }
                             endAdornment={
                               <InputAdornment position="end">
-                                {measurement.units}
+                                {measurement.metadata.units}
                               </InputAdornment>
                             }
                           />
