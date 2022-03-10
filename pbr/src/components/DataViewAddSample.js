@@ -18,13 +18,9 @@ import {
   Stack,
   AccordionDetails,
   TextField,
-  Chip,
   InputAdornment,
   Button,
-  ListItem,
-  ListItemIcon,
   Checkbox,
-  ListItemText,
   MenuItem,
   IconButton,
 } from "@mui/material";
@@ -44,17 +40,6 @@ import { tooltipClasses } from "@mui/material/Tooltip";
 import { createFilterOptions } from "@mui/material/Autocomplete";
 
 const filter = createFilterOptions();
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
 
 const Input = styled("input")({
   display: "none",
@@ -106,11 +91,14 @@ const HtmlTooltip = styled(({ className, ...props }) => (
 
 export default function DataViewAddSample() {
   const classes = useStyles();
-  const theme = useTheme();
+  useTheme();
 
   // General Section Data
 
   const [timestamp, setTimestamp] = React.useState(Date.now());
+  const [errorMessage, setErrorMessage] = React.useState("Error.");
+  const [errorToggle, setErrorToggle] = React.useState(false);
+  const [loadingFile, setLoadingFile] = React.useState(false);
 
   const handleFlagChange = () => {
     setGeneralDetails({
@@ -164,15 +152,18 @@ export default function DataViewAddSample() {
   const getMeasurementByID = (machine, measID) => {
     return machine.measurements.find((meas) => meas.metadata.id === measID);
   };
-  const handleMachineDetailsChange = (machineID, measID) => (event) => {
+  const getMachineInfoByID = (machine, infoID) => {
+    return machine.info.find((info) => info.metadata.id === infoID);
+  };
+  const handleMeasurementChange = (machineID, measID) => (event) => {
     let newMachineDetails = [...machineDetails];
-    console.log("Machine ID: " + machineID + " | Measurement ID" + measID);
+    console.log("Machine ID: " + machineID + " | Measurement ID: " + measID);
     let machine = getMachineByID(machineID);
     getMeasurementByID(machine, measID).value = event.target.value;
 
     console.log(machine);
     for (let i = 0; i < newMachineDetails.length; i++) {
-      if (newMachineDetails.id == machineID) {
+      if (newMachineDetails.id === machineID) {
         newMachineDetails[i] = machine;
         break;
       }
@@ -180,28 +171,90 @@ export default function DataViewAddSample() {
     setMachineDetails(newMachineDetails);
   };
 
-  const uploadMachineFile = (machineName) => (event) => {
-    console.log("uploading machine file for: ", machineName);
-    let files = event.target.files;
-    parseFiles(files);
+  const handleMachineInfoChange = (machineID, infoID) => (event) => {
+    let newMachineDetails = [...machineDetails];
+    console.log("Machine ID: " + machineID + " | Info ID: " + infoID);
+    let machine = getMachineByID(machineID);
+    getMachineInfoByID(machine, infoID).value = event.target.value;
+
+    console.log(machine);
+    for (let i = 0; i < newMachineDetails.length; i++) {
+      if (newMachineDetails.id === machineID) {
+        newMachineDetails[i] = machine;
+        break;
+      }
+    }
+    setMachineDetails(newMachineDetails);
   };
 
-  let parseFiles = (files) => {
+  const uploadMachineFile = (machine) => (event) => {
+    console.log("uploading machine file for: ", machine.name);
+    let files = event.target.files;
+    console.log(event);
+    parseFilesAndAddData(files, machine);
+  };
+  const loadMachineData = (data, machine) => {
+    console.log("Loading in data.");
+    console.log("Detected Machine was:", data.name);
+    let newMachineDetails = [...machineDetails];
+    let updatedMachine = { ...machine };
+    if (machine.name == "VetScan VS2") {
+      console.log("Loading in VetScan Info Data.");
+
+      for (let i = 0; i < data.info.length; i++) {
+        let inf = updatedMachine.info.find(
+          (inf) => inf.metadata.key === data.info[i].key
+        );
+        inf.value = data.info[i].value;
+        inf.metadata.inputSource = "file";
+        console.log(inf);
+      }
+      console.log("Loading in VetScan Measurement Data.");
+
+      for (let i = 0; i < data.measurements.length; i++) {
+        let meas = updatedMachine.measurements.find(
+          (meas) => meas.metadata.abbrev === data.measurements[i].key
+        );
+        meas.value = data.measurements[i].value;
+        meas.metadata.inputSource = "file";
+        console.log(meas);
+      }
+      for (let i = 0; i < newMachineDetails.length; i++) {
+        if (newMachineDetails.id === updatedMachine.id) {
+          newMachineDetails[i] = updatedMachine;
+          break;
+        }
+      }
+      console.log(newMachineDetails);
+    }
+
+    setMachineDetails(newMachineDetails);
+  };
+
+  let parseFilesAndAddData = async (files, machine) => {
     console.log("Parsing files -> Sending to API");
     var data = new FormData();
     for (let i = 0; i < files.length; i++) {
       data.append("file", files[i]);
     }
-
-    fetch("/api/sample/parse", {
+    setLoadingFile(true);
+    await fetch("/api/sample/parse", {
       method: "POST",
       body: data,
     })
-      .then(() => {})
-      .catch((err) => {});
+      .then((response) => response.json())
+      .then((body) => {
+        loadMachineData(body.data, machine);
+        setLoadingFile(false);
+      })
+      .catch((error) => {
+        setErrorMessage("Error: " + error);
+        setErrorToggle(true);
+        setLoadingFile(false);
+      });
   };
 
-  // Machine List
+  // Machine Lists
   const [machineList, setMachineList] = React.useState([]);
 
   const parseMachineDetails = () => {
@@ -212,13 +265,22 @@ export default function DataViewAddSample() {
       let currentMachineDetails = {
         name: currentMachine.name,
         id: currentMachine.id,
+        info: [],
         measurements: [],
       };
+      for (let j = 0; j < currentMachine.info.length; j++) {
+        let currentInfo = currentMachine.info[j];
+        let currentInfoData = {
+          metadata: currentInfo,
+          value: "",
+        };
+        currentMachineDetails.info.push(currentInfoData);
+      }
       for (let j = 0; j < currentMachine.measurements.length; j++) {
         let currentMeasurement = currentMachine.measurements[j];
         let currentMeasurementData = {
           metadata: currentMeasurement,
-          value: null,
+          value: "",
         };
         currentMachineDetails.measurements.push(currentMeasurementData);
       }
@@ -233,71 +295,93 @@ export default function DataViewAddSample() {
       {
         name: "VetScan VS2",
         id: 12415,
+        info: [
+          {
+            id: 4,
+            name: "Timestamp of Test",
+            key: "timestamp",
+            datatype: "text",
+          },
+          { id: 1, name: "Patient ID", key: "patient_id", datatype: "text" },
+          {
+            id: 2,
+            name: "Rotor Lot Number",
+            key: "rotor_lot_number",
+            datatype: "text",
+          },
+          {
+            id: 3,
+            name: "Serial Number",
+            key: "serial_number",
+            datatype: "text",
+          },
+        ],
         measurements: [
-          { id: 1, abbrev: "AST", units: "U/L", datatype: "number" },
-          { id: 2, abbrev: "BA", units: "umol/L", datatype: "number" },
-          { id: 3, abbrev: "CK", units: "U/L", datatype: "number" },
-          { id: 4, abbrev: "UA", units: "mg/dL", datatype: "number" },
+          { id: 1, abbrev: "AST", units: "U/L", datatype: "text" },
+          { id: 2, abbrev: "BA", units: "umol/L", datatype: "text" },
+          { id: 3, abbrev: "CK", units: "U/L", datatype: "text" },
+          { id: 4, abbrev: "UA", units: "mg/dL", datatype: "text" },
           {
             id: 5,
             name: "Glucose",
             abbrev: "GLU",
             units: "mg/dL",
-            datatype: "number",
+            datatype: "text",
           },
           {
             id: 6,
             name: "Total Calcium",
             abbrev: "CA",
             units: "mg/dL",
-            datatype: "number",
+            datatype: "text",
           },
           {
             id: 7,
             name: "Phosphorus",
             abbrev: "PHOS",
             units: "mg/dL",
-            datatype: "number",
+            datatype: "text",
           },
           {
             id: 8,
             name: "Total Protein",
             abbrev: "TP",
             units: "g/dL",
-            datatype: "number",
+            datatype: "text",
           },
           {
             id: 9,
             name: "Albumen",
             abbrev: "ALB",
             units: "g/dL",
-            datatype: "number",
+            datatype: "text",
           },
           {
             id: 10,
             name: "Globulin",
             abbrev: "GLOB",
             units: "g/dL",
-            datatype: "number",
+            datatype: "text",
           },
           {
             id: 11,
             name: "Potassium",
             abbrev: "K+",
             units: "mmol/L",
-            datatype: "number",
+            datatype: "text",
           },
           {
             id: 12,
             name: "Sodium",
             abbrev: "NA+",
             units: "mmol/L",
-            datatype: "number",
+            datatype: "text",
           },
-          { id: 13, abbrev: "QC", datatype: "number" },
-          { id: 14, abbrev: "HEM", datatype: "number" },
-          { id: 15, abbrev: "LIP", datatype: "number" },
-          { id: 16, abbrev: "ICT", datatype: "number" },
+          { id: 13, abbrev: "RQC", datatype: "text" },
+          { id: 13, abbrev: "QC", datatype: "text" },
+          { id: 14, abbrev: "HEM", datatype: "text" },
+          { id: 15, abbrev: "LIP", datatype: "text" },
+          { id: 16, abbrev: "ICT", datatype: "text" },
         ],
       },
     ];
@@ -315,7 +399,6 @@ export default function DataViewAddSample() {
   // Always run
   React.useEffect(() => {
     getMachineList();
-    parseMachineDetails();
     getFlocks();
 
     // Keep the timestamp live
@@ -323,6 +406,10 @@ export default function DataViewAddSample() {
       setTimestamp(Date.now());
     }, 1000);
   }, []);
+
+  React.useEffect(() => {
+    parseMachineDetails();
+  }, [machineList]);
 
   return (
     <Box className={classes.root}>
@@ -360,13 +447,14 @@ export default function DataViewAddSample() {
         Add data directly, or alternatively upload a file or photo of a machine
         report to autofill bloodwork data for that machine.
       </Typography>
-      <Typography paragraph>
+      {/* <Typography paragraph>
         Files must be in .txt, .pdf, .jpg/.jpeg, or .heic format.
-      </Typography>
+      </Typography> */}
+      <Typography paragraph>Files must be in .txt format.</Typography>
       <Box>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ mb: -2 }}>
           <Grid item xs={12} sm={6}>
-            <FormControl sx={{ width: "100%" }}>
+            <FormControl sx={{ width: "100%", mb: 2 }}>
               <InputLabel>Organization</InputLabel>
               <Select
                 value={generalDetails.organization}
@@ -381,7 +469,7 @@ export default function DataViewAddSample() {
             <DateTimePicker
               label="Timestamp"
               fullWidth
-              sx={{ width: "100%" }}
+              sx={{ width: "100%", mb: 2 }}
               readOnly
               value={timestamp}
               onChange={handleTimestampChange()}
@@ -551,7 +639,7 @@ export default function DataViewAddSample() {
                 sx={{ width: "100%" }}
               >
                 <Typography sx={{ flexGrow: 1 }}>
-                  {machine.name} ({machine.id}) Data
+                  {machine.name} Data
                 </Typography>
                 <label htmlFor="icon-button-file">
                   <Input accept="image/*" id="icon-button-file" type="file" />
@@ -570,7 +658,7 @@ export default function DataViewAddSample() {
                     id="contained-button-file"
                     multiple
                     type="file"
-                    onChange={uploadMachineFile(machine.name)}
+                    onChange={uploadMachineFile(machine)}
                   />
                   <Button variant="contained" size="small" component="span">
                     Upload
@@ -580,6 +668,98 @@ export default function DataViewAddSample() {
               <Divider orientation="vertical" />
             </AccordionSummary>
             <AccordionDetails>
+              <Grid container spacing={2} sx={{ mb: -2 }}>
+                <Grid item xs={12} sm={6}>
+                  {machine.info
+                    .slice(0, Math.ceil(machine.info.length / 2))
+                    .map((data, dataIndex) => {
+                      return (
+                        <>
+                          {data.metadata.key == "timestamp" && (
+                            <Box key={dataIndex} sx={{ mb: 2, width: "100%" }}>
+                              <DateTimePicker
+                                label={data.metadata.name}
+                                fullWidth
+                                value={data.value}
+                                onChange={handleMachineInfoChange(
+                                  machine.id,
+                                  data.metadata.id
+                                )}
+                                renderInput={(params) => (
+                                  <TextField {...params} />
+                                )}
+                              />
+                            </Box>
+                          )}
+                          {data.metadata.key != "timestamp" && (
+                            <FormControl
+                              key={dataIndex}
+                              sx={{ mb: 2, width: "100%" }}
+                              variant="outlined"
+                            >
+                              <InputLabel>{data.metadata.name}</InputLabel>
+                              <OutlinedInput
+                                value={data.value}
+                                label={data.metadata.name}
+                                onChange={handleMachineInfoChange(
+                                  machine.id,
+                                  data.metadata.id
+                                )}
+                              />
+                            </FormControl>
+                          )}
+                        </>
+                      );
+                    })}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  {machine.info
+                    .slice(
+                      Math.ceil(machine.info.length / 2),
+                      machine.info.length
+                    )
+                    .map((data, dataIndex) => {
+                      return (
+                        <>
+                          {data.metadata.key == "timestamp" && (
+                            <Box key={dataIndex} sx={{ mb: 2, width: "100%" }}>
+                              <DateTimePicker
+                                label={data.metadata.name}
+                                fullWidth
+                                value={data.value}
+                                onChange={handleMachineInfoChange(
+                                  machine.id,
+                                  data.metadata.id
+                                )}
+                                renderInput={(params) => (
+                                  <TextField {...params} />
+                                )}
+                              />
+                            </Box>
+                          )}
+                          {data.metadata.key != "timestamp" && (
+                            <FormControl
+                              key={dataIndex}
+                              sx={{ mb: 2, width: "100%" }}
+                              variant="outlined"
+                            >
+                              <InputLabel>{data.metadata.name}</InputLabel>
+                              <OutlinedInput
+                                value={data.value}
+                                label={data.metadata.name}
+                                onChange={handleMachineInfoChange(
+                                  machine.id,
+                                  data.metadata.id
+                                )}
+                              />
+                            </FormControl>
+                          )}
+                        </>
+                      );
+                    })}
+                </Grid>
+              </Grid>
+              <Divider />
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   {machine.measurements
@@ -599,7 +779,7 @@ export default function DataViewAddSample() {
                           <OutlinedInput
                             type={measurement.metadata.datatype}
                             value={measurement.value}
-                            onChange={handleMachineDetailsChange(
+                            onChange={handleMeasurementChange(
                               machine.id,
                               measurement.metadata.id
                             )}
@@ -639,7 +819,7 @@ export default function DataViewAddSample() {
                           <OutlinedInput
                             type={measurement.metadata.datatype}
                             value={measurement.value}
-                            onChange={handleMachineDetailsChange(
+                            onChange={handleMeasurementChange(
                               machine.id,
                               measurement.metadata.id
                             )}

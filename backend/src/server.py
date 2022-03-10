@@ -8,11 +8,13 @@ load_dotenv(find_dotenv())
 from api import apiBlueprint
 from api.APISourceController import sourceBlueprint
 from api.APIUserController import userBlueprint
+from api.APIDataController import sampleBlueprint
 from api.APIOrganizationController import organizationBlueprint
 
 app = Flask(__name__)
 app.register_blueprint(apiBlueprint, url_prefix='/api')
 app.register_blueprint(sourceBlueprint, url_prefix='/api/source')
+app.register_blueprint(sampleBlueprint, url_prefix='/api/sample')
 app.register_blueprint(userBlueprint, url_prefix='/api/user')
 app.register_blueprint(organizationBlueprint, url_prefix='/api/organization')
 app.config['SECRET_KEY'] = os.environ.get("JWT_SECRET")
