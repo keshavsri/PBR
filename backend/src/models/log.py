@@ -10,11 +10,14 @@ class Log(db.Model):
     __table_args__ = {'extend_existing': True}
     
     id: int = db.Column(db.Integer, primary_key=True)
-    user: User = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user: User = db.relationship('User')
     role: Roles = db.Column(db.Enum(Roles))
-    organization: Organization = db.Column(db.Integer, db.ForeignKey('organization.id'))
+    organization_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
+    organization: Organization = db.relationship('Organization')
     action: LogActions = db.Column(db.Enum(LogActions))
     logContent: str = db.Column(db.String(500))
+    logTime: str = db.Column(db.DateTime, server_default=db.func.now())
     
     def __init__(self, requestJSON):
         self.user = requestJSON.get('user')
@@ -24,8 +27,8 @@ class Log(db.Model):
         self.logContent = requestJSON.get('logContent')
         
     def __init__(self, user, organization, role, action, logContent):
-        self.user = user
-        self.organization = organization
+        self.user_id = user
+        self.organization_id = organization
         self.role = role
         self.action = action
         self.logContent = logContent
@@ -35,8 +38,6 @@ def createTable():
     db.create_all()
     
 def createLog(current_user, action, logContent):
-    from models.user import User
-    user = User.query.get(current_user.id)
-    log = Log(user.id, user.organization, user.role, action, logContent)
+    log = Log(current_user.id, current_user.organization, current_user.role, action, logContent)
     db.session.add(log)
     db.session.commit()

@@ -19,9 +19,10 @@ class Organization(db.Model):
     zip: str = db.Column(db.String(10))
     notes: str = db.Column(db.String(500))
     organizationCode: str = db.Column(db.String(6), unique=True)
+    from models.source import Source
+    sources: list[Source] = None
     # TODO: sort this out
     #organizationCodeExpiry = db.Column(db.DateTime)
-    sources: list[Source] = None
 
     # initialize the class from a json object from the frontend
     def __init__ (self, requestJSON):
@@ -31,8 +32,12 @@ class Organization(db.Model):
         self.state = requestJSON.get('state')
         self.zip = requestJSON.get('zip')
 
-# creates the table in the database
-def createTable():
+    # creates the table in the database
+    def createTable():
+        from models.user import User
+        mainContact: User = db.Column(db.Integer, db.ForeignKey('user.id'))
+        organization_source = db.Table('organization-source', db.metadata, db.Column('organization_id', db.Integer, db.ForeignKey('organization.id')), db.Column('source_id', db.Integer, db.ForeignKey('source.id')), extend_existing=True)
+        Organization.sources = db.relationship('Source', secondary=organization_source, backref = 'organizations')
         db.create_all()
-        
+
 

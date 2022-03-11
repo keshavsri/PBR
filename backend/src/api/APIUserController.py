@@ -52,12 +52,7 @@ def me():
       data = Auth_Token.decode_token(token)
       dbUser = User.query.filter_by(id=data["id"]).first()
       if dbUser:
-        ret_user = {
-          "email": dbUser.email,
-          "firstname": dbUser.first_name,
-          "lastname": dbUser.last_name,
-        }
-        return jsonify(ret_user), 200
+        return jsonify(dbUser), 200
       else:
         return jsonify({"message":"Unauthorized"}), 401
     except Exception as error:

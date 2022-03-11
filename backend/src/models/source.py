@@ -2,7 +2,6 @@ from server import db
 from models.enums import States
 from dataclasses import dataclass
 
-from models.organization import Organization
 @dataclass
 class Source(db.Model):
     __tablename__ = 'source'
@@ -15,7 +14,6 @@ class Source(db.Model):
     city: str = db.Column(db.String(120))
     state: States = db.Column(db.String(20))
     zip: str = db.Column(db.String(10))
-    organizations: list[Organization] = None
     
     # initialize the class from a json object from the frontend
     def __init__(self, requestJSON: dict):
@@ -26,8 +24,10 @@ class Source(db.Model):
         self.state = requestJSON.get('state')
         self.zip = requestJSON.get('zip')
 
-# creates the table in the database
-def createTable():
-    db.create_all()
+    # creates the table in the database
+    def createTable():
+        from models.organization import Organization
+        organizations: list[Organization] = None
+        db.create_all()
 
 
