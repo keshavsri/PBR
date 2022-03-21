@@ -77,7 +77,7 @@ def handleOrganization(current_user, item_id=None):
                 createLog(current_user, LogActions.DELETE_ORGANIZATION, 'Deleted Organization: ' + deletedOrganization.name)
                 return jsonify({'message': 'Organization deleted'}), 200
         else:
-            return {'message': 'Bad Request Method Not Allowed'}, 405
+            return jsonify({'message': 'Bad Request Method Not Allowed'}), 405
     else:
         return jsonify({'message': 'Forbidden'}), 403
 
