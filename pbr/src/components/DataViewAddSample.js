@@ -62,6 +62,15 @@ const useStyles = makeStyles({
         marginLeft: "15px",
         marginRight: "15px",
       },
+      "& .MuiInputLabel-root": {
+        color: "grey !IMPORTANT",
+      },
+      "& .MuiInputAdornment-root .MuiTypography-root": {
+        color: "grey !IMPORTANT",
+      },
+      ".autofilled div": {
+        backgroundColor: "rgb(37, 185, 0, 0.1) !IMPORTANT",
+      },
     },
   },
   headerWithButton: {
@@ -159,8 +168,9 @@ export default function DataViewAddSample() {
     let newMachineDetails = [...machineDetails];
     console.log("Machine ID: " + machineID + " | Measurement ID: " + measID);
     let machine = getMachineByID(machineID);
-    getMeasurementByID(machine, measID).value = event.target.value;
-
+    let meas = getMeasurementByID(machine, measID);
+    meas.value = event.target.value;
+    meas.metadata.inputSource = "manual";
     console.log(machine);
     for (let i = 0; i < newMachineDetails.length; i++) {
       if (newMachineDetails.id === machineID) {
@@ -175,7 +185,9 @@ export default function DataViewAddSample() {
     let newMachineDetails = [...machineDetails];
     console.log("Machine ID: " + machineID + " | Info ID: " + infoID);
     let machine = getMachineByID(machineID);
-    getMachineInfoByID(machine, infoID).value = event.target.value;
+    let machInfo = getMachineInfoByID(machine, infoID);
+    machInfo.value = event.target.value;
+    machInfo.metadata.inputSource = "manual";
 
     console.log(machine);
     for (let i = 0; i < newMachineDetails.length; i++) {
@@ -378,10 +390,10 @@ export default function DataViewAddSample() {
             datatype: "text",
           },
           { id: 13, abbrev: "RQC", datatype: "text" },
-          { id: 13, abbrev: "QC", datatype: "text" },
-          { id: 14, abbrev: "HEM", datatype: "text" },
-          { id: 15, abbrev: "LIP", datatype: "text" },
-          { id: 16, abbrev: "ICT", datatype: "text" },
+          { id: 14, abbrev: "QC", datatype: "text" },
+          { id: 15, abbrev: "HEM", datatype: "text" },
+          { id: 16, abbrev: "LIP", datatype: "text" },
+          { id: 17, abbrev: "ICT", datatype: "text" },
         ],
       },
     ];
@@ -674,9 +686,16 @@ export default function DataViewAddSample() {
                     .slice(0, Math.ceil(machine.info.length / 2))
                     .map((data, dataIndex) => {
                       return (
-                        <>
+                        <Box
+                          key={dataIndex}
+                          className={
+                            data.metadata.inputSource == "file"
+                              ? "autofilled"
+                              : ""
+                          }
+                        >
                           {data.metadata.key == "timestamp" && (
-                            <Box key={dataIndex} sx={{ mb: 2, width: "100%" }}>
+                            <Box sx={{ mb: 2, width: "100%" }}>
                               <DateTimePicker
                                 label={data.metadata.name}
                                 fullWidth
@@ -708,7 +727,7 @@ export default function DataViewAddSample() {
                               />
                             </FormControl>
                           )}
-                        </>
+                        </Box>
                       );
                     })}
                 </Grid>
@@ -720,9 +739,16 @@ export default function DataViewAddSample() {
                     )
                     .map((data, dataIndex) => {
                       return (
-                        <>
+                        <Box
+                          key={dataIndex}
+                          className={
+                            data.metadata.inputSource == "file"
+                              ? "autofilled"
+                              : ""
+                          }
+                        >
                           {data.metadata.key == "timestamp" && (
-                            <Box key={dataIndex} sx={{ mb: 2, width: "100%" }}>
+                            <Box sx={{ mb: 2, width: "100%" }}>
                               <DateTimePicker
                                 label={data.metadata.name}
                                 fullWidth
@@ -754,7 +780,7 @@ export default function DataViewAddSample() {
                               />
                             </FormControl>
                           )}
-                        </>
+                        </Box>
                       );
                     })}
                 </Grid>
@@ -770,6 +796,11 @@ export default function DataViewAddSample() {
                           key={measurementIndex}
                           sx={{ mb: 2, width: "100%" }}
                           variant="outlined"
+                          className={
+                            measurement.metadata.inputSource == "file"
+                              ? "autofilled"
+                              : ""
+                          }
                         >
                           <InputLabel>
                             {measurement.metadata.name
@@ -810,6 +841,11 @@ export default function DataViewAddSample() {
                           key={measurementIndex}
                           sx={{ mb: 2, width: "100%" }}
                           variant="outlined"
+                          className={
+                            measurement.metadata.inputSource == "file"
+                              ? "autofilled"
+                              : ""
+                          }
                         >
                           <InputLabel>
                             {measurement.metadata.name

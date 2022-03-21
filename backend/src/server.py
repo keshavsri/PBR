@@ -27,8 +27,6 @@ db = SQLAlchemy(app)
 def testMethod():
     return 'CVM + CSC Home'
 
-
-
 if __name__ == '__main__':
     app.run(
         host= os.environ.get("SERVER_NAME"),

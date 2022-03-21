@@ -54,6 +54,9 @@ let mainTheme = createTheme({
     text: {
       secondary: "#2E3B52",
     },
+    lighttext: {
+      main: "rgba(0, 0, 0, 0.50)",
+    },
     background: {
       default: "rgb(40, 40, 40)",
     },

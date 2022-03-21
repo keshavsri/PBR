@@ -39,7 +39,7 @@ def parse_file():
 
     # Check if the filetype is allowed
     if file and check_allowed_filetype(file.filename):
-        data = parse_file(file)
+        data = parse(file)
         resp = jsonify({'message' : 'File successfully read', 'data': data})
         resp.status_code = HTTPStatus.OK
         return resp
@@ -52,7 +52,7 @@ def parse_file():
 def check_allowed_filetype(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def parse_file(file):
+def parse(file):
     if not check_allowed_filetype(file.filename):
         raise Exception("Invalid file type")
 
