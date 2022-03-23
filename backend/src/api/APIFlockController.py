@@ -1,42 +1,66 @@
-from api.APIUserController import token_required
+from api.APIUserController import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
+
 
 flockBlueprint = Blueprint('flock', __name__)
 
 
-@flockBlueprint.route('/', methods=['GET', 'POST'])
-@flockBlueprint.route('/<int:item_id>', methods=['GET', 'PUT', 'DELETE'])
+@flockBlueprint.route('/', methods=['GET'])
 @token_required
-def handleFlock(current_user, item_id = None):
-    from models.flock import Flock
-    from models.enums import Roles
-    from models.log import createLog
-    from models.enums import LogActions
-    if request.method == 'GET':
+@allowed_roles([0,1,2,3])
+def getFlocks(access_allowed, current_user):
+    if access_allowed:
+        from models.flock import Flock
+        from models.enums import Roles
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
         current_Organization = current_user.organization_id
-        # if item id exists then it will return the Flock with the id
-        if item_id:
-            flock = Flock.query.get(item_id)
-            if current_user.role == Roles.Super_Admin:
-                responseJSON = jsonify(flock)
-            elif flock.organization_id == current_Organization:
-                responseJSON = jsonify(flock)
-            else:
-                return jsonify({'message': 'You cannot access this flock'}), 403
-        
-        elif current_user.role == Roles.Super_Admin:
+        if current_user.role == Roles.Super_Admin:
             responseJSON = jsonify(Flock.query.all())
         else:
-            responseJSON = jsonify(Flock.query.filter_by(organization_id=current_Organization).all())
+            responseJSON = jsonify(Flock.query.filter_by(
+                organization_id=current_Organization).all())
         # if the response json is empty then return a 404 not found
         if responseJSON.json is None:
             responseJSON = jsonify({'message': 'No records found'})
             return responseJSON, 404
         else:
             return responseJSON, 200
-    elif request.method == 'POST':
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+
+
+@flockBlueprint.route('/<int:item_id>', methods=['GET'])
+@token_required
+@allowed_roles([0, 1, 2, 3])
+def getFlock(access_allowed, current_user, item_id):
+    if access_allowed:
+        from models.flock import Flock
+        from models.enums import Roles
+        # response json is created here and gets returned at the end of the block for GET requests.
+        responseJSON = None
+        current_Organization = current_user.organization_id
+        flock = Flock.query.get(item_id)
+        if current_user.role == Roles.Super_Admin:
+            responseJSON = jsonify(flock)
+        elif flock.organization_id == current_Organization:
+            responseJSON = jsonify(flock)
+        else:
+            return jsonify({'message': 'You cannot access this flock'}), 403
+        return responseJSON, 200
+    else:
+        return jsonify({'message': 'Role not allowed' + str(access_allowed)}), 403
+    
+
+@flockBlueprint.route('/', methods=['POST'])
+@token_required
+@allowed_roles([0, 1])
+def postFlock(access_allowed, current_user):
+    if access_allowed:
+        from models.flock import Flock
+        from models.log import createLog
+        from models.enums import LogActions
+        
         # checks if the Flock already exists in the database
         if Flock.query.filter_by(name=request.json.get('name')).first() is None:
             # builds the Flock from the request json
@@ -50,8 +74,18 @@ def handleFlock(current_user, item_id = None):
         # if the Flock already exists then return a 409 conflict
         else:
             return jsonify({'message': 'Flock already exists', "existing organization": jsonify(Flock.query.filter_by(name=request.json.get('name')).first()).json}), 409
-        # Handling the PUT requests
-    elif request.method == 'PUT':
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+    
+
+@flockBlueprint.route('/<int:item_id>', methods=['PUT'])
+@token_required
+@allowed_roles([0, 1])
+def putFlock(access_allowed, current_user, item_id):
+    if access_allowed:
+        from models.flock import Flock
+        from models.log import createLog
+        from models.enums import LogActions
         #check if the Flock exists in the database if it does then update the Flock
         if Flock.query.filter_by(organization_id=current_user.organization_id, id=item_id).first() is None:
             return jsonify({'message': 'Flock does not exist'}), 404
@@ -66,10 +100,18 @@ def handleFlock(current_user, item_id = None):
                 return jsonify(editedFlock), 200
             else:
                 return jsonify({'message': 'Cannot Edit Organization or source'}), 400
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+    
 
-
-    # Handling the DELETE requests
-    elif request.method == 'DELETE':
+@flockBlueprint.route('/<int:item_id>', methods=['DELETE'])
+@token_required
+@allowed_roles([0, 1])
+def deleteFlock(access_allowed, current_user, item_id):
+    if access_allowed:
+        from models.flock import Flock
+        from models.log import createLog
+        from models.enums import LogActions
         # check if the Flock exists in the database if it does then delete the Flock
         if Flock.query.filter_by(organization_id=current_user.organization_id, id=item_id).first() is None:
             return jsonify({'message': 'Flock does not exist'}), 404
@@ -80,6 +122,10 @@ def handleFlock(current_user, item_id = None):
             db.session.commit()
             createLog(current_user, LogActions.DELETE_FLOCK, 'Deleted Flock: ' + deletedFlock.name)
             return jsonify({'message': 'Flock deleted'}), 200
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
 
-    # If the request is not a GET, POST, PUT, or DELETE then return a 405 Method Not Allowed
-    return {'message': 'Bad Request Method Not Allowed'}, 405
+@flockBlueprint.route('/<int:item_id>')
+@flockBlueprint.route('/')
+def invalid_method(item_id = None):
+    return jsonify({'message': 'Invalid Method'}), 405
