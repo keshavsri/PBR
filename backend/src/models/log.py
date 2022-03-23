@@ -38,6 +38,6 @@ def createTable():
     db.create_all()
     
 def createLog(current_user, action, logContent):
-    log = Log(current_user.id, current_user.organization, current_user.role, action, logContent)
+    log = Log(current_user.id, current_user.organization.id, current_user.role, action, logContent)
     db.session.add(log)
     db.session.commit()
