@@ -3,6 +3,7 @@ import bcrypt
 from datetime import datetime, timedelta, timezone
 import os
 import uuid
+import jwt
 import json
 from auth_token import Auth_Token
 from functools import wraps
@@ -29,10 +30,15 @@ def token_required(f):
       # GET AND RETURN CURRENT USER
       current_user = User.query.filter_by(email=data["email"]).first()
     except jwt.ExpiredSignatureError as error:
-      return jsonify({
-        'message' : 'Token is expired!'
-      }), 401
-    else:
+      data = Auth_Token.decode_token(token, verify_expiration=False)
+      current_user = User.query.filter_by(email=data["email"]).first()
+      ret_user = {
+        "email": current_user.email,
+        "firstname": current_user.first_name,
+        "lastname": current_user.last_name,
+      }
+      return jsonify(ret_user), 419
+    except Error as error:
       return jsonify({
         'message' : 'Token is invalid!'
       }), 401
@@ -47,27 +53,19 @@ def route_setting_all(item_id=None):
   return User.fs_get_delete_put_post(item_id)
 
 @userBlueprint.route('/me', methods=['GET'])
-def me():
+@token_required
+def me(current_user):
   from models.user import User
-  if 'pbr_token' in request.cookies:
-    token = request.cookies['pbr_token']
-    try:
-      data = Auth_Token.decode_token(token)
-      dbUser = User.query.filter_by(id=data["id"]).first()
-      if dbUser:
-        ret_user = {
-          "email": dbUser.email,
-          "firstname": dbUser.first_name,
-          "lastname": dbUser.last_name,
-        }
-        return jsonify(ret_user), 200
-      else:
-        return jsonify({"message":"Unauthorized"}), 401
-    except Exception as error:
-      print(f'Token invalid. {error}')
-
-  print(f'UNAUTHORIZED')
-  return jsonify({"message":"Unauthorized"}), 401
+  if current_user:
+    ret_user = {
+      "email": current_user.email,
+      "firstname": current_user.first_name,
+      "lastname": current_user.last_name,
+    }
+    return jsonify(ret_user), 200
+  else:
+    return jsonify({"message":"Unauthorized"}), 401
+    
 
 @userBlueprint.route('/login', methods=['POST'])
 def login():
@@ -99,7 +97,7 @@ def login():
         "lastname": dbUser.last_name,
       }
       response = make_response(jsonify(ret_user), 200)
-      response.set_cookie(key="pbr_token", value=Auth_Token.create_token(dbUser), expires=datetime.now(tz=timezone.utc) + timedelta(minutes=int(os.environ.get("JWT_TTL"))), secure=True, httponly = True, samesite="Strict")
+      response.set_cookie(key="pbr_token", value=Auth_Token.create_token(dbUser), expires=datetime.now(tz=timezone.utc) + timedelta(days=1), secure=True, httponly = True, samesite="Strict")
       print("SUCCESS")
       return response
     else:

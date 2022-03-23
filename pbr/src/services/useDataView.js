@@ -2,32 +2,53 @@ import * as React from "react";
 const DataViewContext = React.createContext();
 
 export function useDataView() {
-  const [payload, setPayload] = React.useState({});
-  const [visibility, setVisibility] = React.useState(false);
+  const [samplePayload, setSamplePayload] = React.useState({});
+  const [sampleModalVisibility, setSampleModalVisibility] =
+    React.useState(false);
+  const [sampleModalScreen, setSampleModalScreen] = React.useState(0);
+  const [error, setError] = React.useState({});
 
-  React.useEffect(() => {}, []);
-
-  let openModal = () => {
-    setVisibility(true);
+  let openSampleModal = () => {
+    setSampleModalVisibility(true);
   };
 
-  let closeModal = () => {
-    setVisibility(false);
+  let closeSampleModal = () => {
+    setSampleModalScreen(0);
+    setSamplePayload({});
+    setSampleModalVisibility(false);
   };
 
-  const [nextButtonAction, setNextButtonAction] = React.useState(closeModal());
-  const [prevButtonAction, setPrevButtonAction] = React.useState(closeModal());
+  let samplePrevAction = () => {
+    if (sampleModalScreen > 0) {
+      setSampleModalScreen(sampleModalScreen - 1);
+    } else {
+      closeSampleModal();
+    }
+  };
+
+  let sampleNextAction = () => {
+    setSampleModalScreen(sampleModalScreen + 1);
+  };
+
+  let restartSample = () => {
+    setSampleModalScreen(0);
+    setSamplePayload({});
+    setError({});
+  };
 
   return {
-    payload,
-    setPayload,
-    visibility,
-    openModal,
-    closeModal,
-    nextButtonAction,
-    prevButtonAction,
-    setNextButtonAction,
-    setPrevButtonAction,
+    samplePayload,
+    setSamplePayload,
+    sampleModalVisibility,
+    sampleModalScreen,
+    setSampleModalScreen,
+    openSampleModal,
+    closeSampleModal,
+    samplePrevAction,
+    sampleNextAction,
+    error,
+    setError,
+    restartSample,
   };
 }
 

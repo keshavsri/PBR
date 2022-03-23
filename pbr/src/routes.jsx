@@ -13,10 +13,10 @@ import RecoveryCard from "./components/login/RecoveryCard";
 import ManageUsers from "./components/ManageUsers";
 
 function RequireAuth({ children }) {
-  const { user } = AuthConsumer();
+  const { user, recredentialize } = AuthConsumer();
   const location = useLocation();
   console.log("requireauth");
-  return user ? (
+  return user || recredentialize ? (
     children
   ) : (
     <Navigate to="/login" replace state={{ path: location.pathname }} />

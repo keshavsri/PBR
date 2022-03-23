@@ -150,7 +150,10 @@ export default function LoginCard() {
             alt="NCSU Brick Logo"
           />
 
-          <Typography variant="h1" sx={{ fontWeight: "bold", width: "100%" }}>
+          <Typography
+            variant="h1"
+            sx={{ fontWeight: "bold", width: "100%", textAlign: "center" }}
+          >
             Poultry Bloodwork Reporting Tool
           </Typography>
 

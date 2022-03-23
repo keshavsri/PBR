@@ -7,14 +7,15 @@ import NextIcon from "@mui/icons-material/ArrowForwardIos";
 import BackIcon from "@mui/icons-material/ArrowBackIosNew";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import DataViewFilterContent from "./DataViewFilterContent";
-import DataViewSampleModal from "./DataViewSampleModal";
-import DataViewAddSample from "./DataViewAddSample";
+import DataViewSampleModal from "./DataViewSample/SampleModal";
+import DataViewAddSample from "./DataViewSample/AddSample";
 import EnhancedTable from "./DataViewTable/EnhancedTable";
 import BulkIcon from "@mui/icons-material/UploadFile";
 import ReportIcon from "@mui/icons-material/Assessment";
 
 import CustomDialog from "./CustomDialog";
 import { makeStyles } from "@mui/styles";
+import DataViewConsumer from "../services/useDataView";
 
 const useStyles = makeStyles({});
 
@@ -470,20 +471,13 @@ const getSomethingAPICall = () => {
 };
 export default function DataView() {
   const [openFilterModal, setOpenFilterModal] = React.useState(false);
-  const [openSampleAddModal, setOpenSampleAddModal] = React.useState(false);
+  let { openSampleModal } = DataViewConsumer();
 
   const handleOpenFilterModal = () => {
     setOpenFilterModal(true);
   };
   const handleCloseFilterModal = () => {
     setOpenFilterModal(false);
-  };
-
-  const handleOpenSampleAddModal = () => {
-    setOpenSampleAddModal(true);
-  };
-  const handleCloseSampleAddModal = () => {
-    setOpenSampleAddModal(false);
   };
 
   // PH
@@ -535,7 +529,7 @@ export default function DataView() {
               <Tooltip title="Add Sample Entry">
                 <Button
                   variant="contained"
-                  onClick={handleOpenSampleAddModal}
+                  onClick={openSampleModal}
                   startIcon={<SampleIcon />}
                   sx={{ ml: 1 }}
                 >
@@ -546,33 +540,7 @@ export default function DataView() {
           }
         ></EnhancedTable>
       </Paper>
-      {/* <CustomDialog
-        open={openFilterModal}
-        icon={<FilterListIcon />}
-        title="Data View"
-        subtitle="Filter Settings"
-        handleClose={handleCloseFilterModal}
-        footer={
-          <>
-            <Button
-              variant="contained"
-              color="secondaryLight"
-              onClick={handleCloseFilterModal}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleCloseFilterModal}
-              variant="contained"
-              autoFocus
-            >
-              Apply
-            </Button>
-          </>
-        }
-      >
-        <DataViewFilterContent />
-      </CustomDialog> */}
+
       <DataViewSampleModal />
     </>
   );

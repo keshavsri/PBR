@@ -7,6 +7,7 @@ const AuthContext = React.createContext();
 export function useAuth() {
   const [user, setUser] = React.useState(null);
   const [loadingAuth, setLoadingAuth] = React.useState(true);
+  const [recredentialize, setRecredentialize] = React.useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -15,15 +16,13 @@ export function useAuth() {
     fetch("/api/user/me", {
       method: "GET",
     })
-      .then(handleResponse)
+      .then(handleRefreshResponse)
       .then((user) => {
-        if (user) {
-          setUser(user);
-          setLoadingAuth(false);
-        } else {
-          setUser(null);
-          setLoadingAuth(false);
-        }
+        console.log(user);
+        setLoadingAuth(false);
+        setRecredentialize(false);
+        setUser(user);
+        setRecredentialize(false);
       })
       .catch((err) => {
         setUser(null);
@@ -49,6 +48,7 @@ export function useAuth() {
         .then(handleResponse)
         .then((user) => {
           setUser(user);
+          setRecredentialize(false);
           resolve("Success. Logging in.");
         })
         .catch((err) => {
@@ -76,6 +76,28 @@ export function useAuth() {
       });
   };
 
+  function handleRefreshResponse(response) {
+    if (!response.ok) {
+      if ([419].indexOf(response.status) !== -1) {
+        // Token expired. We need to reprompt to login.
+        console.log("Token expired. We need to reprompt to login.");
+        setRecredentialize(true);
+        setLoadingAuth(false);
+        return Promise.reject();
+      }
+      if ([401, 403].indexOf(response.status) !== -1) {
+        // auto logout if 401 Unauthorized or 403 Forbidden response returned from api
+        console.log("User is unauthorized. Forbid!.");
+        logout();
+        setLoadingAuth(false);
+        return Promise.reject();
+      }
+    } else {
+      console.log("User is valid. Return.");
+      return response.json();
+    }
+  }
+
   function handleResponse(response) {
     if (!response.ok) {
       let error = "Try again.";
@@ -95,6 +117,8 @@ export function useAuth() {
     login,
     logout,
     loadingAuth,
+    recredentialize,
+    setRecredentialize,
   };
 }
 

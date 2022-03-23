@@ -69,10 +69,11 @@ class Auth_Token:
 
 
     @staticmethod
-    def decode_token(token):
+    def decode_token(token, verify_expiration=True):
         """
         Validates a token, ensuring it is original/signed and not expired.
         :param token: the token to validate
+        :param verify_expiration: Set to False to decode a token even if it is expired.
         :returns: token payload, or error if token is invalid or expired
         """
 
@@ -82,7 +83,7 @@ class Auth_Token:
                 raise jwt.InvalidTokenError
 
             header_data = jwt.get_unverified_header(token)
-            payload = jwt.decode(token, key=os.environ.get("JWT_SECRET"), algorithms=[os.environ.get("JWT_SIGN_ALGORITHM")])
+            payload = jwt.decode(token, key=os.environ.get("JWT_SECRET"), algorithms=[os.environ.get("JWT_SIGN_ALGORITHM")], options={'verify_exp': verify_expiration})
             print(f'Token valid.')
             return payload
         except jwt.ExpiredSignatureError as error:

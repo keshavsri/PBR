@@ -94,11 +94,11 @@ BootstrapDialogTitle.propTypes = {
 };
 
 export default function CustomDialog(props) {
-  const { open, handleClose, title, subtitle, footer, icon } = props;
+  const { open, handleClose, title, subtitle, footer, icon, maxWidth } = props;
 
   return (
     <BootstrapDialog
-      maxWidth={"md"}
+      maxWidth={maxWidth ? maxWidth : "md"}
       fullWidth
       onClose={handleClose}
       aria-labelledby="customized-dialog-title"

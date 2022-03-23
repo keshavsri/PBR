@@ -32,12 +32,13 @@ import {
   ageUnits,
   productionTypes,
   speciesTypes,
-} from "../models/enums";
+} from "../../models/enums";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import FlagIcon from "@mui/icons-material/Flag";
 import OutlinedFlagIcon from "@mui/icons-material/OutlinedFlag";
 import { tooltipClasses } from "@mui/material/Tooltip";
 import { createFilterOptions } from "@mui/material/Autocomplete";
+import DataViewConsumer from "../../services/useDataView";
 
 const filter = createFilterOptions();
 
@@ -101,6 +102,8 @@ const HtmlTooltip = styled(({ className, ...props }) => (
 export default function DataViewAddSample() {
   const classes = useStyles();
   useTheme();
+  const { visibility, closeModal, setNextButtonAction, setPrevButtonAction } =
+    DataViewConsumer();
 
   // General Section Data
 
