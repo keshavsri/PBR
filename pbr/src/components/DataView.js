@@ -442,7 +442,7 @@ const headCells = [
 ];
 
 let machineHeadCells = [];
-const addApiColumnNamesToHeadCells = () => {
+const addApiColumnNamesToHeadCells = (headCellNamesFromAPI) => {
   headCellNamesFromAPI.map((item) => {
     item.data.map((point, index) => {
       headCells.push(createHeadCell(point, item.machineName, index));
@@ -462,9 +462,6 @@ function createHeadCell(point, machineName, index) {
     sublabel: "" + machineName,
   };
 }
-
-addApiColumnNamesToHeadCells();
-console.log(headCells)
 
 const denestMachineData = (rows) => {
   rows.map((row, index) => {
@@ -510,29 +507,38 @@ const assignRowHtml = () => {
   })
 }
 
+
+// const getAPICall = () => {
+//   fetch(`/api/sample`, {method: "GET",})
+//     .then((response) => {
+//       return response.json();
+//     }).then((data) => {
+//       console.log(data);
+//       setRowList(data.row);
+//       setHeadCellList(data.types);
+//     })
+
+//     addApiColumnNamesToHeadCells(headCellNamesFromAPI);
+//     console.log(headCellList)
+//     denestMachineData(rowList)
+//     assignRowHtml()
+//     console.log(rows)  
+// };
+
+addApiColumnNamesToHeadCells(headCellNamesFromAPI);
+console.log(headCells)
 denestMachineData(rows)
 assignRowHtml()
-console.log(rows)
+console.log(rows)  
 
-const getSomethingAPICall = () => {
-  // fetch(`/api/organization/orgCode/${selectedOrganization.id}`, {method: "GET",})
-  //   .then((response) => {
-  //     return response.json();
-  //   }).then((data) => {
-  //     console.log(data);
-  //     setOrgCodeData(data);
-  //   })
-  // let mockedOrgCode = {
-  //   orgCode: "873450",
-  //   validTill: "2021-12-10T13:45:00.000Z",
-  // };
-  // console.log(mockedOrgCode);
-  // setOrgCodeData(mockedOrgCode);
-};
+
+
+
 export default function DataView() {
   const [openFilterModal, setOpenFilterModal] = React.useState(false);
   const [openSampleAddModal, setOpenSampleAddModal] = React.useState(false);
-
+  // const [rowList, setRowList] = React.useState([]);
+  // const [headCellList, setHeadCellList] = React.useState([]);
   const handleOpenFilterModal = () => {
     setOpenFilterModal(true);
   };

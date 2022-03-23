@@ -84,12 +84,11 @@ export default function EnhancedTable(props) {
     handleCloseSampleAddModal,
     rows,
     headCells,
-    machineHeadCells,
     toolbarButtons,
   } = props;
 
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("calories");
+  const [order, setOrder] = React.useState("");
+  const [orderBy, setOrderBy] = React.useState("");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
