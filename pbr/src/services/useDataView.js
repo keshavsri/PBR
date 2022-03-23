@@ -1,7 +1,7 @@
 import * as React from "react";
-const SampleModalContext = React.createContext();
+const DataViewContext = React.createContext();
 
-export function useSampleModal() {
+export function useDataView() {
   const [payload, setPayload] = React.useState({});
   const [visibility, setVisibility] = React.useState(false);
 
@@ -31,16 +31,16 @@ export function useSampleModal() {
   };
 }
 
-export function SampleModalProvider({ children }) {
-  const sampleModal = useSampleModal();
+export function DataViewProvider({ children }) {
+  const dataview = useDataView();
 
   return (
-    <SampleModalContext.Provider value={sampleModal}>
+    <DataViewContext.Provider value={dataview}>
       {children}
-    </SampleModalContext.Provider>
+    </DataViewContext.Provider>
   );
 }
 
-export default function SampleModalConsumer() {
-  return React.useContext(SampleModalContext);
+export default function DataViewConsumer() {
+  return React.useContext(DataViewContext);
 }

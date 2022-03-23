@@ -7,14 +7,11 @@ import NextIcon from "@mui/icons-material/ArrowForwardIos";
 import BackIcon from "@mui/icons-material/ArrowBackIosNew";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import DataViewFilterContent from "./DataViewFilterContent";
+import DataViewSampleModal from "./DataViewSampleModal";
 import DataViewAddSample from "./DataViewAddSample";
 import EnhancedTable from "./DataViewTable/EnhancedTable";
 import BulkIcon from "@mui/icons-material/UploadFile";
 import ReportIcon from "@mui/icons-material/Assessment";
-import {
-  SampleModalProvider,
-  useSampleModal,
-} from "../services/useSampleModal";
 
 import CustomDialog from "./CustomDialog";
 import { makeStyles } from "@mui/styles";
@@ -472,17 +469,6 @@ const getSomethingAPICall = () => {
   // setOrgCodeData(mockedOrgCode);
 };
 export default function DataView() {
-  const {
-    payload,
-    setPayload,
-    visibility,
-    openModal,
-    closeModal,
-    nextButtonAction,
-    prevButtonAction,
-    setNextButtonAction,
-    setPrevButtonAction,
-  } = useSampleModal();
   const [openFilterModal, setOpenFilterModal] = React.useState(false);
   const [openSampleAddModal, setOpenSampleAddModal] = React.useState(false);
 
@@ -519,12 +505,9 @@ export default function DataView() {
     <>
       <Paper>
         <EnhancedTable
-          openFilterModal={openFilterModal}
-          openSampleAddModal={openSampleAddModal}
+          // openFilterModal={openFilterModal}
           handleOpenFilterModal={handleOpenFilterModal}
-          handleOpenSampleAddModal={handleOpenSampleAddModal}
           handleCloseFilterModal={handleCloseFilterModal}
-          handleCloseSampleAddModal={handleCloseSampleAddModal}
           headCells={headCells}
           rows={newRows}
           machineHeadCells={machineHeadCells}
@@ -563,7 +546,7 @@ export default function DataView() {
           }
         ></EnhancedTable>
       </Paper>
-      <CustomDialog
+      {/* <CustomDialog
         open={openFilterModal}
         icon={<FilterListIcon />}
         title="Data View"
@@ -589,37 +572,8 @@ export default function DataView() {
         }
       >
         <DataViewFilterContent />
-      </CustomDialog>
-      <SampleModalProvider>
-        <CustomDialog
-          open={openSampleAddModal}
-          icon={<SampleIcon />}
-          title="Sample"
-          subtitle="Add"
-          handleClose={handleCloseSampleAddModal}
-          footer={
-            <>
-              <Button
-                variant="contained"
-                color="secondaryLight"
-                onClick={handleCloseSampleAddModal}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleCloseSampleAddModal}
-                variant="contained"
-                autoFocus
-                endIcon={<NextIcon />}
-              >
-                Next
-              </Button>
-            </>
-          }
-        >
-          <DataViewAddSample />
-        </CustomDialog>
-      </SampleModalProvider>
+      </CustomDialog> */}
+      <DataViewSampleModal />
     </>
   );
 }

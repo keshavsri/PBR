@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles, createStyles } from "@mui/styles";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../services/useAuth";
+import AuthConsumer from "../../services/useAuth";
 
 import {
   Grid,
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) =>
 
 export default function RegisterCard() {
   const classes = useStyles();
-  const { login } = useAuth();
+  const { login } = AuthConsumer();
   const navigate = useNavigate();
 
   const [values, setValues] = React.useState({

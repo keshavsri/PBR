@@ -226,7 +226,7 @@ export default function EnhancedTable(props) {
 
                         if (key == "deletable") {
                           return (
-                            <StyledTableCell padding="checkbox">
+                            <StyledTableCell padding="checkbox" key={index}>
                               <Checkbox
                                 color="primary"
                                 disabled={value}
@@ -243,6 +243,7 @@ export default function EnhancedTable(props) {
                               padding="none"
                               align="left"
                               id={index}
+                              key={index}
                             >
                               {value}
                             </StyledTableCell>
