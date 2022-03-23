@@ -2,20 +2,16 @@ import * as React from "react";
 
 import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
 
-import SampleIcon from "@mui/icons-material/Science";
-import NextIcon from "@mui/icons-material/ArrowForwardIos";
-import BackIcon from "@mui/icons-material/ArrowBackIosNew";
-import FilterListIcon from "@mui/icons-material/FilterList";
 import DataViewFilterContent from "./DataViewFilterContent";
 import DataViewSampleModal from "./DataViewSample/SampleModal";
 import DataViewAddSample from "./DataViewSample/AddSample";
+import DVTableToolbar from "./DVTableToolbar";
+
 import EnhancedTable from "./DataViewTable/EnhancedTable";
-import BulkIcon from "@mui/icons-material/UploadFile";
-import ReportIcon from "@mui/icons-material/Assessment";
 
 import CustomDialog from "./CustomDialog";
 import { makeStyles } from "@mui/styles";
-import DataViewConsumer from "../services/useDataView";
+import { DataViewProvider } from "../services/useDataView";
 
 const useStyles = makeStyles({});
 
@@ -470,16 +466,6 @@ const getSomethingAPICall = () => {
   // setOrgCodeData(mockedOrgCode);
 };
 export default function DataView() {
-  const [openFilterModal, setOpenFilterModal] = React.useState(false);
-  let { openSampleModal } = DataViewConsumer();
-
-  const handleOpenFilterModal = () => {
-    setOpenFilterModal(true);
-  };
-  const handleCloseFilterModal = () => {
-    setOpenFilterModal(false);
-  };
-
   // PH
   // PCO2
   // BE
@@ -494,54 +480,34 @@ export default function DataView() {
   // function addHeadCellsFromAPI(measurements){
   //   headCellsToAdd = measurements.map((measurement) => [measurement]);
   // }
+  const [openFilterModal, setOpenFilterModal] = React.useState(false);
+
+  const handleOpenFilterModal = () => {
+    setOpenFilterModal(true);
+  };
+  const handleCloseFilterModal = () => {
+    setOpenFilterModal(false);
+  };
 
   return (
     <>
-      <Paper>
-        <EnhancedTable
-          // openFilterModal={openFilterModal}
-          handleOpenFilterModal={handleOpenFilterModal}
-          handleCloseFilterModal={handleCloseFilterModal}
-          headCells={headCells}
-          rows={newRows}
-          machineHeadCells={machineHeadCells}
-          toolbarButtons={
-            <>
-              <Tooltip title="Generate Group Report">
-                <IconButton sx={{ ml: -0.5 }}>
-                  <ReportIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Filter list">
-                <IconButton onClick={handleOpenFilterModal} sx={{ ml: -0.5 }}>
-                  <FilterListIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Batch Import">
-                <Button
-                  variant="contained"
-                  startIcon={<BulkIcon />}
-                  sx={{ ml: 1 }}
-                >
-                  Batch Import
-                </Button>
-              </Tooltip>
-              <Tooltip title="Add Sample Entry">
-                <Button
-                  variant="contained"
-                  onClick={openSampleModal}
-                  startIcon={<SampleIcon />}
-                  sx={{ ml: 1 }}
-                >
-                  Add Sample
-                </Button>
-              </Tooltip>
-            </>
-          }
-        ></EnhancedTable>
-      </Paper>
+      <DataViewProvider>
+        <Paper>
+          <EnhancedTable
+            // openFilterModal={openFilterModal}
+            handleOpenFilterModal={handleOpenFilterModal}
+            handleCloseFilterModal={handleCloseFilterModal}
+            headCells={headCells}
+            rows={newRows}
+            machineHeadCells={machineHeadCells}
+            toolbarButtons={
+              <DVTableToolbar handleOpenFilterModal={handleOpenFilterModal} />
+            }
+          ></EnhancedTable>
+        </Paper>
 
-      <DataViewSampleModal />
+        <DataViewSampleModal />
+      </DataViewProvider>
     </>
   );
 }

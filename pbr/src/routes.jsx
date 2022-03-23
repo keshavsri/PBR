@@ -69,9 +69,7 @@ const routes = [
     element: (
       <RequireAuth>
         <MainLayout>
-          <DataViewProvider>
-            <DataView />
-          </DataViewProvider>
+          <DataView />
         </MainLayout>
       </RequireAuth>
     ),

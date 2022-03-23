@@ -8,7 +8,6 @@ import json
 from auth_token import Auth_Token
 from functools import wraps
 
-
 userBlueprint = Blueprint('user', __name__)
 
 # decorator for verifying the JWT
@@ -36,6 +35,7 @@ def token_required(f):
         "email": current_user.email,
         "firstname": current_user.first_name,
         "lastname": current_user.last_name,
+        "role": current_user.role,
       }
       return jsonify(ret_user), 419
     except Error as error:
@@ -61,6 +61,7 @@ def me(current_user):
       "email": current_user.email,
       "firstname": current_user.first_name,
       "lastname": current_user.last_name,
+      "role": current_user.role,
     }
     return jsonify(ret_user), 200
   else:

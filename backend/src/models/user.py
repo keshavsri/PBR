@@ -1,6 +1,7 @@
 from server import db
 from models.enums import Roles
 from flask_serialize import FlaskSerialize
+from models.enums import Roles
 
 fs_mixin = FlaskSerialize(db)
 
@@ -13,7 +14,7 @@ class User(db.Model, fs_mixin):
     password = db.Column(db.String(120))
     first_name = db.Column(db.String(120))
     last_name = db.Column(db.String(120))
-    role = db.Column(db.Integer)
+    role = db.Column(db.Enum(Roles), nullable=True)
     notes = db.Column(db.String(500))
     
     __fs_create_fields__ = __fs_update_fields__ = ['email', 'password', 'first_name', 'last_name', 'role', 'notes']
