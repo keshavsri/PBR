@@ -163,8 +163,8 @@ def register():
 
   salt = bcrypt.gensalt()
   hashedPW = bcrypt.hashpw(data["password"].encode('utf8'), salt)
-
-  user = User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=None )
+  from models.enums import Roles
+  user = User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
   db.session.add(user)
   db.session.commit()
   print("User was successfully added.")
