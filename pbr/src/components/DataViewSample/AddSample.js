@@ -39,6 +39,7 @@ import OutlinedFlagIcon from "@mui/icons-material/OutlinedFlag";
 import { tooltipClasses } from "@mui/material/Tooltip";
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import DataViewConsumer from "../../services/useDataView";
+import AuthConsumer from "../../services/useAuth";
 
 const filter = createFilterOptions();
 
@@ -69,9 +70,11 @@ const useStyles = makeStyles({
       "& .MuiInputAdornment-root .MuiTypography-root": {
         color: "grey !IMPORTANT",
       },
-      ".autofilled div": {
-        backgroundColor: "rgb(37, 185, 0, 0.1) !IMPORTANT",
-      },
+    },
+  },
+  autoFilled: {
+    "& .MuiInputBase-root": {
+      backgroundColor: "rgb(37, 185, 0, 0.1) !IMPORTANT",
     },
   },
   headerWithButton: {
@@ -102,12 +105,18 @@ const HtmlTooltip = styled(({ className, ...props }) => (
 export default function DataViewAddSample() {
   const classes = useStyles();
   useTheme();
-  const { visibility, closeModal, setNextButtonAction, setPrevButtonAction } =
-    DataViewConsumer();
+  const {
+    machineDetails,
+    setMachineDetails,
+    generalDetails,
+    setGeneralDetails,
+    timestamp,
+    setTimestamp,
+  } = DataViewConsumer();
+  const { handleAPIResponse } = AuthConsumer();
 
   // General Section Data
 
-  const [timestamp, setTimestamp] = React.useState(Date.now());
   const [errorMessage, setErrorMessage] = React.useState("Error.");
   const [errorToggle, setErrorToggle] = React.useState(false);
   const [loadingFile, setLoadingFile] = React.useState(false);
@@ -117,46 +126,84 @@ export default function DataViewAddSample() {
       ...generalDetails,
       flagged: !generalDetails.flagged,
     });
-    console.log(machineDetails);
   };
 
-  const [generalDetails, setGeneralDetails] = React.useState({
-    organization: "",
-    flockID: "",
-    species: "",
-    strain: "",
-    gender: "",
-    source: "",
-    productionType: "",
-    ageNumber: "",
-    ageUnit: "",
-    flagged: false,
-    comments: "",
-  });
+  const [flocks, setFlocks] = React.useState([]);
+  const [strains, setStrains] = React.useState([]);
+  const [sources, setSources] = React.useState([]);
+
+  const getFlocks = () => {
+    let mockFlocks = [{ id: 1852 }, { id: 2531 }, { id: 3491 }];
+    setFlocks(mockFlocks);
+  };
+
+  const getStrains = async (species) => {
+    await fetch(`/api/sample/strains/${species}`, {
+      method: "GET",
+    })
+      .then(handleAPIResponse)
+      .then((data) => {
+        console.log(data);
+        setStrains(data);
+      });
+  };
+
+  const getSources = async () => {
+    // await fetch(`/api/source`, {
+    //   method: "GET",
+    // })
+    //   .then(handleAPIResponse)
+    //   .then((data) => {
+    //     console.log(data);
+    //     setSources(data);
+    //   });
+    let mockSources = [
+      {
+        id: "1",
+        name: "Source A",
+        street_address: "123 Main Street",
+        city: "Raleigh",
+        state: "NC",
+        zip: "27606",
+      },
+      {
+        id: "2",
+        name: "Source B",
+        street_address: "456 Main Street",
+        city: "Raleigh",
+        state: "NC",
+        zip: "27606",
+      },
+    ];
+    setSources(mockSources);
+  };
 
   const handleGeneralDetailsChange = (prop) => (event) => {
-    console.log("General Details changed: ", event.target.value);
-    setGeneralDetails({
-      ...generalDetails,
-      [prop]: event.target.value,
-    });
-    console.log(generalDetails);
+    if (prop === "species") {
+      setGeneralDetails({
+        ...generalDetails,
+        species: event.target.value,
+        strain: "",
+      });
+      getStrains(event.target.value);
+    } else {
+      setGeneralDetails({
+        ...generalDetails,
+        [prop]: event.target.value,
+      });
+    }
   };
 
-  const handleFlockChange = (flock) => {
-    console.log("Flock changed: ", flock);
+  const handleFlockChange = (id) => {
     setGeneralDetails({
       ...generalDetails,
-      flockID: flock.id,
+      flockID: id,
     });
-    console.log(generalDetails);
   };
 
   const handleTimestampChange = () => (event) => {
     setTimestamp(event.target.value);
   };
-
-  const [machineDetails, setMachineDetails] = React.useState([]);
 
   const getMachineByID = (machineID) => {
     return machineDetails.find((m) => m.id === machineID);
@@ -208,6 +255,31 @@ export default function DataViewAddSample() {
     console.log(event);
     parseFilesAndAddData(files, machine);
   };
+
+  const clearMachineData = (machine) => {
+    console.log(`Clearing data for ${machine.name}`);
+    let newMachineDetails = [...machineDetails];
+    let updatedMachine = { ...machine };
+    console.log(newMachineDetails);
+    console.log(updatedMachine);
+    for (let i = 0; i < updatedMachine.info; i++) {
+      updatedMachine.info[i].value = "";
+    }
+    for (let i = 0; i < updatedMachine.measurements; i++) {
+      updatedMachine.measurements[i].value = "";
+    }
+    console.log(newMachineDetails);
+    console.log(updatedMachine);
+
+    for (let i = 0; i < newMachineDetails.length; i++) {
+      if (newMachineDetails.id === updatedMachine.id) {
+        newMachineDetails[i] = updatedMachine;
+        break;
+      }
+    }
+    setMachineDetails(newMachineDetails);
+  };
+
   const loadMachineData = (data, machine) => {
     console.log("Loading in data.");
     console.log("Detected Machine was:", data.name);
@@ -215,31 +287,38 @@ export default function DataViewAddSample() {
     let updatedMachine = { ...machine };
     if (machine.name == "VetScan VS2") {
       console.log("Loading in VetScan Info Data.");
-
+      console.log(data.info);
+      console.log(data.info.length);
       for (let i = 0; i < data.info.length; i++) {
         let inf = updatedMachine.info.find(
-          (inf) => inf.metadata.key === data.info[i].key
+          (inf) => inf.metadata.name === data.info[i].key
         );
-        inf.value = data.info[i].value;
-        inf.metadata.inputSource = "file";
-        console.log(inf);
+        if (inf) {
+          inf.value = data.info[i].value;
+          inf.metadata.inputSource = "file";
+        }
       }
-      console.log("Loading in VetScan Measurement Data.");
 
+      console.log("Loading in VetScan Measurement Data.");
+      console.log(data.measurements);
       for (let i = 0; i < data.measurements.length; i++) {
         let meas = updatedMachine.measurements.find(
           (meas) => meas.metadata.abbrev === data.measurements[i].key
         );
-        meas.value = data.measurements[i].value;
-        meas.metadata.inputSource = "file";
-        console.log(meas);
+        if (meas) {
+          meas.value = data.measurements[i].value;
+          meas.metadata.inputSource = "file";
+          console.log("MEAS:", meas);
+        }
       }
+
       for (let i = 0; i < newMachineDetails.length; i++) {
         if (newMachineDetails.id === updatedMachine.id) {
           newMachineDetails[i] = updatedMachine;
           break;
         }
       }
+
       console.log(newMachineDetails);
     }
 
@@ -257,8 +336,9 @@ export default function DataViewAddSample() {
       method: "POST",
       body: data,
     })
-      .then((response) => response.json())
+      .then(handleAPIResponse)
       .then((body) => {
+        clearMachineData(machine);
         loadMachineData(body.data, machine);
         setLoadingFile(false);
       })
@@ -275,7 +355,6 @@ export default function DataViewAddSample() {
   const parseMachineDetails = () => {
     let tmpMachineDetails = [];
     for (let i = 0; i < machineList.length; i++) {
-      console.log(machineList[i].name);
       let currentMachine = machineList[i];
       let currentMachineDetails = {
         name: currentMachine.name,
@@ -301,7 +380,6 @@ export default function DataViewAddSample() {
       }
       tmpMachineDetails.push(currentMachineDetails);
     }
-    console.log(tmpMachineDetails);
     setMachineDetails(tmpMachineDetails);
   };
 
@@ -314,20 +392,17 @@ export default function DataViewAddSample() {
           {
             id: 4,
             name: "Timestamp of Test",
-            key: "timestamp",
             datatype: "text",
           },
-          { id: 1, name: "Patient ID", key: "patient_id", datatype: "text" },
+          { id: 1, name: "Patient ID", datatype: "text" },
           {
             id: 2,
             name: "Rotor Lot Number",
-            key: "rotor_lot_number",
             datatype: "text",
           },
           {
             id: 3,
             name: "Serial Number",
-            key: "serial_number",
             datatype: "text",
           },
         ],
@@ -403,23 +478,11 @@ export default function DataViewAddSample() {
     setMachineList(mockMachineList);
   };
 
-  const [flocks, setFlocks] = React.useState([]);
-
-  const getFlocks = () => {
-    let mockFlocks = [{ id: 1852 }, { id: 2531 }, { id: 3491 }];
-
-    setFlocks(mockFlocks);
-  };
-
   // Always run
   React.useEffect(() => {
     getMachineList();
     getFlocks();
-
-    // Keep the timestamp live
-    setInterval(() => {
-      setTimestamp(Date.now());
-    }, 1000);
+    getSources();
   }, []);
 
   React.useEffect(() => {
@@ -557,10 +620,17 @@ export default function DataViewAddSample() {
               <InputLabel>Strain</InputLabel>
               <Select
                 value={generalDetails.strain}
+                disabled={!generalDetails.species ? true : false}
                 label="Strain"
                 onChange={handleGeneralDetailsChange("strain")}
               >
-                <MenuItem value={""}></MenuItem>
+                {strains.map((strain, index) => {
+                  return (
+                    <MenuItem value={strain} key={index}>
+                      {strain}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
 
@@ -589,7 +659,14 @@ export default function DataViewAddSample() {
                 label="Source"
                 onChange={handleGeneralDetailsChange("source")}
               >
-                <MenuItem value={""}></MenuItem>
+                {sources.map((source, index) => {
+                  return (
+                    <MenuItem value={source} key={index}>
+                      {source.name} ({source.street_address}, {source.city},
+                      {source.state} {source.zip})
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%", mb: 2 }}>
@@ -689,16 +766,16 @@ export default function DataViewAddSample() {
                     .slice(0, Math.ceil(machine.info.length / 2))
                     .map((data, dataIndex) => {
                       return (
-                        <Box
-                          key={dataIndex}
-                          className={
-                            data.metadata.inputSource == "file"
-                              ? "autofilled"
-                              : ""
-                          }
-                        >
-                          {data.metadata.key == "timestamp" && (
-                            <Box sx={{ mb: 2, width: "100%" }}>
+                        <Box key={dataIndex}>
+                          {data.metadata.name == "Timestamp of Test" && (
+                            <Box
+                              sx={{ mb: 2, width: "100%" }}
+                              className={
+                                data.metadata.inputSource == "file"
+                                  ? classes.autoFilled
+                                  : ""
+                              }
+                            >
                               <DateTimePicker
                                 label={data.metadata.name}
                                 fullWidth
@@ -713,11 +790,16 @@ export default function DataViewAddSample() {
                               />
                             </Box>
                           )}
-                          {data.metadata.key != "timestamp" && (
+                          {data.metadata.name != "Timestamp of Test" && (
                             <FormControl
                               key={dataIndex}
                               sx={{ mb: 2, width: "100%" }}
                               variant="outlined"
+                              className={
+                                data.metadata.inputSource == "file"
+                                  ? classes.autoFilled
+                                  : ""
+                              }
                             >
                               <InputLabel>{data.metadata.name}</InputLabel>
                               <OutlinedInput
@@ -742,16 +824,16 @@ export default function DataViewAddSample() {
                     )
                     .map((data, dataIndex) => {
                       return (
-                        <Box
-                          key={dataIndex}
-                          className={
-                            data.metadata.inputSource == "file"
-                              ? "autofilled"
-                              : ""
-                          }
-                        >
+                        <Box key={dataIndex}>
                           {data.metadata.key == "timestamp" && (
-                            <Box sx={{ mb: 2, width: "100%" }}>
+                            <Box
+                              sx={{ mb: 2, width: "100%" }}
+                              className={
+                                data.metadata.inputSource == "file"
+                                  ? classes.autoFilled
+                                  : ""
+                              }
+                            >
                               <DateTimePicker
                                 label={data.metadata.name}
                                 fullWidth
@@ -771,6 +853,11 @@ export default function DataViewAddSample() {
                               key={dataIndex}
                               sx={{ mb: 2, width: "100%" }}
                               variant="outlined"
+                              className={
+                                data.metadata.inputSource == "file"
+                                  ? classes.autoFilled
+                                  : ""
+                              }
                             >
                               <InputLabel>{data.metadata.name}</InputLabel>
                               <OutlinedInput
@@ -801,7 +888,7 @@ export default function DataViewAddSample() {
                           variant="outlined"
                           className={
                             measurement.metadata.inputSource == "file"
-                              ? "autofilled"
+                              ? classes.autoFilled
                               : ""
                           }
                         >
@@ -846,7 +933,7 @@ export default function DataViewAddSample() {
                           variant="outlined"
                           className={
                             measurement.metadata.inputSource == "file"
-                              ? "autofilled"
+                              ? classes.autoFilled
                               : ""
                           }
                         >

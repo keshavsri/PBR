@@ -7,6 +7,21 @@ export function useDataView() {
     React.useState(false);
   const [sampleModalScreen, setSampleModalScreen] = React.useState(0);
   const [error, setError] = React.useState({});
+  const [timestamp, setTimestamp] = React.useState(Date.now());
+  const [generalDetails, setGeneralDetails] = React.useState({
+    organization: "",
+    flockID: "",
+    species: "",
+    strain: "",
+    gender: "",
+    source: "",
+    productionType: "",
+    ageNumber: "",
+    ageUnit: "",
+    flagged: false,
+    comments: "",
+  });
+  const [machineDetails, setMachineDetails] = React.useState([]);
 
   let openSampleModal = () => {
     setSampleModalVisibility(true);
@@ -36,9 +51,20 @@ export function useDataView() {
     setError({});
   };
 
+  React.useEffect(() => {
+    // Keep the timestamp live
+    setInterval(() => {
+      setTimestamp(Date.now());
+    }, 1000);
+  }, []);
+
   return {
     samplePayload,
     setSamplePayload,
+    generalDetails,
+    setGeneralDetails,
+    machineDetails,
+    setMachineDetails,
     sampleModalVisibility,
     sampleModalScreen,
     setSampleModalScreen,
@@ -49,6 +75,8 @@ export function useDataView() {
     error,
     setError,
     restartSample,
+    timestamp,
+    setTimestamp,
   };
 }
 

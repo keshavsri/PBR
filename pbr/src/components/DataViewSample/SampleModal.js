@@ -23,18 +23,18 @@ export default function DataViewSampleModal() {
   const {
     sampleModalVisibility,
     sampleModalScreen,
-    setSampleModalScreen,
     closeSampleModal,
     samplePrevAction,
     sampleNextAction,
     error,
     setError,
     restartSample,
+    timestamp,
+    generalDetails,
+    machineDetails,
+    setSamplePayload,
+    samplePayload,
   } = DataViewConsumer();
-
-  let finishSample = async () => {
-    console.log("Finished Sample Edits! Getting Report");
-  };
 
   let onSubmit = async () => {
     console.log("Submitting!");
@@ -43,6 +43,15 @@ export default function DataViewSampleModal() {
   let dismissError = () => {
     samplePrevAction();
     setError({});
+  };
+  let stageSample = () => {
+    let payload = {
+      timestamp: timestamp,
+      generalDetails: generalDetails,
+      machineDetails: machineDetails,
+    };
+    setSamplePayload(payload);
+    console.log(samplePayload);
   };
 
   // Define the footer for the modal. By default, there's no footer.
@@ -61,7 +70,7 @@ export default function DataViewSampleModal() {
         </Button>
         <Button
           onClick={() => {
-            finishSample();
+            stageSample();
             sampleNextAction();
           }}
           variant="contained"

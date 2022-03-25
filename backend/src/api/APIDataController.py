@@ -73,50 +73,54 @@ def _parse_vetscan_vs2(content_lines):
     retDict = {
         "name": content_lines[0],
         "info":[
-            {"key": "patient_id", "value": content_lines[4].split(":")[1].strip()},
-            {"key": "rotor_lot_number", "value": content_lines[5].split(":")[1].strip()},
-            {"key": "serial_number", "value": content_lines[6].split(":")[1].strip()}
+            {"key": "Timestamp of Test", "value": re.sub(" +", " ", content_lines[2])},
         ],
         "measurements": []
-        
     }
-    
-    datetime = re.sub(" +", " ", content_lines[2])
-
-    retDict["info"].append({"key": "timestamp", "value" : datetime})
-
-    data_start_idx = 8
-    is_error_file = _is_error_file(content_lines)
+    is_error_file = False
 
     if is_error_file:
-        data_start_idx = 14
         print("Error file")
 
-    measurement_flag = True
+    info_flag = True
+    measurement_flag = False
     print("MEASUREMENTS-----------------------")
-    for row_idx in range(data_start_idx, len(content_lines)):
+    for row_idx in range(3, len(content_lines)):
         row = content_lines[row_idx]
         print("CHECKING:" + row)
-        
         # While pulling basic measurements,
-        if measurement_flag:
+        if (info_flag):
+            if re.search(r"^[.]+", row):
+                info_flag = False
+                measurement_flag = True
+            else:
+                key = row.split(":")[0].strip()
+                value = row.split(":")[1].strip()
+                print("NEW:", {"key": key, "value" : value})
+                retDict["info"].append({"key": key, "value" : value})
+
+        # While pulling basic measurements,
+        elif measurement_flag:
             # Are we at the end of the basic measurements?
             if row.strip() == "":
                 print("EXTRA-----------------------")
                 measurement_flag = False
             else:
-                rowContents = re.sub(" +", " ", row).split()
-                print(rowContents)
-                # For non-error files with issue measurements
-                if len(rowContents) is not 3 and not is_error_file:
-                    data = ""
-                    for j in range(1, len(rowContents) - 1):
-                        data = data + rowContents[j] + " "
-                    newMeas = {"key":rowContents[0].strip(), "value": data.strip(), "units": rowContents[len(rowContents)-1].strip() }
-                else: # For all other measurements
-                    newMeas = {"key":rowContents[0].strip(), "value": rowContents[1].strip(), "units": rowContents[len(rowContents)-1].strip() }
-                print("NEW:", newMeas)
-                retDict["measurements"].append(newMeas)
+                if re.search(r"^[0-9]{2} ([0-9ABCDEF]{4}  ){1,4} *", row):
+                    is_error_file = True
+                else:
+                    rowContents = re.sub(" +", " ", row).split()
+                    print(rowContents)
+                    # For non-error files with issue measurements
+                    if len(rowContents) != 3 and not is_error_file:
+                        data = ""
+                        for j in range(1, len(rowContents) - 1):
+                            data = data + rowContents[j] + " "
+                        newMeas = {"key":rowContents[0].strip(), "value": data.strip(), "units": rowContents[len(rowContents)-1].strip() }
+                    else: # For all other measurements
+                        newMeas = {"key":rowContents[0].strip(), "value": rowContents[1].strip(), "units": rowContents[len(rowContents)-1].strip() }
+                    print("NEW:", newMeas)
+                    retDict["measurements"].append(newMeas)
         else: # You are finished with basic measurements. Switch to extra info.
             if re.search(r"^QC +[A-Za-z0-9]+ *", row):
                 rowContents = re.sub(" +", " ", row).strip().split()
@@ -153,3 +157,54 @@ def _is_error_file(content_lines):
         is_error_file = True
     return is_error_file
 
+# Inspiration from https://roytuts.com/python-flask-rest-api-file-upload/
+@sampleBlueprint.route('/strains/<string:species>', methods=['GET'])
+def get_strains(species=None):
+    print(species.lower())
+    # Move this to a database soon
+    strains = {
+        "chicken": [
+            "Ross 308",
+            "Ross 708",
+            "Ross 308 AP",
+            "Ranger Premium",
+            "Ranger Classic",
+            "Ranger Gold",
+            "Cobb500",
+            "Cobb700",
+            "Arbor Acres Plus",
+            "Hubbard",
+            "Brown",
+            "LSL",
+            "Sandy",
+            "Silver",
+            "Tradition",
+            "White",
+        ],
+        "turkey": [
+            "Nicholas Select",
+            "BUT 6",
+            "Converter",
+            "Grade Maker",
+            "Optima",
+            "ConverterNOVO",
+        ],
+    }
+
+    if species and species.lower() in strains.keys():
+        resp = jsonify(strains[species.lower()])
+        resp.status_code = HTTPStatus.OK
+        return resp
+    elif species:
+        resp = jsonify({
+            'message' : 'Unsupported Species!'
+        })
+        resp.status_code = HTTPStatus.BAD_REQUEST
+        return resp
+    else:
+        resp = jsonify({
+            'message' : 'Must include a species!'
+        })
+        resp.status_code = HTTPStatus.BAD_REQUEST
+        return resp
+   

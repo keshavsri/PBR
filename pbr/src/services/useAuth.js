@@ -16,7 +16,7 @@ export function useAuth() {
     fetch("/api/user/me", {
       method: "GET",
     })
-      .then(handleRefreshResponse)
+      .then(handleAPIResponse)
       .then((user) => {
         console.log(user);
         setLoadingAuth(false);
@@ -76,7 +76,7 @@ export function useAuth() {
       });
   };
 
-  function handleRefreshResponse(response) {
+  function handleAPIResponse(response) {
     if (!response.ok) {
       if ([419].indexOf(response.status) !== -1) {
         // Token expired. We need to reprompt to login.
@@ -119,6 +119,7 @@ export function useAuth() {
     loadingAuth,
     recredentialize,
     setRecredentialize,
+    handleAPIResponse,
   };
 }
 

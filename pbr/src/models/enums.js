@@ -23,10 +23,10 @@ export const sampleTypes = Object.freeze({
 // Stores the potential production types
 export const productionTypes = Object.freeze({
   MEAT: "Meat",
-  BROILER: "Broiler",
+  LAYER: "Layer",
   BREEDER: "Breeder",
   BROILER_BREEDER: "Broiler Breeder",
-  BYP: "BYP, layer",
+  BYP: "BYP",
 });
 
 // Stores the potential production types
