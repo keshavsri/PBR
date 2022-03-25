@@ -189,7 +189,7 @@ def putSource(access_allowed, current_user, item_id, source_id):
 
 @organizationBlueprint.route('/<int:item_id>/sources/<int:source_id>', methods=['DELETE'])
 @token_required
-@allowed_roles([0])
+@allowed_roles([0,1])
 def deleteSource(access_allowed, current_user, item_id, source_id):
     if access_allowed:
         from models.source import Source
