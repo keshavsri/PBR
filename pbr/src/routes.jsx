@@ -103,14 +103,6 @@ const routes = [
     ),
   },
   {
-    path: "/organization-view",
-    element: (
-      <RequireAuth>
-        <OrganizationView />
-      </RequireAuth>
-    ),
-  },
-  {
     path: "/settings",
     element: (
       <RequireAuth>

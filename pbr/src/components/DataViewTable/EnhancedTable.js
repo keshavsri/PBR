@@ -85,27 +85,28 @@ export default function EnhancedTable(props) {
     rows,
     headCells,
     toolbarButtons,
+    selected,
+    setSelected,
   } = props;
 
   const [order, setOrder] = React.useState("");
   const [orderBy, setOrderBy] = React.useState("");
-  const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [loading, setLoading] = React.useState(false);
-  let rowComponents = generateRows();
+  // let rowComponents = generateRows();
 
-  function generateRows() {
-    var cols = Object.keys(rows[0]),
-      data = rows;
-    return rows.map(function (item) {
-      var cells = cols.map(function (colData) {
-        return <td> {item[colData]} </td>;
-      });
-      return <tr key={item.id}> {cells} </tr>;
-    });
-  }
+  // function generateRows() {
+  //   var cols = Object.keys(rows[0]),
+  //     data = rows;
+  //   return rows.map(function (item) {
+  //     var cells = cols.map(function (colData) {
+  //       return <td> {item[colData]} </td>;
+  //     });
+  //     return <tr key={item.id}> {cells} </tr>;
+  //   });
+  // }
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
@@ -115,7 +116,7 @@ export default function EnhancedTable(props) {
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       let newSelecteds = rows.filter((n) => n.deletable).map((n) => n.id);
-
+      console.log(newSelecteds)
       setSelected(newSelecteds);
       return;
     }
@@ -196,6 +197,7 @@ export default function EnhancedTable(props) {
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
               headCells={headCells}
+              deletableRowCount={rows.filter((n) => n.deletable).length}
             />
             <TableBody>
               {stableSort(rows, getComparator(order, orderBy))
@@ -203,9 +205,9 @@ export default function EnhancedTable(props) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  console.log(row);
+                  // console.log(row);
                   let onClickFxn = (event, deletable, id) => {
-                    if (!deletable) {
+                    if (deletable) {
                       handleClick(event, id);
                     }
                   };
