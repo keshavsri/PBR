@@ -12,7 +12,7 @@ class Batch(db.Model):
     __table_args__ = {'extend_existing': True}
 
     id: int = db.Column(db.Integer, primary_key=True)
-    name: str = db.Column(db.String(120), nullable=False)
+    name: str = db.Column(db.String(120))
     entries: list[Sample] = None
    
 def createTable():

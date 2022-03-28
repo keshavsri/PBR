@@ -17,7 +17,8 @@ class Sample(db.Model):
     id: int = db.Column(db.Integer, primary_key=True)
     entered_by_user: User = db.Column(db.Integer, db.ForeignKey(User.id))
     data_entry_timestamp: datetime = db.Column(db.DateTime, default=datetime.now)
-    flock: Flock = db.Column(db.Integer, db.ForeignKey(Flock.id))
+    flock_id: int = db.Column(db.Integer, db.ForeignKey(Flock.id))
+    flock = db.relationship('Flock')
     flock_age: int = db.Column(db.Integer)
     flock_age_units_used: AgeUnits = db.Column(db.Enum(AgeUnits))
     species: Species = db.Column(db.Integer, db.ForeignKey(Flock.id))
@@ -31,7 +32,7 @@ class Sample(db.Model):
     comments: str = db.Column(db.String(500))
     
     def __init__(self, requestJSON):
-        flock = requestJSON.get('flock')
+        flock_id = requestJSON.get('flock')
 
 
 def createTable():
