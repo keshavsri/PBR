@@ -52,6 +52,7 @@ export default function EnhancedTableHead(props) {
     rowCount,
     onRequestSort,
     headCells,
+    deletableRowCount,
   } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -62,12 +63,12 @@ export default function EnhancedTableHead(props) {
       <TableRow className={classes.root}>
         <TableCell padding="checkbox">
           <Checkbox
-            color="secondaryLight"
+            color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
+            checked={rowCount > 0 && numSelected === deletableRowCount}
             onChange={onSelectAllClick}
             inputProps={{
-              "aria-label": "select all desserts",
+              "aria-label": "select all rows",
             }}
           />
         </TableCell>
