@@ -13,8 +13,8 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable=False)
     first_name: str = db.Column(db.String(120), nullable=False)
     last_name: str = db.Column(db.String(120), nullable=False)
-    phone_number: str = db.Column(db.String(20), nullable=False)
-    role: Roles = db.Column(db.Enum(Roles), nullable=False)
+    phone_number: str = db.Column(db.String(20))
+    role: Roles = db.Column(db.Enum(Roles))
     notes: str = db.Column(db.String(500))
     
     def createTable():
