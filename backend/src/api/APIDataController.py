@@ -15,6 +15,7 @@ def create_sample(access_allowed, current_user):
         from models.log import createLog
         from models.enums import LogActions
         newSample = Sample(request.json)
+        newSample.entered_by_user_id = current_user.id
         from server import db
         db.session.add(newSample)
         db.session.commit()
