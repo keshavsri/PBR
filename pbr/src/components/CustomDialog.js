@@ -1,10 +1,7 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
-
 import {
-  Button,
-  Grid,
   Box,
   Typography,
   Dialog,
@@ -19,6 +16,9 @@ import PropTypes from "prop-types";
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(5),
+    [theme.breakpoints.down("md")]: {
+      padding: theme.spacing(1.5),
+    },
   },
   "& .MuiDialogActions-root": {
     padding: theme.spacing(5),
@@ -47,7 +47,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   wrapIcon: {
     alignItems: "center",
     display: "flex",
@@ -95,7 +95,7 @@ BootstrapDialogTitle.propTypes = {
 
 export default function CustomDialog(props) {
   const { open, handleClose, title, subtitle, footer, icon, maxWidth } = props;
-
+  const classes = useStyles();
   return (
     <BootstrapDialog
       maxWidth={maxWidth ? maxWidth : "md"}
@@ -114,7 +114,9 @@ export default function CustomDialog(props) {
         />
       )}
       {props.children && (
-        <DialogContent dividers>{props.children}</DialogContent>
+        <DialogContent className={classes.modalBodyContainer} dividers>
+          {props.children}
+        </DialogContent>
       )}
       {footer && <DialogActions>{footer}</DialogActions>}
     </BootstrapDialog>

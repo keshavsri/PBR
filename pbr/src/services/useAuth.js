@@ -16,7 +16,7 @@ export function useAuth() {
     fetch("/api/user/me", {
       method: "GET",
     })
-      .then(handleAPIResponse)
+      .then(checkResponseAuth)
       .then((user) => {
         console.log(user);
         setLoadingAuth(false);
@@ -29,6 +29,23 @@ export function useAuth() {
         setLoadingAuth(false);
       });
   }, []);
+
+  // let apiCall = (method, endpoint, callback = null, options = null) => {
+  //   // Check HTTP method
+  //   if (
+  //     !method ||
+  //     ["GET", "POST", "PUSH", "DELETE", "PATCH"].indexOf(method) !== -1
+  //   ) {
+  //     throw new Error("Invalid HTTP method.");
+  //   }
+  //   // Check if endpoint was provided
+  //   if (!endpoint) {
+  //     throw new Error("Missing Endpoint.");
+  //   }
+  //   fetch(`${endpoint}`, {
+  //     method: `${method}`,
+  //   }).then(checkResponseAuth).then((response) => console.log(response));
+  // };
 
   let login = async (email, password) => {
     console.log("useAuth(): Logging in.");
@@ -76,7 +93,7 @@ export function useAuth() {
       });
   };
 
-  function handleAPIResponse(response) {
+  function checkResponseAuth(response) {
     if (!response.ok) {
       if ([419].indexOf(response.status) !== -1) {
         // Token expired. We need to reprompt to login.
@@ -91,10 +108,12 @@ export function useAuth() {
         logout();
         setLoadingAuth(false);
         return Promise.reject();
+      } else {
+        return response;
       }
     } else {
       console.log("User is valid. Return.");
-      return response.json();
+      return response;
     }
   }
 
@@ -119,7 +138,7 @@ export function useAuth() {
     loadingAuth,
     recredentialize,
     setRecredentialize,
-    handleAPIResponse,
+    checkResponseAuth,
   };
 }
 

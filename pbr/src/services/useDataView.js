@@ -10,7 +10,7 @@ export function useDataView() {
   const [timestamp, setTimestamp] = React.useState(Date.now());
   const [generalDetails, setGeneralDetails] = React.useState({
     organization: "",
-    flockID: "",
+    flockID: null,
     species: "",
     strain: "",
     gender: "",
@@ -52,10 +52,34 @@ export function useDataView() {
   };
 
   React.useEffect(() => {
+    console.log("useDataView useEffect");
     // Keep the timestamp live
     setInterval(() => {
       setTimestamp(Date.now());
     }, 1000);
+
+    // Get the current user's organization
+    // await fetch(`/api/organization`, {
+    //   method: "GET",
+    // })
+    //   .then(handleAPIResponse)
+    //   .then((data) => {
+    //     console.log(data);
+    //     setSources(data);
+    //   });
+    let mockOrganization = {
+      id: "1",
+      name: "Organization A",
+      street_address: "123 Main Street",
+      city: "Raleigh",
+      state: "NC",
+      zip: "27606",
+      default: "true",
+    };
+    setGeneralDetails({
+      ...generalDetails,
+      organization: mockOrganization,
+    });
   }, []);
 
   return {

@@ -3,19 +3,10 @@ import * as React from "react";
 import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
 
 import SampleIcon from "@mui/icons-material/Science";
-import NextIcon from "@mui/icons-material/ArrowForwardIos";
-import BackIcon from "@mui/icons-material/ArrowBackIosNew";
-import FilterListIcon from "@mui/icons-material/FilterList";
-// Might need to change
-import DataViewFilterContent from "./DataViewFilterContent";
 // Might need to change
 import EnhancedTable from "./DataViewTable/EnhancedTable";
-import BulkIcon from "@mui/icons-material/UploadFile";
-import ReportIcon from "@mui/icons-material/Assessment";
 import EditIcon from "@mui/icons-material/Edit";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
 
-import CustomDialog from "./CustomDialog";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({});
@@ -42,27 +33,15 @@ export default function OrganizationView() {
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
 
-  function createHeadCell(point, machineName, index) {
-    return {
-      machineName: machineName,
-      name: point.type.name,
-      id: machineName + "_" + point.type.name,
-      numeric: false,
-      disablePadding: true,
-      label: " " + point.type.name + " (" + point.type.units + ")",
-      sublabel: "" + machineName,
-    };
-  }
-
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
-      row.buttons = (
+      return (row.buttons = (
         <>
           <IconButton aria-label="edit" size="small">
             <EditIcon />
           </IconButton>
         </>
-      );
+      ));
     });
   };
 

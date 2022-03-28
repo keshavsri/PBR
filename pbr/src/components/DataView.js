@@ -504,7 +504,6 @@ export default function DataView() {
         machine.data.map((dataPoint, index3) => {
           let temp = machine.machineName + "_" + dataPoint.type.name;
           row[temp] = dataPoint.value + " " + dataPoint.type.units;
-          console.log(temp);
         });
       });
     });
@@ -513,7 +512,6 @@ export default function DataView() {
   React.useEffect(() => {
     getData();
     getHeadCells();
-    console.log(rowList);
   }, []);
 
   return (
