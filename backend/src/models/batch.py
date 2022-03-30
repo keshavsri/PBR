@@ -13,7 +13,7 @@ class Batch(db.Model):
 
     id: int = db.Column(db.Integer, primary_key=True)
     name: str = db.Column(db.String(120))
-    entries: List[Sample] = None
+    entries: list[Sample] = None
    
 def createTable():
     db.create_all()
