@@ -3,12 +3,44 @@ import bcrypt
 from datetime import datetime, timedelta, timezone
 import os
 import uuid
+import jwt
 import json
 from auth_token import Auth_Token
 from functools import wraps
 
-
 userBlueprint = Blueprint('user', __name__)
+
+
+def allowed_roles(roles):
+  def wrapper(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+      from models.user import User
+      token = None
+      allowed = False
+      # jwt is passed in the request header
+      if 'pbr_token' in request.cookies:
+        token = request.cookies["pbr_token"]
+      # return 401 if token is not passed
+      if not token:
+        return jsonify({'message': 'Token is missing!'}), 401
+      try:
+        # PULL OUT DATA FROM TOKEN
+        data = Auth_Token.decode_token(token)
+        # GET AND RETURN CURRENT USER
+        current_user = User.query.filter_by(id=data["id"]).first()
+        from models.enums import Roles
+        for role in roles:
+          if current_user.role == 0 or int(current_user.role) is role:
+            allowed = True
+      except jwt.ExpiredSignatureError as error:
+        return jsonify({
+            'message': 'Token is expired!'
+        }), 401
+      # returns the current logged in users contex to the routes
+      return f(allowed, *args, **kwargs)
+    return decorated
+  return wrapper
 
 # decorator for verifying the JWT
 # Template from GeeksForGeeks: https://www.geeksforgeeks.org/using-jwt-for-user-authentication-in-flask/
@@ -27,12 +59,18 @@ def token_required(f):
       # PULL OUT DATA FROM TOKEN
       data = Auth_Token.decode_token(token)
       # GET AND RETURN CURRENT USER
-      current_user = User.query.filter_by(email=data["email"]).first()
+      current_user = User.query.filter_by(id=data["id"]).first()
     except jwt.ExpiredSignatureError as error:
-      return jsonify({
-        'message' : 'Token is expired!'
-      }), 401
-    else:
+      data = Auth_Token.decode_token(token, verify_expiration=False)
+      current_user = User.query.filter_by(email=data["email"]).first()
+      ret_user = {
+        "email": current_user.email,
+        "firstname": current_user.first_name,
+        "lastname": current_user.last_name,
+        "role": current_user.role,
+      }
+      return jsonify(ret_user), 419
+    except Exception as error:
       return jsonify({
         'message' : 'Token is invalid!'
       }), 401
@@ -47,27 +85,20 @@ def route_setting_all(item_id=None):
   return User.fs_get_delete_put_post(item_id)
 
 @userBlueprint.route('/me', methods=['GET'])
-def me():
+@token_required
+def me(current_user):
   from models.user import User
-  if 'pbr_token' in request.cookies:
-    token = request.cookies['pbr_token']
-    try:
-      data = Auth_Token.decode_token(token)
-      dbUser = User.query.filter_by(id=data["id"]).first()
-      if dbUser:
-        ret_user = {
-          "email": dbUser.email,
-          "firstname": dbUser.first_name,
-          "lastname": dbUser.last_name,
-        }
-        return jsonify(ret_user), 200
-      else:
-        return jsonify({"message":"Unauthorized"}), 401
-    except Exception as error:
-      print(f'Token invalid. {error}')
-
-  print(f'UNAUTHORIZED')
-  return jsonify({"message":"Unauthorized"}), 401
+  if current_user:
+    ret_user = {
+      "email": current_user.email,
+      "firstname": current_user.first_name,
+      "lastname": current_user.last_name,
+      "role": current_user.role,
+    }
+    return jsonify(ret_user), 200
+  else:
+    return jsonify({"message":"Unauthorized"}), 401
+    
 
 @userBlueprint.route('/login', methods=['POST'])
 def login():
@@ -81,6 +112,8 @@ def login():
   content_type = request.headers.get('Content-Type')
   if (content_type == 'application/json'):
       data = request.json
+
+  print(data)
 
   if data["email"] and data["password"]:
     data["email"] = data["email"].lower()
@@ -99,7 +132,7 @@ def login():
         "lastname": dbUser.last_name,
       }
       response = make_response(jsonify(ret_user), 200)
-      response.set_cookie(key="pbr_token", value=Auth_Token.create_token(dbUser), expires=datetime.now(tz=timezone.utc) + timedelta(minutes=int(os.environ.get("JWT_TTL"))), secure=True, httponly = True, samesite="Strict")
+      response.set_cookie(key="pbr_token", value=Auth_Token.create_token(dbUser), expires=datetime.now(tz=timezone.utc) + timedelta(days=1), secure=True, httponly = True, samesite="Strict")
       print("SUCCESS")
       return response
     else:
@@ -142,8 +175,8 @@ def register():
 
   salt = bcrypt.gensalt()
   hashedPW = bcrypt.hashpw(data["password"].encode('utf8'), salt)
-
-  user = User(email=data["email"].lower(), first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=None )
+  from models.enums import Roles
+  user = User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
   db.session.add(user)
   db.session.commit()
   print("User was successfully added.")

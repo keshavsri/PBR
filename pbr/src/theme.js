@@ -1,6 +1,15 @@
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
-let mainTheme = createTheme({
+let tempTheme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   components: {
     MuiToolbar: {
       styleOverrides: {
@@ -26,7 +35,7 @@ let mainTheme = createTheme({
     MuiButtonBase: {
       styleOverrides: {
         root: {
-          height: "42px",
+          // height: "42px",
         },
       },
     },
@@ -53,6 +62,9 @@ let mainTheme = createTheme({
     },
     text: {
       secondary: "#2E3B52",
+    },
+    lighttext: {
+      main: "rgba(0, 0, 0, 0.50)",
     },
     background: {
       default: "rgb(40, 40, 40)",
@@ -86,8 +98,4 @@ let mainTheme = createTheme({
   },
 });
 
-mainTheme = responsiveFontSizes(mainTheme);
-
-export const themes = {
-  mainTheme,
-};
+export const mainTheme = responsiveFontSizes(tempTheme);

@@ -117,7 +117,7 @@ export default function EnhancedTable(props) {
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
       let newSelecteds = rows.filter((n) => n.deletable).map((n) => n.id);
-      console.log(newSelecteds)
+      console.log(newSelecteds);
       setSelected(newSelecteds);
       return;
     }
@@ -160,10 +160,10 @@ export default function EnhancedTable(props) {
   const findMachineDataPoint = (row, machineName, fieldName) => {
     for (var i = 0, iLen = row.machines.length; i < iLen; i++) {
       if (row.machines[i].machineName == machineName) {
-        console.log(machineName);
+        // console.log(machineName);
         for (var j = 0, jLen = row.machines[i].data.length; j < jLen; j++) {
           if (row.machines[i].data[j].type.name == fieldName) {
-            console.log(row.machines[i].data[j].value);
+            // console.log(row.machines[i].data[j].value);
             return row.machines[i].data[j].value;
           }
         }
@@ -225,28 +225,27 @@ export default function EnhancedTable(props) {
                       key={index}
                       selected={isItemSelected}
                     >
-                    <StyledTableCell padding="checkbox">
-                              <Checkbox
-                                color="primary"
-                                disabled={!row.deletable}
-                                checked={isItemSelected}
-                                inputProps={{
-                                  "aria-labelledby": labelId,
-                                }}
-                              />
-                    </StyledTableCell> 
-                      {
-                      headCells.map((headCell, index) => {
-                          return (
-                            <StyledTableCell
-                              padding="none"
-                              align="left"
-                              id={index}
-                            >
-                              {row[headCell.id]}
-                            </StyledTableCell>
-                          );
-                        
+                      <StyledTableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          disabled={!row.deletable}
+                          checked={isItemSelected}
+                          inputProps={{
+                            "aria-labelledby": labelId,
+                          }}
+                        />
+                      </StyledTableCell>
+                      {headCells.map((headCell, index) => {
+                        return (
+                          <StyledTableCell
+                            padding="none"
+                            align="left"
+                            id={index}
+                            key={index}
+                          >
+                            {row[headCell.id]}
+                          </StyledTableCell>
+                        );
                       })}
 
                       {/* <StyledTableCell

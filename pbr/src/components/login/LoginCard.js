@@ -3,7 +3,7 @@ import React from "react";
 import LoginIcon from "@mui/icons-material/Login";
 import { makeStyles, createStyles } from "@mui/styles";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import useAuth from "../../services/useAuth";
+import AuthConsumer from "../../services/useAuth";
 
 import {
   Grid,
@@ -46,7 +46,7 @@ export default function LoginCard() {
   const classes = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
+  const { login } = AuthConsumer();
   const { state } = useLocation();
 
   const [values, setValues] = React.useState({
@@ -150,7 +150,10 @@ export default function LoginCard() {
             alt="NCSU Brick Logo"
           />
 
-          <Typography variant="h1" sx={{ fontWeight: "bold", width: "100%" }}>
+          <Typography
+            variant="h1"
+            sx={{ fontWeight: "bold", width: "100%", textAlign: "center" }}
+          >
             Poultry Bloodwork Reporting Tool
           </Typography>
 

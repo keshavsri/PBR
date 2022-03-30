@@ -1,17 +1,23 @@
 from server import db
-from models.user import createTable as createUserTable
-from models.organization import createTable as createOrganizationTable
-from models.source import createTable as createSourceTable
-
-organization_source = db.Table('organization-source', db.metadata, db.Column('organization_id', db.Integer, db.ForeignKey('organization.id')), db.Column('source_id', db.Integer, db.ForeignKey('source.id')))
-
+from models.user import User
 from models.organization import Organization
 from models.source import Source
+from models.log import createTable as createLogTable
+from models.flock import createTable as createFlockTable
+from models.sample import createTable as createSampleTable
+from models.batch import createTable as createBatchTable
 
-Organization.sources = db.relationship('Source', secondary=organization_source, back_populates = 'organizations')
-Source.organizations = db.relationship('Organization', secondary=organization_source, back_populates = 'sources')
+from models.batch import Batch
+from models.sample import Sample
+Sample.batch_id = db.Column(db.Integer, db.ForeignKey(Batch.id), nullable=True)
+Batch.entries = db.relationship('Sample')
 
-createUserTable()
-createSourceTable()
-createOrganizationTable()
+
+Organization.createTable()
+User.createTable()
+Source.createTable()
+createLogTable()
+createFlockTable()
+createSampleTable()
+createBatchTable()
 db.create_all()

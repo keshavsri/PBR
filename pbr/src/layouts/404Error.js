@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { makeStyles, createStyles } from "@mui/styles";
-import useAuth from "../services/useAuth";
+import AuthConsumer from "../services/useAuth";
 
 import image1 from "../images/404images/birds.jpg";
 import image2 from "../images/404images/cows.jpg";
@@ -120,7 +120,7 @@ const useStyles = makeStyles((theme) =>
 
 export default function Error404() {
   const classes = useStyles();
-  const { authenticated } = useAuth();
+  const { authenticated } = AuthConsumer();
 
   const navigate = useNavigate();
   return (

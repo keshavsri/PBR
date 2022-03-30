@@ -1,0 +1,32 @@
+         VetScan VS2          
+ Avian/Reptilian Profile Plus 
+12 Feb 2020           11:37 AM
+Sample Type:             Other
+Patient ID:               6D13
+Rotor Lot Number:      9365AB3
+Serial Number:      0000V33943
+..............................
+01 54EF  FFFF  1FFF  FFFF     
+02 42EF  FFFF  C77A  EDFF     
+03 0000  0000  0000  0000     
+04 0000  0000  0000  0000     
+05 0000  0000  8800  0000     
+06 0000                       
+AST     194   0000 0000    U/L
+BA       23   0001 0000 umol/L
+CK      526   0000 0000    U/L
+UA     10.2   0000 0000  mg/dL
+GLU     230   0000 0000  mg/dL
+CA     11.4   0000 0000  mg/dL
+PHOS    5.7   0000 0000  mg/dL
+TP      2.4   0000 0000   g/dL
+ALB     2.0   0000 0001   g/dL
+GLOB    0.4   0000 0000   g/dL
+K+      5.3   0000 0000 mmol/L
+NA+     148   0000 0000 mmol/L
+                              
+RQC: 103                      
+HEM -5    LIP 155   ICT 2     
+Version:                3.1.33
+
+

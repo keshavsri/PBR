@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import useAuth from "./services/useAuth";
+import AuthConsumer from "./services/useAuth";
+import { DataViewProvider } from "./services/useDataView";
 
 import MainLayout from "./layouts/MainLayout";
 import LoginBackdrop from "./layouts/LoginLayout";
@@ -14,17 +15,17 @@ import RecoveryCard from "./components/login/RecoveryCard";
 import ManageUsers from "./components/ManageUsers";
 
 function RequireAuth({ children }) {
-  const { user } = useAuth();
+  const { user, recredentialize } = AuthConsumer();
   const location = useLocation();
   console.log("requireauth");
-  return user ? (
+  return user || recredentialize ? (
     children
   ) : (
     <Navigate to="/login" replace state={{ path: location.pathname }} />
   );
 }
 function NonAuth({ children }) {
-  const { user } = useAuth();
+  const { user } = AuthConsumer();
   const location = useLocation();
   console.log("nonauth");
   return user ? (
