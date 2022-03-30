@@ -20,7 +20,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import FactCheckIcon from '@mui/icons-material/FactCheck';
 
 
-export default function ManageUsers() {
+export default function LoggingView() {
   const [openModal, setOpenModal] = React.useState(false);
 
   const [rowList, setRowList] = React.useState([]);
@@ -34,17 +34,6 @@ export default function ManageUsers() {
     setOpenModal(false);
   };
 
-  function createHeadCell(point, machineName, index) {
-    return {
-      machineName: machineName,
-      name: point.type.name,
-      id: machineName + "_" + point.type.name,
-      numeric: false,
-      disablePadding: true,
-      label: " " + point.type.name + " (" + point.type.units + ")",
-      sublabel: "" + machineName,
-    };
-  }
   
   const assignRowHtml = (rows) => {
   
@@ -57,35 +46,51 @@ export default function ManageUsers() {
         </>
         
       )
+      row.timestamp = new Date(row.timestamp).toLocaleString()
     })
+    
   }
   
   const getData = () => {
     let apiRows = [
-      {
-          deletable: true,
-          id: 1,
-          organization: "NCSU",
-          email: "rcrespo@ncsu.edu",
-          first_name: "Rosio",
-          last_name: "Crespo",  
-          phone: "9191234567",
-          role: "Super Admin",
-          notes: "N/A",
-      },
-      {
-        deletable: false,
-        id: 2,
-        organization: "UNC",
-        email: "jwalker@unc.edu",
-        first_name: "John",
-        last_name: "Walker",  
-        phone: "1234567890",
+        {
+        deletable: true,
+        id: 1,
+        user: {
+            organization: "NCSU",
+            email: "rcrespo@ncsu.edu",
+            first_name: "Rosio",
+            last_name: "Crespo",  
+            phone: "9191234567",
+            roles: "Super Admin",
+            notes: "N/A",
+        },
         role: "Data Collector",
-        notes: "N/A",
-    },
+        organization: "NCSU",
+        timestamp: "2022-12-10T13:45:00.000Z",
+        action: "Create",
+        target: "Add Sample Data (201)",
+        },
+        {
+            deletable: true,
+            id: 2,
+            user: {
+                organization: "NCSU",
+                email: "rcrespo@ncsu.edu",
+                first_name: "Rosio",
+                last_name: "Crespo",  
+                phone: "9191234567",
+                roles: "Super Admin",
+                notes: "N/A",
+            },
+            role: "Data Collector",
+            organization: "NCSU",
+            timestamp: "2022-12-10T12:45:00.000Z",
+            action: "Read",
+            target: "Login (102)",
+        },
     ];
-    // denestMachineData(apiRows);
+    denestMachineData(apiRows);
     assignRowHtml(apiRows);
     setRowList(apiRows);
   }
@@ -97,34 +102,22 @@ export default function ManageUsers() {
         id: "buttons",
       },
       {
-        id: "first_name",
+        id: "user.first_name",
         numeric: false,
         disablePadding: true,
         label: "First Name",
       },
       {
-        id: "last_name",
+        id: "user.last_name",
         numeric: false,
         disablePadding: true,
         label: "Last Name",
       },
       {
-        id: "organization",
+        id: "user.organization",
         numeric: false,
         disablePadding: true,
         label: "Organization",
-      },
-      {
-        id: "email",
-        numeric: false,
-        disablePadding: true,
-        label: "Email",
-      },
-      {
-        id: "phone",
-        numeric: false,
-        disablePadding: true,
-        label: "Phone",
       },
       {
         id: "role",
@@ -133,10 +126,22 @@ export default function ManageUsers() {
         label: "Role",
       },
       {
-        id: "notes",
+        id: "timestamp",
         numeric: false,
         disablePadding: true,
-        label: "Notes",
+        label: "Timestamp",
+      },
+      {
+        id: "action",
+        numeric: false,
+        disablePadding: true,
+        label: "Action",
+      },
+      {
+        id: "target",
+        numeric: false,
+        disablePadding: true,
+        label: "Target",
       },
     ];
   
@@ -151,15 +156,16 @@ export default function ManageUsers() {
     // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
   }
   
-  // const denestMachineData = (rows) => {
-  //   rows.map((row, index) => {
-  //     Object.entries(row.maincontact).forEach(([key, value]) => {
-  //       let temp = "maincontact." + key
-  //       row[temp] = value
-  //       })
-  //     }
-  //   )
-  // }
+  const denestMachineData = (rows) => {
+    rows.map((row, index) => {
+      Object.entries(row.user).forEach(([key, value]) => {
+        let temp = "user." + key
+        row[temp] = value
+        console.log(temp)
+        })
+      }
+    )
+  }
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
     React.useEffect(() => {
       getData();

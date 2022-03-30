@@ -87,6 +87,7 @@ export default function EnhancedTable(props) {
     toolbarButtons,
     selected,
     setSelected,
+    onDelete,
   } = props;
 
   const [order, setOrder] = React.useState("");
@@ -182,6 +183,7 @@ export default function EnhancedTable(props) {
         <EnhancedTableToolbar
           numSelected={selected.length}
           toolbarButtons={toolbarButtons}
+          onDelete={onDelete}
         />
         <TableContainer>
           <Table

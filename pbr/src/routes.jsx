@@ -7,6 +7,7 @@ import LoginBackdrop from "./layouts/LoginLayout";
 import Error404 from "./layouts/404Error";
 import DataView from "./components/DataView";
 import OrganizationView from "./components/OrganizationView";
+import LoggingView from "./components/LoggingView";
 import LoginCard from "./components/login/LoginCard";
 import RegisterCard from "./components/login/RegisterCard";
 import RecoveryCard from "./components/login/RecoveryCard";
@@ -98,6 +99,16 @@ const routes = [
       <RequireAuth>
         <MainLayout>
           <OrganizationView />
+        </MainLayout>
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/logging-view",
+    element: (
+      <RequireAuth>
+        <MainLayout>
+          <LoggingView />
         </MainLayout>
       </RequireAuth>
     ),

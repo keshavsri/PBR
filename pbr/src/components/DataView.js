@@ -511,6 +511,14 @@ const denestMachineData = (rows) => {
       })
     })
 }
+
+const onDelete = () => {
+  console.log("DELETE TEST")
+
+  // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
+  // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
+  // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
+}
 // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
   React.useEffect(() => {
     getData();
@@ -565,6 +573,7 @@ const denestMachineData = (rows) => {
           }
           selected={selected}
           setSelected={setSelected}
+          onDelete = {onDelete}
         ></EnhancedTable>
       </Paper>
       <CustomDialog
