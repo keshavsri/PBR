@@ -27,6 +27,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDatabase } from "@fortawesome/free-solid-svg-icons";
@@ -72,6 +73,11 @@ const pageData = [
     },
   ],
   [
+    {
+      path: "logging-view",
+      title: "View System Logs",
+      icon: <PendingActionsIcon />,
+    },
     {
       path: "settings",
       title: "Settings",

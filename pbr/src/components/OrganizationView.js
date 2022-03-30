@@ -149,6 +149,7 @@ export default function OrganizationView() {
     setHeadCellList(headCells);
   };
 
+
   const denestMachineData = (rows) => {
     rows.map((row, index) => {
       Object.entries(row.maincontact).forEach(([key, value]) => {
@@ -157,7 +158,15 @@ export default function OrganizationView() {
       });
     });
   };
+  const onDelete = () => {
+    console.log("DELETE TEST")
+
+    // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
+    // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
+    // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
+  }
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
+
   React.useEffect(() => {
     getData();
     getHeadCells();
@@ -186,6 +195,7 @@ export default function OrganizationView() {
           }
           selected={selected}
           setSelected={setSelected}
+          onDelete={onDelete}
         ></EnhancedTable>
       </Paper>
     </>
