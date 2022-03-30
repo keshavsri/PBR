@@ -31,7 +31,7 @@ def allowed_roles(roles):
         current_user = User.query.filter_by(id=data["id"]).first()
         from models.enums import Roles
         for role in roles:
-          if current_user.role is 0 or int(current_user.role) is role:
+          if current_user.role == 0 or int(current_user.role) is role:
             allowed = True
       except jwt.ExpiredSignatureError as error:
         return jsonify({
