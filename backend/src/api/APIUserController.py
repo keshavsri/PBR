@@ -81,6 +81,8 @@ def login():
   if (content_type == 'application/json'):
       data = request.json
 
+  print(data)
+
   if data["email"] and data["password"]:
     data["email"] = data["email"].lower()
     print(data["email"])
