@@ -1,5 +1,6 @@
 from flask import request, Blueprint, jsonify, Response, make_response
 import bcrypt
+import jwt
 from datetime import datetime, timedelta, timezone
 import os
 import uuid
@@ -9,6 +10,38 @@ from functools import wraps
 
 
 userBlueprint = Blueprint('user', __name__)
+
+
+def allowed_roles(roles):
+  def wrapper(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+      from models.user import User
+      token = None
+      allowed = False
+      # jwt is passed in the request header
+      if 'pbr_token' in request.cookies:
+        token = request.cookies["pbr_token"]
+      # return 401 if token is not passed
+      if not token:
+        return jsonify({'message': 'Token is missing!'}), 401
+      try:
+        # PULL OUT DATA FROM TOKEN
+        data = Auth_Token.decode_token(token)
+        # GET AND RETURN CURRENT USER
+        current_user = User.query.filter_by(id=data["id"]).first()
+        from models.enums import Roles
+        for role in roles:
+          if current_user.role is 0 or int(current_user.role) is role:
+            allowed = True
+      except jwt.ExpiredSignatureError as error:
+        return jsonify({
+            'message': 'Token is expired!'
+        }), 401
+      # returns the current logged in users contex to the routes
+      return f(allowed, *args, **kwargs)
+    return decorated
+  return wrapper
 
 # decorator for verifying the JWT
 # Template from GeeksForGeeks: https://www.geeksforgeeks.org/using-jwt-for-user-authentication-in-flask/
@@ -27,14 +60,10 @@ def token_required(f):
       # PULL OUT DATA FROM TOKEN
       data = Auth_Token.decode_token(token)
       # GET AND RETURN CURRENT USER
-      current_user = User.query.filter_by(email=data["email"]).first()
+      current_user = User.query.filter_by(id=data["id"]).first()
     except jwt.ExpiredSignatureError as error:
       return jsonify({
         'message' : 'Token is expired!'
-      }), 401
-    else:
-      return jsonify({
-        'message' : 'Token is invalid!'
       }), 401
     # returns the current logged in users contex to the routes
     return  f(current_user, *args, **kwargs)
@@ -55,12 +84,7 @@ def me():
       data = Auth_Token.decode_token(token)
       dbUser = User.query.filter_by(id=data["id"]).first()
       if dbUser:
-        ret_user = {
-          "email": dbUser.email,
-          "firstname": dbUser.first_name,
-          "lastname": dbUser.last_name,
-        }
-        return jsonify(ret_user), 200
+        return jsonify(dbUser), 200
       else:
         return jsonify({"message":"Unauthorized"}), 401
     except Exception as error:
@@ -142,8 +166,8 @@ def register():
 
   salt = bcrypt.gensalt()
   hashedPW = bcrypt.hashpw(data["password"].encode('utf8'), salt)
-
-  user = User(email=data["email"].lower(), first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=None )
+  from models.enums import Roles
+  user = User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
   db.session.add(user)
   db.session.commit()
   print("User was successfully added.")

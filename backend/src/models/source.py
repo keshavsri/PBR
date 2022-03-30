@@ -1,24 +1,33 @@
 from server import db
 from models.enums import States
-from flask_serialize import FlaskSerialize
+from dataclasses import dataclass
 
-fs_mixin = FlaskSerialize(db)
-
-class Source(db.Model, fs_mixin):
+@dataclass
+class Source(db.Model):
     __tablename__ = 'source'
     __table_args__ = {'extend_existing': True}
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), index=True, unique=True)
-    street_address = db.Column(db.String(120))
-    city = db.Column(db.String(120))
-    state = db.Column(db.String(20))
-    zip = db.Column(db.String(10))
-    organizations = None
     
-    __fs_create_fields__ = __fs_update_fields__ = ['name', 'street_address', 'city', 'state', 'zip']
-    #__fs_relationship_fields__ = __fs_update_fields__ = ['organizations']
+    # The fields below are stored in the database, they are assigned both a python and a database type
+    id: int = db.Column(db.Integer, primary_key=True)
+    name: str = db.Column(db.String(120), unique=True)
+    street_address: str = db.Column(db.String(120))
+    city: str = db.Column(db.String(120))
+    state: States = db.Column(db.String(20))
+    zip: str = db.Column(db.String(10))
+    
+    # initialize the class from a json object from the frontend
+    def __init__(self, requestJSON: dict):
+        self.id = requestJSON.get('id')
+        self.name = requestJSON.get('name')
+        self.street_address = requestJSON.get('street_address')
+        self.city = requestJSON.get('city')
+        self.state = requestJSON.get('state')
+        self.zip = requestJSON.get('zip')
 
-def createTable():
-    db.create_all()
+    # creates the table in the database
+    def createTable():
+        from models.organization import Organization
+        organizations: list[Organization] = None
+        db.create_all()
 
 

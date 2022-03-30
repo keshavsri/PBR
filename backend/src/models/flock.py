@@ -1,20 +1,32 @@
+from dataclasses import dataclass
 from server import db
-from enums import Bird_Gender
-from flask_serialize import FlaskSerialize
 
-fs_mixin = FlaskSerialize(db)
+from models.organization import Organization
+from models.source import Source
+from models.enums import Species, BirdGenders, ProductionTypes
 
-
-
-class Flock(db.Model, fs_mixin):
-    id = db.Column(db.Integer, primary_key=True)
-    associated_organization = db.Column(db.Integer, db.ForeignKey('organization.id'))
-    strain = db.Column(db.String(120))
-    species = db.Column(db.String(120))
-    gender = db.Column(db.Integer)
-    source = db.Column(db.Integer, db.ForeignKey('organization.id'))
-    production_type = db.Column(db.String(120))
+@dataclass
+class Flock(db.Model):
+    id: int = db.Column(db.Integer, primary_key=True)
+    name: str = db.Column(db.String(255),unique=True, nullable=False)
+    organization_id = db.Column(db.Integer, db.ForeignKey(Organization.id))
+    organization: Organization = db.relationship('Organization')
+    strain: str = db.Column(db.String(120))
+    species: Species = db.Column(db.Enum(Species), nullable=False)
+    production_type: ProductionTypes = db.Column(db.Enum(ProductionTypes), nullable=False)
+    source_id = db.Column(db.Integer, db.ForeignKey(Source.id), nullable=False)
+    source: Source = db.relationship('Source')
+    gender: BirdGenders = db.Column(db.Enum(BirdGenders), nullable=False)
     
-    __fs_create_fields__ = __fs_update_fields__ = ['associated_organization', 'strain', 'species', 'gender', 'source', 'production_type']
+    def __init__(self, requestJSON):
+        self.name = requestJSON.get('name')
+        self.organization_id = requestJSON.get('organization')
+        self.strain = requestJSON.get('strain')
+        self.species = requestJSON.get('species')
+        self.production_type = requestJSON.get('production_type')
+        self.source_id = requestJSON.get('source')
+        self.gender = requestJSON.get('gender')
+    
 
-db.create_all()
+def createTable():
+    db.create_all()
