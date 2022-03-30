@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles, createStyles } from "@mui/styles";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../services/useAuth";
+import AuthConsumer from "../../services/useAuth";
 
 import {
   Grid,
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) =>
 
 export default function RegisterCard() {
   const classes = useStyles();
-  const { login } = useAuth();
+  const { login } = AuthConsumer();
   const navigate = useNavigate();
 
   const [values, setValues] = React.useState({
@@ -201,210 +201,189 @@ export default function RegisterCard() {
 
   return (
     <>
-      <Paper
-        elevation={12}
-        sx={{
-          raised: true,
-          maxWidth: "sm",
-          textAlign: "center",
-          padding: 5,
-          overflow: "scroll",
-        }}
-      >
-        <Box component="form">
-          <Grid
-            justifyContent="center"
-            container
-            direction="row"
-            alignItems="center"
-            onKeyDown={onKeyDown}
-          >
-            <img
-              className={classes.ncsuBrickLogo}
-              src={brickLogoNCSU}
-              alt="NCSU Brick Logo"
-            />
-            <Typography variant="h1" sx={{ fontWeight: "bold" }}>
-              Poultry Bloodwork Reporting Tool
-            </Typography>
+      <Box component="form">
+        <Grid
+          justifyContent="center"
+          container
+          direction="row"
+          alignItems="center"
+          onKeyDown={onKeyDown}
+        >
+          <img
+            className={classes.ncsuBrickLogo}
+            src={brickLogoNCSU}
+            alt="NCSU Brick Logo"
+          />
+          <Typography variant="h1" sx={{ fontWeight: "bold" }}>
+            Poultry Bloodwork Reporting Tool
+          </Typography>
 
-            <Box sx={{ mt: 6, mb: 6, width: "100%" }}>
-              {signUpErrorToggle && (
-                <Alert severity="error" color="error">
-                  {signUpErrorMessage}
-                </Alert>
-              )}
-              <FormControl
-                sx={{ mt: 2, width: "100%" }}
-                required
-                variant="outlined"
-                error={errors["email"] ? true : false}
-              >
-                <InputLabel htmlFor="outlined-adornment-email">
-                  Email
-                </InputLabel>
-                <OutlinedInput
-                  value={values.email}
-                  onChange={handleChange("email")}
-                  label="Email"
-                />
-                {errors["email"] && (
-                  <FormHelperText>{errors["email"]}</FormHelperText>
-                )}
-              </FormControl>
-              <FormControl
-                sx={{ mt: 2, width: "100%" }}
-                required
-                variant="outlined"
-                error={errors["firstname"] ? true : false}
-              >
-                <InputLabel htmlFor="outlined-adornment-firstname">
-                  First Name
-                </InputLabel>
-                <OutlinedInput
-                  value={values.firstname}
-                  onChange={handleChange("firstname")}
-                  label="First Name"
-                />
-                {errors["firstname"] && (
-                  <FormHelperText>{errors["firstname"]}</FormHelperText>
-                )}
-              </FormControl>
-              <FormControl
-                sx={{ mt: 2, width: "100%" }}
-                required
-                variant="outlined"
-                error={errors["lastname"] ? true : false}
-              >
-                <InputLabel htmlFor="outlined-adornment-lastname">
-                  Last Name
-                </InputLabel>
-                <OutlinedInput
-                  value={values.lastname}
-                  onChange={handleChange("lastname")}
-                  label="Last Name"
-                />
-                {errors["lastname"] && (
-                  <FormHelperText>{errors["lastname"]}</FormHelperText>
-                )}
-              </FormControl>
-              <FormControl
-                sx={{ mt: 2, width: "100%" }}
-                required
-                variant="outlined"
-                error={errors["password"] ? true : false}
-              >
-                <InputLabel htmlFor="outlined-adornment-password">
-                  Password
-                </InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-password"
-                  type={values.showPassword ? "text" : "password"}
-                  value={values.password}
-                  onChange={handleChange("password")}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {values.showPassword ? (
-                          <VisibilityOff />
-                        ) : (
-                          <Visibility />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  label="Password"
-                />
-                {errors["password"] && (
-                  <FormHelperText>{errors["password"]}</FormHelperText>
-                )}
-              </FormControl>
-              <FormControl
-                sx={{ mt: 2, width: "100%" }}
-                required
-                variant="outlined"
-                error={errors["password2"] ? true : false}
-              >
-                <InputLabel htmlFor="outlined-adornment-password2">
-                  Confirm Password
-                </InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-password2"
-                  type={values.showPassword ? "text" : "password"}
-                  value={values.password2}
-                  onChange={handleChange("password2")}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle confirm password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {values.showPassword ? (
-                          <VisibilityOff />
-                        ) : (
-                          <Visibility />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  label="Confirm Password"
-                />
-                {errors["password2"] && (
-                  <FormHelperText>{errors["password2"]}</FormHelperText>
-                )}
-              </FormControl>
-              <FormControl
-                sx={{ mt: 2, width: "100%" }}
-                required
-                variant="outlined"
-                error={errors["orgCode"] ? true : false}
-              >
-                <InputLabel htmlFor="outlined-adornment-orgcode">
-                  Organization Code
-                </InputLabel>
-                <OutlinedInput
-                  value={values.username}
-                  onChange={handleChange("orgCode")}
-                  label="Organization Code"
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <Tooltip title={orgCodeExplainer} placement="left" arrow>
-                        <HelpIcon />
-                      </Tooltip>
-                    </InputAdornment>
-                  }
-                />
-                {errors["orgCode"] && (
-                  <FormHelperText>{errors["orgCode"]}</FormHelperText>
-                )}
-              </FormControl>
-            </Box>
-            <Stack direction="row" spacing={2}>
-              <Link to="/login">Switch to Login Screen</Link>
-            </Stack>
-
-            <LoadingButton
-              onClick={handleSubmit}
-              endIcon={<HowToRegIcon />}
-              loading={loading}
-              fullWidth={true}
-              sx={{ mt: 2 }}
-              loadingPosition="end"
-              color="secondary"
-              variant="contained"
+          <Box sx={{ mt: 6, mb: 6, width: "100%" }}>
+            {signUpErrorToggle && (
+              <Alert severity="error" color="error">
+                {signUpErrorMessage}
+              </Alert>
+            )}
+            <FormControl
+              sx={{ mt: 2, width: "100%" }}
+              required
+              variant="outlined"
+              error={errors["email"] ? true : false}
             >
-              Sign Up
-            </LoadingButton>
-          </Grid>
-        </Box>
-      </Paper>
+              <InputLabel htmlFor="outlined-adornment-email">Email</InputLabel>
+              <OutlinedInput
+                value={values.email}
+                onChange={handleChange("email")}
+                label="Email"
+              />
+              {errors["email"] && (
+                <FormHelperText>{errors["email"]}</FormHelperText>
+              )}
+            </FormControl>
+            <FormControl
+              sx={{ mt: 2, width: "100%" }}
+              required
+              variant="outlined"
+              error={errors["firstname"] ? true : false}
+            >
+              <InputLabel htmlFor="outlined-adornment-firstname">
+                First Name
+              </InputLabel>
+              <OutlinedInput
+                value={values.firstname}
+                onChange={handleChange("firstname")}
+                label="First Name"
+              />
+              {errors["firstname"] && (
+                <FormHelperText>{errors["firstname"]}</FormHelperText>
+              )}
+            </FormControl>
+            <FormControl
+              sx={{ mt: 2, width: "100%" }}
+              required
+              variant="outlined"
+              error={errors["lastname"] ? true : false}
+            >
+              <InputLabel htmlFor="outlined-adornment-lastname">
+                Last Name
+              </InputLabel>
+              <OutlinedInput
+                value={values.lastname}
+                onChange={handleChange("lastname")}
+                label="Last Name"
+              />
+              {errors["lastname"] && (
+                <FormHelperText>{errors["lastname"]}</FormHelperText>
+              )}
+            </FormControl>
+            <FormControl
+              sx={{ mt: 2, width: "100%" }}
+              required
+              variant="outlined"
+              error={errors["password"] ? true : false}
+            >
+              <InputLabel htmlFor="outlined-adornment-password">
+                Password
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password"
+                type={values.showPassword ? "text" : "password"}
+                value={values.password}
+                onChange={handleChange("password")}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+              />
+              {errors["password"] && (
+                <FormHelperText>{errors["password"]}</FormHelperText>
+              )}
+            </FormControl>
+            <FormControl
+              sx={{ mt: 2, width: "100%" }}
+              required
+              variant="outlined"
+              error={errors["password2"] ? true : false}
+            >
+              <InputLabel htmlFor="outlined-adornment-password2">
+                Confirm Password
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password2"
+                type={values.showPassword ? "text" : "password"}
+                value={values.password2}
+                onChange={handleChange("password2")}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle confirm password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Confirm Password"
+              />
+              {errors["password2"] && (
+                <FormHelperText>{errors["password2"]}</FormHelperText>
+              )}
+            </FormControl>
+            <FormControl
+              sx={{ mt: 2, width: "100%" }}
+              required
+              variant="outlined"
+              error={errors["orgCode"] ? true : false}
+            >
+              <InputLabel htmlFor="outlined-adornment-orgcode">
+                Organization Code
+              </InputLabel>
+              <OutlinedInput
+                value={values.username}
+                onChange={handleChange("orgCode")}
+                label="Organization Code"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <Tooltip title={orgCodeExplainer} placement="left" arrow>
+                      <HelpIcon />
+                    </Tooltip>
+                  </InputAdornment>
+                }
+              />
+              {errors["orgCode"] && (
+                <FormHelperText>{errors["orgCode"]}</FormHelperText>
+              )}
+            </FormControl>
+          </Box>
+          <Stack direction="row" spacing={2}>
+            <Link to="/login">Switch to Login Screen</Link>
+          </Stack>
+
+          <LoadingButton
+            onClick={handleSubmit}
+            endIcon={<HowToRegIcon />}
+            loading={loading}
+            fullWidth={true}
+            sx={{ mt: 2 }}
+            loadingPosition="end"
+            color="secondary"
+            variant="contained"
+          >
+            Sign Up
+          </LoadingButton>
+        </Grid>
+      </Box>
     </>
   );
 }

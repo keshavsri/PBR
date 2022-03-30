@@ -2,7 +2,7 @@ import React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import { makeStyles, createStyles } from "@mui/styles";
 import { NavLink, useNavigate } from "react-router-dom";
-import useAuth from "../services/useAuth";
+import AuthConsumer from "../services/useAuth";
 
 import MuiDrawer from "@mui/material/Drawer";
 import MuiAppBar from "@mui/material/AppBar";
@@ -27,6 +27,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import PendingActionsIcon from '@mui/icons-material/PendingActions';
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDatabase } from "@fortawesome/free-solid-svg-icons";
@@ -36,6 +37,8 @@ import UsersIcon from "@mui/icons-material/Group";
 import OrganizationIcon from "@mui/icons-material/Apartment";
 
 import SettingsIcon from "@mui/icons-material/Settings";
+import LoginCard from "../components/login/LoginCard";
+import CustomDialog from "../components/CustomDialog";
 
 const drawerWidth = 250;
 
@@ -71,6 +74,11 @@ const pageData = [
   ],
   [
     {
+      path: "logging-view",
+      title: "View System Logs",
+      icon: <PendingActionsIcon />,
+    },
+    {
       path: "settings",
       title: "Settings",
       icon: <SettingsIcon />,
@@ -80,10 +88,10 @@ const pageData = [
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    "navbar-active": {
+    ".navbar-active": {
       backgroundColor: "red",
     },
-    "MuiMenuItem-root": {
+    ".MuiMenuItem-root": {
       borderRadius: "0px",
     },
   })
@@ -189,7 +197,7 @@ export default function MainLayout(props) {
   const [open, setOpen] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(pageData[0][0]);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { user, logout } = useAuth();
+  const { user, logout, recredentialize, setRecredentialize } = AuthConsumer();
 
   const handleLogout = () => {
     logout();
@@ -370,9 +378,19 @@ export default function MainLayout(props) {
           )}
         </Box>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, height: "100%" }}>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, height: "100%", minWidth: "0px" }}
+      >
         <DrawerHeader />
         <Box sx={{ width: "100%", backgroundColor: "grey" }}>
+          <CustomDialog
+            open={recredentialize}
+            handleClose={() => {}}
+            maxWidth="sm"
+          >
+            <LoginCard />
+          </CustomDialog>
           <Box>{props.children}</Box>
         </Box>
       </Box>

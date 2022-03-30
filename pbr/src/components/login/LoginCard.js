@@ -3,7 +3,7 @@ import React from "react";
 import LoginIcon from "@mui/icons-material/Login";
 import { makeStyles, createStyles } from "@mui/styles";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import useAuth from "../../services/useAuth";
+import AuthConsumer from "../../services/useAuth";
 
 import {
   Grid,
@@ -46,7 +46,7 @@ export default function LoginCard() {
   const classes = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
+  const { login } = AuthConsumer();
   const { state } = useLocation();
 
   const [values, setValues] = React.useState({
@@ -68,7 +68,7 @@ export default function LoginCard() {
     await login(values.email, values.password)
       .then(() => {
         setLoading(false);
-        navigate(state?.path || "/data-view");
+        navigate("/data-view");
       })
       .catch((error) => {
         setLoginErrorMessage("Error: " + error);
@@ -136,114 +136,100 @@ export default function LoginCard() {
 
   return (
     <>
-      <Paper
-        elevation={12}
-        sx={{
-          raised: true,
-          maxWidth: "sm",
-          textAlign: "center",
-          padding: 5,
-          overflow: "scroll",
-        }}
-      >
-        <Box component="form">
-          <Grid
-            justifyContent="center"
-            container
-            direction="row"
-            alignItems="center"
-            onKeyDown={onKeyDown}
+      <Box component="form">
+        <Grid
+          justifyContent="center"
+          container
+          direction="row"
+          alignItems="center"
+          onKeyDown={onKeyDown}
+        >
+          <img
+            className={classes.ncsuBrickLogo}
+            src={brickLogoNCSU}
+            alt="NCSU Brick Logo"
+          />
+
+          <Typography
+            variant="h1"
+            sx={{ fontWeight: "bold", width: "100%", textAlign: "center" }}
           >
-            <img
-              className={classes.ncsuBrickLogo}
-              src={brickLogoNCSU}
-              alt="NCSU Brick Logo"
-            />
+            Poultry Bloodwork Reporting Tool
+          </Typography>
 
-            <Typography variant="h1" sx={{ fontWeight: "bold", width: "100%" }}>
-              Poultry Bloodwork Reporting Tool
-            </Typography>
-
-            <Box sx={{ mt: 6, mb: 6, width: "100%" }}>
-              {loginErrorToggle && (
-                <Alert severity="error" color="error">
-                  {loginErrorMessage}
-                </Alert>
-              )}
-              <FormControl
-                sx={{ mt: 2, width: "100%" }}
-                variant="outlined"
-                required
-                error={errors["email"] ? true : false}
-              >
-                <InputLabel htmlFor="outlined-adornment-email">
-                  Email
-                </InputLabel>
-                <OutlinedInput
-                  value={values.email}
-                  onChange={handleChange("email")}
-                  label="Email"
-                />
-                {errors["email"] && (
-                  <FormHelperText>{errors["email"]}</FormHelperText>
-                )}
-              </FormControl>
-              <FormControl
-                sx={{ mt: 2, width: "100%" }}
-                variant="outlined"
-                required
-                error={errors["password"] ? true : false}
-              >
-                <InputLabel htmlFor="outlined-adornment-password">
-                  Password
-                </InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-password"
-                  type={values.showPassword ? "text" : "password"}
-                  value={values.password}
-                  onChange={handleChange("password")}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {values.showPassword ? (
-                          <VisibilityOff />
-                        ) : (
-                          <Visibility />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  label="Password"
-                />
-                {errors["password"] && (
-                  <FormHelperText>{errors["password"]}</FormHelperText>
-                )}
-              </FormControl>
-            </Box>
-            <Stack direction="row" spacing={2}>
-              <Link to="/forgot-password">Forgot Password</Link>
-              <Link to="/register">Sign Up</Link>
-            </Stack>
-
-            <LoadingButton
-              onClick={handleLoginClick}
-              endIcon={<LoginIcon />}
-              loading={loading}
-              fullWidth={true}
-              sx={{ mt: 2 }}
-              loadingPosition="end"
-              variant="contained"
+          <Box sx={{ mt: 6, mb: 6, width: "100%" }}>
+            {loginErrorToggle && (
+              <Alert severity="error" color="error">
+                {loginErrorMessage}
+              </Alert>
+            )}
+            <FormControl
+              sx={{ mt: 2, width: "100%" }}
+              variant="outlined"
+              required
+              error={errors["email"] ? true : false}
             >
-              Login
-            </LoadingButton>
-          </Grid>
-        </Box>
-      </Paper>
+              <InputLabel htmlFor="outlined-adornment-email">Email</InputLabel>
+              <OutlinedInput
+                value={values.email}
+                onChange={handleChange("email")}
+                label="Email"
+              />
+              {errors["email"] && (
+                <FormHelperText>{errors["email"]}</FormHelperText>
+              )}
+            </FormControl>
+            <FormControl
+              sx={{ mt: 2, width: "100%" }}
+              variant="outlined"
+              required
+              error={errors["password"] ? true : false}
+            >
+              <InputLabel htmlFor="outlined-adornment-password">
+                Password
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password"
+                type={values.showPassword ? "text" : "password"}
+                value={values.password}
+                onChange={handleChange("password")}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+              />
+              {errors["password"] && (
+                <FormHelperText>{errors["password"]}</FormHelperText>
+              )}
+            </FormControl>
+          </Box>
+          <Stack direction="row" spacing={2}>
+            <Link to="/forgot-password">Forgot Password</Link>
+            <Link to="/register">Sign Up</Link>
+          </Stack>
+
+          <LoadingButton
+            onClick={handleLoginClick}
+            endIcon={<LoginIcon />}
+            loading={loading}
+            fullWidth={true}
+            sx={{ mt: 2 }}
+            loadingPosition="end"
+            variant="contained"
+          >
+            Login
+          </LoadingButton>
+        </Grid>
+      </Box>
     </>
   );
 }

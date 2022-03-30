@@ -9,7 +9,8 @@ import routes from "./routes";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import GlobalStyles from "./layouts/GlobalStyles";
-import { themes } from "./theme";
+import { mainTheme } from "./theme";
+
 import { AuthProvider, useAuth } from "./services/useAuth";
 
 import { Box, CircularProgress, Grid } from "@mui/material";
@@ -23,7 +24,7 @@ function App() {
     return (
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <AuthProvider>
-          <ThemeProvider theme={themes.mainTheme}>
+          <ThemeProvider theme={mainTheme}>
             <GlobalStyles />
             <Grid
               container
@@ -48,7 +49,7 @@ function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <AuthProvider>
-        <ThemeProvider theme={themes.mainTheme}>
+        <ThemeProvider theme={mainTheme}>
           <GlobalStyles />
           {routing}
         </ThemeProvider>

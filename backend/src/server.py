@@ -7,6 +7,7 @@ load_dotenv(find_dotenv())
 
 from api import apiBlueprint
 from api.APIUserController import userBlueprint
+from api.APIDataController import sampleBlueprint
 from api.APIOrganizationController import organizationBlueprint
 from api.APILogController import logBlueprint
 from api.APIFlockController import flockBlueprint
@@ -28,8 +29,6 @@ db = SQLAlchemy(app)
 @app.route('/')
 def testMethod():
     return 'CVM + CSC Home'
-
-
 
 if __name__ == '__main__':
     app.run(
