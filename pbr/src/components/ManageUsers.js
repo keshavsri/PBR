@@ -12,13 +12,12 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 // Might need to change
 import DataViewFilterContent from "./DataViewFilterContent";
 // Might need to change
-import DataViewAddSample from "./DataViewAddSample";
+import DataViewAddSample from "./DataViewSample/AddSample";
 import EnhancedTable from "./DataViewTable/EnhancedTable";
 import BulkIcon from "@mui/icons-material/UploadFile";
 import ReportIcon from "@mui/icons-material/Assessment";
-import EditIcon from '@mui/icons-material/Edit';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
-
+import EditIcon from "@mui/icons-material/Edit";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
 
 export default function ManageUsers() {
   const [openModal, setOpenModal] = React.useState(false);
@@ -45,9 +44,8 @@ export default function ManageUsers() {
       sublabel: "" + machineName,
     };
   }
-  
+
   const assignRowHtml = (rows) => {
-  
     rows.map((row, index) => {
       row.buttons = (
         <>
@@ -55,23 +53,22 @@ export default function ManageUsers() {
             <EditIcon />
           </IconButton>
         </>
-        
-      )
-    })
-  }
-  
+      );
+    });
+  };
+
   const getData = () => {
     let apiRows = [
       {
-          deletable: true,
-          id: 1,
-          organization: "NCSU",
-          email: "rcrespo@ncsu.edu",
-          first_name: "Rosio",
-          last_name: "Crespo",  
-          phone: "9191234567",
-          role: "Super Admin",
-          notes: "N/A",
+        deletable: true,
+        id: 1,
+        organization: "NCSU",
+        email: "rcrespo@ncsu.edu",
+        first_name: "Rosio",
+        last_name: "Crespo",
+        phone: "9191234567",
+        role: "Super Admin",
+        notes: "N/A",
       },
       {
         deletable: false,
@@ -79,19 +76,18 @@ export default function ManageUsers() {
         organization: "UNC",
         email: "jwalker@unc.edu",
         first_name: "John",
-        last_name: "Walker",  
+        last_name: "Walker",
         phone: "1234567890",
         role: "Data Collector",
         notes: "N/A",
-    },
+      },
     ];
     // denestMachineData(apiRows);
     assignRowHtml(apiRows);
     setRowList(apiRows);
-  }
-  
+  };
+
   const getHeadCells = () => {
-    
     const headCells = [
       {
         id: "buttons",
@@ -139,18 +135,18 @@ export default function ManageUsers() {
         label: "Notes",
       },
     ];
-  
+
     setHeadCellList(headCells);
-  }
+  };
 
   const onDelete = () => {
-    console.log("DELETE TEST")
-  
+    console.log("DELETE TEST");
+
     // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
     // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
     // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
-  }
-  
+  };
+
   // const denestMachineData = (rows) => {
   //   rows.map((row, index) => {
   //     Object.entries(row.maincontact).forEach(([key, value]) => {
@@ -161,12 +157,11 @@ export default function ManageUsers() {
   //   )
   // }
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
-    React.useEffect(() => {
-      getData();
-      getHeadCells();
-      console.log(rowList);
-      },[]);
-  
+  React.useEffect(() => {
+    getData();
+    getHeadCells();
+    console.log(rowList);
+  }, []);
 
   return (
     <>
@@ -176,22 +171,22 @@ export default function ManageUsers() {
           rows={rowList}
           toolbarButtons={
             <>
-                  <Button
-                  variant="contained"
-                  onClick={handleOpenModal}
-                  startIcon={<OrganizationIcon />}
-                  >
-                    Get Org Share Code
-                  </Button>
+              <Button
+                variant="contained"
+                onClick={handleOpenModal}
+                startIcon={<OrganizationIcon />}
+              >
+                Get Org Share Code
+              </Button>
 
-            <CustomDialog
-            open={openModal}
-            icon={<OrganizationIcon />}
-            title="Get Organization Share Code"
-            handleClose={handleCloseModal}
-            >
-              <OrgCodeContent />
-            </CustomDialog>
+              <CustomDialog
+                open={openModal}
+                icon={<OrganizationIcon />}
+                title="Get Organization Share Code"
+                handleClose={handleCloseModal}
+              >
+                <OrgCodeContent />
+              </CustomDialog>
               <Tooltip title="Add Organization">
                 <Button
                   variant="contained"

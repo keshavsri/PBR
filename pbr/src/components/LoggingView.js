@@ -12,13 +12,12 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 // Might need to change
 import DataViewFilterContent from "./DataViewFilterContent";
 // Might need to change
-import DataViewAddSample from "./DataViewAddSample";
+import DataViewAddSample from "./DataViewSample/AddSample";
 import EnhancedTable from "./DataViewTable/EnhancedTable";
 import BulkIcon from "@mui/icons-material/UploadFile";
 import ReportIcon from "@mui/icons-material/Assessment";
-import EditIcon from '@mui/icons-material/Edit';
-import FactCheckIcon from '@mui/icons-material/FactCheck';
-
+import EditIcon from "@mui/icons-material/Edit";
+import FactCheckIcon from "@mui/icons-material/FactCheck";
 
 export default function LoggingView() {
   const [openModal, setOpenModal] = React.useState(false);
@@ -34,9 +33,7 @@ export default function LoggingView() {
     setOpenModal(false);
   };
 
-  
   const assignRowHtml = (rows) => {
-  
     rows.map((row, index) => {
       row.buttons = (
         <>
@@ -44,59 +41,56 @@ export default function LoggingView() {
             <EditIcon />
           </IconButton>
         </>
-        
-      )
-      row.timestamp = new Date(row.timestamp).toLocaleString()
-    })
-    
-  }
-  
+      );
+      row.timestamp = new Date(row.timestamp).toLocaleString();
+    });
+  };
+
   const getData = () => {
     let apiRows = [
-        {
+      {
         deletable: true,
         id: 1,
         user: {
-            organization: "NCSU",
-            email: "rcrespo@ncsu.edu",
-            first_name: "Rosio",
-            last_name: "Crespo",  
-            phone: "9191234567",
-            roles: "Super Admin",
-            notes: "N/A",
+          organization: "NCSU",
+          email: "rcrespo@ncsu.edu",
+          first_name: "Rosio",
+          last_name: "Crespo",
+          phone: "9191234567",
+          roles: "Super Admin",
+          notes: "N/A",
         },
         role: "Data Collector",
         organization: "NCSU",
         timestamp: "2022-12-10T13:45:00.000Z",
         action: "Create",
         target: "Add Sample Data (201)",
+      },
+      {
+        deletable: true,
+        id: 2,
+        user: {
+          organization: "NCSU",
+          email: "rcrespo@ncsu.edu",
+          first_name: "Rosio",
+          last_name: "Crespo",
+          phone: "9191234567",
+          roles: "Super Admin",
+          notes: "N/A",
         },
-        {
-            deletable: true,
-            id: 2,
-            user: {
-                organization: "NCSU",
-                email: "rcrespo@ncsu.edu",
-                first_name: "Rosio",
-                last_name: "Crespo",  
-                phone: "9191234567",
-                roles: "Super Admin",
-                notes: "N/A",
-            },
-            role: "Data Collector",
-            organization: "NCSU",
-            timestamp: "2022-12-10T12:45:00.000Z",
-            action: "Read",
-            target: "Login (102)",
-        },
+        role: "Data Collector",
+        organization: "NCSU",
+        timestamp: "2022-12-10T12:45:00.000Z",
+        action: "Read",
+        target: "Login (102)",
+      },
     ];
     denestMachineData(apiRows);
     assignRowHtml(apiRows);
     setRowList(apiRows);
-  }
-  
+  };
+
   const getHeadCells = () => {
-    
     const headCells = [
       {
         id: "buttons",
@@ -144,35 +138,33 @@ export default function LoggingView() {
         label: "Target",
       },
     ];
-  
+
     setHeadCellList(headCells);
-  }
+  };
 
   const onDelete = () => {
-    console.log("DELETE TEST")
-  
+    console.log("DELETE TEST");
+
     // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
     // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
     // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
-  }
-  
+  };
+
   const denestMachineData = (rows) => {
     rows.map((row, index) => {
       Object.entries(row.user).forEach(([key, value]) => {
-        let temp = "user." + key
-        row[temp] = value
-        console.log(temp)
-        })
-      }
-    )
-  }
+        let temp = "user." + key;
+        row[temp] = value;
+        console.log(temp);
+      });
+    });
+  };
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
-    React.useEffect(() => {
-      getData();
-      getHeadCells();
-      console.log(rowList);
-      },[]);
-  
+  React.useEffect(() => {
+    getData();
+    getHeadCells();
+    console.log(rowList);
+  }, []);
 
   return (
     <>
@@ -182,22 +174,22 @@ export default function LoggingView() {
           rows={rowList}
           toolbarButtons={
             <>
-                  <Button
-                  variant="contained"
-                  onClick={handleOpenModal}
-                  startIcon={<OrganizationIcon />}
-                  >
-                    Get Org Share Code
-                  </Button>
+              <Button
+                variant="contained"
+                onClick={handleOpenModal}
+                startIcon={<OrganizationIcon />}
+              >
+                Get Org Share Code
+              </Button>
 
-            <CustomDialog
-            open={openModal}
-            icon={<OrganizationIcon />}
-            title="Get Organization Share Code"
-            handleClose={handleCloseModal}
-            >
-              <OrgCodeContent />
-            </CustomDialog>
+              <CustomDialog
+                open={openModal}
+                icon={<OrganizationIcon />}
+                title="Get Organization Share Code"
+                handleClose={handleCloseModal}
+              >
+                <OrgCodeContent />
+              </CustomDialog>
               <Tooltip title="Add Organization">
                 <Button
                   variant="contained"

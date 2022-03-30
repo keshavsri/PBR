@@ -17,6 +17,7 @@ export function useAuth() {
       method: "GET",
     })
       .then(checkResponseAuth)
+      .then((response) => response.json())
       .then((user) => {
         console.log(user);
         setLoadingAuth(false);
@@ -25,6 +26,7 @@ export function useAuth() {
         setRecredentialize(false);
       })
       .catch((err) => {
+        console.log(err);
         setUser(null);
         setLoadingAuth(false);
       });

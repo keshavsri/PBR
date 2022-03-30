@@ -68,7 +68,7 @@ export default function LoginCard() {
     await login(values.email, values.password)
       .then(() => {
         setLoading(false);
-        navigate(state?.path || "/data-view");
+        navigate("/data-view");
       })
       .catch((error) => {
         setLoginErrorMessage("Error: " + error);
