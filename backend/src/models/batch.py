@@ -1,11 +1,19 @@
+from dataclasses import dataclass
+from glob import glob
+from typing import List
 from server import db
+from datetime import datetime
 
-from flask_serialize import FlaskSerialize
+from models.sample import Sample
 
-fs_mixin = FlaskSerialize(db)
+@dataclass
+class Batch(db.Model):
+    __tablename__ = 'batch'
+    __table_args__ = {'extend_existing': True}
 
-class Batch(db.Model, fs_mixin):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120))
-    
-    __fs_create_fields__ = __fs_update_fields__ = ['name']
+    id: int = db.Column(db.Integer, primary_key=True)
+    name: str = db.Column(db.String(120))
+    entries: List[Sample] = None
+   
+def createTable():
+    db.create_all()
