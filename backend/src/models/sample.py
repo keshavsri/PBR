@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from server import db
 from datetime import datetime
+from typing import List
 
 from models.user import User
 from models.flock import Flock
@@ -31,7 +32,7 @@ class Sample(db.Model):
     flock_gender: BirdGenders = db.Column(db.Enum(BirdGenders))
     sample_type: SampleTypes = db.Column(db.Enum(SampleTypes))
     strain: str = db.Column(db.String(120))
-    machines: list[Machine] = None
+    machines: List[Machine] = None
     comments: str = db.Column(db.String(500))
     
     def __init__(self, requestJSON):

@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from server import db
 from models.enums import States
+from typing import List
 
 from models.source import Source
 
@@ -20,7 +21,7 @@ class Organization(db.Model):
     notes: str = db.Column(db.String(500))
     organizationCode: str = db.Column(db.String(6), unique=True)
     from models.source import Source
-    sources: list[Source] = None
+    sources: List[Source] = None
     # TODO: sort this out
     #organizationCodeExpiry = db.Column(db.DateTime)
 
