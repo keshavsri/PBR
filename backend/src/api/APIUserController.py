@@ -1,6 +1,5 @@
 from flask import request, Blueprint, jsonify, Response, make_response
 import bcrypt
-import jwt
 from datetime import datetime, timedelta, timezone
 import os
 import uuid
@@ -71,7 +70,7 @@ def token_required(f):
         "role": current_user.role,
       }
       return jsonify(ret_user), 419
-    except Error as error:
+    except Exception as error:
       return jsonify({
         'message' : 'Token is invalid!'
       }), 401
