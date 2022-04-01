@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from backend.src.models.measurementValue import MeasurementValue
 from server import db
 from datetime import datetime
 from typing import List
@@ -33,6 +34,7 @@ class Sample(db.Model):
     sample_type: SampleTypes = db.Column(db.Enum(SampleTypes))
     strain: str = db.Column(db.String(120))
     machines: List[Machine] = None
+    measurements: List[MeasurementValue] = None
     comments: str = db.Column(db.String(500))
     
     def __init__(self, requestJSON):
@@ -47,5 +49,10 @@ class Sample(db.Model):
         self.sample_type = requestJSON.get('sample_type')
         self.strain = requestJSON.get('strain')
         self.comments = requestJSON.get('comments')
-def createTable():
+    
+    def createTable(self):
+        sample_machine = db.Table('sample-machine', db.metadata, db.Column('sample_id', db.Integer, db.ForeignKey('sample.id')), db.Column('machine_id', db.Integer, db.ForeignKey('machine.id')), extend_existing=True)
+        self.machines = db.relationship('Machine', secondary=sample_machine, backref='samples')
+        sample_measurement_value = db.Table('sample-measurement-value', db.metadata, db.Column('sample_id', db.Integer, db.ForeignKey('sample.id')), db.Column('measurement_value_id', db.Integer, db.ForeignKey('measurement_value.id')), extend_existing=True)
+        self.measurements = db.relationship('MeasurementValue', secondary=sample_measurement_value, backref='samples')
         db.create_all()
