@@ -232,10 +232,10 @@ export default function DataViewAddSample() {
         strain: "",
       });
       getStrains(event.target.value);
-    } else if (prop === "organization") {
+    } else if (prop === "organizationID") {
       setGeneralDetails({
         ...generalDetails,
-        organization: event.target.value,
+        organizationID: event.target.value,
         flockID: null,
       });
       getSources(event.target.value);
@@ -690,9 +690,9 @@ export default function DataViewAddSample() {
             <FormControl sx={{ width: "100%", mb: 2 }}>
               <InputLabel>Organization</InputLabel>
               <Select
-                value={generalDetails.organization}
+                value={generalDetails.organizationID}
                 label="Organization"
-                onChange={handleGeneralDetailsChange("organization")}
+                onChange={handleGeneralDetailsChange("organizationID")}
               >
                 {organizations.map((org, index) => {
                   return (
@@ -819,9 +819,9 @@ export default function DataViewAddSample() {
             <FormControl sx={{ width: "100%", mb: 2 }}>
               <InputLabel>Source</InputLabel>
               <Select
-                value={generalDetails.source}
+                value={generalDetails.sourceID}
                 label="Source"
-                onChange={handleGeneralDetailsChange("source")}
+                onChange={handleGeneralDetailsChange("sourceID")}
               >
                 {sources.map((source, index) => {
                   return (

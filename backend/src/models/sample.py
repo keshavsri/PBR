@@ -1,42 +1,46 @@
 from dataclasses import dataclass
-from backend.src.models.measurementValue import MeasurementValue
+from models.measurementValue import MeasurementValue
 from server import db
 from datetime import datetime
-from typing import List
 
 from models.user import User
-from models.flock import Flock
-from models.source import Source
-from models.machine import Machine
-from models.organization import Organization
-from models.enums import AgeUnits, ValidationTypes, SampleTypes, BirdGenders, Species
 
+from models.organization import OrganizationORM
+from models.source import SourceORM
+from models.flock import FlockORM
+
+from models.batch import BatchORM
+from models.machine import Machine
+from models.enums import AgeUnits, ValidationTypes, SampleTypes, BirdGenders, Species
+from pydantic import BaseModel, validator, constr
+from typing import List, Optional
 @dataclass
-class Sample(db.Model):
+class SampleORM(db.Model):
     __tablename__ = 'sample'
     __table_args__ = {'extend_existing': True}
 
     id: int = db.Column(db.Integer, primary_key=True)
-    entered_by_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    entered_by_user: User = db.relationship('User')
-    data_entry_timestamp: datetime = db.Column(db.DateTime, default=datetime.now)
-    flock_id: int = db.Column(db.Integer, db.ForeignKey('flock.id'))
-    flock: Flock = db.relationship('Flock')
+    timestamp_added: datetime = db.Column(db.DateTime)
+    comments: str = db.Column(db.String(500))
+
+    entered_by: User = db.relationship('User')
+    # entered_by_user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
+    # Put these 3 into its own join table like in the Database Design Doc?
+    organization: OrganizationORM = db.relationship('Organization')
+    source: SourceORM = db.relationship('Source')
+    flock: FlockORM = db.relationship('Flock')
+    # organization-source_flock_sample_id: int = db.relationship('organization-source_flock_sample')
+    # organization-source_flock_sample_id: int = db.Column(db.Integer, db.ForeignKey('organization-source_flock_sample.id'))
+
     flock_age: int = db.Column(db.Integer)
-    flock_age_units_used: AgeUnits = db.Column(db.Enum(AgeUnits))
-    species: Species = db.Column(db.Enum(Species))
-    source_id = db.Column(db.Integer, db.ForeignKey(Source.id))
-    source: Source = db.relationship('Source')
-    organization_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
-    organization: Organization = db.relationship('Organization')
+    flock_age_unit: AgeUnits = db.Column(db.Enum(AgeUnits))
     validation_status: ValidationTypes = db.Column(db.Enum(ValidationTypes))
-    flock_gender: BirdGenders = db.Column(db.Enum(BirdGenders))
     sample_type: SampleTypes = db.Column(db.Enum(SampleTypes))
-    strain: str = db.Column(db.String(120))
     machines: List[Machine] = None
     measurements: List[MeasurementValue] = None
-    comments: str = db.Column(db.String(500))
-    
+    batch: BatchORM = db.relationship("Batch")
+
     def __init__(self, requestJSON):
         self.flock_id = requestJSON.get('flock')
         self.flock_age = requestJSON.get('flock_age')
@@ -47,7 +51,6 @@ class Sample(db.Model):
         self.validation_status = requestJSON.get('validation_status')
         self.flock_gender = requestJSON.get('flock_gender')
         self.sample_type = requestJSON.get('sample_type')
-        self.strain = requestJSON.get('strain')
         self.comments = requestJSON.get('comments')
     
     def createTable(self):
@@ -56,3 +59,17 @@ class Sample(db.Model):
         sample_measurement_value = db.Table('sample-measurement-value', db.metadata, db.Column('sample_id', db.Integer, db.ForeignKey('sample.id')), db.Column('measurement_value_id', db.Integer, db.ForeignKey('measurement_value.id')), extend_existing=True)
         self.measurements = db.relationship('MeasurementValue', secondary=sample_measurement_value, backref='samples')
         db.create_all()
+    
+
+class SampleBase(BaseModel):
+    ageNumber: int
+    ageUnit: str
+    flagged: bool
+    comments: str
+
+class SampleCreate(SampleBase):
+    pass
+class Sample(SampleBase):
+    id: int
+    class Config:
+        orm_mode = True
