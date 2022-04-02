@@ -7,6 +7,13 @@ from models.sample import Sample
 @dataclass
 class MeasurementValue(db.Model):
     id: int = db.Column(db.Integer, primary_key=True)
-    measurement: Measurement = db.Column(db.Integer, db.ForeignKey(Measurement.id), nullable=False)
-    sample: Sample = db.Column(db.Integer, db.ForeignKey(Sample.id), nullable=False)
+    measurement_id = db.Column(db.Integer, db.ForeignKey('measurement.id'), nullable=False)
+    measurement: Measurement = db.relationship('Measurement')
+    sample_id = db.Column(db.Integer, db.ForeignKey('sample.id'), nullable=False)
+    sample: Sample = db.relationship('Sample')
     value: str = db.column(db.String(120))
+    
+    def __init__(self, valueJSON):
+        self.measurement_id = valueJSON.get('measurement')
+        self.sample_id = valueJSON.get('sample')
+        self.value = valueJSON.get('value')
