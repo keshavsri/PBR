@@ -7,7 +7,7 @@ from datetime import datetime
 from models.sample import Sample
 
 @dataclass
-class Batch(db.Model):
+class BatchORM(db.Model):
     __tablename__ = 'batch'
     __table_args__ = {'extend_existing': True}
 
