@@ -1,6 +1,5 @@
 from server import db
 from models.enums import States
-from models.organization import OrganizationORM
 from dataclasses import dataclass
 
 from pydantic import BaseModel, validator, constr, conint
@@ -20,6 +19,7 @@ class SourceORM(db.Model):
     
     # creates the table in the database
     def createTable():
+        from models.organization import OrganizationORM
         organizations: list[OrganizationORM] = None
         db.create_all()
 

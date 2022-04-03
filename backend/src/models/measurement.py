@@ -1,12 +1,13 @@
 from dataclasses import dataclass
 from server import db
 
-from models.machine import Machine
-from models.measurementType import MeasurementType
-from models.organization import Organization
+
 
 @dataclass
 class Measurement(db.Model):
+    from models.machine import Machine
+    from models.measurementType import MeasurementType
+    from models.organization import Organization
     id: int = db.Column(db.Integer, primary_key=True)
     machine_id = db.Column(db.Integer, db.ForeignKey('machine.id'), nullable=False)
     machine: Machine = db.relationship('Machine')

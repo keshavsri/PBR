@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 from server import db
 
-from models.organization import Organization
-from models.source import Source
 from models.enums import Species, BirdGenders, ProductionTypes
 from pydantic import BaseModel, validator, constr
 from typing import List, Optional
@@ -10,13 +8,15 @@ from typing import List, Optional
 class FlockORM(db.Model):
     id: int = db.Column(db.Integer, primary_key=True)
     name: str = db.Column(db.String(255),unique=True, nullable=False)
-    organization_id = db.Column(db.Integer, db.ForeignKey(Organization.id))
-    organization: Organization = db.relationship('Organization')
+    from models.organization import OrganizationORM
+    organization_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
+    organization: OrganizationORM = db.relationship('Organization')
     strain: str = db.Column(db.String(120))
     species: Species = db.Column(db.Enum(Species), nullable=False)
     production_type: ProductionTypes = db.Column(db.Enum(ProductionTypes), nullable=False)
-    source_id = db.Column(db.Integer, db.ForeignKey(Source.id), nullable=False)
-    source: Source = db.relationship('Source')
+    from models.source import SourceORM
+    source_id = db.Column(db.Integer, db.ForeignKey('source.id'), nullable=False)
+    source: SourceORM = db.relationship('Source')
     gender: BirdGenders = db.Column(db.Enum(BirdGenders), nullable=False)
     birthday = db.column(db.DateTime)
 
@@ -35,8 +35,10 @@ class FlockCreate(FlockBase):
     source_id: int
 
 class Flock(FlockBase):
+    from models.source import Source
+    from models.organization import OrganizationORM
     id: int
-    organization: Organization
+    organization: OrganizationORM
     source: Source
 
     class Config:

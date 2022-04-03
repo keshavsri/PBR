@@ -9,7 +9,6 @@ from models.organization import OrganizationORM
 from models.source import SourceORM
 from models.flock import FlockORM
 
-from models.batch import BatchORM
 from models.machine import Machine
 from models.enums import AgeUnits, ValidationTypes, SampleTypes, BirdGenders, Species
 from pydantic import BaseModel, validator, constr
@@ -39,7 +38,10 @@ class SampleORM(db.Model):
     sample_type: SampleTypes = db.Column(db.Enum(SampleTypes))
     machines: List[Machine] = None
     measurements: List[MeasurementValue] = None
-    batch: BatchORM = db.relationship("Batch")
+    sample_machine = db.Table('sample-machine', db.metadata, db.Column('sample_id', db.Integer, db.ForeignKey('sample.id')), db.Column('machine_id', db.Integer, db.ForeignKey('machine.id')), extend_existing=True)
+    machines = db.relationship('Machine', secondary=sample_machine, backref='samples')
+    sample_measurement_value = db.Table('sample-measurement-value', db.metadata, db.Column('sample_id', db.Integer, db.ForeignKey('sample.id')), db.Column('measurement_value_id', db.Integer, db.ForeignKey('measurement_value.id')), extend_existing=True)
+    measurements = db.relationship('MeasurementValue', secondary=sample_measurement_value, backref='samples')
 
     def __init__(self, requestJSON):
         self.flock_id = requestJSON.get('flock')
@@ -52,12 +54,11 @@ class SampleORM(db.Model):
         self.flock_gender = requestJSON.get('flock_gender')
         self.sample_type = requestJSON.get('sample_type')
         self.comments = requestJSON.get('comments')
+        
+
     
-    def createTable(self):
-        sample_machine = db.Table('sample-machine', db.metadata, db.Column('sample_id', db.Integer, db.ForeignKey('sample.id')), db.Column('machine_id', db.Integer, db.ForeignKey('machine.id')), extend_existing=True)
-        self.machines = db.relationship('Machine', secondary=sample_machine, backref='samples')
-        sample_measurement_value = db.Table('sample-measurement-value', db.metadata, db.Column('sample_id', db.Integer, db.ForeignKey('sample.id')), db.Column('measurement_value_id', db.Integer, db.ForeignKey('measurement_value.id')), extend_existing=True)
-        self.measurements = db.relationship('MeasurementValue', secondary=sample_measurement_value, backref='samples')
+    def createTable():
+
         db.create_all()
     
 

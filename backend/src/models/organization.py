@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 from server import db
 from models.enums import States
-from models.source import SourceORM, Source
 from pydantic import BaseModel, validator, constr, conint
 from typing import List, Optional
 from models.source import SourceORM
@@ -9,6 +8,7 @@ from models.source import SourceORM
 
 @dataclass
 class OrganizationORM(db.Model):
+    from models.source import SourceORM
     __tablename__ = 'organization'
     __table_args__ = {'extend_existing': True}
     
@@ -50,6 +50,7 @@ class OrganizationCreate(OrganizationBase):
 
 # This is the view of an item we want to return to a user
 class Organization(OrganizationBase):
+    from models.source import Source
     id: int # For the DB representation we have additional fields
     sources: List[Source] = []
     class Config:

@@ -11,8 +11,8 @@ class Machine(db.Model):
     type_id = db.Column(db.Integer, db.ForeignKey('machine_type.id'))
     organization_id = db.Column(db.Integer, db.ForeignKey('organization.id'), nullable=False)
     serial_number: str = db.Column(db.String(120), nullable=False)
-    machine_type: MachineType = db.relationship('MachineType')
-    organization: Organization = db.relationship('Organization')
+    #machine_type: MachineType = db.relationship('MachineType')
+    #organization: Organization = db.relationship('Organization')
     
     def __init__(self, requestJSON):
         self.name = requestJSON.get('name')
@@ -20,5 +20,5 @@ class Machine(db.Model):
         self.organization_id = requestJSON.get('organization')
         self.serial_number = requestJSON.get('serial_number')
 
-def createTable():
-    db.create_all()
+# def createTable():
+#     db.create_all()

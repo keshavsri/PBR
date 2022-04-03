@@ -9,5 +9,5 @@ class MachineType(db.Model):
     def __init__(self, name:str):
         self.name = name
 
-def createTable():
-    db.create_all()
+# def createTable():
+#     db.create_all()
