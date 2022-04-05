@@ -6,19 +6,22 @@ from pydantic import BaseModel, validator, constr
 from typing import List, Optional
 @dataclass
 class FlockORM(db.Model):
+    __tablename__ = 'flock'
+    __table_args__ = {'extend_existing': True}
+
     id: int = db.Column(db.Integer, primary_key=True)
     name: str = db.Column(db.String(255),unique=True, nullable=False)
-    from models.organization import OrganizationORM
-    organization_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
-    organization: OrganizationORM = db.relationship('Organization')
     strain: str = db.Column(db.String(120))
     species: Species = db.Column(db.Enum(Species), nullable=False)
-    production_type: ProductionTypes = db.Column(db.Enum(ProductionTypes), nullable=False)
-    from models.source import SourceORM
-    source_id = db.Column(db.Integer, db.ForeignKey('source.id'), nullable=False)
-    source: SourceORM = db.relationship('Source')
     gender: BirdGenders = db.Column(db.Enum(BirdGenders), nullable=False)
+    production_type: ProductionTypes = db.Column(db.Enum(ProductionTypes), nullable=False)
     birthday = db.column(db.DateTime)
+
+    # References to Foreign Objects
+    source = db.Column(db.Integer, db.ForeignKey('source.id'))
+
+    # Foreign References to this Object
+    organization_source_flock_sample = db.relationship('organization-source-flock-sample', backref='flock')
 
     def createTable():
         db.create_all()
@@ -36,9 +39,9 @@ class FlockCreate(FlockBase):
 
 class Flock(FlockBase):
     from models.source import Source
-    from models.organization import OrganizationORM
+    from models.organization import Organization
     id: int
-    organization: OrganizationORM
+    organization: Organization
     source: Source
 
     class Config:

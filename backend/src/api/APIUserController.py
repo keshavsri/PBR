@@ -5,17 +5,17 @@ import os
 import uuid
 import jwt
 import json
-from auth_token import Auth_Token
+from src.auth_token import Auth_Token
 from functools import wraps
+from src import Models
+from src.enums import Roles, LogActions
 
 userBlueprint = Blueprint('user', __name__)
-
 
 def allowed_roles(roles):
   def wrapper(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-      from models.user import User
       token = None
       allowed = False
       # jwt is passed in the request header
@@ -28,8 +28,7 @@ def allowed_roles(roles):
         # PULL OUT DATA FROM TOKEN
         data = Auth_Token.decode_token(token)
         # GET AND RETURN CURRENT USER
-        current_user = User.query.filter_by(id=data["id"]).first()
-        from models.enums import Roles
+        current_user = Models.User.query.filter_by(id=data["id"]).first()
         for role in roles:
           if current_user.role == 0 or int(current_user.role) is role:
             allowed = True
@@ -47,7 +46,6 @@ def allowed_roles(roles):
 def token_required(f):
   @wraps(f)
   def decorated(*args, **kwargs):
-    from models.user import User
     token = None
     # jwt is passed in the request header
     if 'pbr_token' in request.cookies:
@@ -59,10 +57,10 @@ def token_required(f):
       # PULL OUT DATA FROM TOKEN
       data = Auth_Token.decode_token(token)
       # GET AND RETURN CURRENT USER
-      current_user = User.query.filter_by(id=data["id"]).first()
+      current_user = Models.User.query.filter_by(id=data["id"]).first()
     except jwt.ExpiredSignatureError as error:
       data = Auth_Token.decode_token(token, verify_expiration=False)
-      current_user = User.query.filter_by(email=data["email"]).first()
+      current_user = Models.User.query.filter_by(email=data["email"]).first()
       ret_user = {
         "email": current_user.email,
         "firstname": current_user.first_name,
@@ -81,13 +79,11 @@ def token_required(f):
 @userBlueprint.route('/<int:item_id>', methods=['GET', 'PUT', 'DELETE', 'POST'])
 @userBlueprint.route('/', methods=['GET', 'POST'])
 def route_setting_all(item_id=None):
-  from models.user import User
-  return User.fs_get_delete_put_post(item_id)
+  return Models.User.fs_get_delete_put_post(item_id)
 
 @userBlueprint.route('/me', methods=['GET'])
 @token_required
 def me(current_user):
-  from models.user import User
   if current_user:
     ret_user = {
       "email": current_user.email,
@@ -106,8 +102,6 @@ def login():
   Logs the current user in, getting email and password from payload
   If user doesn't exist, if fields are missing/invalid, incorrect password, return 401 
   """
-  from models.user import User
-  loggedIn = False
 
   content_type = request.headers.get('Content-Type')
   if (content_type == 'application/json'):
@@ -118,7 +112,7 @@ def login():
   if data["email"] and data["password"]:
     data["email"] = data["email"].lower()
     print(data["email"])
-    dbUser = User.query.filter_by(email=data["email"]).first()
+    dbUser = Models.User.query.filter_by(email=data["email"]).first()
     print(dbUser)
     if not dbUser:
       print("USER DOES NOT EXIST.")
@@ -146,7 +140,6 @@ def login():
 # @token_required
 def logout():
   print("Logging out.")
-  from models.user import User
   if 'pbr_token' in request.cookies:
     token = request.cookies['pbr_token']
     Auth_Token.invalidate_token(token)
@@ -156,8 +149,6 @@ def logout():
 
 @userBlueprint.route('/register', methods=['POST'])
 def register():
-  from models.user import User
-  from server import db
   content_type = request.headers.get('Content-Type')
 
   if (content_type == 'application/json'):
@@ -165,19 +156,18 @@ def register():
 
   if not data["email"] or not data["firstname"] or not data["lastname"] or not data["password"] or not data["orgCode"]:
     print("MISSING FIELDS.")
-    db.session.rollback()
+    Models.db.session.rollback()
     return "Invalid Request!", 400
   
-  if User.query.filter_by(email=data["email"]).first():
+  if Models.User.query.filter_by(email=data["email"]).first():
     print("USER ALREADY EXISTS.")
-    db.session.rollback()
+    Models.db.session.rollback()
     return "User Already Exists", 422
 
   salt = bcrypt.gensalt()
   hashedPW = bcrypt.hashpw(data["password"].encode('utf8'), salt)
-  from models.enums import Roles
-  user = User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
-  db.session.add(user)
-  db.session.commit()
+  user = Models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
+  Models.db.session.add(user)
+  Models.db.session.commit()
   print("User was successfully added.")
   return 'Success', 200

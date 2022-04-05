@@ -1,17 +1,18 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from dotenv import load_dotenv, find_dotenv
+from src.api import apiBlueprint
+from src.api.APIUserController import userBlueprint
+from src.api.APIDataController import sampleBlueprint
+from src.api.APIOrganizationController import organizationBlueprint
+from src.api.APILogController import logBlueprint
+from src.api.APIFlockController import flockBlueprint
+from src.api.APIDataController import sampleBlueprint
 import os
+from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
-from api import apiBlueprint
-from api.APIUserController import userBlueprint
-from api.APIDataController import sampleBlueprint
-from api.APIOrganizationController import organizationBlueprint
-from api.APILogController import logBlueprint
-from api.APIFlockController import flockBlueprint
-from api.APIDataController import sampleBlueprint
+
 
 app = Flask(__name__)
 app.register_blueprint(apiBlueprint, url_prefix='/api')
@@ -23,17 +24,6 @@ app.register_blueprint(sampleBlueprint, url_prefix='/api/sample')
 app.config['SECRET_KEY'] = os.environ.get("JWT_SECRET")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
-db = SQLAlchemy(app)
 
-
-@app.route('/')
-def testMethod():
-    return 'CVM + CSC Home'
-
-if __name__ == '__main__':
-    app.run(
-        host= os.environ.get("SERVER_NAME"),
-        debug= os.environ.get("DEBUG_MODE"),
-        port = os.environ.get("BACKEND_PORT")
-    )
-
+from src import Models
+Models.db.init_app(app)

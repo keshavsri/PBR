@@ -1,19 +1,19 @@
 from dataclasses import dataclass
 from server import db
-from models.enums import States
+from enums import States
 from pydantic import BaseModel, validator, constr, conint
 from typing import List, Optional
-from models.source import SourceORM
 
 
 @dataclass
 class OrganizationORM(db.Model):
-    from models.source import SourceORM
     __tablename__ = 'organization'
     __table_args__ = {'extend_existing': True}
-    
-    # need to add ot    # The fields below are stored in the database, they are assigned both a python and a database type
-    id:int = db.Column(db.Integer, primary_key=True)
+
+    from models.user import UserORM
+
+    # The fields below are stored in the database, they are assigned both a python and a database type
+    id: int = db.Column(db.Integer, primary_key=True)
     name: str = db.Column(db.String(120), unique=True)
     street_address: str = db.Column(db.String(120))
     city: str = db.Column(db.String(120))
@@ -21,16 +21,20 @@ class OrganizationORM(db.Model):
     zip: str = db.Column(db.String(10))
     notes: str = db.Column(db.String(500))
     organization_code: str = db.Column(db.String(6), unique=True)
-    sources: List[SourceORM] = None
+
+    # References to Foureign Objects
+    main_contact: UserORM = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    # Foreign References to this Object
+    user = db.relationship('user', backref='organization')
+    machine = db.relationship('machine',  backref='organization')
+    organization_source = db.relationship('organization-source', backref='organization')
+
     # TODO: sort this out
     #organizationCodeExpiry = db.Column(db.DateTime)
 
     # creates the table in the database
     def createTable():
-        from models.user import User
-        mainContact: User = db.Column(db.Integer, db.ForeignKey('user.id'))
-        organization_source = db.Table('organization-source', db.metadata, db.Column('organization_id', db.Integer, db.ForeignKey('organization.id')), db.Column('source_id', db.Integer, db.ForeignKey('source.id')), extend_existing=True)
-        OrganizationORM.sources = db.relationship('Source', secondary=organization_source, backref = 'organizations')
         db.create_all()
 
 # Pydantic defines models with typed fields.

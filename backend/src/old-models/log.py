@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from server import db
 
-from models.user import User
+from models.user import UserORM
 from models.organization import Organization
 from models.enums import Roles, LogActions
 @dataclass
@@ -11,7 +11,7 @@ class Log(db.Model):
     
     id: int = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user: User = db.relationship('User')
+    user: UserORM = db.relationship('User')
     role: Roles = db.Column(db.Enum(Roles))
     organization_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
     organization: Organization = db.relationship('Organization')

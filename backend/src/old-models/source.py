@@ -8,7 +8,7 @@ from typing import List, Optional
 class SourceORM(db.Model):
     __tablename__ = 'source'
     __table_args__ = {'extend_existing': True}
-    
+
     # The fields below are stored in the database, they are assigned both a python and a database type
     id: int = db.Column(db.Integer, primary_key=True)
     name: str = db.Column(db.String(120), unique=True)
@@ -16,11 +16,13 @@ class SourceORM(db.Model):
     city: str = db.Column(db.String(120))
     state: States = db.Column(db.String(20))
     zip: int = db.Column(db.Integer)
+
+    # Foreign References to this Object
+    organization_source = db.relationship('organization-source', backref='source')
+    flock = db.relationship('flock', backref='source')
     
     # creates the table in the database
     def createTable():
-        from models.organization import OrganizationORM
-        organizations: list[OrganizationORM] = None
         db.create_all()
 
 # Pydantic defines models with typed fields.
@@ -63,5 +65,5 @@ def create_source(source: SourceCreate):
     return source;
 
 
-def json_to_organization(json) -> SourceCreate:
+def json_to_source(json) -> SourceCreate:
     return SourceCreate(json)
