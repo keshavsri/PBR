@@ -17,7 +17,7 @@ source: ## Runs the server
 
 .PHONY: run
 run: ## Runs the server
-	python src/server.py
+	python server.py
 
 .PHONY: install
 install: bootstrap ## Installs dependencies from requirements.txt
