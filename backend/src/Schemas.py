@@ -1,6 +1,8 @@
 from pydantic import BaseModel, validator, constr, conint
 from src.enums import States
 from typing import List, Optional
+from src.Models import db
+from src.Models import Flock as FlockORM
 
 # PYDANTIC MODELS
 
@@ -93,6 +95,20 @@ class Flock(FlockBase):
     class Config:
         orm_mode = True
     
+    
+def get_flock(id: int) -> Flock:
+    flock = FlockORM.query.filter_by(id=id).first()
+    return Flock(flock)
+
+def create_flock(flock: FlockCreate):
+    flock = FlockORM(**flock.dict())
+    db.session.add(flock)
+    db.session.commit()
+    db.session.refresh(flock)
+    return flock
+
+def json_to_flock(json) -> FlockCreate:
+    return Flock(json)
 # ------------------------------
 # ?
 # ------------------------------
