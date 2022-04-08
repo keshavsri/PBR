@@ -100,15 +100,15 @@ def get_flock_by_org(org_id: int) -> List[Flock]:
     flocks = FlockORM.query.filter_by(organization=org_id).all()
     ret = []
     for flock in flocks:
-        ret.append(Flock.from_orm(flock))
-    return ret.__dict__
+        ret.append(Flock.from_orm(flock).dict())
+    return json.dumps(ret)
 
 def get_all_flocks() -> List[Flock]:
     flocks = FlockORM.query.all()
     ret = []
     for flock in flocks:
-        ret.append(Flock(flock))
-    return ret.__dict__
+        ret.append(Flock.from_orm(flock).dict())
+    return json.dumps(ret)
 
 def create_flock(flock_dict: dict):
     flock:FlockORM = FlockORM()

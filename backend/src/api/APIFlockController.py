@@ -17,9 +17,9 @@ def getFlocks(access_allowed, current_user):
         if current_user.role == Roles.Super_Admin:
             responseJSON = Schemas.get_all_flocks()
         else:
-            responseJSON = Schemas.get_flocks_by_organization(current_Organization)
+            responseJSON = Schemas.get_flock_by_org(current_Organization)
         # if the response json is empty then return a 404 not found
-        if responseJSON.json is None:
+        if responseJSON is None:
             responseJSON = jsonify({'message': 'No records found'})
             return responseJSON, 404
         else:
