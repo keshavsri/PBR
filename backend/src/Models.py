@@ -153,6 +153,8 @@ class Flock(db.Model):
 
     # References to Foreign Objects
     source = db.Column(db.Integer, db.ForeignKey('Source.id'))
+    organization = db.Column(db.Integer, db.ForeignKey('Organization.id'))
+        
 
     # Foreign References to this Object
     # organization_source_flock_sample = db.relationship('OrganizationSourceFlockSample', backref='Flock')

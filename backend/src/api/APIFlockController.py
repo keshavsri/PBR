@@ -1,6 +1,6 @@
 from src.api.APIUserController import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
-from src import Models
+from src import Models, Schemas
 from src.enums import Roles, LogActions
 
 flockBlueprint = Blueprint('flock', __name__)
@@ -15,10 +15,9 @@ def getFlocks(access_allowed, current_user):
         responseJSON = None
         current_Organization = current_user.organization_id
         if current_user.role == Roles.Super_Admin:
-            responseJSON = jsonify(Models.Flock.query.all())
+            responseJSON = Schemas.get_all_flocks()
         else:
-            responseJSON = jsonify(Models.Flock.query.filter_by(
-                organization_id=current_Organization).all())
+            responseJSON = Schemas.get_flocks_by_organization(current_Organization)
         # if the response json is empty then return a 404 not found
         if responseJSON.json is None:
             responseJSON = jsonify({'message': 'No records found'})
@@ -38,10 +37,8 @@ def getFlock(access_allowed, current_user, item_id):
         responseJSON = None
         current_Organization = current_user.organization_id
         flock = Models.Flock.query.get(item_id)
-        if current_user.role == Roles.Super_Admin:
-            responseJSON = jsonify(flock)
-        elif flock.organization_id == current_Organization:
-            responseJSON = jsonify(flock)
+        if current_user.role == Roles.Super_Admin or flock.organization == current_Organization:
+            responseJSON = Schemas.get_flock(item_id).dict()
         else:
             return jsonify({'message': 'You cannot access this flock'}), 403
         return responseJSON, 200
@@ -57,7 +54,7 @@ def postFlock(access_allowed, current_user):
         # checks if the Flock already exists in the database
         if Models.Flock.query.filter_by(name=request.json.get('name')).first() is None:
             # builds the Flock from the request json
-            newFlock = Models.Flock(request.json)
+            newFlock = Schemas.create_flock(request.json)
             # stages and then commits the new Flock to the database
             Models.db.session.add(newFlock)
             Models.db.session.commit()
@@ -65,7 +62,7 @@ def postFlock(access_allowed, current_user):
             return jsonify(Models.Flock.query.get(request.json.get('id'))), 201
         # if the Flock already exists then return a 409 conflict
         else:
-            return jsonify({'message': 'Flock already exists', "existing organization": jsonify(Flock.query.filter_by(name=request.json.get('name')).first()).json}), 409
+            return jsonify({'message': 'Flock already exists', "existing organization": jsonify(Models.Flock.query.filter_by(name=request.json.get('name')).first()).json}), 409
     else:
         return jsonify({'message': 'Role not allowed'}), 403
     

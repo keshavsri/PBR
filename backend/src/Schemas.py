@@ -1,3 +1,4 @@
+from itsdangerous import json
 from pydantic import BaseModel, validator, constr, conint
 from src.enums import States
 from typing import List, Optional
@@ -76,21 +77,15 @@ class Organization(OrganizationBase):
 # Flock
 # ------------------------------
 
-class FlockBase(BaseModel):
-    name: int
-    strain: int
+class Flock(BaseModel):
+    name: str
+    strain: str
     species: str
-    production_type: bool
+    production_type: str
     gender: str
-
-class FlockCreate(FlockBase):
-    organization_id: int
-    source_id: int
-
-class Flock(FlockBase):
-    id: int
-    organization: Organization
-    source: Source
+    id: Optional[int]
+    organization: int
+    source: int
 
     class Config:
         orm_mode = True
@@ -98,17 +93,31 @@ class Flock(FlockBase):
     
 def get_flock(id: int) -> Flock:
     flock = FlockORM.query.filter_by(id=id).first()
-    return Flock(flock)
+    print(flock)
+    return Flock.from_orm(flock)
 
-def create_flock(flock: FlockCreate):
-    flock = FlockORM(**flock.dict())
+def get_flock_by_org(org_id: int) -> List[Flock]:
+    flocks = FlockORM.query.filter_by(organization=org_id).all()
+    ret = []
+    for flock in flocks:
+        ret.append(Flock.from_orm(flock))
+    return ret.__dict__
+
+def get_all_flocks() -> List[Flock]:
+    flocks = FlockORM.query.all()
+    ret = []
+    for flock in flocks:
+        ret.append(Flock(flock))
+    return ret.__dict__
+
+def create_flock(flock_dict: dict):
+    flock:FlockORM = FlockORM()
+    for name, value in Flock.parse_obj(flock_dict):
+        setattr(flock, name, value)
     db.session.add(flock)
     db.session.commit()
     db.session.refresh(flock)
     return flock
-
-def json_to_flock(json) -> FlockCreate:
-    return Flock(json)
 # ------------------------------
 # ?
 # ------------------------------
