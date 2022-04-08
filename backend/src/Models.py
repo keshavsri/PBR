@@ -100,10 +100,12 @@ class MeasurementValue(db.Model):
 
 class MeasurementType(db.Model):
     __tablename__ = 'MeasurementType'
-    id: int = db.Column(db.Integer, primary_key=True)
-    name: str = db.Column(db.String(120), unique=True, nullable=False)
-    units: str = db.Column(db.String(120), unique=True, nullable=False)
-    required: bool = db.Column(db.Boolean, nullable=False)
+    id: int = db.Column(db.Integer, unique=True, primary_key=True)
+    name: str = db.Column(db.String(120), nullable=False)
+    abbreviation: str = db.Column(db.String(120), nullable=False)
+    units: str = db.Column(db.String(120), nullable=False)
+    required: bool = db.Column(db.Boolean)
+    general: bool = db.Column(db.Boolean)
 
     # Foreign References to this Object 
     measurement = db.relationship('Measurement', backref='MeasurementType')
@@ -152,8 +154,8 @@ class Flock(db.Model):
     birthday = db.Column(db.DateTime)
 
     # References to Foreign Objects
-    source = db.Column(db.Integer, db.ForeignKey('Source.id'))
-    organization = db.Column(db.Integer, db.ForeignKey('Organization.id'))
+    source_id = db.Column(db.Integer, db.ForeignKey('Source.id'))
+    organization_id = db.Column(db.Integer, db.ForeignKey('Organization.id'))
         
 
     # Foreign References to this Object
