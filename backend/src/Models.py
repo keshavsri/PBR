@@ -140,7 +140,13 @@ class Log(db.Model):
     # References to Foreign Objects
     user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
     organization_id = db.Column(db.Integer, db.ForeignKey('Organization.id'))
-
+    
+    def __init__(self, user, organization, role, action, logContent):
+        self.user_id = user
+        self.organization_id = organization
+        self.role = role
+        self.action = action
+        self.logContent = logContent
 class Flock(db.Model):
     __tablename__ = 'Flock'
     id: int = db.Column(db.Integer, primary_key=True)
@@ -179,6 +185,6 @@ class Batch(db.Model):
 #     sample = db.relationship('Sample', backref='OrganizationSourceFlockSample')
 
 def createLog(current_user, action, logContent):
-    log = Log(current_user.id, current_user.organization.id, current_user.role, action, logContent)
+    log = Log(current_user.id, current_user.organization_id, current_user.role, action, logContent)
     db.session.add(log)
     db.session.commit()

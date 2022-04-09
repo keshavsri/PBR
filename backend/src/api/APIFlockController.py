@@ -37,6 +37,8 @@ def getFlock(access_allowed, current_user, item_id):
         responseJSON = None
         current_Organization = current_user.organization_id
         flock = Models.Flock.query.get(item_id)
+        if flock is None:
+            return jsonify({'message': 'No record found'}), 404
         if current_user.role == Roles.Super_Admin or flock.organization == current_Organization:
             responseJSON = Schemas.get_flock(item_id).dict()
         else:
@@ -62,7 +64,7 @@ def postFlock(access_allowed, current_user):
             return jsonify(Models.Flock.query.get(request.json.get('id'))), 201
         # if the Flock already exists then return a 409 conflict
         else:
-            return jsonify({'message': 'Flock already exists', "existing organization": jsonify(Models.Flock.query.filter_by(name=request.json.get('name')).first()).json}), 409
+            return jsonify({'message': 'Flock already exists', "existing organization": Schemas.Flock.from_orm(Models.Flock.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
     else:
         return jsonify({'message': 'Role not allowed'}), 403
     
@@ -73,7 +75,7 @@ def postFlock(access_allowed, current_user):
 def putFlock(access_allowed, current_user, item_id):
     if access_allowed:
         #check if the Flock exists in the database if it does then update the Flock
-        if Models.Flock.query.filter_by(organization_id=current_user.organization_id, id=item_id).first() is None:
+        if Models.Flock.query.filter_by(organization=current_user.organization_id, id=item_id).first() is None:
             return jsonify({'message': 'Flock does not exist'}), 404
         else:
             if request.json.get('organization') is None and request.json.get('source') is None:
@@ -82,7 +84,7 @@ def putFlock(access_allowed, current_user, item_id):
                 editedFlock = Models.Flock.query.get(item_id)
                 Models.createLog(current_user, LogActions.EDIT_FLOCK,
                 'Edited Flock: ' + editedFlock.name)
-                return jsonify(editedFlock), 200
+                return Schemas.Flock.from_orm(editedFlock).dict(), 200
             else:
                 return jsonify({'message': 'Cannot Edit Organization or source'}), 400
     else:
@@ -95,11 +97,11 @@ def putFlock(access_allowed, current_user, item_id):
 def deleteFlock(access_allowed, current_user, item_id):
     if access_allowed:
         # check if the Flock exists in the database if it does then delete the Flock
-        if Models.Flock.query.filter_by(organization_id=current_user.organization_id, id=item_id).first() is None:
+        if Models.Flock.query.filter_by(organization=current_user.organization_id, id=item_id).first() is None:
             return jsonify({'message': 'Flock does not exist'}), 404
         else:
             deletedFlock = Models.Flock.query.get(item_id)
-            Models.db.session.delete(Models.Flock.query.filter_by(organization_id=current_user.organization_id, id=item_id).first())
+            Models.db.session.delete(Models.Flock.query.filter_by(organization=current_user.organization_id, id=item_id).first())
             Models.db.session.commit()
             Models.createLog(current_user, LogActions.DELETE_FLOCK, 'Deleted Flock: ' + deletedFlock.name)
             return jsonify({'message': 'Flock deleted'}), 200
