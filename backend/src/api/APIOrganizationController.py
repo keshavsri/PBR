@@ -1,8 +1,9 @@
 
 from src.api.APIUserController import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
-from src import Models
+from src import Models, Schemas
 from src.enums import Roles, LogActions
+import src.helpers
 
 # Flask blueprint for the organization routes, this is the blueprint that is registered in the app.py file with a prefix of /organization
 organizationBlueprint = Blueprint('organization', __name__)
@@ -10,9 +11,9 @@ organizationBlueprint = Blueprint('organization', __name__)
 @organizationBlueprint.route('/', methods=['GET'])
 @token_required
 @allowed_roles([0])
-def getOrganizations(access_allowed, current_user):
+def get_organizations(access_allowed, current_user):
     if access_allowed:
-        responseJSON = jsonify(Models.Organization.query.all())
+        responseJSON = src.helpers.get_all_organizations()
         # if the response json is empty then return a 404 not found
         if responseJSON.json is None:
             responseJSON = jsonify({'message': 'No records found'})
@@ -26,13 +27,13 @@ def getOrganizations(access_allowed, current_user):
 @organizationBlueprint.route('/<int:item_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
-def getOrganization(access_allowed, current_user, item_id):
+def get_organization(access_allowed, current_user, item_id):
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
         # if item id exists then it will return the organization with the id
         if current_user.organization.id == item_id:
-            responseJSON = jsonify(Models.Organization.query.get(item_id))
+            responseJSON = src.helpers.get_organization_by_id(item_id)
         # otherwise it will return all the organizations in the database
         if responseJSON.json is None:
             responseJSON = jsonify({'message': 'No records found'})
@@ -46,20 +47,17 @@ def getOrganization(access_allowed, current_user, item_id):
 @organizationBlueprint.route('/', methods=['POST'])
 @token_required
 @allowed_roles([0])
-def postOrganization(access_allowed, current_user):
+def post_organization(access_allowed, current_user):
     if access_allowed:        
         # checks if the organization already exists in the database
         if Models.Organization.query.filter_by(name=request.json.get('name')).first() is None:
             # builds the organization from the request json
-            newOrganization = Models.Organization(request.json)
-            # stages and then commits the new organization to the database
-            Models.db.session.add(newOrganization)
-            Models.db.session.commit()
+            newOrganization = src.helpers.create_organization(request.json)
             Models.createLog(current_user, LogActions.ADD_ORGANIZATION, 'Created new organization: ' + newOrganization.name)
-            return jsonify(Models.Organization.query.get(request.json.get('id'))), 201
+            return Schemas.Organization.from_orm(Models.Organization.query.get(request.json.get('id'))).dict(), 201
         # if the organization already exists then return a 409 conflict
         else:
-            return jsonify({'message': 'Organization already exists', "existing organization": jsonify(Organization.query.filter_by(name=request.json.get('name')).first()).json}), 409
+            return jsonify({'message': 'Organization already exists', "existing organization": Schemas.Organization.from_orm(Models.Organization.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
 
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -68,7 +66,7 @@ def postOrganization(access_allowed, current_user):
 @organizationBlueprint.route('/<int:item_id>', methods=['PUT'])
 @token_required
 @allowed_roles([0, 1])
-def putOrganization(access_allowed, current_user, item_id):
+def put_organization(access_allowed, current_user, item_id):
     if access_allowed:
         #check if the organization exists in the database if it does then update the organization
         if Models.Organization.query.get(item_id) is None:

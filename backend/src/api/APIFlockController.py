@@ -1,3 +1,4 @@
+import src.helpers
 from src.api.APIUserController import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
 from src import Models, Schemas
@@ -15,9 +16,9 @@ def getFlocks(access_allowed, current_user):
         responseJSON = None
         current_Organization = current_user.organization_id
         if current_user.role == Roles.Super_Admin:
-            responseJSON = Schemas.get_all_flocks()
+            responseJSON = src.helpers.get_all_flocks()
         else:
-            responseJSON = Schemas.get_flock_by_org(current_Organization)
+            responseJSON = src.helpers.get_flock_by_org(current_Organization)
         # if the response json is empty then return a 404 not found
         if responseJSON is None:
             responseJSON = jsonify({'message': 'No records found'})
@@ -40,7 +41,7 @@ def getFlock(access_allowed, current_user, item_id):
         if flock is None:
             return jsonify({'message': 'No record found'}), 404
         if current_user.role == Roles.Super_Admin or flock.organization == current_Organization:
-            responseJSON = Schemas.get_flock(item_id).dict()
+            responseJSON = src.helpers.get_flock_by_id(item_id)
         else:
             return jsonify({'message': 'You cannot access this flock'}), 403
         return responseJSON, 200
@@ -56,7 +57,7 @@ def postFlock(access_allowed, current_user):
         # checks if the Flock already exists in the database
         if Models.Flock.query.filter_by(name=request.json.get('name')).first() is None:
             # builds the Flock from the request json
-            newFlock = Schemas.create_flock(request.json)
+            newFlock = src.helpers.create_flock(request.json)
             # stages and then commits the new Flock to the database
             Models.db.session.add(newFlock)
             Models.db.session.commit()
