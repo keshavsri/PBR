@@ -10,21 +10,13 @@ from typing import List, Optional
 # ------------------------------
 
 # Pydantic defines models with typed fields.
-class SourceBase(BaseModel):
+class Source(BaseModel):
     name: constr(max_length=120)
     street_address: constr(max_length=120)
     city: constr(max_length=120)
     state: States
     zip: constr(regex=r'^[0-9]{5}(?:-[0-9]{4})?$')
-
-# We create specialized models for different tasks/views
-# These are the fields needed for creating an item.
-class SourceCreate(SourceBase):
-    pass # No need for extra fields when creating
-
-# This is the view of an item we want to return to a user
-class Source(SourceBase):
-    id: int # For the DB representation we have additional fields
+    id: Optional[int] = None
     class Config:
         orm_mode = True
 
@@ -60,7 +52,7 @@ class Organization(BaseModel):
     organization_code: Optional[constr(regex=r'^[a-zA-Z0-9]{6}?$')]
 # This is the view of an item we want to return to a user
     id: Optional[int] # For the DB representation we have additional fields
-    sources: Optional[List[int]]
+    sources: Optional[List[Source]]
     class Config:
         orm_mode = True
 

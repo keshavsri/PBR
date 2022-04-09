@@ -5,7 +5,8 @@ from itsdangerous import json
 from src.Models import db
 from src.Models import Flock as FlockORM
 from src.Models import Organization as OrganizationORM
-from src.Schemas import Flock, Organization
+from src.Models import Source as SourceORM
+from src.Schemas import Flock, Organization, Source
 
 def get_organization_by_id(id: int):
     org = OrganizationORM.query.filter_by(id=id).first()
@@ -20,12 +21,25 @@ def get_all_organizations() -> List[dict]:
 
 def create_organization(org_dict: dict):
     org:OrganizationORM = OrganizationORM()
+    print(Organization.parse_obj(org_dict))
     for name, value in Organization.parse_obj(org_dict):
-        setattr(org, name, value)
+        if name != 'notes' and name != 'sources':
+            setattr(org, name, value)
+        elif value is not None and name == 'notes':
+            org.notes = value
     db.session.add(org)
     db.session.commit()
     db.session.refresh(org)
     return org
+
+def create_source(source_dict: dict):
+    source:SourceORM = SourceORM()
+    for name, value in Source.parse_obj(source_dict):
+        setattr(source, name, value)
+    db.session.add(source)
+    db.session.commit()
+    db.session.refresh(source)
+    return source
 
 def get_flock_by_id(id: int) -> Flock:
     flock = FlockORM.query.filter_by(id=id).first()
