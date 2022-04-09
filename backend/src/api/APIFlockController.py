@@ -62,7 +62,7 @@ def postFlock(access_allowed, current_user):
             Models.db.session.add(newFlock)
             Models.db.session.commit()
             Models.createLog(current_user, LogActions.ADD_FLOCK, 'Created new Flock: ' + newFlock.name)
-            return jsonify(Models.Flock.query.get(request.json.get('id'))), 201
+            return Schemas.Flock.from_orm(Models.Flock.query.get(request.json.get('id'))).dict(), 201
         # if the Flock already exists then return a 409 conflict
         else:
             return jsonify({'message': 'Flock already exists', "existing organization": Schemas.Flock.from_orm(Models.Flock.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
