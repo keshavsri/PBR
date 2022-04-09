@@ -136,13 +136,22 @@ export default function DataViewAddSample() {
   const [strains, setStrains] = React.useState([]);
   const [sources, setSources] = React.useState([]);
 
-  const getFlocks = () => {
-    let mockFlocks = [{ id: 1852 }, { id: 2531 }, { id: 3491 }];
-    setFlocks(mockFlocks);
+  const getFlocks = async () => {
+    await fetch(`/api/flock/`, {
+      method: "GET",
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setFlocks(data);
+      });
   };
 
   const getStrains = async (species) => {
-    await fetch(`/api/sample/strains/${species}`, {
+    await fetch(`/api/flock/strains/${species}`, {
       method: "GET",
     })
       .then(checkResponseAuth)
@@ -161,7 +170,7 @@ export default function DataViewAddSample() {
     // await fetch(`/api/source`, {
     //   method: "GET",
     // })
-    //   .then(handleAPIResponse)
+    //   .then(checkResponseAuth)
     //   .then((response)=> {
     //     return response.json()
     //   })

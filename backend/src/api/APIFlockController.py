@@ -1,4 +1,5 @@
 import src.helpers
+from http import HTTPStatus
 from src.api.APIUserController import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
 from src import Models, Schemas
@@ -113,3 +114,54 @@ def deleteFlock(access_allowed, current_user, item_id):
 @flockBlueprint.route('/')
 def invalid_method(item_id = None):
     return jsonify({'message': 'Invalid Method'}), 405
+
+# Inspiration from https://roytuts.com/python-flask-rest-api-file-upload/
+@flockBlueprint.route('/strains/<string:species>', methods=['GET'])
+def get_strains(species=None):
+    print(species.lower())
+    # Move this to a database soon
+    strains = {
+        "chicken": [
+            "Ross 308",
+            "Ross 708",
+            "Ross 308 AP",
+            "Ranger Premium",
+            "Ranger Classic",
+            "Ranger Gold",
+            "Cobb500",
+            "Cobb700",
+            "Arbor Acres Plus",
+            "Hubbard",
+            "Brown",
+            "LSL",
+            "Sandy",
+            "Silver",
+            "Tradition",
+            "White",
+        ],
+        "turkey": [
+            "Nicholas Select",
+            "BUT 6",
+            "Converter",
+            "Grade Maker",
+            "Optima",
+            "ConverterNOVO",
+        ],
+    }
+
+    if species and species.lower() in strains.keys():
+        resp = jsonify(strains[species.lower()])
+        resp.status_code = HTTPStatus.OK
+        return resp
+    elif species:
+        resp = jsonify({
+            'message' : 'Unsupported Species!'
+        })
+        resp.status_code = HTTPStatus.BAD_REQUEST
+        return resp
+    else:
+        resp = jsonify({
+            'message' : 'Must include a species!'
+        })
+        resp.status_code = HTTPStatus.BAD_REQUEST
+        return resp

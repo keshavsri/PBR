@@ -158,8 +158,8 @@ class Flock(db.Model):
     birthday = db.Column(db.DateTime)
 
     # References to Foreign Objects
-    source = db.Column(db.Integer, db.ForeignKey('Source.id'))
-    organization = db.Column(db.Integer, db.ForeignKey('Organization.id'))
+    source_id = db.Column(db.Integer, db.ForeignKey('Source.id'))
+    organization_id = db.Column(db.Integer, db.ForeignKey('Organization.id'))
         
 
     # Foreign References to this Object

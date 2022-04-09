@@ -48,7 +48,7 @@ def get_flock_by_id(id: int) -> Flock:
 
 
 def get_flock_by_org(org_id: int) -> List[dict]:
-    flocks = FlockORM.query.filter_by(organization=org_id).all()
+    flocks = FlockORM.query.filter_by(organization_id=org_id).all()
     ret = []
     for flock in flocks:
         ret.append(Flock.from_orm(flock).dict())

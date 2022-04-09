@@ -67,8 +67,8 @@ class Flock(BaseModel):
     production_type: str
     gender: str
     id: Optional[int]
-    organization: int
-    source: int
+    organization_id: int
+    source_id: int
 
     class Config:
         orm_mode = True
