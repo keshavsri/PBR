@@ -152,7 +152,7 @@ class Log(db.Model):
 class Flock(db.Model):
     __tablename__ = 'Flock'
     id: int = db.Column(db.Integer, primary_key=True)
-    name: str = db.Column(db.String(255),unique=True, nullable=False)
+    name: str = db.Column(db.String(255), unique=True, nullable=False)
     strain: str = db.Column(db.String(120))
     species: Species = db.Column(db.Enum(Species), nullable=False)
     gender: BirdGenders = db.Column(db.Enum(BirdGenders), nullable=False)
@@ -162,7 +162,6 @@ class Flock(db.Model):
     # References to Foreign Objects
     source_id = db.Column(db.Integer, db.ForeignKey('Source.id'))
     organization_id = db.Column(db.Integer, db.ForeignKey('Organization.id'))
-        
 
     # Foreign References to this Object
     # organization_source_flock_sample = db.relationship('OrganizationSourceFlockSample', backref='Flock')

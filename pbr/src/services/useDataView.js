@@ -1,4 +1,5 @@
 import * as React from "react";
+
 const DataViewContext = React.createContext();
 
 export function useDataView() {
@@ -8,9 +9,10 @@ export function useDataView() {
   const [sampleModalScreen, setSampleModalScreen] = React.useState(0);
   const [error, setError] = React.useState({});
   const [timestamp, setTimestamp] = React.useState(Date.now());
+
   const [generalDetails, setGeneralDetails] = React.useState({
     organizationID: "",
-    flockID: null,
+    flockName: null,
     species: "",
     strain: "",
     gender: "",
@@ -57,29 +59,6 @@ export function useDataView() {
     setInterval(() => {
       setTimestamp(Date.now());
     }, 1000);
-
-    // Get the current user's organization
-    // await fetch(`/api/organization`, {
-    //   method: "GET",
-    // })
-    //   .then(handleAPIResponse)
-    //   .then((data) => {
-    //     console.log(data);
-    //     setSources(data);
-    //   });
-    let mockOrganization = {
-      id: "1",
-      name: "Organization A",
-      street_address: "123 Main Street",
-      city: "Raleigh",
-      state: "NC",
-      zip: "27606",
-      default: "true",
-    };
-    setGeneralDetails({
-      ...generalDetails,
-      organization: mockOrganization,
-    });
   }, []);
 
   return {

@@ -116,7 +116,7 @@ export default function DataViewAddSample() {
     timestamp,
     setTimestamp,
   } = DataViewConsumer();
-  const { checkResponseAuth } = AuthConsumer();
+  const { checkResponseAuth, user } = AuthConsumer();
 
   // General Section Data
 
@@ -165,8 +165,8 @@ export default function DataViewAddSample() {
       });
   };
 
-  const getSources = async (organization) => {
-    console.log("Getting sources for " + organization.name);
+  const getSources = async (organization_id) => {
+    // console.log("Getting sources for " + organization.name);
     // await fetch(`/api/source`, {
     //   method: "GET",
     // })
@@ -231,6 +231,10 @@ export default function DataViewAddSample() {
       },
     ];
     setOrganizations(mockOrganizations);
+    setGeneralDetails({
+      ...generalDetails,
+      organizationID: user.organization_id,
+    });
   };
 
   const handleGeneralDetailsChange = (prop) => (event) => {
@@ -245,28 +249,50 @@ export default function DataViewAddSample() {
       setGeneralDetails({
         ...generalDetails,
         organizationID: event.target.value,
-        flockID: null,
+        flockName: null,
       });
       getSources(event.target.value);
-    } else if (prop === "flockID") {
-      // TODO: If Flock exists, get data from flock and store it in the GeneralDetails.
-      setGeneralDetails({
-        ...generalDetails,
-        flock: event.target.value,
-      });
     } else {
       setGeneralDetails({
         ...generalDetails,
         [prop]: event.target.value,
       });
     }
+    console.log(generalDetails);
   };
 
-  const handleFlockChange = (id) => {
-    setGeneralDetails({
-      ...generalDetails,
-      flockID: id,
-    });
+  const handleFlockChange = (fl) => {
+    console.log("FLOCK NAME CHANGED.");
+    if (fl == null) {
+      return;
+    }
+    if (fl.inputValue) {
+      console.log("NEW FLOCK");
+      setGeneralDetails({
+        ...generalDetails,
+        flockName: fl.name,
+        species: "",
+        strain: "",
+        gender: "",
+        sourceID: "",
+        productionType: "",
+        ageNumber: "",
+        ageUnit: "",
+      });
+    } else {
+      let matchedFlock = flocks.find((flock) => flock.name === fl.name);
+      console.log("FOUND FLOCK:", matchedFlock);
+      setGeneralDetails({
+        ...generalDetails,
+        flockName: matchedFlock.name,
+        species: matchedFlock.species,
+        strain: matchedFlock.strain,
+        gender: matchedFlock.gender,
+        sourceID: matchedFlock.source_id,
+        productionType: matchedFlock.production_type,
+      });
+    }
+    console.log(generalDetails);
   };
 
   const handleTimestampChange = () => (event) => {
@@ -705,7 +731,7 @@ export default function DataViewAddSample() {
               >
                 {organizations.map((org, index) => {
                   return (
-                    <MenuItem value={org} key={index}>
+                    <MenuItem value={org.id} key={index}>
                       {org.name} ({org.street_address}, {org.city}, {org.state}{" "}
                       {org.zip})
                     </MenuItem>
@@ -734,10 +760,10 @@ export default function DataViewAddSample() {
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
             <Autocomplete
-              value={generalDetails.flockID}
-              sx={{ width: "100%", mb: 2 }}
-              onChange={(event, newValue) => {
-                handleFlockChange(newValue);
+              value={generalDetails.flockName}
+              onChange={(event, newFlock) => {
+                console.log("NEW NAME:", newFlock);
+                handleFlockChange(newFlock);
               }}
               filterOptions={(options, params) => {
                 const filtered = filter(options, params);
@@ -745,12 +771,12 @@ export default function DataViewAddSample() {
                 const { inputValue } = params;
                 // Suggest the creation of a new value
                 const isExisting = options.some(
-                  (option) => inputValue === option.id
+                  (option) => inputValue === option.name
                 );
                 if (inputValue !== "" && !isExisting) {
                   filtered.push({
                     inputValue,
-                    title: `Add Flock "${inputValue}"`,
+                    name: `Add "${inputValue}"`,
                   });
                 }
 
@@ -761,16 +787,25 @@ export default function DataViewAddSample() {
               handleHomeEndKeys
               options={flocks}
               getOptionLabel={(option) => {
+                console.log(option);
                 // Value selected with enter, right from the input
-                // Regular option
-                if (option.id) {
-                  return `Flock ${option.id}`;
+                if (typeof option === "string") {
+                  return option;
                 }
+                // Add "xxx" option created dynamically
+                if (option.inputValue) {
+                  return option.inputValue;
+                }
+                // Regular option
+                return option.name;
               }}
-              renderOption={(props, option) => <li {...props}>{option.id}</li>}
+              renderOption={(props, option) => (
+                <li {...props}>{option.name}</li>
+              )}
+              sx={{ width: "100%", mb: 2 }}
               freeSolo
               renderInput={(params) => (
-                <TextField {...params} label="Flock ID" />
+                <TextField {...params} label="Flock Name" />
               )}
             />
             <FormControl sx={{ width: "100%", mb: 2 }}>
@@ -834,7 +869,7 @@ export default function DataViewAddSample() {
               >
                 {sources.map((source, index) => {
                   return (
-                    <MenuItem value={source} key={index}>
+                    <MenuItem value={source.id} key={index}>
                       {source.name} ({source.street_address}, {source.city},{" "}
                       {source.state} {source.zip})
                     </MenuItem>
