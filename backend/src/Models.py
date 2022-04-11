@@ -34,12 +34,13 @@ class Sample(db.Model):
     batch_id: int = db.Column(db.Integer, db.ForeignKey('Batch.id'))
     flock_age: int = db.Column(db.Integer)
     flock_age_unit: AgeUnits = db.Column(db.Enum(AgeUnits))
+    flagged: bool = db.Column(db.Boolean)
     validation_status: ValidationTypes = db.Column(db.Enum(ValidationTypes))
     sample_type: SampleTypes = db.Column(db.Enum(SampleTypes))
 
     # Foreign References to this Object
     measurementValue = db.relationship('MeasurementValue', backref='Sample')
-    organizationsource_flock_sample = db.Table('OrganizationSource-Flock-Sample', db.metadata, db.Column('id', db.Integer, primary_key=True), db.Column('Organization-Source_id', db.Integer, db.ForeignKey('Organization-Source.id')), db.Column('Flock_id', db.Integer, db.ForeignKey('Flock.id')))
+    organizationsource_flock_sample = db.Table('OrganizationSource-Flock-Sample', db.metadata, db.Column('id', db.Integer, primary_key=True), db.Column('Organization-Source_id', db.Integer, db.ForeignKey('Organization-Source.id')), db.Column('Flock_id', db.Integer, db.ForeignKey('Flock.id')), db.Column('Sample_id', db.Integer, db.ForeignKey('Sample.id')))
     organizationsource_flock_sample_id: int = db.Column(db.Integer, db.ForeignKey('OrganizationSource-Flock-Sample.id'))
 
 
@@ -101,7 +102,7 @@ class MeasurementValue(db.Model):
 class MeasurementType(db.Model):
     __tablename__ = 'MeasurementType'
     id: int = db.Column(db.Integer, unique=True, primary_key=True)
-    name: str = db.Column(db.String(120), nullable=False)
+    name: str = db.Column(db.String(120), nullable=False, unique=True)
     abbreviation: str = db.Column(db.String(120), nullable=False)
     units: str = db.Column(db.String(120), nullable=False)
     required: bool = db.Column(db.Boolean)
@@ -113,22 +114,21 @@ class MeasurementType(db.Model):
 class Machine(db.Model):
     __tablename__ = 'Machine'
     id: int = db.Column(db.Integer, primary_key=True)
-    serial_number: str = db.Column(db.String(120), nullable=False)
-    
+    serial_number: str = db.Column(db.String(120), unique=True,nullable=False)
+
     # References to Foreign Objects
-    machinetype_id: int = db.Column(db.Integer, db.ForeignKey('MachineType.id'))
+    machinetype_id: int = db.Column(db.Integer, db.ForeignKey('MachineType.id'), nullable=False)
+    machinetype = db.relationship('MachineType')
     organization_id: int = db.Column(db.Integer, db.ForeignKey('Organization.id'), nullable=False)
 
-    # Foreign References to this Object 
+    # Foreign References to this Object
     measurement = db.relationship('Measurement', backref='Machine')
 
 class MachineType(db.Model):
     __tablename__ = 'MachineType'
     id: int = db.Column(db.Integer, primary_key=True)
-    name: str = db.Column(db.String(120))
+    name: str = db.Column(db.String(120), unique=True, nullable=False)
 
-    # Foreign References to this Object 
-    machine = db.relationship('Machine', backref='MachineType')
 
 class Log(db.Model):   
     __tablename__ = 'Log' 
@@ -165,7 +165,6 @@ class Flock(db.Model):
         
 
     # Foreign References to this Object
-    # organization_source_flock_sample = db.relationship('OrganizationSourceFlockSample', backref='Flock')
 
 class Batch(db.Model):
     __tablename__ = 'Batch'
@@ -175,16 +174,16 @@ class Batch(db.Model):
     # Foreign References to this Object
     sample = db.relationship('Sample', backref='Batch')
 
-# class OrganizationSourceFlockSample(db.Model):    
+# class OrganizationSourceFlockSample(db.Model):
 #     __tablename__ = 'OrganizationSourceFlockSample'
 #     id: int = db.Column(db.Integer, primary_key=True)
-
+#
 #     # References to Foreign Objects
-#     organization_source_id: int = db.Column(db.Integer, db.ForeignKey('OrganizationSource.id'))
+#     organization_source_id: int = db.Column(db.Integer, db.ForeignKey('Organization-Source.id'))
 #     flock_id: int = db.Column(db.Integer, db.ForeignKey('Flock.id'))
-    
-#     # Foreign References to this Object 
-#     sample = db.relationship('Sample', backref='OrganizationSourceFlockSample')
+#
+#     # Foreign References to this Object
+#     sample_id = db.Column(db.Integer, db.ForeignKey('Sample.id'))
 
 def createLog(current_user, action, logContent):
     log = Log(current_user.id, current_user.organization_id, current_user.role, action, logContent)

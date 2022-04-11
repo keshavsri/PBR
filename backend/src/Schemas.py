@@ -1,9 +1,70 @@
 from pydantic import BaseModel, constr
-from src.enums import States
+from src.enums import States, Species, ProductionTypes, BirdGenders, AgeUnits
 from typing import List, Optional
 
 
 # PYDANTIC MODELS
+
+
+
+# ------------------------------
+# Machinetype
+# ------------------------------
+class Machinetype(BaseModel):
+    id: Optional[int]
+    name: constr(max_length=120)
+    class Config:
+        orm_mode = True
+
+# ------------------------------
+# Machine
+# ------------------------------
+class Machine(BaseModel):
+    id: Optional[int]
+    serial_number: constr(max_length=120)
+
+    # References to Foreign Objects
+    machinetype_id: int
+    machinetype: Optional[Machinetype]
+    organization_id: int
+    class Config:
+        orm_mode = True
+
+# ------------------------------
+# Measurement
+# ------------------------------
+class Measurement(BaseModel):
+    id: Optional[int]
+    machine_id: int
+    measurementtype_id: int
+    class Config:
+        orm_mode = True
+
+# ------------------------------
+# MeasurementType
+# ------------------------------
+class MeasurementType(BaseModel):
+    id: Optional[int]
+    name: constr(max_length=120)
+    abbreviation: constr(max_length=120)
+    units: constr(max_length=120)
+    required: bool
+    general: bool
+    class Config:
+        orm_mode = True
+
+# ------------------------------
+# MeasurementValue
+# ------------------------------
+class MeasurementValue(BaseModel):
+    id: Optional[int]
+    measurement_id: int
+    measurement: Optional[Measurement]
+    sample_id: int
+    value: float
+    timestamp_added: Optional[str]
+    class Config:
+        orm_mode = True
 
 # ------------------------------
 # Source
@@ -24,17 +85,13 @@ class Source(BaseModel):
 # Sample
 # ------------------------------
 
-class SampleBase(BaseModel):
-    ageNumber: int
-    ageUnit: str
+class Sample(BaseModel):
+    flock_age: int
+    flock_age_unit: AgeUnits
     flagged: bool
     comments: str
-
-class SampleCreate(SampleBase):
-    pass
-
-class Sample(SampleBase):
-    id: int
+    id: Optional[int]
+    measurement_values: List[MeasurementValue]
     class Config:
         orm_mode = True
 
@@ -63,12 +120,12 @@ class Organization(BaseModel):
 class Flock(BaseModel):
     name: str
     strain: str
-    species: str
-    production_type: str
-    gender: str
+    species: Species
+    production_type: ProductionTypes
+    gender: BirdGenders
     id: Optional[int]
-    organization: int
-    source: int
+    organization_id: int
+    source_id: int
 
     class Config:
         orm_mode = True
