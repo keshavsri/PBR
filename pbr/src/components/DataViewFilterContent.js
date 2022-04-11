@@ -54,18 +54,10 @@ export default function DataViewFilterContent() {
 
   // General Section Data
 
-  const [generalFilterState, setGeneralFilterState] = React.useState({
-    flockID: "",
-    species: "",
-    strain: "",
-    gender: "",
-    ageRange: "",
-    validationStatus: "",
-    sampleType: "",
-    batch: "",
-    dataCollector: "",
-    organiztion: "",
-  });
+  const {
+    generalFilterState,
+    setGeneralFilterState
+  } = DataViewConsumer();
 
   const handleGeneralFilterChange = (prop) => (event) => {
     console.log("General Filter changed: ", prop, event.target.value);

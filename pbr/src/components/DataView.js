@@ -50,12 +50,10 @@ export default function DataView() {
     setOpenFilterModal(false);
   };
 
-  const handleOpenSampleAddModal = () => {
-    setOpenSampleAddModal(true);
-  };
-  const handleCloseSampleAddModal = () => {
-    setOpenSampleAddModal(false);
-  };
+  const {
+    generalFilterState,
+    setGeneralFilterState
+  } = DataViewConsumer();
 
   function createHeadCell(point, machineName, index) {
     return {
@@ -91,6 +89,20 @@ export default function DataView() {
       row.timestamp = new Date(row.timestamp).toLocaleString();
       row.age = new Date(row.age).toLocaleString();
     });
+  };
+
+  let applyFilter = async () => {
+//   fetch(`/api/sample/filter`, {      method: "POST",
+//      body: generalFilterState,})
+//     .then((response) => {
+//       return response.json();
+//     }).then((data) => {
+//       console.log(data);
+//       setRowList(data.row);
+//       setHeadCellList(data.types);
+//     })
+    console.log("Filtering!");
+    handleCloseFilterModal();
   };
 
   const getData = () => {
@@ -553,7 +565,7 @@ export default function DataView() {
               Cancel
             </Button>
             <Button
-              onClick={handleCloseFilterModal}
+              onClick={applyFilter}
               variant="contained"
               autoFocus
             >

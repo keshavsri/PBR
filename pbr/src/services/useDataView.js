@@ -23,6 +23,19 @@ export function useDataView() {
   });
   const [machineDetails, setMachineDetails] = React.useState([]);
 
+  const [generalFilterState, setGeneralFilterState] = React.useState({
+    flockID: "",
+    species: "",
+    strain: "",
+    gender: "",
+    ageRange: "",
+    validationStatus: "",
+    sampleType: "",
+    batch: "",
+    dataCollector: "",
+    organiztion: "",
+  });
+
   let openSampleModal = () => {
     setSampleModalVisibility(true);
   };
@@ -101,6 +114,8 @@ export function useDataView() {
     restartSample,
     timestamp,
     setTimestamp,
+    generalFilterState,
+    setGeneralFilterState
   };
 }
 
