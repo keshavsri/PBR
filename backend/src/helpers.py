@@ -12,7 +12,8 @@ from src.Models import Machine as MachineORM
 from src.Models import MachineType as MachineTypeORM
 from src.Models import Measurement as MeasurementORM
 from src.Models import MeasurementType as MeasurementTypeORM
-from src.Schemas import Flock, Organization, Source, Sample, Machine, Machinetype, Measurement, MeasurementType
+from src.Models import MeasurementValue as MeasurementValueORM
+from src.Schemas import Flock, Organization, Source, Sample, Machine, Machinetype, Measurement, MeasurementType, MeasurementValue
 
 def get_machines_by_org(org_id: int) -> List[dict]:
     machines = MachineORM.query.filter_by(organization_id=org_id).all()
@@ -174,3 +175,48 @@ def create_measurement(measurement_dict: dict):
     db.session.commit()
     db.session.refresh(measurement)
     return measurement
+
+def get_sample_by_id(id: int) -> dict:
+    sample = SampleORM.query.filter_by(id=id).first()
+    return Sample.from_orm(sample).dict()
+
+def get_sample_by_org(org_id: int) -> List[dict]:
+    samples = SampleORM.query.filter_by(organization_id=org_id).all()
+    ret = []
+    for sample in samples:
+        ret.append(Sample.from_orm(sample).dict())
+    return json.dumps(ret)
+
+def get_sample_by_user(user_id: int) -> List[dict]:
+    samples = SampleORM.query.filter_by(entered_by_id=user_id).all()
+    ret = []
+    for sample in samples:
+        ret.append(Sample.from_orm(sample).dict())
+    return json.dumps(ret)
+
+def get_samples() -> List[dict]:
+    samples = SampleORM.query.filter_by().all()
+    ret = []
+    for sample in samples:
+        ret.append(Sample.from_orm(sample).dict())
+    return json.dumps(ret)
+
+def create_measurement_value(measurement_value_dict: dict):
+    measurement_value:MeasurementValueORM = MeasurementValueORM()
+    for name, value in MeasurementValue.parse_obj(measurement_value_dict):
+        setattr(measurement_value, name, value)
+    db.session.add(measurement_value)
+    db.session.commit()
+    db.session.refresh(measurement_value)
+    return measurement_value
+
+def create_sample(sample_dict: dict):
+    sample:SampleORM = SampleORM()
+    for name, value in Sample.parse_obj(sample_dict):
+        if name != 'measurement_values':
+            setattr(sample, name, value)
+        else:
+            for measurement_value_dict in value:
+                new_mv = create_measurement_value(measurement_value_dict)
+                sample.measurement_values.append(new_mv)
+    return sample

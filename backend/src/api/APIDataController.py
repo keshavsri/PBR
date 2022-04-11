@@ -3,7 +3,7 @@ from http import HTTPStatus
 import re
 from src.enums import Roles, LogActions
 from src.api.APIUserController import token_required, allowed_roles
-from src import Models
+from src import Models, helpers
 
 sampleBlueprint = Blueprint('sample', __name__)
 batchBluePrint = Blueprint('batch', __name__)
@@ -200,12 +200,12 @@ def get_strains(species=None):
         resp.status_code = HTTPStatus.BAD_REQUEST
         return resp
 # Creates a new sample #
-@sampleBlueprint.route('/datapoint', methods=['POST'])
+@sampleBlueprint.route('/datapoint/', methods=['POST'])
 @token_required
 @allowed_roles([0,1,2,3])
 def create_sample(access_allowed, current_user):
     if access_allowed:
-        newSample = Models.Sample(request.json)
+        newSample = helpers.create_sample(request.json)
         newSample.entered_by_user_id = current_user.id
         Models.db.session.add(newSample)
         Models.db.session.commit()
@@ -220,22 +220,30 @@ def create_sample(access_allowed, current_user):
 @allowed_roles([0,1,2,3])
 def get_sample(access_allowed, current_user,item_id):
     if access_allowed:
-        responseJSON = jsonify(Models.Sample.query.get(item_id))
+        responseJSON = helpers.get_sample_by_id(item_id)
         if responseJSON.json is None:
             responseJSON = jsonify({'message': 'Sample cannot be found.'})
             return responseJSON, 404
         else:
-            return responseJSON, 200
+            if (responseJSON.get('entered_by_user_id') == current_user.id) or ((responseJSON.get('organization_id') == current_user.organization_id) and (current_user.role == 1 or current_user.role == 2)) or (current_user.role == 0):
+                return responseJSON, 200
+            else:
+                return jsonify({'message': 'You do not have permission to view this sample.'}), 403
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
 # Retrieves all samples #
-@sampleBlueprint.route('/datapoint', methods=['GET'])
+@sampleBlueprint.route('/datapoint/', methods=['GET'])
 @token_required
 @allowed_roles([0,1,2,3])
 def get_samples(access_allowed, current_user):
     if access_allowed:
-        responseJSON = jsonify(Models.Sample.query.all())
+        if current_user.role == 0:
+            responseJSON = helpers.get_all_samples()
+        elif current_user.role == 1 or current_user.role == 2:
+            responseJSON = helpers.get_all_samples_by_organization(current_user.organization_id)
+        else:
+            responseJSON = helpers.get_all_samples_by_user(current_user.id)
         if responseJSON.json is None:
             responseJSON = jsonify({'message': 'Samples cannot be returned.'})
             return responseJSON, 404

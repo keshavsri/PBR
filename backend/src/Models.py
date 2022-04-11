@@ -37,12 +37,12 @@ class Sample(db.Model):
     flagged: bool = db.Column(db.Boolean)
     validation_status: ValidationTypes = db.Column(db.Enum(ValidationTypes))
     sample_type: SampleTypes = db.Column(db.Enum(SampleTypes))
+    organization_id = db.Column(db.Integer, db.ForeignKey('Organization.id'))
+    source_id = db.Column(db.Integer, db.ForeignKey('Source.id'))
+    flock_id = db.Column(db.Integer, db.ForeignKey('Flock.id'))
 
     # Foreign References to this Object
-    measurementValue = db.relationship('MeasurementValue', backref='Sample')
-    organizationsource_flock_sample = db.Table('OrganizationSource-Flock-Sample', db.metadata, db.Column('id', db.Integer, primary_key=True), db.Column('Organization-Source_id', db.Integer, db.ForeignKey('Organization-Source.id')), db.Column('Flock_id', db.Integer, db.ForeignKey('Flock.id')), db.Column('Sample_id', db.Integer, db.ForeignKey('Sample.id')))
-    organizationsource_flock_sample_id: int = db.Column(db.Integer, db.ForeignKey('OrganizationSource-Flock-Sample.id'))
-
+    # measurement_values = db.relationship('MeasurementValue', backref='Sample')
 
 class Organization(db.Model):
     __tablename__ = 'Organization'
