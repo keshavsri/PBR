@@ -1,5 +1,7 @@
+from datetime import date
+
 from pydantic import BaseModel, constr
-from src.enums import States, Species, ProductionTypes, BirdGenders, AgeUnits
+from src.enums import States, Species, ProductionTypes, BirdGenders, AgeUnits, ValidationTypes, SampleTypes
 from typing import List, Optional
 
 
@@ -89,9 +91,13 @@ class Sample(BaseModel):
     flock_age: int
     flock_age_unit: AgeUnits
     flagged: bool
-    comments: str
+    comments: Optional[str]
     id: Optional[int]
     measurement_values: List[MeasurementValue]
+    timestamp_added: Optional[str]
+    validation_status: ValidationTypes
+    sample_type: SampleTypes
+    entered_by_id: Optional[int]
     class Config:
         orm_mode = True
 
@@ -126,7 +132,7 @@ class Flock(BaseModel):
     id: Optional[int]
     organization_id: int
     source_id: int
-
+    birthday: date
     class Config:
         orm_mode = True
 
