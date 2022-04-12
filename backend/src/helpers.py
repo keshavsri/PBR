@@ -77,6 +77,7 @@ def get_organization_by_id(id: int):
 
 def get_all_organizations() -> List[dict]:
     organizations = OrganizationORM.query.all()
+    print(organizations)
     ret = []
     for organization in organizations:
         ret.append(Organization.from_orm(organization).dict())
@@ -115,7 +116,8 @@ def get_flock_by_org(org_id: int) -> List[dict]:
     ret = []
     for flock in flocks:
         ret.append(Flock.from_orm(flock).dict())
-    return json.dumps(ret)
+    print(ret)
+    return json.dumps(ret, default=str)
 
 
 def get_all_flocks() -> List[dict]:
@@ -123,7 +125,7 @@ def get_all_flocks() -> List[dict]:
     ret = []
     for flock in flocks:
         ret.append(Flock.from_orm(flock).dict())
-    return json.dumps(ret)
+    return json.dumps(ret, default=str)
 
 
 def create_flock(flock_dict: dict):

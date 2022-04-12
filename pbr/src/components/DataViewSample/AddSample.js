@@ -105,6 +105,18 @@ const HtmlTooltip = styled(({ className, ...props }) => (
   },
 }));
 
+function yearDiff(dateFrom, dateTo) {
+  return dateTo.getYear() - dateFrom.getYear();
+}
+
+function monthDiff(dateFrom, dateTo) {
+  return (
+    dateTo.getMonth() -
+    dateFrom.getMonth() +
+    12 * (dateTo.getFullYear() - dateFrom.getFullYear())
+  );
+}
+
 export default function DataViewAddSample() {
   const classes = useStyles();
   useTheme();
@@ -137,7 +149,8 @@ export default function DataViewAddSample() {
   const [sources, setSources] = React.useState([]);
 
   const getFlocks = async () => {
-    await fetch(`/api/flock/`, {
+    console.log(`/api/flock/${generalDetails.organizationID}`);
+    await fetch(`/api/flock/${generalDetails.organizationID}`, {
       method: "GET",
     })
       .then(checkResponseAuth)
@@ -145,7 +158,7 @@ export default function DataViewAddSample() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        console.log("NEW FLOCKS:", data);
         setFlocks(data);
       });
   };
@@ -165,76 +178,26 @@ export default function DataViewAddSample() {
       });
   };
 
-  const getSources = async (organization_id) => {
-    // console.log("Getting sources for " + organization.name);
-    // await fetch(`/api/source`, {
-    //   method: "GET",
-    // })
-    //   .then(checkResponseAuth)
-    //   .then((response)=> {
-    //     return response.json()
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //     setSources(data);
-    //   });
-    let mockSources = [
-      {
-        id: "1",
-        name: "Source A",
-        street_address: "123 Main Street",
-        city: "Raleigh",
-        state: "NC",
-        zip: "27606",
-      },
-      {
-        id: "2",
-        name: "Source B",
-        street_address: "456 Main Street",
-        city: "Raleigh",
-        state: "NC",
-        zip: "27606",
-      },
-    ];
-    setSources(mockSources);
+  const getSources = async () => {
+    let org = organizations.find(
+      (org) => org.id == generalDetails.organizationID
+    );
+    setSources(org.sources);
+    console.log("NEW SOURCES:", org.sources);
   };
 
   const getOrganizations = async () => {
-    // await fetch(`/api/organization`, {
-    //   method: "GET",
-    // })
-    //   .then(handleAPIResponse)
-    //   .then((response)=> {
-    //     return response.json()
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //     setSources(data);
-    //   });
-    let mockOrganizations = [
-      {
-        id: "1",
-        name: "Organization A",
-        street_address: "123 Main Street",
-        city: "Raleigh",
-        state: "NC",
-        zip: "27606",
-        default: "true",
-      },
-      {
-        id: "2",
-        name: "Organization B",
-        street_address: "456 Main Street",
-        city: "Raleigh",
-        state: "NC",
-        zip: "27606",
-      },
-    ];
-    setOrganizations(mockOrganizations);
+    const response = await fetch(`/api/organization/`, {
+      method: "GET",
+    }).then(checkResponseAuth);
+    const data = await response.json();
+    console.log(data);
+    setOrganizations(data);
     setGeneralDetails({
       ...generalDetails,
       organizationID: user.organization_id,
     });
+    console.log("Set Org in Gen Details:", generalDetails.organizationID);
   };
 
   const handleGeneralDetailsChange = (prop) => (event) => {
@@ -246,12 +209,21 @@ export default function DataViewAddSample() {
       });
       getStrains(event.target.value);
     } else if (prop === "organizationID") {
+      console.log("Changing Organization");
       setGeneralDetails({
         ...generalDetails,
         organizationID: event.target.value,
-        flockName: null,
+        flockName: "",
+        species: "",
+        strain: "",
+        gender: "",
+        sourceID: "",
+        productionType: "",
+        ageUnit: "",
+        ageNumber: "",
       });
-      getSources(event.target.value);
+      getFlocks();
+      getSources();
     } else {
       setGeneralDetails({
         ...generalDetails,
@@ -262,7 +234,7 @@ export default function DataViewAddSample() {
   };
 
   const handleFlockChange = (fl) => {
-    console.log("FLOCK NAME CHANGED.");
+    console.log("FLOCK NAME CHANGED:", fl);
     if (fl == null) {
       return;
     }
@@ -270,7 +242,7 @@ export default function DataViewAddSample() {
       console.log("NEW FLOCK");
       setGeneralDetails({
         ...generalDetails,
-        flockName: fl.name,
+        flockName: fl.inputValue,
         species: "",
         strain: "",
         gender: "",
@@ -282,6 +254,23 @@ export default function DataViewAddSample() {
     } else {
       let matchedFlock = flocks.find((flock) => flock.name === fl.name);
       console.log("FOUND FLOCK:", matchedFlock);
+      let currentDateTime = new Date();
+      let flockBirthday = new Date(matchedFlock.birthday);
+      let flockAgeDays = parseInt(
+        (currentDateTime - flockBirthday) / (24 * 60 * 60 * 1000)
+      );
+
+      let flockAge = flockAgeDays;
+      let flockAgeUnit = ageUnits.DAYS;
+
+      if (flockAge >= 365) {
+        flockAgeUnit = ageUnits.YEARS;
+        flockAge = yearDiff(flockBirthday, currentDateTime);
+      }
+      console.log("Flock's birthday:", flockBirthday);
+      console.log("Current Datetime:", currentDateTime);
+      console.log(`Age: ${flockAge} ${flockAgeUnit}`);
+      getStrains(matchedFlock.species);
       setGeneralDetails({
         ...generalDetails,
         flockName: matchedFlock.name,
@@ -290,6 +279,8 @@ export default function DataViewAddSample() {
         gender: matchedFlock.gender,
         sourceID: matchedFlock.source_id,
         productionType: matchedFlock.production_type,
+        ageNumber: flockAge,
+        ageUnit: flockAgeUnit,
       });
     }
     console.log(generalDetails);
@@ -660,10 +651,15 @@ export default function DataViewAddSample() {
   // Always run
   React.useEffect(() => {
     getOrganizations();
-    getMachineList();
-    getFlocks();
-    getSources();
   }, []);
+
+  React.useEffect(() => {
+    if (generalDetails.organizationID) {
+      getFlocks();
+      getSources();
+      getMachineList();
+    }
+  }, [generalDetails.organizationID]);
 
   React.useEffect(() => {
     parseMachineDetails();
@@ -765,6 +761,22 @@ export default function DataViewAddSample() {
                 console.log("NEW NAME:", newFlock);
                 handleFlockChange(newFlock);
               }}
+              onInputChange={(event, newInputValue, reason) => {
+                if (reason === "reset") {
+                  setGeneralDetails({
+                    ...generalDetails,
+                    flockName: "",
+                    species: "",
+                    strain: "",
+                    gender: "",
+                    sourceID: "",
+                    productionType: "",
+                    ageUnit: "",
+                    ageNumber: "",
+                  });
+                  return;
+                }
+              }}
               filterOptions={(options, params) => {
                 const filtered = filter(options, params);
 
@@ -787,7 +799,6 @@ export default function DataViewAddSample() {
               handleHomeEndKeys
               options={flocks}
               getOptionLabel={(option) => {
-                console.log(option);
                 // Value selected with enter, right from the input
                 if (typeof option === "string") {
                   return option;
@@ -989,10 +1000,6 @@ export default function DataViewAddSample() {
                                   )}
                                   value={data.value}
                                   onChange={(newValue) => {
-                                    console.log(
-                                      "DATETIME CHANGED TO: " + newValue
-                                    );
-
                                     handleMachineTimestampChange(
                                       machine.id,
                                       data.metadata.id,

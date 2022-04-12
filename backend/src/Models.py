@@ -71,7 +71,7 @@ class Source(db.Model):
     name: str = db.Column(db.String(120), unique=True)
     street_address: str = db.Column(db.String(120))
     city: str = db.Column(db.String(120))
-    state: States = db.Column(db.String(20))
+    state: States = db.Column(db.Enum(States))
     zip: int = db.Column(db.Integer)
     organizations: List[Organization] = None 
 

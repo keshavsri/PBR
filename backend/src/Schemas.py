@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 from pydantic import BaseModel, constr
 from src.enums import States, Species, ProductionTypes, BirdGenders, AgeUnits, ValidationTypes, SampleTypes
@@ -132,7 +132,7 @@ class Flock(BaseModel):
     id: Optional[int]
     organization_id: int
     source_id: int
-    birthday: date
+    birthday: datetime
     class Config:
         orm_mode = True
 

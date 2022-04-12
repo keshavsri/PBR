@@ -12,7 +12,7 @@ export function useDataView() {
 
   const [generalDetails, setGeneralDetails] = React.useState({
     organizationID: "",
-    flockName: null,
+    flockName: "",
     species: "",
     strain: "",
     gender: "",
@@ -31,6 +31,19 @@ export function useDataView() {
 
   let closeSampleModal = () => {
     setSampleModalScreen(0);
+    setGeneralDetails({
+      organizationID: "",
+      flockName: "",
+      species: "",
+      strain: "",
+      gender: "",
+      sourceID: "",
+      productionType: "",
+      ageNumber: "",
+      ageUnit: "",
+      flagged: false,
+      comments: "",
+    });
     setSamplePayload({});
     setSampleModalVisibility(false);
   };

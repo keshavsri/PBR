@@ -10,18 +10,18 @@ organizationBlueprint = Blueprint('organization', __name__)
 
 @organizationBlueprint.route('/', methods=['GET'])
 @token_required
-@allowed_roles([0])
+@allowed_roles([0, 1, 2, 3])
 def get_organizations(access_allowed, current_user):
     if access_allowed:
-        responseJSON = src.helpers.get_all_organizations()
-        # if the response json is empty then return a 404 not found
-        if responseJSON is None:
-            responseJSON = jsonify({'message': 'No records found'})
-            return responseJSON, 404
+        if current_user.role == Roles.Super_Admin:
+            responseJSON = src.helpers.get_all_organizations()
         else:
-            return responseJSON, 200
+            current_org_id = current_user.organization_id
+            responseJSON = src.helpers.get_organization_by_id(current_org_id)
+        return responseJSON, 200
     else:
-        return jsonify({'message': 'Role not allowed'}), 403
+        return jsonify({'message': 'Role not allowed' + str(access_allowed)}), 403
+
 
 
 @organizationBlueprint.route('/<int:item_id>', methods=['GET'])
