@@ -34,6 +34,7 @@ export default function DataViewSampleModal() {
     machineDetails,
     setSamplePayload,
     samplePayload,
+    setSampleValidationErrors,
   } = DataViewConsumer();
 
   let onSubmit = async () => {
@@ -44,20 +45,84 @@ export default function DataViewSampleModal() {
     samplePrevAction();
     setError({});
   };
+
+  let validatePayload = (payload) => {
+    let errors = {};
+    if (payload.generalDetails.organizationID === "") {
+      errors.organizationID = "Organization field is required.";
+    }
+    if (payload.generalDetails.flockName === "") {
+      errors.flockName = "Flock Name field is required.";
+    }
+    if (payload.generalDetails.species === "") {
+      errors.species = "Species field is required.";
+    }
+    if (payload.generalDetails.strain === "") {
+      errors.strain = "Strain field is required.";
+    }
+    if (payload.generalDetails.gender === "") {
+      errors.gender = "Gender field is required.";
+    }
+    if (payload.generalDetails.sourceID === "") {
+      errors.sourceID = "Source field is required.";
+    }
+    if (payload.generalDetails.productionType === "") {
+      errors.productionType = "Production Type field is required.";
+    }
+    if (payload.generalDetails.ageNumber === "") {
+      errors.ageNumber = "Age field is required.";
+    }
+    if (payload.generalDetails.ageUnit === "") {
+      errors.ageUnit = "Age Unit field is required.";
+    }
+    return errors;
+  };
+
   let stageSample = () => {
+    console.log("STAGING SAMPLE");
     let payload = {
       timestamp: timestamp,
       generalDetails: generalDetails,
       machineDetails: machineDetails,
     };
-    setSamplePayload(payload);
-    console.log(samplePayload);
+
+    // Validate Sample before Staging
+    let errors = validatePayload(payload);
+
+    if (Object.keys(errors).length === 0) {
+      console.log("No Errors with Payload");
+      setSamplePayload(payload);
+      console.log("STAGED:", payload);
+      sampleNextAction();
+    } else {
+      setSampleValidationErrors(errors);
+      console.log("Errors found: ", errors);
+      console.log("Cannot stage payload", payload);
+    }
   };
 
   // Define the footer for the modal. By default, there's no footer.
   let footer = null;
 
-  if (sampleModalScreen === 0) {
+  if (Object.keys(error).length !== 0) {
+    // Error Footer
+    footer = (
+      <Stack
+        direction="row"
+        spacing={2}
+        sx={{ justifyContent: "center", width: "100%" }}
+      >
+        <Button
+          variant="contained"
+          color="secondaryLight"
+          onClick={dismissError}
+          startIcon={<PrevIcon />}
+        >
+          Try Again
+        </Button>
+      </Stack>
+    );
+  } else if (sampleModalScreen === 0) {
     // Add Sample Screen
     footer = (
       <>
@@ -71,7 +136,6 @@ export default function DataViewSampleModal() {
         <Button
           onClick={() => {
             stageSample();
-            sampleNextAction();
           }}
           variant="contained"
           autoFocus
@@ -132,24 +196,6 @@ export default function DataViewSampleModal() {
         </Button>
       </Stack>
     );
-  } else if (Object.keys(error).length != 0) {
-    // Error Footer
-    footer = (
-      <Stack
-        direction="row"
-        spacing={2}
-        sx={{ justifyContent: "center", width: "100%" }}
-      >
-        <Button
-          variant="contained"
-          color="secondaryLight"
-          onClick={dismissError}
-          startIcon={<PrevIcon />}
-        >
-          Try Again
-        </Button>
-      </Stack>
-    );
   }
 
   return (
@@ -162,14 +208,23 @@ export default function DataViewSampleModal() {
         handleClose={closeSampleModal}
         footer={footer}
       >
-        {/* Add Sample Screen */}
-        {sampleModalScreen === 0 && <AddSample />}
-        {/* Your Sample Screen */}
-        {sampleModalScreen === 1 && <YourSample />}
-        {/* Success Screen */}
-        {sampleModalScreen === 2 && <Success />}
-        {/* Error Screen */}
-        {Object.keys(error).length != 0 && <Error />}
+        {Object.keys(error).length === 0 ? (
+          <>
+            {/* Add Sample Screen */}
+            {sampleModalScreen === 0 && <AddSample />}
+
+            {/* Your Sample Screen */}
+            {sampleModalScreen === 1 && <YourSample />}
+
+            {/* Success Screen */}
+            {sampleModalScreen === 2 && <Success />}
+          </>
+        ) : (
+          <>
+            {/* Error Screen */}
+            {Object.keys(error).length !== 0 && <Error />}
+          </>
+        )}
       </CustomDialog>
     </>
   );

@@ -7,8 +7,12 @@ export function useDataView() {
   const [sampleModalVisibility, setSampleModalVisibility] =
     React.useState(false);
   const [sampleModalScreen, setSampleModalScreen] = React.useState(0);
+  const [sampleValidationErrors, setSampleValidationErrors] = React.useState(
+    {}
+  );
   const [error, setError] = React.useState({});
   const [timestamp, setTimestamp] = React.useState(Date.now());
+  React.useState(false);
 
   const [generalDetails, setGeneralDetails] = React.useState({
     organizationID: "",
@@ -45,6 +49,7 @@ export function useDataView() {
       comments: "",
     });
     setSamplePayload({});
+    setSampleValidationErrors({});
     setSampleModalVisibility(false);
   };
 
@@ -93,6 +98,8 @@ export function useDataView() {
     restartSample,
     timestamp,
     setTimestamp,
+    sampleValidationErrors,
+    setSampleValidationErrors,
   };
 }
 

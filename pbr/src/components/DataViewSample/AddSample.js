@@ -21,6 +21,7 @@ import {
   InputAdornment,
   Button,
   Checkbox,
+  FormHelperText,
   MenuItem,
   IconButton,
 } from "@mui/material";
@@ -51,6 +52,9 @@ const Input = styled("input")({
 
 const useStyles = makeStyles({
   root: {
+    "& .Mui-disabled": {
+      backgroundColor: "#efefef",
+    },
     "& .MuiTextField-root": {
       width: "100%",
     },
@@ -70,6 +74,9 @@ const useStyles = makeStyles({
       "& .MuiInputAdornment-root .MuiTypography-root": {
         color: "grey !IMPORTANT",
       },
+    },
+    "& .MuiFormHelperText-root": {
+      marginLeft: "0px",
     },
   },
   autoFilled: {
@@ -127,6 +134,7 @@ export default function DataViewAddSample() {
     setGeneralDetails,
     timestamp,
     setTimestamp,
+    sampleValidationErrors,
   } = DataViewConsumer();
   const { checkResponseAuth, user } = AuthConsumer();
 
@@ -149,7 +157,7 @@ export default function DataViewAddSample() {
   const [sources, setSources] = React.useState([]);
 
   const getFlocks = async () => {
-    console.log(`/api/flock/${generalDetails.organizationID}`);
+    console.log(`Getting Flocks: /api/flock/${generalDetails.organizationID}`);
     await fetch(`/api/flock/${generalDetails.organizationID}`, {
       method: "GET",
     })
@@ -164,6 +172,7 @@ export default function DataViewAddSample() {
   };
 
   const getStrains = async (species) => {
+    console.log("Getting Strains");
     await fetch(`/api/flock/strains/${species}`, {
       method: "GET",
     })
@@ -179,6 +188,7 @@ export default function DataViewAddSample() {
   };
 
   const getSources = async () => {
+    console.log("Getting Sources for ", generalDetails.organizationID);
     let org = organizations.find(
       (org) => org.id == generalDetails.organizationID
     );
@@ -187,6 +197,7 @@ export default function DataViewAddSample() {
   };
 
   const getOrganizations = async () => {
+    console.log("Getting Organizations");
     const response = await fetch(`/api/organization/`, {
       method: "GET",
     }).then(checkResponseAuth);
@@ -449,6 +460,7 @@ export default function DataViewAddSample() {
     }
 
     setMachineDetails(newMachineDetails);
+    console.log(machineDetails);
   };
 
   let parseFilesAndAddData = async (files, machine) => {
@@ -654,6 +666,7 @@ export default function DataViewAddSample() {
   }, []);
 
   React.useEffect(() => {
+    console.log("Org Changed. Fire Flocks and Sources");
     if (generalDetails.organizationID) {
       getFlocks();
       getSources();
@@ -718,7 +731,16 @@ export default function DataViewAddSample() {
       <Box>
         <Grid container spacing={2} sx={{ mb: -2 }}>
           <Grid item xs={12} sm={6}>
-            <FormControl sx={{ width: "100%", mb: 2 }}>
+            <FormControl
+              sx={{ width: "100%", mb: 2 }}
+              required
+              error={
+                sampleValidationErrors["organizationID"] &&
+                generalDetails.organizationID === ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Organization</InputLabel>
               <Select
                 value={generalDetails.organizationID}
@@ -734,6 +756,12 @@ export default function DataViewAddSample() {
                   );
                 })}
               </Select>
+              {sampleValidationErrors["organizationID"] &&
+                generalDetails.organizationID === "" && (
+                  <FormHelperText>
+                    {sampleValidationErrors["organizationID"]}
+                  </FormHelperText>
+                )}
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -755,71 +783,106 @@ export default function DataViewAddSample() {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <Autocomplete
-              value={generalDetails.flockName}
-              onChange={(event, newFlock) => {
-                console.log("NEW NAME:", newFlock);
-                handleFlockChange(newFlock);
-              }}
-              onInputChange={(event, newInputValue, reason) => {
-                if (reason === "reset") {
-                  setGeneralDetails({
-                    ...generalDetails,
-                    flockName: "",
-                    species: "",
-                    strain: "",
-                    gender: "",
-                    sourceID: "",
-                    productionType: "",
-                    ageUnit: "",
-                    ageNumber: "",
-                  });
-                  return;
-                }
-              }}
-              filterOptions={(options, params) => {
-                const filtered = filter(options, params);
-
-                const { inputValue } = params;
-                // Suggest the creation of a new value
-                const isExisting = options.some(
-                  (option) => inputValue === option.name
-                );
-                if (inputValue !== "" && !isExisting) {
-                  filtered.push({
-                    inputValue,
-                    name: `Add "${inputValue}"`,
-                  });
-                }
-
-                return filtered;
-              }}
-              selectOnFocus
-              clearOnBlur
-              handleHomeEndKeys
-              options={flocks}
-              getOptionLabel={(option) => {
-                // Value selected with enter, right from the input
-                if (typeof option === "string") {
-                  return option;
-                }
-                // Add "xxx" option created dynamically
-                if (option.inputValue) {
-                  return option.inputValue;
-                }
-                // Regular option
-                return option.name;
-              }}
-              renderOption={(props, option) => (
-                <li {...props}>{option.name}</li>
-              )}
+            <FormControl
+              required
               sx={{ width: "100%", mb: 2 }}
-              freeSolo
-              renderInput={(params) => (
-                <TextField {...params} label="Flock Name" />
-              )}
-            />
-            <FormControl sx={{ width: "100%", mb: 2 }}>
+              error={
+                sampleValidationErrors["flockName"] &&
+                generalDetails.flockName === ""
+                  ? true
+                  : false
+              }
+            >
+              <Autocomplete
+                value={generalDetails.flockName}
+                onChange={(event, newFlock) => {
+                  console.log("NEW NAME:", newFlock);
+                  handleFlockChange(newFlock);
+                }}
+                onInputChange={(event, newInputValue, reason) => {
+                  if (reason === "reset") {
+                    setGeneralDetails({
+                      ...generalDetails,
+                      flockName: "",
+                      species: "",
+                      strain: "",
+                      gender: "",
+                      sourceID: "",
+                      productionType: "",
+                      ageUnit: "",
+                      ageNumber: "",
+                    });
+                    return;
+                  }
+                }}
+                filterOptions={(options, params) => {
+                  const filtered = filter(options, params);
+
+                  const { inputValue } = params;
+                  // Suggest the creation of a new value
+                  const isExisting = options.some(
+                    (option) => inputValue === option.name
+                  );
+                  if (inputValue !== "" && !isExisting) {
+                    filtered.push({
+                      inputValue,
+                      name: `Add "${inputValue}"`,
+                    });
+                  }
+
+                  return filtered;
+                }}
+                selectOnFocus
+                clearOnBlur
+                handleHomeEndKeys
+                options={flocks}
+                getOptionLabel={(option) => {
+                  // Value selected with enter, right from the input
+                  if (typeof option === "string") {
+                    return option;
+                  }
+                  // Add "xxx" option created dynamically
+                  if (option.inputValue) {
+                    return option.inputValue;
+                  }
+                  // Regular option
+                  return option.name;
+                }}
+                renderOption={(props, option) => (
+                  <li {...props}>{option.name}</li>
+                )}
+                sx={{ width: "100%" }}
+                freeSolo
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    error={
+                      sampleValidationErrors["flockName"] &&
+                      generalDetails.flockName === ""
+                        ? true
+                        : false
+                    }
+                    label="Flock Name *"
+                  />
+                )}
+              />
+              {sampleValidationErrors["flockName"] &&
+                generalDetails.flockName === "" && (
+                  <FormHelperText>
+                    {sampleValidationErrors["flockName"]}
+                  </FormHelperText>
+                )}
+            </FormControl>
+            <FormControl
+              required
+              sx={{ width: "100%", mb: 2 }}
+              error={
+                sampleValidationErrors["species"] &&
+                generalDetails.species === ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Species</InputLabel>
               <Select
                 value={generalDetails.species}
@@ -834,8 +897,22 @@ export default function DataViewAddSample() {
                   );
                 })}
               </Select>
+              {sampleValidationErrors["species"] &&
+                generalDetails.species === "" && (
+                  <FormHelperText>
+                    {sampleValidationErrors["species"]}
+                  </FormHelperText>
+                )}
             </FormControl>
-            <FormControl sx={{ width: "100%", mb: 2 }}>
+            <FormControl
+              required
+              sx={{ width: "100%", mb: 2 }}
+              error={
+                sampleValidationErrors["strain"] && generalDetails.strain === ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Strain</InputLabel>
               <Select
                 value={generalDetails.strain}
@@ -851,9 +928,23 @@ export default function DataViewAddSample() {
                   );
                 })}
               </Select>
+              {sampleValidationErrors["strain"] &&
+                generalDetails.strain === "" && (
+                  <FormHelperText>
+                    {sampleValidationErrors["strain"]}
+                  </FormHelperText>
+                )}
             </FormControl>
 
-            <FormControl sx={{ width: "100%" }}>
+            <FormControl
+              required
+              sx={{ width: "100%" }}
+              error={
+                sampleValidationErrors["gender"] && generalDetails.gender === ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Gender</InputLabel>
               <Select
                 value={generalDetails.gender}
@@ -868,10 +959,25 @@ export default function DataViewAddSample() {
                   );
                 })}
               </Select>
+              {sampleValidationErrors["gender"] &&
+                generalDetails.gender === "" && (
+                  <FormHelperText>
+                    {sampleValidationErrors["gender"]}
+                  </FormHelperText>
+                )}
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormControl sx={{ width: "100%", mb: 2 }}>
+            <FormControl
+              required
+              sx={{ width: "100%", mb: 2 }}
+              error={
+                sampleValidationErrors["sourceID"] &&
+                generalDetails.sourceID === ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Source</InputLabel>
               <Select
                 value={generalDetails.sourceID}
@@ -887,8 +993,23 @@ export default function DataViewAddSample() {
                   );
                 })}
               </Select>
+              {sampleValidationErrors["sourceID"] &&
+                generalDetails.sourceID === "" && (
+                  <FormHelperText>
+                    {sampleValidationErrors["sourceID"]}
+                  </FormHelperText>
+                )}
             </FormControl>
-            <FormControl sx={{ width: "100%", mb: 2 }}>
+            <FormControl
+              required
+              sx={{ width: "100%", mb: 2 }}
+              error={
+                sampleValidationErrors["productionType"] &&
+                generalDetails.productionType === ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Production Type</InputLabel>
               <Select
                 value={generalDetails.productionType}
@@ -904,22 +1025,60 @@ export default function DataViewAddSample() {
                   );
                 })}
               </Select>
+              {sampleValidationErrors["productionType"] &&
+                generalDetails.productionType === "" && (
+                  <FormHelperText>
+                    {sampleValidationErrors["productionType"]}
+                  </FormHelperText>
+                )}
             </FormControl>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <TextField
-                  label="Age"
-                  value={generalDetails.ageNumber}
-                  type="number"
-                  onChange={handleGeneralDetailsChange("ageNumber")}
-                />
+                <FormControl
+                  required
+                  sx={{ width: "100%" }}
+                  error={
+                    sampleValidationErrors["ageNumber"] &&
+                    generalDetails.ageNumber === ""
+                      ? true
+                      : false
+                  }
+                >
+                  <TextField
+                    error={
+                      sampleValidationErrors["ageNumber"] &&
+                      generalDetails.ageNumber === ""
+                        ? true
+                        : false
+                    }
+                    label="Age *"
+                    value={generalDetails.ageNumber}
+                    type="number"
+                    onChange={handleGeneralDetailsChange("ageNumber")}
+                  />
+                  {sampleValidationErrors["ageNumber"] &&
+                    generalDetails.ageNumber === "" && (
+                      <FormHelperText>
+                        {sampleValidationErrors["ageNumber"]}
+                      </FormHelperText>
+                    )}
+                </FormControl>
               </Grid>
               <Grid item xs={6}>
-                <FormControl sx={{ width: "100%" }}>
+                <FormControl
+                  sx={{ width: "100%" }}
+                  required
+                  error={
+                    sampleValidationErrors["ageUnit"] &&
+                    generalDetails.ageUnit === ""
+                      ? true
+                      : false
+                  }
+                >
                   <InputLabel>D/W/M/Y</InputLabel>
                   <Select
                     value={generalDetails.ageUnit}
-                    label="D/W/M/Y"
+                    label="D/W/M/Y *"
                     onChange={handleGeneralDetailsChange("ageUnit")}
                   >
                     {Object.values(ageUnits).map((unit, index) => {
@@ -930,6 +1089,12 @@ export default function DataViewAddSample() {
                       );
                     })}
                   </Select>
+                  {sampleValidationErrors["ageUnit"] &&
+                    generalDetails.ageUnit === "" && (
+                      <FormHelperText>
+                        {sampleValidationErrors["ageUnit"]}
+                      </FormHelperText>
+                    )}
                 </FormControl>
               </Grid>
             </Grid>

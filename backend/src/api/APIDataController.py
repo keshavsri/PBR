@@ -164,35 +164,55 @@ def create_sample(access_allowed, current_user):
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
-# Retrives specified sample #
-@sampleBlueprint.route('/datapoint/<int:item_id>', methods=['GET'])
+# # Retrives specified sample #
+# @sampleBlueprint.route('/datapoint/<int:item_id>', methods=['GET'])
+# @token_required
+# @allowed_roles([0,1,2,3])
+# def get_sample(access_allowed, current_user,item_id):
+#     if access_allowed:
+#         responseJSON = jsonify(Models.Sample.query.get(item_id))
+#         if responseJSON.json is None:
+#             responseJSON = jsonify({'message': 'Sample cannot be found.'})
+#             return responseJSON, 404
+#         else:
+#             return responseJSON, 200
+#     else:
+#         return jsonify({'message': 'Role not allowed'}), 403
+
+# Retrieves all samples for a given organization#
+@sampleBlueprint.route('/', methods=['GET'])
+@sampleBlueprint.route('/<int:given_org_id>', methods=['GET'])
 @token_required
 @allowed_roles([0,1,2,3])
-def get_sample(access_allowed, current_user,item_id):
+def get_samples(access_allowed, current_user, given_org_id=None):
     if access_allowed:
-        responseJSON = jsonify(Models.Sample.query.get(item_id))
-        if responseJSON.json is None:
-            responseJSON = jsonify({'message': 'Sample cannot be found.'})
+        # response json is created here and gets returned at the end of the block for GET requests.
+        responseJSON = None
+        current_Organization = current_user.organization_id
+
+        if given_org_id:
+            if current_user.role == Roles.Super_Admin:
+                responseJSON = src.helpers.get_flock_by_org(given_org_id)
+            elif current_user.organization_id == given_org_id:
+                responseJSON = src.helpers.get_flock_by_org(given_org_id)
+            else:
+                responseJSON = jsonify({'message': 'Insufficient Permissions'})
+                return responseJSON, 401
+        else:
+            if current_user.role == Roles.Super_Admin:
+                responseJSON = jsonify(Models.Sample.query.all())
+            else:
+                responseJSON = src.helpers.get_flock_by_org(current_Organization)
+
+        # if the response json is empty then return a 404 not found
+        if responseJSON is None:
+            responseJSON = jsonify({'message': 'No records found'})
             return responseJSON, 404
         else:
             return responseJSON, 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
-# Retrieves all samples #
-@sampleBlueprint.route('/datapoint', methods=['GET'])
-@token_required
-@allowed_roles([0,1,2,3])
-def get_samples(access_allowed, current_user):
-    if access_allowed:
-        responseJSON = jsonify(Models.Sample.query.all())
-        if responseJSON.json is None:
-            responseJSON = jsonify({'message': 'Samples cannot be returned.'})
-            return responseJSON, 404
-        else:
-            return responseJSON, 200
-    else:
-        return jsonify({'message': 'Role not allowed'}), 403
 
 # Deletes specified sample #
 @sampleBlueprint.route('/datapoint/<int:item_id>', methods=['DELETE'])
