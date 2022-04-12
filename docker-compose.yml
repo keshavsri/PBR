@@ -18,24 +18,37 @@ services:
     build: ./backend
     container_name: backend
     restart: unless-stopped
-    volumes:
-      - ./backend/src:/backend/src
+    env_file:
+      - .env
+    environment:
+      - BACKEND_PORT=3005
+      - SERVER_NAME=0.0.0.0
+      # - DATABASE_URL=sqlite:///pbrDatabase.sqlite3
+      - DATABASE_URL=mysql+pymysql://root:${MYSQL_ROOT_PASSWORD}@db/pbr
+      - JWT_SIGN_ALGORITHM=HS256
+      - JWT_TTL=60
+    depends_on:
+      - db
 
   app:
     build: ./pbr
     container_name: pbr
     restart: unless-stopped
-    volumes:
-      - ./pbr/src:/pbr/src
-      - ./pbr/public:/pbr/public
+    environment:
+      - HOST=0.0.0.0
 
   db:
     image: mysql
     container_name: db
-    ports:
-      - "3306:3306" #Expose the port so that you can connect to it directly, like from HeidiSQL
+    env_file:
+      - .env
     volumes:
-      - ./dbdata:/var/lib/mysql
+      - dbdata:/var/lib/mysql
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=choose_a_password # I suggest you set this via a .env file
+      - MYSQL_DATABASE=pbr
+      # - MYSQL_ROOT_PASSWORD=choose_a_password # I suggest you set this via a .env file
+    command: mysqld --default-authentication-plugin=mysql_native_password
+
+volumes:
+  dbdata: 
