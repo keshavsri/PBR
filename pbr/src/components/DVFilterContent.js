@@ -26,6 +26,8 @@ import {
   productionTypes,
 } from "../models/enums";
 
+import DataViewConsumer from "../services/useDataView";
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {

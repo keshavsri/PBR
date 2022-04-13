@@ -2,8 +2,8 @@ import * as React from "react";
 
 import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
 
-import DataViewFilterContent from "./DataViewFilterContent";
 import DataViewSampleModal from "./DataViewSample/SampleModal";
+import DVFilterModal from "./DVFilterModal";
 import DataViewAddSample from "./DataViewSample/AddSample";
 import DVTableToolbar from "./DVTableToolbar";
 
@@ -17,7 +17,6 @@ import FactCheckIcon from "@mui/icons-material/FactCheck";
 import CustomDialog from "./CustomDialog";
 import { makeStyles } from "@mui/styles";
 import { DataViewProvider } from "../services/useDataView";
-import DataViewConsumer from "../services/useDataView";
 import AuthConsumer from "../services/useAuth";
 
 const useStyles = makeStyles({});
@@ -52,11 +51,9 @@ export default function DataView() {
     setOpenFilterModal(false);
   };
 
-  const {
-    generalFilterState,
-    setGeneralFilterState
-  } = DataViewConsumer();
   const { checkResponseAuth } = AuthConsumer();
+  
+  
 
   function createHeadCell(point, machineName, index) {
     return {
@@ -94,19 +91,7 @@ export default function DataView() {
     });
   };
 
-  let applyFilter = async () => {
-  fetch(`/api/sample/filter`, {      method: "POST",
-     body: generalFilterState,})
-    .then((response) => {
-      return response.json();
-    }).then((data) => {
-      console.log(data);
-      setRowList(data.row);
-      setHeadCellList(data.types);
-    })
-    console.log("Filtering!");
-    handleCloseFilterModal();
-  };
+
 
   const getData = async () => {
     // let apiRows = [
@@ -569,33 +554,7 @@ export default function DataView() {
           onDelete = {onDelete}
         ></EnhancedTable>
       </Paper>
-      <CustomDialog
-        open={openFilterModal}
-        icon={<FilterListIcon />}
-        title="Data View"
-        subtitle="Filter Settings"
-        handleClose={handleCloseFilterModal}
-        footer={
-          <>
-            <Button
-              variant="contained"
-              color="secondaryLight"
-              onClick={handleCloseFilterModal}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={applyFilter}
-              variant="contained"
-              autoFocus
-            >
-              Apply
-            </Button>
-          </>
-        }
-      >
-        <DataViewFilterContent />
-      </CustomDialog>
+      {/* <DVFilterModal/> */}
       <DataViewSampleModal />
     </DataViewProvider>
   );

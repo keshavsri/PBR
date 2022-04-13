@@ -11,9 +11,34 @@ import SampleIcon from "@mui/icons-material/Science";
 
 const useStyles = makeStyles({});
 
-export default function DVTableToolbar({ handleOpenFilterModal }) {
+export default function DVTableToolbar() {
+  const {
+    samplePayload,
+    setSamplePayload,
+    generalDetails,
+    setGeneralDetails,
+    machineDetails,
+    setMachineDetails,
+    sampleModalVisibility,
+    sampleModalScreen,
+    setSampleModalScreen,
+    openSampleModal,
+    closeSampleModal,
+    samplePrevAction,
+    sampleNextAction,
+    error,
+    setError,
+    restartSample,
+    timestamp,
+    setTimestamp,
+    generalFilterState,
+    setGeneralFilterState,
+    openFilterModal, 
+    setOpenFilterModal,
+    handleOpenFilterModal,
+    handleCloseFilterModal  
+  } = DataViewConsumer();
   const classes = useStyles();
-  const { openSampleModal } = DataViewConsumer();
 
   useTheme();
 

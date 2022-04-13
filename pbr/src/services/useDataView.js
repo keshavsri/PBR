@@ -5,6 +5,14 @@ export function useDataView() {
   const [samplePayload, setSamplePayload] = React.useState({});
   const [sampleModalVisibility, setSampleModalVisibility] =
     React.useState(false);
+  const [openFilterModal, setOpenFilterModal] = React.useState(false);
+  const handleOpenFilterModal = () => {
+      setOpenFilterModal(true);
+    };
+  const handleCloseFilterModal = () => {
+      setOpenFilterModal(false);
+    };
+  
   const [sampleModalScreen, setSampleModalScreen] = React.useState(0);
   const [error, setError] = React.useState({});
   const [timestamp, setTimestamp] = React.useState(Date.now());
@@ -115,7 +123,11 @@ export function useDataView() {
     timestamp,
     setTimestamp,
     generalFilterState,
-    setGeneralFilterState
+    setGeneralFilterState,
+    openFilterModal, 
+    setOpenFilterModal,
+    handleOpenFilterModal,
+    handleCloseFilterModal  
   };
 }
 

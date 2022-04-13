@@ -9,8 +9,7 @@ import SampleIcon from "@mui/icons-material/Science";
 import NextIcon from "@mui/icons-material/ArrowForwardIos";
 import BackIcon from "@mui/icons-material/ArrowBackIosNew";
 import FilterListIcon from "@mui/icons-material/FilterList";
-// Might need to change
-import DataViewFilterContent from "./DataViewFilterContent";
+
 // Might need to change
 import DataViewAddSample from "./DataViewSample/AddSample";
 import EnhancedTable from "./DataViewTable/EnhancedTable";
