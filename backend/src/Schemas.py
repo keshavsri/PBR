@@ -24,7 +24,6 @@ class Machinetype(BaseModel):
 class Machine(BaseModel):
     id: Optional[int]
     serial_number: constr(max_length=120)
-
     # References to Foreign Objects
     machinetype_id: int
     machinetype: Optional[Machinetype]
@@ -86,23 +85,6 @@ class Source(BaseModel):
     class Config:
         orm_mode = True
 
-# ------------------------------
-# Sample
-# ------------------------------
-
-class Sample(BaseModel):
-    flock_age: int
-    flock_age_unit: AgeUnits
-    flagged: bool
-    comments: Optional[str]
-    id: Optional[int]
-    measurement_values: List[MeasurementValue]
-    timestamp_added: Optional[str]
-    validation_status: ValidationTypes
-    sample_type: SampleTypes
-    entered_by_id: Optional[int]
-    class Config:
-        orm_mode = True
 
 # ------------------------------
 # Organization
@@ -119,6 +101,26 @@ class Organization(BaseModel):
 # This is the view of an item we want to return to a user
     id: Optional[int] # For the DB representation we have additional fields
     sources: Optional[List[Source]]
+    class Config:
+        orm_mode = True
+
+# ------------------------------
+# Sample
+# ------------------------------
+
+class Sample(BaseModel):
+    flock_age: int
+    flock_age_unit: AgeUnits
+    flagged: bool
+    comments: Optional[str]
+    id: Optional[int]
+    measurement_values: Optional[List[MeasurementValue]]
+    timestamp_added: Optional[str]
+    validation_status: Optional[ValidationTypes]
+    sample_type: SampleTypes
+    entered_by_id: Optional[int]
+    timestamp_added: Optional[datetime]
+    organization: Optional[Organization]
     class Config:
         orm_mode = True
 

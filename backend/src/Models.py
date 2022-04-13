@@ -7,28 +7,8 @@ from typing import List, Optional
 # SQLALCHEMY MODELS
 db = SQLAlchemy()
 
-class OrganizationSource(db.Model):
-    __tablename__ = 'Organization-Source'
-    id: int = db.Column(db.Integer, primary_key=True)
-
-    # References to Foreign Objects
-    organization_id: int = db.Column(db.Integer, db.ForeignKey('Organization.id'))
-    source_id: int = db.Column(db.Integer, db.ForeignKey('Source.id'))
-
-    # Foreign References to this Object
-    organizationsource_flock_sample = db.relationship('OrganizationSource-Flock-Sample', backref='Organization-Source')
-
-class OrganizationSourceFlockSample(db.Model):
-    __tablename__ = 'OrganizationSource-Flock-Sample'
-    id: int = db.Column(db.Integer, primary_key=True)
-
-    # References to Foreign Objects
-    organizationsource_id: int = db.Column(db.Integer, db.ForeignKey('Organization-Source.id'))
-    flock_id: int = db.Column(db.Integer, db.ForeignKey('Flock.id'))
-
-    # Foreign References to this Object
-    sample = db.relationship('Sample', backref='OrganizationSource-Flock-Sample')
-
+OrganizationSource_Flock_Sample = db.Table('OrganizationSource-Flock-Sample', db.metadata, db.Column('id', db.Integer, primary_key=True), db.Column('organizationsource_id', db.Integer, db.ForeignKey('Organization-Source.id')), db.Column('flock_id', db.Integer, db.ForeignKey('Flock.id')))
+OrganizationSource = db.Table('Organization-Source', db.metadata, db.Column('id', db.Integer, primary_key=True), db.Column('organization_id', db.Integer, db.ForeignKey('Organization.id')), db.Column('source_id', db.Integer, db.ForeignKey('Source.id')))
 
 class User(db.Model):
     __tablename__ = 'User'
@@ -48,24 +28,6 @@ class User(db.Model):
     sample = db.relationship('Sample',  backref='User')
     log = db.relationship('Log',  backref='User')
 
-class Sample(db.Model):
-    __tablename__ = 'Sample'
-    id: int = db.Column(db.Integer, primary_key=True)
-    timestamp_added: datetime = db.Column(db.DateTime)
-    comments: str = db.Column(db.String(500))
-    entered_by_id: int = db.Column(db.Integer, db.ForeignKey('User.id'))
-    batch_id: int = db.Column(db.Integer, db.ForeignKey('Batch.id'))
-    flock_age: int = db.Column(db.Integer)
-    flock_age_unit: AgeUnits = db.Column(db.Enum(AgeUnits))
-    flagged: bool = db.Column(db.Boolean)
-    validation_status: ValidationTypes = db.Column(db.Enum(ValidationTypes))
-    sample_type: SampleTypes = db.Column(db.Enum(SampleTypes))
-
-    # Foreign References to this Object
-    measurementValue = db.relationship('MeasurementValue', backref='Sample')
-    # organizationsource_flock_sample = db.Table('OrganizationSource-Flock-Sample', db.metadata, db.Column('id', db.Integer, primary_key=True), db.Column('Organization-Source_id', db.Integer, db.ForeignKey('Organization-Source.id')), db.Column('Flock_id', db.Integer, db.ForeignKey('Flock.id')), db.Column('Sample_id', db.Integer, db.ForeignKey('Sample.id')))
-    organizationsource_flock_sample_id: int = db.Column(db.Integer, db.ForeignKey('OrganizationSource-Flock-Sample.id'))
-
 class Organization(db.Model):
     __tablename__ = 'Organization'
     # The fields below are stored in the database, they are assigned both a python and a database type
@@ -83,8 +45,27 @@ class Organization(db.Model):
     machine = db.relationship('Machine',  backref='Organization')
     log = db.relationship('Log', backref='Organization')
 
-    organization_source = db.relationship('OrganizationSource-Flock-Sample', backref='Flock')
-    sources = db.relationship('Source', secondary="Organization-Source", back_populates='Organization')
+    sources = db.relationship('Source', secondary=OrganizationSource, backref = 'Organization')
+
+class Sample(db.Model):
+    __tablename__ = 'Sample'
+    id: int = db.Column(db.Integer, primary_key=True)
+    timestamp_added: str = db.Column(db.DateTime, server_default=db.func.now())
+    comments: str = db.Column(db.String(500))
+    entered_by_id: int = db.Column(db.Integer, db.ForeignKey('User.id'))
+    batch_id: int = db.Column(db.Integer, db.ForeignKey('Batch.id'))
+    flock_age: int = db.Column(db.Integer)
+    flock_age_unit: AgeUnits = db.Column(db.Enum(AgeUnits))
+    flagged: bool = db.Column(db.Boolean)
+    deleted: bool = db.Column(db.Boolean, server_default="0")
+    validation_status: ValidationTypes = db.Column(db.Enum(ValidationTypes), server_default=ValidationTypes.Pending)
+    sample_type: SampleTypes = db.Column(db.Enum(SampleTypes))
+
+    # Foreign References to this Object
+    measurementValue = db.relationship('MeasurementValue', backref='Sample')
+    # organization = db.column_property(db.select(Organization).where())
+    organizationsource_flock_sample_id: int = db.Column(db.Integer, db.ForeignKey('OrganizationSource-Flock-Sample.id'))
+
 
 class Source(db.Model):
     __tablename__ = 'Source'
@@ -95,7 +76,7 @@ class Source(db.Model):
     city: str = db.Column(db.String(120))
     state: States = db.Column(db.Enum(States))
     zip: int = db.Column(db.Integer)
-    organizations = db.relationship('Organization', secondary="Organization-Source", back_populates='Source')
+    organizations: List[Organization] = None
 
     # Foreign References to this Object
     flock = db.relationship('Flock', backref='Source')
@@ -108,7 +89,7 @@ class Measurement(db.Model):
     machine_id: int = db.Column(db.Integer, db.ForeignKey('Machine.id'), nullable=False)
     measurementtype_id: int = db.Column(db.Integer, db.ForeignKey('MeasurementType.id'), nullable=False)
 
-    # Foreign References to this Object 
+    # Foreign References to this Object
     measurementValue = db.relationship('MeasurementValue', backref='Measurement')
 
 class MeasurementValue(db.Model):
@@ -130,7 +111,7 @@ class MeasurementType(db.Model):
     required: bool = db.Column(db.Boolean)
     general: bool = db.Column(db.Boolean)
 
-    # Foreign References to this Object 
+    # Foreign References to this Object
     measurement = db.relationship('Measurement', backref='MeasurementType')
 
 class Machine(db.Model):
@@ -152,8 +133,8 @@ class MachineType(db.Model):
     name: str = db.Column(db.String(120), unique=True, nullable=False)
 
 
-class Log(db.Model):   
-    __tablename__ = 'Log' 
+class Log(db.Model):
+    __tablename__ = 'Log'
     id: int = db.Column(db.Integer, primary_key=True)
     user = db.relationship('User')
     role: Roles = db.Column(db.Enum(Roles))
@@ -164,7 +145,7 @@ class Log(db.Model):
     # References to Foreign Objects
     user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
     organization_id = db.Column(db.Integer, db.ForeignKey('Organization.id'))
-    
+
     def __init__(self, user, organization, role, action, logContent):
         self.user_id = user
         self.organization_id = organization
@@ -180,13 +161,13 @@ class Flock(db.Model):
     gender: BirdGenders = db.Column(db.Enum(BirdGenders), nullable=False)
     production_type: ProductionTypes = db.Column(db.Enum(ProductionTypes), nullable=False)
     birthday = db.Column(db.DateTime)
+    timestamp_added: str = db.Column(db.DateTime, server_default=db.func.now())
 
     # References to Foreign Objects
     source_id = db.Column(db.Integer, db.ForeignKey('Source.id'))
     organization_id = db.Column(db.Integer, db.ForeignKey('Organization.id'))
 
     # Foreign References to this Object
-    organizationsource_flock_sample = db.relationship('OrganizationSource-Flock-Sample', backref='Flock')
 
 class Batch(db.Model):
     __tablename__ = 'Batch'

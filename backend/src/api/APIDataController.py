@@ -1,9 +1,12 @@
 from flask import request, Blueprint, jsonify
 from http import HTTPStatus
 import re
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+
 
 import src.helpers
-from src.enums import Roles, LogActions
+from src.enums import Roles, LogActions, AgeUnits, ValidationTypes
 from src.api.APIUserController import token_required, allowed_roles
 from src import Models
 
@@ -152,34 +155,57 @@ def _is_error_file(content_lines):
     return is_error_file
 
 # Creates a new sample #
-@sampleBlueprint.route('/datapoint', methods=['POST'])
+@sampleBlueprint.route('/', methods=['POST'])
 @token_required
 @allowed_roles([0,1,2,3])
 def create_sample(access_allowed, current_user):
     if access_allowed:
-        newSample = Models.Sample(request.json)
-        newSample.entered_by_user_id = current_user.id
-        Models.db.session.add(newSample)
-        Models.db.session.commit()
-        Models.createLog(current_user, LogActions.ADD_SAMPLE, 'Created new sample: ' + str(newSample.id))
+        payload = request.json
+        print(payload)
+        # Validate Payload
+
+        # Check if flock exists.
+        current_flock = src.helpers.get_flock_by_name(payload['flockDetails']['name'])
+        # If flock doesn't exist, make it.
+        if current_flock:
+            print("Flock already exists")
+            # If so, see if things were edited.
+            print(current_flock)
+            print(payload['flockDetails'])
+        else:
+            print("Brand new flock. Add it.")
+            # If flock doesn't exist, make it.
+            now = datetime.now()
+            flock_birthday = now
+            print(AgeUnits(payload['flock_age_unit']))
+            print(AgeUnits.Months)
+            if AgeUnits(payload['flock_age_unit']) is AgeUnits.Days:
+                flock_birthday = now - timedelta(days=int(payload['flock_age']))
+            elif AgeUnits(payload['flock_age_unit']) is AgeUnits.Weeks:
+                flock_birthday = now - timedelta(weeks=int(payload['flock_age']))
+            elif AgeUnits(payload['flock_age_unit']) is AgeUnits.Months:
+                print(relativedelta(months=payload['flock_age']))
+                flock_birthday = now - relativedelta(months=payload['flock_age'])
+            elif AgeUnits(payload['flock_age_unit']) is AgeUnits.Years:
+                flock_birthday = now - relativedelta(years=payload['flock_age'])
+            else:
+                return jsonify({'message': 'Bad Request!'}), 400
+
+            payload['flockDetails']["birthday"] = flock_birthday
+            new_flock = src.helpers.create_flock(payload['flockDetails'])
+
+            print(new_flock)
+            # stages and then commits the new Flock to the database
+            Models.createLog(current_user, LogActions.ADD_FLOCK, 'Created new Flock: ' + new_flock.name)
+
+        payload["validation_status"] = ValidationTypes.Pending
+        new_sample = src.helpers.create_sample(payload)
+        new_sample.entered_by_id = current_user.id
+        Models.createLog(current_user, LogActions.ADD_SAMPLE, 'Created new sample: ' + str(new_sample.id))
         return jsonify(Models.Sample.query.get(request.json.get('id'))), 201
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
-# # Retrives specified sample #
-# @sampleBlueprint.route('/datapoint/<int:item_id>', methods=['GET'])
-# @token_required
-# @allowed_roles([0,1,2,3])
-# def get_sample(access_allowed, current_user,item_id):
-#     if access_allowed:
-#         responseJSON = jsonify(Models.Sample.query.get(item_id))
-#         if responseJSON.json is None:
-#             responseJSON = jsonify({'message': 'Sample cannot be found.'})
-#             return responseJSON, 404
-#         else:
-#             return responseJSON, 200
-#     else:
-#         return jsonify({'message': 'Role not allowed'}), 403
 
 # Retrieves all available samples for a given user, or organization if provided#
 @sampleBlueprint.route('/', methods=['GET'])
@@ -191,20 +217,20 @@ def get_samples(access_allowed, current_user, given_org_id=None):
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
         current_Organization = current_user.organization_id
-
-        if given_org_id:
-            if current_user.role == Roles.Super_Admin:
-                responseJSON = src.helpers.get_sample_by_org(given_org_id)
-            elif current_user.organization_id == given_org_id:
-                responseJSON = src.helpers.get_sample_by_org(given_org_id)
-            else:
-                responseJSON = jsonify({'message': 'Insufficient Permissions'})
-                return responseJSON, 401
-        else:
-            if current_user.role == Roles.Super_Admin:
-                responseJSON = jsonify(Models.Sample.query.all())
-            else:
-                responseJSON = src.helpers.get_flock_by_org(current_Organization)
+        responseJSON = jsonify(Models.Sample.query.all())
+        # if given_org_id:
+        #     if current_user.role == Roles.Super_Admin:
+        #         responseJSON = src.helpers.get_sample_by_org(given_org_id)
+        #     elif current_user.organization_id == given_org_id:
+        #         responseJSON = src.helpers.get_sample_by_org(given_org_id)
+        #     else:
+        #         responseJSON = jsonify({'message': 'Insufficient Permissions'})
+        #         return responseJSON, 401
+        # else:
+        #     if current_user.role == Roles.Super_Admin:
+        #         responseJSON = jsonify(Models.Sample.query.all())
+        #     else:
+        #         responseJSON = src.helpers.get_sample_by_org(current_Organization)
 
         # if the response json is empty then return a 404 not found
         if responseJSON is None:

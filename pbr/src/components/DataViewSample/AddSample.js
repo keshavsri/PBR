@@ -124,7 +124,14 @@ function monthDiff(dateFrom, dateTo) {
   );
 }
 
-export default function DataViewAddSample() {
+export default function DataViewAddSample({
+  organizations,
+  sources,
+  getSources,
+  flocks,
+  getFlocks,
+  machineList,
+}) {
   const classes = useStyles();
   useTheme();
   const {
@@ -136,7 +143,7 @@ export default function DataViewAddSample() {
     setTimestamp,
     sampleValidationErrors,
   } = DataViewConsumer();
-  const { checkResponseAuth, user } = AuthConsumer();
+  const { checkResponseAuth } = AuthConsumer();
 
   // General Section Data
 
@@ -151,25 +158,7 @@ export default function DataViewAddSample() {
     });
   };
 
-  const [organizations, setOrganizations] = React.useState([]);
-  const [flocks, setFlocks] = React.useState([]);
   const [strains, setStrains] = React.useState([]);
-  const [sources, setSources] = React.useState([]);
-
-  const getFlocks = async () => {
-    console.log(`Getting Flocks: /api/flock/${generalDetails.organizationID}`);
-    await fetch(`/api/flock/${generalDetails.organizationID}`, {
-      method: "GET",
-    })
-      .then(checkResponseAuth)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        console.log("NEW FLOCKS:", data);
-        setFlocks(data);
-      });
-  };
 
   const getStrains = async (species) => {
     console.log("Getting Strains");
@@ -187,31 +176,8 @@ export default function DataViewAddSample() {
       });
   };
 
-  const getSources = async () => {
-    console.log("Getting Sources for ", generalDetails.organizationID);
-    let org = organizations.find(
-      (org) => org.id == generalDetails.organizationID
-    );
-    setSources(org.sources);
-    console.log("NEW SOURCES:", org.sources);
-  };
-
-  const getOrganizations = async () => {
-    console.log("Getting Organizations");
-    const response = await fetch(`/api/organization/`, {
-      method: "GET",
-    }).then(checkResponseAuth);
-    const data = await response.json();
-    console.log(data);
-    setOrganizations(data);
-    setGeneralDetails({
-      ...generalDetails,
-      organizationID: user.organization_id,
-    });
-    console.log("Set Org in Gen Details:", generalDetails.organizationID);
-  };
-
   const handleGeneralDetailsChange = (prop) => (event) => {
+    console.log("Handling General Details Change");
     if (prop === "species") {
       setGeneralDetails({
         ...generalDetails,
@@ -492,9 +458,6 @@ export default function DataViewAddSample() {
       });
   };
 
-  // Machine Lists
-  const [machineList, setMachineList] = React.useState([]);
-
   const parseMachineDetails = () => {
     let tmpMachineDetails = [];
     for (let i = 0; i < machineList.length; i++) {
@@ -530,149 +493,10 @@ export default function DataViewAddSample() {
     }
     setMachineDetails(tmpMachineDetails);
   };
-
-  const getMachineList = () => {
-    let mockMachineList = [
-      {
-        name: "VetScan VS2",
-        id: 12415,
-        info: [
-          {
-            id: 4,
-            name: "Timestamp of Test",
-            type: "timestamp",
-            datatype: "text",
-          },
-          { id: 1, name: "Patient ID", datatype: "text" },
-          {
-            id: 2,
-            name: "Rotor Lot Number",
-            datatype: "text",
-          },
-          {
-            id: 3,
-            name: "Serial Number",
-            datatype: "text",
-          },
-        ],
-        measurements: [
-          { id: 1, abbrev: "AST", units: "U/L", datatype: "text" },
-          { id: 2, abbrev: "BA", units: "umol/L", datatype: "text" },
-          { id: 3, abbrev: "CK", units: "U/L", datatype: "text" },
-          { id: 4, abbrev: "UA", units: "mg/dL", datatype: "text" },
-          {
-            id: 5,
-            name: "Glucose",
-            abbrev: "GLU",
-            units: "mg/dL",
-            datatype: "text",
-          },
-          {
-            id: 6,
-            name: "Total Calcium",
-            abbrev: "CA",
-            units: "mg/dL",
-            datatype: "text",
-          },
-          {
-            id: 7,
-            name: "Phosphorus",
-            abbrev: "PHOS",
-            units: "mg/dL",
-            datatype: "text",
-          },
-          {
-            id: 8,
-            name: "Total Protein",
-            abbrev: "TP",
-            units: "g/dL",
-            datatype: "text",
-          },
-          {
-            id: 9,
-            name: "Albumen",
-            abbrev: "ALB",
-            units: "g/dL",
-            datatype: "text",
-          },
-          {
-            id: 10,
-            name: "Globulin",
-            abbrev: "GLOB",
-            units: "g/dL",
-            datatype: "text",
-          },
-          {
-            id: 11,
-            name: "Potassium",
-            abbrev: "K+",
-            units: "mmol/L",
-            datatype: "text",
-          },
-          {
-            id: 12,
-            name: "Sodium",
-            abbrev: "NA+",
-            units: "mmol/L",
-            datatype: "text",
-          },
-          { id: 13, abbrev: "RQC", datatype: "text" },
-          { id: 14, abbrev: "QC", datatype: "text" },
-          { id: 15, abbrev: "HEM", datatype: "text" },
-          { id: 16, abbrev: "LIP", datatype: "text" },
-          { id: 17, abbrev: "ICT", datatype: "text" },
-        ],
-      },
-      {
-        name: "iStat",
-        id: 12152,
-        info: [
-          {
-            id: 4,
-            name: "Timestamp of Test",
-            type: "timestamp",
-            datatype: "text",
-          },
-          {
-            id: 2,
-            name: "iStat Number",
-            datatype: "number",
-          },
-        ],
-        measurements: [
-          { id: 1, abbrev: "pH", units: "", datatype: "number" },
-          { id: 2, abbrev: "pCO2", units: "", datatype: "number" },
-          { id: 3, abbrev: "pO2", units: "", datatype: "number" },
-          { id: 4, abbrev: "BE", units: "", datatype: "number" },
-          { id: 5, abbrev: "HCO3", units: "", datatype: "number" },
-          { id: 6, abbrev: "tCO2", units: "", datatype: "number" },
-          { id: 7, abbrev: "sO2", units: "", datatype: "number" },
-          { id: 8, abbrev: "Na", units: "", datatype: "number" },
-          { id: 9, abbrev: "K", units: "", datatype: "number" },
-          { id: 10, abbrev: "iCa", units: "", datatype: "number" },
-          { id: 11, abbrev: "Glu", units: "", datatype: "number" },
-          { id: 12, abbrev: "Hct", units: "", datatype: "number" },
-          { id: 13, abbrev: "Hb", units: "", datatype: "number" },
-        ],
-      },
-    ];
-
-    setMachineList(mockMachineList);
-  };
-
-  // Always run
   React.useEffect(() => {
-    getOrganizations();
+    console.log("Rendering Add Sample: ", generalDetails, machineDetails);
+    parseMachineDetails();
   }, []);
-
-  React.useEffect(() => {
-    console.log("Org Changed. Fire Flocks and Sources");
-    if (generalDetails.organizationID) {
-      getFlocks();
-      getSources();
-      getMachineList();
-    }
-  }, [generalDetails.organizationID]);
 
   React.useEffect(() => {
     parseMachineDetails();

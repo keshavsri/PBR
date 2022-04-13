@@ -16,8 +16,8 @@ export const genders = Object.freeze({
 
 // Stores the choices for a bird sample type
 export const sampleTypes = Object.freeze({
-  SURVEILLANCE: "Surveillance Sample",
-  DIAGNOSTIC: "Diagnostic Sample",
+  SURVEILLANCE: "Surveillance",
+  DIAGNOSTIC: "Diagnostic",
 });
 
 // Stores the potential production types

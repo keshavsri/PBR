@@ -1,6 +1,5 @@
 from datetime import date, datetime
 from typing import List
-
 from itsdangerous import json
 
 from src.Models import db
@@ -11,6 +10,8 @@ from src.Models import Sample as SampleORM
 from src.Models import Machine as MachineORM
 from src.Models import MachineType as MachineTypeORM
 from src.Models import Measurement as MeasurementORM
+from src.Models import OrganizationSource as OrganizationSourceORM
+from src.Models import OrganizationSource_Flock_Sample as OrganizationSource_Flock_SampleORM
 from src.Models import MeasurementType as MeasurementTypeORM
 from src.Schemas import Flock, Organization, Source, Sample, Machine, Machinetype, Measurement, MeasurementType
 
@@ -66,13 +67,21 @@ def create_sample(sample_dict: dict):
     sample:SampleORM = SampleORM()
     for name, value in Sample.parse_obj(sample_dict):
         setattr(sample, name, value)
+
     db.session.add(sample)
     db.session.commit()
     db.session.refresh(sample)
     return sample
 
 def get_sample_by_org(org_id: int) -> List[dict]:
-    samples = SampleORM.query.join(OrganizationSource_Flock_Sample, sample.organizationsource_flock_sample_id==OrganizationSource_Flock_Sample.id)
+    # samples = SampleORM.query.join(OrganizationSource_Flock_SampleORM, SampleORM.organizationsource_flock_sample_id==OrganizationSource_Flock_SampleORM.c.id ).join(OrganizationSourceORM, OrganizationSource_Flock_SampleORM.c.organizationsource_id==OrganizationSourceORM.c.id).join(OrganizationORM, OrganizationSourceORM.c.organization_id==OrganizationORM.id).all()
+    # results = db.session.query(SampleORM, OrganizationSource_Flock_SampleORM, OrganizationSourceORM, OrganizationORM).select_from(SampleORM).join(OrganizationSource_Flock_SampleORM).join(OrganizationSourceORM).join(OrganizationORM).all()
+    #
+    # for sample, osfs, os, org in results:
+    #     print(sample.id, osfs.id, os.id, org.id)
+
+    samples = SampleORM.query.all()
+    # print("SAMPLE 1", json.dumps(samples[0].street_address, default=str))
     ret = []
     for sample in samples:
         ret.append(Sample.from_orm(sample).dict())
@@ -118,6 +127,13 @@ def get_flock_by_id(id: int) -> Flock:
     print(flock)
     return Flock.from_orm(flock).dict()
 
+def get_flock_by_name(name: str) -> Flock:
+    flock = FlockORM.query.filter_by(name=name).first()
+    print(flock)
+    ret = None
+    if (flock):
+        ret = Flock.from_orm(flock).dict()
+    return ret
 
 def get_flock_by_org(org_id: int) -> List[dict]:
     flocks = FlockORM.query.filter_by(organization_id=org_id).all()
@@ -184,3 +200,5 @@ def create_measurement(measurement_dict: dict):
     db.session.commit()
     db.session.refresh(measurement)
     return measurement
+
+

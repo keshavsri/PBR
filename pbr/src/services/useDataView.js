@@ -3,6 +3,7 @@ import * as React from "react";
 const DataViewContext = React.createContext();
 
 export function useDataView() {
+  const [sampleLoading, setSampleLoading] = React.useState(false);
   const [samplePayload, setSamplePayload] = React.useState({});
   const [sampleModalVisibility, setSampleModalVisibility] =
     React.useState(false);
@@ -28,13 +29,14 @@ export function useDataView() {
     comments: "",
   });
   const [machineDetails, setMachineDetails] = React.useState([]);
+  const [sampleType, setSampleType] = React.useState("");
 
   let openSampleModal = () => {
     setSampleModalVisibility(true);
   };
 
   let closeSampleModal = () => {
-    setSampleModalScreen(0);
+    console.log("Closing Sample Modal");
     setGeneralDetails({
       organizationID: "",
       flockName: "",
@@ -48,9 +50,12 @@ export function useDataView() {
       flagged: false,
       comments: "",
     });
+    setMachineDetails([]);
     setSamplePayload({});
     setSampleValidationErrors({});
+    setSampleType("");
     setSampleModalVisibility(false);
+    setSampleModalScreen(0);
   };
 
   let samplePrevAction = () => {
@@ -67,7 +72,23 @@ export function useDataView() {
 
   let restartSample = () => {
     setSampleModalScreen(0);
+    setGeneralDetails({
+      organizationID: generalDetails.organizationID,
+      flockName: "",
+      species: "",
+      strain: "",
+      gender: "",
+      sourceID: "",
+      productionType: "",
+      ageNumber: "",
+      ageUnit: "",
+      flagged: false,
+      comments: "",
+    });
+    setMachineDetails([]);
     setSamplePayload({});
+    setSampleValidationErrors({});
+    setSampleType("");
     setError({});
   };
 
@@ -100,6 +121,10 @@ export function useDataView() {
     setTimestamp,
     sampleValidationErrors,
     setSampleValidationErrors,
+    sampleType,
+    setSampleType,
+    sampleLoading,
+    setSampleLoading,
   };
 }
 
