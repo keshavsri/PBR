@@ -8,7 +8,7 @@ from dateutil.relativedelta import relativedelta
 import src.helpers
 from src.enums import Roles, LogActions, AgeUnits, ValidationTypes
 from src.api.APIUserController import token_required, allowed_roles
-from src import Models
+from src import Models, helpers
 
 sampleBlueprint = Blueprint('sample', __name__)
 batchBluePrint = Blueprint('batch', __name__)
