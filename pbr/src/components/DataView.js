@@ -3,7 +3,7 @@ import * as React from "react";
 import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
 
 import DataViewSampleModal from "./DataViewSample/SampleModal";
-import DVFilterModal from "./DVFilterModal";
+import DataViewFilterModal from "./FilterModal";
 import DataViewAddSample from "./DataViewSample/AddSample";
 import DVTableToolbar from "./DVTableToolbar";
 
@@ -39,17 +39,9 @@ const useStyles = makeStyles({});
 // };
 
 export default function DataView() {
-  const [openFilterModal, setOpenFilterModal] = React.useState(false);
-  const [openSampleAddModal, setOpenSampleAddModal] = React.useState(false);
   const [rowList, setRowList] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
-  const handleOpenFilterModal = () => {
-    setOpenFilterModal(true);
-  };
-  const handleCloseFilterModal = () => {
-    setOpenFilterModal(false);
-  };
 
   const { checkResponseAuth } = AuthConsumer();
   
@@ -542,19 +534,17 @@ export default function DataView() {
     <DataViewProvider>
       <Paper>
         <EnhancedTable
-          handleOpenFilterModal={handleOpenFilterModal}
-          handleCloseFilterModal={handleCloseFilterModal}
           headCells={headCellList}
           rows={rowList}
           toolbarButtons={
-            <DVTableToolbar handleOpenFilterModal={handleOpenFilterModal} />
+            <DVTableToolbar/>
           }
           selected={selected}
           setSelected={setSelected}
           onDelete = {onDelete}
         ></EnhancedTable>
       </Paper>
-      {/* <DVFilterModal/> */}
+      <DataViewFilterModal/>
       <DataViewSampleModal />
     </DataViewProvider>
   );

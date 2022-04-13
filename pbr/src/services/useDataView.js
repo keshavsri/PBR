@@ -6,10 +6,10 @@ export function useDataView() {
   const [sampleModalVisibility, setSampleModalVisibility] =
     React.useState(false);
   const [openFilterModal, setOpenFilterModal] = React.useState(false);
-  const handleOpenFilterModal = () => {
+  let handleOpenFilterModal = () => {
       setOpenFilterModal(true);
     };
-  const handleCloseFilterModal = () => {
+  let handleCloseFilterModal = () => {
       setOpenFilterModal(false);
     };
   
