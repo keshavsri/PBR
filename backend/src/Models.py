@@ -10,6 +10,18 @@ db = SQLAlchemy()
 OrganizationSource_Flock_Sample = db.Table('OrganizationSource-Flock-Sample', db.metadata, db.Column('id', db.Integer, primary_key=True), db.Column('organizationsource_id', db.Integer, db.ForeignKey('Organization-Source.id')), db.Column('flock_id', db.Integer, db.ForeignKey('Flock.id')))
 OrganizationSource = db.Table('Organization-Source', db.metadata, db.Column('id', db.Integer, primary_key=True), db.Column('organization_id', db.Integer, db.ForeignKey('Organization.id')), db.Column('source_id', db.Integer, db.ForeignKey('Source.id')))
 
+# class OrganizationSource_Flock_Sample(db.Model):
+#     __tablename__ = 'OrganizationSource-Flock-Sample'
+#     id: int = db.Column('id', db.Integer, primary_key=True)
+#     organizationsource_id: int = db.Column('organizationsource_id', db.Integer, db.ForeignKey('Organization-Source.id'))
+#     flock_id: int = db.Column('flock_id', db.Integer, db.ForeignKey('Flock.id'))
+#
+# class OrganizationSource(db.Model):
+#     __tablename__ = 'Organization-Source'
+#     id: int = db.Column('id', db.Integer, primary_key=True)
+#     organization_id: int = db.Column('organization_id', db.Integer, db.ForeignKey('Organization.id'))
+#     source_id: int = db.Column('source_id', db.Integer, db.ForeignKey('Source.id'))
+
 class User(db.Model):
     __tablename__ = 'User'
     id: int = db.Column(db.Integer, primary_key=True)
