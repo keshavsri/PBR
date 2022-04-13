@@ -21,6 +21,7 @@ import {
   InputAdornment,
   Button,
   Checkbox,
+  FormHelperText,
   MenuItem,
   IconButton,
 } from "@mui/material";
@@ -51,6 +52,9 @@ const Input = styled("input")({
 
 const useStyles = makeStyles({
   root: {
+    "& .Mui-disabled": {
+      backgroundColor: "#efefef",
+    },
     "& .MuiTextField-root": {
       width: "100%",
     },
@@ -70,6 +74,9 @@ const useStyles = makeStyles({
       "& .MuiInputAdornment-root .MuiTypography-root": {
         color: "grey !IMPORTANT",
       },
+    },
+    "& .MuiFormHelperText-root": {
+      marginLeft: "0px",
     },
   },
   autoFilled: {
@@ -105,7 +112,26 @@ const HtmlTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-export default function DataViewAddSample() {
+function yearDiff(dateFrom, dateTo) {
+  return dateTo.getYear() - dateFrom.getYear();
+}
+
+function monthDiff(dateFrom, dateTo) {
+  return (
+    dateTo.getMonth() -
+    dateFrom.getMonth() +
+    12 * (dateTo.getFullYear() - dateFrom.getFullYear())
+  );
+}
+
+export default function DataViewAddSample({
+  organizations,
+  sources,
+  getSources,
+  flocks,
+  getFlocks,
+  machineList,
+}) {
   const classes = useStyles();
   useTheme();
   const {
@@ -115,6 +141,7 @@ export default function DataViewAddSample() {
     setGeneralDetails,
     timestamp,
     setTimestamp,
+    sampleValidationErrors,
   } = DataViewConsumer();
   const { checkResponseAuth } = AuthConsumer();
 
@@ -131,18 +158,11 @@ export default function DataViewAddSample() {
     });
   };
 
-  const [organizations, setOrganizations] = React.useState([]);
-  const [flocks, setFlocks] = React.useState([]);
   const [strains, setStrains] = React.useState([]);
-  const [sources, setSources] = React.useState([]);
-
-  const getFlocks = () => {
-    let mockFlocks = [{ id: 1852 }, { id: 2531 }, { id: 3491 }];
-    setFlocks(mockFlocks);
-  };
 
   const getStrains = async (species) => {
-    await fetch(`/api/sample/strains/${species}`, {
+    console.log("Getting Strains");
+    await fetch(`/api/flock/strains/${species}`, {
       method: "GET",
     })
       .then(checkResponseAuth)
@@ -156,75 +176,8 @@ export default function DataViewAddSample() {
       });
   };
 
-  const getSources = async (organization) => {
-    console.log("Getting sources for " + organization.name);
-    // await fetch(`/api/source`, {
-    //   method: "GET",
-    // })
-    //   .then(handleAPIResponse)
-    //   .then((response)=> {
-    //     return response.json()
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //     setSources(data);
-    //   });
-    let mockSources = [
-      {
-        id: "1",
-        name: "Source A",
-        street_address: "123 Main Street",
-        city: "Raleigh",
-        state: "NC",
-        zip: "27606",
-      },
-      {
-        id: "2",
-        name: "Source B",
-        street_address: "456 Main Street",
-        city: "Raleigh",
-        state: "NC",
-        zip: "27606",
-      },
-    ];
-    setSources(mockSources);
-  };
-
-  const getOrganizations = async () => {
-    // await fetch(`/api/organization`, {
-    //   method: "GET",
-    // })
-    //   .then(handleAPIResponse)
-    //   .then((response)=> {
-    //     return response.json()
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //     setSources(data);
-    //   });
-    let mockOrganizations = [
-      {
-        id: "1",
-        name: "Organization A",
-        street_address: "123 Main Street",
-        city: "Raleigh",
-        state: "NC",
-        zip: "27606",
-        default: "true",
-      },
-      {
-        id: "2",
-        name: "Organization B",
-        street_address: "456 Main Street",
-        city: "Raleigh",
-        state: "NC",
-        zip: "27606",
-      },
-    ];
-    setOrganizations(mockOrganizations);
-  };
-
   const handleGeneralDetailsChange = (prop) => (event) => {
+    console.log("Handling General Details Change");
     if (prop === "species") {
       setGeneralDetails({
         ...generalDetails,
@@ -233,31 +186,81 @@ export default function DataViewAddSample() {
       });
       getStrains(event.target.value);
     } else if (prop === "organizationID") {
+      console.log("Changing Organization");
       setGeneralDetails({
         ...generalDetails,
         organizationID: event.target.value,
-        flockID: null,
+        flockName: "",
+        species: "",
+        strain: "",
+        gender: "",
+        sourceID: "",
+        productionType: "",
+        ageUnit: "",
+        ageNumber: "",
       });
-      getSources(event.target.value);
-    } else if (prop === "flockID") {
-      // TODO: If Flock exists, get data from flock and store it in the GeneralDetails.
-      setGeneralDetails({
-        ...generalDetails,
-        flock: event.target.value,
-      });
+      getFlocks();
+      getSources();
     } else {
       setGeneralDetails({
         ...generalDetails,
         [prop]: event.target.value,
       });
     }
+    console.log(generalDetails);
   };
 
-  const handleFlockChange = (id) => {
-    setGeneralDetails({
-      ...generalDetails,
-      flockID: id,
-    });
+  const handleFlockChange = (fl) => {
+    console.log("FLOCK NAME CHANGED:", fl);
+    if (fl == null) {
+      return;
+    }
+    if (fl.inputValue) {
+      console.log("NEW FLOCK");
+      setGeneralDetails({
+        ...generalDetails,
+        flockName: fl.inputValue,
+        species: "",
+        strain: "",
+        gender: "",
+        sourceID: "",
+        productionType: "",
+        ageNumber: "",
+        ageUnit: "",
+      });
+    } else {
+      let matchedFlock = flocks.find((flock) => flock.name === fl.name);
+      console.log("FOUND FLOCK:", matchedFlock);
+      let currentDateTime = new Date();
+      let flockBirthday = new Date(matchedFlock.birthday);
+      let flockAgeDays = parseInt(
+        (currentDateTime - flockBirthday) / (24 * 60 * 60 * 1000)
+      );
+
+      let flockAge = flockAgeDays;
+      let flockAgeUnit = ageUnits.DAYS;
+
+      if (flockAge >= 365) {
+        flockAgeUnit = ageUnits.YEARS;
+        flockAge = yearDiff(flockBirthday, currentDateTime);
+      }
+      console.log("Flock's birthday:", flockBirthday);
+      console.log("Current Datetime:", currentDateTime);
+      console.log(`Age: ${flockAge} ${flockAgeUnit}`);
+      getStrains(matchedFlock.species);
+      setGeneralDetails({
+        ...generalDetails,
+        flockName: matchedFlock.name,
+        species: matchedFlock.species,
+        strain: matchedFlock.strain,
+        gender: matchedFlock.gender,
+        sourceID: matchedFlock.source_id,
+        productionType: matchedFlock.production_type,
+        ageNumber: flockAge,
+        ageUnit: flockAgeUnit,
+      });
+    }
+    console.log(generalDetails);
   };
 
   const handleTimestampChange = () => (event) => {
@@ -423,6 +426,7 @@ export default function DataViewAddSample() {
     }
 
     setMachineDetails(newMachineDetails);
+    console.log(machineDetails);
   };
 
   let parseFilesAndAddData = async (files, machine) => {
@@ -453,9 +457,6 @@ export default function DataViewAddSample() {
         setLoadingFile(false);
       });
   };
-
-  // Machine Lists
-  const [machineList, setMachineList] = React.useState([]);
 
   const parseMachineDetails = () => {
     let tmpMachineDetails = [];
@@ -492,142 +493,9 @@ export default function DataViewAddSample() {
     }
     setMachineDetails(tmpMachineDetails);
   };
-
-  const getMachineList = () => {
-    let mockMachineList = [
-      {
-        name: "VetScan VS2",
-        id: 12415,
-        info: [
-          {
-            id: 4,
-            name: "Timestamp of Test",
-            type: "timestamp",
-            datatype: "text",
-          },
-          { id: 1, name: "Patient ID", datatype: "text" },
-          {
-            id: 2,
-            name: "Rotor Lot Number",
-            datatype: "text",
-          },
-          {
-            id: 3,
-            name: "Serial Number",
-            datatype: "text",
-          },
-        ],
-        measurements: [
-          { id: 1, abbrev: "AST", units: "U/L", datatype: "text" },
-          { id: 2, abbrev: "BA", units: "umol/L", datatype: "text" },
-          { id: 3, abbrev: "CK", units: "U/L", datatype: "text" },
-          { id: 4, abbrev: "UA", units: "mg/dL", datatype: "text" },
-          {
-            id: 5,
-            name: "Glucose",
-            abbrev: "GLU",
-            units: "mg/dL",
-            datatype: "text",
-          },
-          {
-            id: 6,
-            name: "Total Calcium",
-            abbrev: "CA",
-            units: "mg/dL",
-            datatype: "text",
-          },
-          {
-            id: 7,
-            name: "Phosphorus",
-            abbrev: "PHOS",
-            units: "mg/dL",
-            datatype: "text",
-          },
-          {
-            id: 8,
-            name: "Total Protein",
-            abbrev: "TP",
-            units: "g/dL",
-            datatype: "text",
-          },
-          {
-            id: 9,
-            name: "Albumen",
-            abbrev: "ALB",
-            units: "g/dL",
-            datatype: "text",
-          },
-          {
-            id: 10,
-            name: "Globulin",
-            abbrev: "GLOB",
-            units: "g/dL",
-            datatype: "text",
-          },
-          {
-            id: 11,
-            name: "Potassium",
-            abbrev: "K+",
-            units: "mmol/L",
-            datatype: "text",
-          },
-          {
-            id: 12,
-            name: "Sodium",
-            abbrev: "NA+",
-            units: "mmol/L",
-            datatype: "text",
-          },
-          { id: 13, abbrev: "RQC", datatype: "text" },
-          { id: 14, abbrev: "QC", datatype: "text" },
-          { id: 15, abbrev: "HEM", datatype: "text" },
-          { id: 16, abbrev: "LIP", datatype: "text" },
-          { id: 17, abbrev: "ICT", datatype: "text" },
-        ],
-      },
-      {
-        name: "iStat",
-        id: 12152,
-        info: [
-          {
-            id: 4,
-            name: "Timestamp of Test",
-            type: "timestamp",
-            datatype: "text",
-          },
-          {
-            id: 2,
-            name: "iStat Number",
-            datatype: "number",
-          },
-        ],
-        measurements: [
-          { id: 1, abbrev: "pH", units: "", datatype: "number" },
-          { id: 2, abbrev: "pCO2", units: "", datatype: "number" },
-          { id: 3, abbrev: "pO2", units: "", datatype: "number" },
-          { id: 4, abbrev: "BE", units: "", datatype: "number" },
-          { id: 5, abbrev: "HCO3", units: "", datatype: "number" },
-          { id: 6, abbrev: "tCO2", units: "", datatype: "number" },
-          { id: 7, abbrev: "sO2", units: "", datatype: "number" },
-          { id: 8, abbrev: "Na", units: "", datatype: "number" },
-          { id: 9, abbrev: "K", units: "", datatype: "number" },
-          { id: 10, abbrev: "iCa", units: "", datatype: "number" },
-          { id: 11, abbrev: "Glu", units: "", datatype: "number" },
-          { id: 12, abbrev: "Hct", units: "", datatype: "number" },
-          { id: 13, abbrev: "Hb", units: "", datatype: "number" },
-        ],
-      },
-    ];
-
-    setMachineList(mockMachineList);
-  };
-
-  // Always run
   React.useEffect(() => {
-    getOrganizations();
-    getMachineList();
-    getFlocks();
-    getSources();
+    console.log("Rendering Add Sample: ", generalDetails, machineDetails);
+    parseMachineDetails();
   }, []);
 
   React.useEffect(() => {
@@ -687,7 +555,16 @@ export default function DataViewAddSample() {
       <Box>
         <Grid container spacing={2} sx={{ mb: -2 }}>
           <Grid item xs={12} sm={6}>
-            <FormControl sx={{ width: "100%", mb: 2 }}>
+            <FormControl
+              sx={{ width: "100%", mb: 2 }}
+              required
+              error={
+                sampleValidationErrors["organizationID"] &&
+                generalDetails.organizationID === ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Organization</InputLabel>
               <Select
                 value={generalDetails.organizationID}
@@ -696,13 +573,19 @@ export default function DataViewAddSample() {
               >
                 {organizations.map((org, index) => {
                   return (
-                    <MenuItem value={org} key={index}>
+                    <MenuItem value={org.id} key={index}>
                       {org.name} ({org.street_address}, {org.city}, {org.state}{" "}
                       {org.zip})
                     </MenuItem>
                   );
                 })}
               </Select>
+              {sampleValidationErrors["organizationID"] &&
+                generalDetails.organizationID === "" && (
+                  <FormHelperText>
+                    {sampleValidationErrors["organizationID"]}
+                  </FormHelperText>
+                )}
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -724,47 +607,106 @@ export default function DataViewAddSample() {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <Autocomplete
-              value={generalDetails.flockID}
+            <FormControl
+              required
               sx={{ width: "100%", mb: 2 }}
-              onChange={(event, newValue) => {
-                handleFlockChange(newValue);
-              }}
-              filterOptions={(options, params) => {
-                const filtered = filter(options, params);
+              error={
+                sampleValidationErrors["flockName"] &&
+                generalDetails.flockName === ""
+                  ? true
+                  : false
+              }
+            >
+              <Autocomplete
+                value={generalDetails.flockName}
+                onChange={(event, newFlock) => {
+                  console.log("NEW NAME:", newFlock);
+                  handleFlockChange(newFlock);
+                }}
+                onInputChange={(event, newInputValue, reason) => {
+                  if (reason === "reset") {
+                    setGeneralDetails({
+                      ...generalDetails,
+                      flockName: "",
+                      species: "",
+                      strain: "",
+                      gender: "",
+                      sourceID: "",
+                      productionType: "",
+                      ageUnit: "",
+                      ageNumber: "",
+                    });
+                    return;
+                  }
+                }}
+                filterOptions={(options, params) => {
+                  const filtered = filter(options, params);
 
-                const { inputValue } = params;
-                // Suggest the creation of a new value
-                const isExisting = options.some(
-                  (option) => inputValue === option.id
-                );
-                if (inputValue !== "" && !isExisting) {
-                  filtered.push({
-                    inputValue,
-                    title: `Add Flock "${inputValue}"`,
-                  });
-                }
+                  const { inputValue } = params;
+                  // Suggest the creation of a new value
+                  const isExisting = options.some(
+                    (option) => inputValue === option.name
+                  );
+                  if (inputValue !== "" && !isExisting) {
+                    filtered.push({
+                      inputValue,
+                      name: `Add "${inputValue}"`,
+                    });
+                  }
 
-                return filtered;
-              }}
-              selectOnFocus
-              clearOnBlur
-              handleHomeEndKeys
-              options={flocks}
-              getOptionLabel={(option) => {
-                // Value selected with enter, right from the input
-                // Regular option
-                if (option.id) {
-                  return `Flock ${option.id}`;
-                }
-              }}
-              renderOption={(props, option) => <li {...props}>{option.id}</li>}
-              freeSolo
-              renderInput={(params) => (
-                <TextField {...params} label="Flock ID" />
-              )}
-            />
-            <FormControl sx={{ width: "100%", mb: 2 }}>
+                  return filtered;
+                }}
+                selectOnFocus
+                clearOnBlur
+                handleHomeEndKeys
+                options={flocks}
+                getOptionLabel={(option) => {
+                  // Value selected with enter, right from the input
+                  if (typeof option === "string") {
+                    return option;
+                  }
+                  // Add "xxx" option created dynamically
+                  if (option.inputValue) {
+                    return option.inputValue;
+                  }
+                  // Regular option
+                  return option.name;
+                }}
+                renderOption={(props, option) => (
+                  <li {...props}>{option.name}</li>
+                )}
+                sx={{ width: "100%" }}
+                freeSolo
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    error={
+                      sampleValidationErrors["flockName"] &&
+                      generalDetails.flockName === ""
+                        ? true
+                        : false
+                    }
+                    label="Flock Name *"
+                  />
+                )}
+              />
+              {sampleValidationErrors["flockName"] &&
+                generalDetails.flockName === "" && (
+                  <FormHelperText>
+                    {sampleValidationErrors["flockName"]}
+                  </FormHelperText>
+                )}
+            </FormControl>
+            <FormControl
+              required
+              sx={{ width: "100%", mb: 2 }}
+              error={
+                sampleValidationErrors["species"] &&
+                generalDetails.species === ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Species</InputLabel>
               <Select
                 value={generalDetails.species}
@@ -779,8 +721,22 @@ export default function DataViewAddSample() {
                   );
                 })}
               </Select>
+              {sampleValidationErrors["species"] &&
+                generalDetails.species === "" && (
+                  <FormHelperText>
+                    {sampleValidationErrors["species"]}
+                  </FormHelperText>
+                )}
             </FormControl>
-            <FormControl sx={{ width: "100%", mb: 2 }}>
+            <FormControl
+              required
+              sx={{ width: "100%", mb: 2 }}
+              error={
+                sampleValidationErrors["strain"] && generalDetails.strain === ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Strain</InputLabel>
               <Select
                 value={generalDetails.strain}
@@ -796,9 +752,23 @@ export default function DataViewAddSample() {
                   );
                 })}
               </Select>
+              {sampleValidationErrors["strain"] &&
+                generalDetails.strain === "" && (
+                  <FormHelperText>
+                    {sampleValidationErrors["strain"]}
+                  </FormHelperText>
+                )}
             </FormControl>
 
-            <FormControl sx={{ width: "100%" }}>
+            <FormControl
+              required
+              sx={{ width: "100%" }}
+              error={
+                sampleValidationErrors["gender"] && generalDetails.gender === ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Gender</InputLabel>
               <Select
                 value={generalDetails.gender}
@@ -813,10 +783,25 @@ export default function DataViewAddSample() {
                   );
                 })}
               </Select>
+              {sampleValidationErrors["gender"] &&
+                generalDetails.gender === "" && (
+                  <FormHelperText>
+                    {sampleValidationErrors["gender"]}
+                  </FormHelperText>
+                )}
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormControl sx={{ width: "100%", mb: 2 }}>
+            <FormControl
+              required
+              sx={{ width: "100%", mb: 2 }}
+              error={
+                sampleValidationErrors["sourceID"] &&
+                generalDetails.sourceID === ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Source</InputLabel>
               <Select
                 value={generalDetails.sourceID}
@@ -825,15 +810,30 @@ export default function DataViewAddSample() {
               >
                 {sources.map((source, index) => {
                   return (
-                    <MenuItem value={source} key={index}>
+                    <MenuItem value={source.id} key={index}>
                       {source.name} ({source.street_address}, {source.city},{" "}
                       {source.state} {source.zip})
                     </MenuItem>
                   );
                 })}
               </Select>
+              {sampleValidationErrors["sourceID"] &&
+                generalDetails.sourceID === "" && (
+                  <FormHelperText>
+                    {sampleValidationErrors["sourceID"]}
+                  </FormHelperText>
+                )}
             </FormControl>
-            <FormControl sx={{ width: "100%", mb: 2 }}>
+            <FormControl
+              required
+              sx={{ width: "100%", mb: 2 }}
+              error={
+                sampleValidationErrors["productionType"] &&
+                generalDetails.productionType === ""
+                  ? true
+                  : false
+              }
+            >
               <InputLabel>Production Type</InputLabel>
               <Select
                 value={generalDetails.productionType}
@@ -849,22 +849,60 @@ export default function DataViewAddSample() {
                   );
                 })}
               </Select>
+              {sampleValidationErrors["productionType"] &&
+                generalDetails.productionType === "" && (
+                  <FormHelperText>
+                    {sampleValidationErrors["productionType"]}
+                  </FormHelperText>
+                )}
             </FormControl>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-                <TextField
-                  label="Age"
-                  value={generalDetails.ageNumber}
-                  type="number"
-                  onChange={handleGeneralDetailsChange("ageNumber")}
-                />
+                <FormControl
+                  required
+                  sx={{ width: "100%" }}
+                  error={
+                    sampleValidationErrors["ageNumber"] &&
+                    generalDetails.ageNumber === ""
+                      ? true
+                      : false
+                  }
+                >
+                  <TextField
+                    error={
+                      sampleValidationErrors["ageNumber"] &&
+                      generalDetails.ageNumber === ""
+                        ? true
+                        : false
+                    }
+                    label="Age *"
+                    value={generalDetails.ageNumber}
+                    type="number"
+                    onChange={handleGeneralDetailsChange("ageNumber")}
+                  />
+                  {sampleValidationErrors["ageNumber"] &&
+                    generalDetails.ageNumber === "" && (
+                      <FormHelperText>
+                        {sampleValidationErrors["ageNumber"]}
+                      </FormHelperText>
+                    )}
+                </FormControl>
               </Grid>
               <Grid item xs={6}>
-                <FormControl sx={{ width: "100%" }}>
+                <FormControl
+                  sx={{ width: "100%" }}
+                  required
+                  error={
+                    sampleValidationErrors["ageUnit"] &&
+                    generalDetails.ageUnit === ""
+                      ? true
+                      : false
+                  }
+                >
                   <InputLabel>D/W/M/Y</InputLabel>
                   <Select
                     value={generalDetails.ageUnit}
-                    label="D/W/M/Y"
+                    label="D/W/M/Y *"
                     onChange={handleGeneralDetailsChange("ageUnit")}
                   >
                     {Object.values(ageUnits).map((unit, index) => {
@@ -875,6 +913,12 @@ export default function DataViewAddSample() {
                       );
                     })}
                   </Select>
+                  {sampleValidationErrors["ageUnit"] &&
+                    generalDetails.ageUnit === "" && (
+                      <FormHelperText>
+                        {sampleValidationErrors["ageUnit"]}
+                      </FormHelperText>
+                    )}
                 </FormControl>
               </Grid>
             </Grid>
@@ -945,10 +989,6 @@ export default function DataViewAddSample() {
                                   )}
                                   value={data.value}
                                   onChange={(newValue) => {
-                                    console.log(
-                                      "DATETIME CHANGED TO: " + newValue
-                                    );
-
                                     handleMachineTimestampChange(
                                       machine.id,
                                       data.metadata.id,

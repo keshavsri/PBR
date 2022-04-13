@@ -96,7 +96,7 @@ export default function VetScanUpload({
           "aria-labelledby": "basic-button",
         }}
       >
-        <Input
+        {/* <Input
           accept="image/*"
           id="icon-button-file"
           type="file"
@@ -112,7 +112,7 @@ export default function VetScanUpload({
             </ListItemIcon>
             <ListItemText>Take a Photo</ListItemText>
           </MenuItem>
-        </label>
+        </label> */}
         <Input
           accept=".txt"
           id="contained-button-file"

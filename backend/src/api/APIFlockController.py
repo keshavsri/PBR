@@ -1,4 +1,5 @@
 import src.helpers
+from http import HTTPStatus
 from src.api.APIUserController import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
 from src import Models, Schemas
@@ -8,17 +9,29 @@ flockBlueprint = Blueprint('flock', __name__)
 
 
 @flockBlueprint.route('/', methods=['GET'])
+@flockBlueprint.route('/<int:given_org_id>', methods=['GET'])
 @token_required
 @allowed_roles([0,1,2,3])
-def getFlocks(access_allowed, current_user):
+def getFlocks(access_allowed, current_user, given_org_id=None):
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
         current_Organization = current_user.organization_id
-        if current_user.role == Roles.Super_Admin:
-            responseJSON = src.helpers.get_all_flocks()
+
+        if given_org_id:
+            if current_user.role == Roles.Super_Admin:
+                responseJSON = src.helpers.get_flock_by_org(given_org_id)
+            elif current_user.organization_id == given_org_id:
+                responseJSON = src.helpers.get_flock_by_org(given_org_id)
+            else:
+                responseJSON = jsonify({'message': 'Insufficient Permissions'})
+                return responseJSON, 401
         else:
-            responseJSON = src.helpers.get_flock_by_org(current_Organization)
+            if current_user.role == Roles.Super_Admin:
+                responseJSON = src.helpers.get_all_flocks()
+            else:
+                responseJSON = src.helpers.get_flock_by_org(current_Organization)
+
         # if the response json is empty then return a 404 not found
         if responseJSON is None:
             responseJSON = jsonify({'message': 'No records found'})
@@ -113,3 +126,54 @@ def deleteFlock(access_allowed, current_user, item_id):
 @flockBlueprint.route('/')
 def invalid_method(item_id = None):
     return jsonify({'message': 'Invalid Method'}), 405
+
+# Inspiration from https://roytuts.com/python-flask-rest-api-file-upload/
+@flockBlueprint.route('/strains/<string:species>', methods=['GET'])
+def get_strains(species=None):
+    print(species.lower())
+    # Move this to a database soon
+    strains = {
+        "chicken": [
+            "Ross 308",
+            "Ross 708",
+            "Ross 308 AP",
+            "Ranger Premium",
+            "Ranger Classic",
+            "Ranger Gold",
+            "Cobb500",
+            "Cobb700",
+            "Arbor Acres Plus",
+            "Hubbard",
+            "Brown",
+            "LSL",
+            "Sandy",
+            "Silver",
+            "Tradition",
+            "White",
+        ],
+        "turkey": [
+            "Nicholas Select",
+            "BUT 6",
+            "Converter",
+            "Grade Maker",
+            "Optima",
+            "ConverterNOVO",
+        ],
+    }
+
+    if species and species.lower() in strains.keys():
+        resp = jsonify(strains[species.lower()])
+        resp.status_code = HTTPStatus.OK
+        return resp
+    elif species:
+        resp = jsonify({
+            'message' : 'Unsupported Species!'
+        })
+        resp.status_code = HTTPStatus.BAD_REQUEST
+        return resp
+    else:
+        resp = jsonify({
+            'message' : 'Must include a species!'
+        })
+        resp.status_code = HTTPStatus.BAD_REQUEST
+        return resp

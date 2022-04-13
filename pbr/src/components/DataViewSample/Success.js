@@ -21,10 +21,6 @@ export default function Error() {
   let message =
     "Your Sample Entry was Submitted Successfully and is Pending Validation from a Supervisor.";
 
-  if (user) {
-    console.log(user);
-  }
-
   return (
     <>
       <Typography variant="h3" className={classes.successMsg}>

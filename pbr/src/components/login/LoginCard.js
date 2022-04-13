@@ -107,6 +107,7 @@ export default function LoginCard() {
     }
 
     setErrors({ ...tempErrors });
+    setLoading(false);
     if (Object.keys(tempErrors).length === 0) {
       return true; // Valid Data
     } else {

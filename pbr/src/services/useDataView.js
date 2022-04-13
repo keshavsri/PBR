@@ -1,16 +1,23 @@
 import * as React from "react";
+
 const DataViewContext = React.createContext();
 
 export function useDataView() {
+  const [sampleLoading, setSampleLoading] = React.useState(false);
   const [samplePayload, setSamplePayload] = React.useState({});
   const [sampleModalVisibility, setSampleModalVisibility] =
     React.useState(false);
   const [sampleModalScreen, setSampleModalScreen] = React.useState(0);
+  const [sampleValidationErrors, setSampleValidationErrors] = React.useState(
+    {}
+  );
   const [error, setError] = React.useState({});
   const [timestamp, setTimestamp] = React.useState(Date.now());
+  React.useState(false);
+
   const [generalDetails, setGeneralDetails] = React.useState({
     organizationID: "",
-    flockID: null,
+    flockName: "",
     species: "",
     strain: "",
     gender: "",
@@ -22,15 +29,33 @@ export function useDataView() {
     comments: "",
   });
   const [machineDetails, setMachineDetails] = React.useState([]);
+  const [sampleType, setSampleType] = React.useState("");
 
   let openSampleModal = () => {
     setSampleModalVisibility(true);
   };
 
   let closeSampleModal = () => {
-    setSampleModalScreen(0);
+    console.log("Closing Sample Modal");
+    setGeneralDetails({
+      organizationID: "",
+      flockName: "",
+      species: "",
+      strain: "",
+      gender: "",
+      sourceID: "",
+      productionType: "",
+      ageNumber: "",
+      ageUnit: "",
+      flagged: false,
+      comments: "",
+    });
+    setMachineDetails([]);
     setSamplePayload({});
+    setSampleValidationErrors({});
+    setSampleType("");
     setSampleModalVisibility(false);
+    setSampleModalScreen(0);
   };
 
   let samplePrevAction = () => {
@@ -47,7 +72,23 @@ export function useDataView() {
 
   let restartSample = () => {
     setSampleModalScreen(0);
+    setGeneralDetails({
+      organizationID: generalDetails.organizationID,
+      flockName: "",
+      species: "",
+      strain: "",
+      gender: "",
+      sourceID: "",
+      productionType: "",
+      ageNumber: "",
+      ageUnit: "",
+      flagged: false,
+      comments: "",
+    });
+    setMachineDetails([]);
     setSamplePayload({});
+    setSampleValidationErrors({});
+    setSampleType("");
     setError({});
   };
 
@@ -57,29 +98,6 @@ export function useDataView() {
     setInterval(() => {
       setTimestamp(Date.now());
     }, 1000);
-
-    // Get the current user's organization
-    // await fetch(`/api/organization`, {
-    //   method: "GET",
-    // })
-    //   .then(handleAPIResponse)
-    //   .then((data) => {
-    //     console.log(data);
-    //     setSources(data);
-    //   });
-    let mockOrganization = {
-      id: "1",
-      name: "Organization A",
-      street_address: "123 Main Street",
-      city: "Raleigh",
-      state: "NC",
-      zip: "27606",
-      default: "true",
-    };
-    setGeneralDetails({
-      ...generalDetails,
-      organization: mockOrganization,
-    });
   }, []);
 
   return {
@@ -101,6 +119,12 @@ export function useDataView() {
     restartSample,
     timestamp,
     setTimestamp,
+    sampleValidationErrors,
+    setSampleValidationErrors,
+    sampleType,
+    setSampleType,
+    sampleLoading,
+    setSampleLoading,
   };
 }
 
