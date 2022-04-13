@@ -7,6 +7,29 @@ from typing import List, Optional
 # SQLALCHEMY MODELS
 db = SQLAlchemy()
 
+class OrganizationSource(db.Model):
+    __tablename__ = 'Organization-Source'
+    id: int = db.Column(db.Integer, primary_key=True)
+
+    # References to Foreign Objects
+    organization_id: int = db.Column(db.Integer, db.ForeignKey('Organization.id'))
+    source_id: int = db.Column(db.Integer, db.ForeignKey('Source.id'))
+
+    # Foreign References to this Object
+    organizationsource_flock_sample = db.relationship('OrganizationSource-Flock-Sample', backref='Organization-Source')
+
+class OrganizationSourceFlockSample(db.Model):
+    __tablename__ = 'OrganizationSource-Flock-Sample'
+    id: int = db.Column(db.Integer, primary_key=True)
+
+    # References to Foreign Objects
+    organizationsource_id: int = db.Column(db.Integer, db.ForeignKey('Organization-Source.id'))
+    flock_id: int = db.Column(db.Integer, db.ForeignKey('Flock.id'))
+
+    # Foreign References to this Object
+    sample = db.relationship('Sample', backref='OrganizationSource-Flock-Sample')
+
+
 class User(db.Model):
     __tablename__ = 'User'
     id: int = db.Column(db.Integer, primary_key=True)
@@ -40,9 +63,8 @@ class Sample(db.Model):
 
     # Foreign References to this Object
     measurementValue = db.relationship('MeasurementValue', backref='Sample')
-    organizationsource_flock_sample = db.Table('OrganizationSource-Flock-Sample', db.metadata, db.Column('id', db.Integer, primary_key=True), db.Column('Organization-Source_id', db.Integer, db.ForeignKey('Organization-Source.id')), db.Column('Flock_id', db.Integer, db.ForeignKey('Flock.id')), db.Column('Sample_id', db.Integer, db.ForeignKey('Sample.id')))
+    # organizationsource_flock_sample = db.Table('OrganizationSource-Flock-Sample', db.metadata, db.Column('id', db.Integer, primary_key=True), db.Column('Organization-Source_id', db.Integer, db.ForeignKey('Organization-Source.id')), db.Column('Flock_id', db.Integer, db.ForeignKey('Flock.id')), db.Column('Sample_id', db.Integer, db.ForeignKey('Sample.id')))
     organizationsource_flock_sample_id: int = db.Column(db.Integer, db.ForeignKey('OrganizationSource-Flock-Sample.id'))
-
 
 class Organization(db.Model):
     __tablename__ = 'Organization'
@@ -61,8 +83,8 @@ class Organization(db.Model):
     machine = db.relationship('Machine',  backref='Organization')
     log = db.relationship('Log', backref='Organization')
 
-    organization_source = db.Table('Organization-Source', db.metadata, db.Column('id', db.Integer, primary_key=True), db.Column('organization_id', db.Integer, db.ForeignKey('Organization.id')), db.Column('Source_id', db.Integer, db.ForeignKey('Source.id')))
-    sources = db.relationship('Source', secondary=organization_source, backref = 'Organization')
+    organization_source = db.relationship('OrganizationSource-Flock-Sample', backref='Flock')
+    sources = db.relationship('Source', secondary="Organization-Source", back_populates='Organization')
 
 class Source(db.Model):
     __tablename__ = 'Source'
@@ -73,7 +95,7 @@ class Source(db.Model):
     city: str = db.Column(db.String(120))
     state: States = db.Column(db.Enum(States))
     zip: int = db.Column(db.Integer)
-    organizations: List[Organization] = None 
+    organizations = db.relationship('Organization', secondary="Organization-Source", back_populates='Source')
 
     # Foreign References to this Object
     flock = db.relationship('Flock', backref='Source')
@@ -164,6 +186,7 @@ class Flock(db.Model):
     organization_id = db.Column(db.Integer, db.ForeignKey('Organization.id'))
 
     # Foreign References to this Object
+    organizationsource_flock_sample = db.relationship('OrganizationSource-Flock-Sample', backref='Flock')
 
 class Batch(db.Model):
     __tablename__ = 'Batch'
@@ -173,16 +196,6 @@ class Batch(db.Model):
     # Foreign References to this Object
     sample = db.relationship('Sample', backref='Batch')
 
-# class OrganizationSourceFlockSample(db.Model):
-#     __tablename__ = 'OrganizationSourceFlockSample'
-#     id: int = db.Column(db.Integer, primary_key=True)
-#
-#     # References to Foreign Objects
-#     organization_source_id: int = db.Column(db.Integer, db.ForeignKey('Organization-Source.id'))
-#     flock_id: int = db.Column(db.Integer, db.ForeignKey('Flock.id'))
-#
-#     # Foreign References to this Object
-#     sample_id = db.Column(db.Integer, db.ForeignKey('Sample.id'))
 
 def createLog(current_user, action, logContent):
     log = Log(current_user.id, current_user.organization_id, current_user.role, action, logContent)

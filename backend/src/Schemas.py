@@ -32,15 +32,6 @@ class Machine(BaseModel):
     class Config:
         orm_mode = True
 
-# ------------------------------
-# Measurement
-# ------------------------------
-class Measurement(BaseModel):
-    id: Optional[int]
-    machine_id: int
-    measurementtype_id: int
-    class Config:
-        orm_mode = True
 
 # ------------------------------
 # MeasurementType
@@ -52,6 +43,18 @@ class MeasurementType(BaseModel):
     units: constr(max_length=120)
     required: bool
     general: bool
+    class Config:
+        orm_mode = True
+
+# ------------------------------
+# Measurement
+# ------------------------------
+class Measurement(BaseModel):
+    id: Optional[int]
+    machine_id: int
+    machine: Optional[Machine]
+    measurementtype_id: int
+    measurementtype: Optional[MeasurementType]
     class Config:
         orm_mode = True
 

@@ -1,6 +1,8 @@
 from flask import request, Blueprint, jsonify
 from http import HTTPStatus
 import re
+
+import src.helpers
 from src.enums import Roles, LogActions
 from src.api.APIUserController import token_required, allowed_roles
 from src import Models
@@ -179,9 +181,9 @@ def create_sample(access_allowed, current_user):
 #     else:
 #         return jsonify({'message': 'Role not allowed'}), 403
 
-# Retrieves all samples for a given organization#
+# Retrieves all available samples for a given user, or organization if provided#
 @sampleBlueprint.route('/', methods=['GET'])
-@sampleBlueprint.route('/<int:given_org_id>', methods=['GET'])
+@sampleBlueprint.route('/organization/<int:given_org_id>', methods=['GET'])
 @token_required
 @allowed_roles([0,1,2,3])
 def get_samples(access_allowed, current_user, given_org_id=None):
@@ -192,9 +194,9 @@ def get_samples(access_allowed, current_user, given_org_id=None):
 
         if given_org_id:
             if current_user.role == Roles.Super_Admin:
-                responseJSON = src.helpers.get_flock_by_org(given_org_id)
+                responseJSON = src.helpers.get_sample_by_org(given_org_id)
             elif current_user.organization_id == given_org_id:
-                responseJSON = src.helpers.get_flock_by_org(given_org_id)
+                responseJSON = src.helpers.get_sample_by_org(given_org_id)
             else:
                 responseJSON = jsonify({'message': 'Insufficient Permissions'})
                 return responseJSON, 401

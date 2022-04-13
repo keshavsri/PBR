@@ -72,10 +72,10 @@ def create_sample(sample_dict: dict):
     return sample
 
 def get_sample_by_org(org_id: int) -> List[dict]:
-    samples = SampleORM.query.filter_by(organization_id=org_id).all()
+    samples = SampleORM.query.join(OrganizationSource_Flock_Sample, sample.organizationsource_flock_sample_id==OrganizationSource_Flock_Sample.id)
     ret = []
-    for flock in flocks:
-        ret.append(Flock.from_orm(flock).dict())
+    for sample in samples:
+        ret.append(Sample.from_orm(sample).dict())
     print(ret)
     return json.dumps(ret, default=str)
 
