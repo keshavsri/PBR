@@ -11,7 +11,11 @@ import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({});
 
-export default function DataViewFilterModal() {
+export default function DataViewFilterModal(props) {
+  const {
+    setRowList,
+    setHeadCellList
+  } = props;
   const {
     generalFilterState,
     setGeneralFilterState,
@@ -29,8 +33,8 @@ export default function DataViewFilterModal() {
         return response.json();
       }).then((data) => {
         console.log(data);
-        // setRowList(data.row);
-        // setHeadCellList(data.types);
+        setRowList(data.row);
+        setHeadCellList(data.types);
       })
       console.log("Filtering!");
       handleCloseFilterModal();

@@ -543,7 +543,7 @@ export default function DataView() {
           onDelete = {onDelete}
         ></EnhancedTable>
       </Paper>
-      <DataViewFilterModal/>
+      <DataViewFilterModal setRowList={setRowList} setHeadCellList={setHeadCellList}/>
       <DataViewSampleModal />
     </DataViewProvider>
   );
