@@ -1,22 +1,12 @@
 import * as React from "react";
 
-import { Button, Stack } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import SampleIcon from "@mui/icons-material/Science";
-import NextIcon from "@mui/icons-material/ArrowForwardIos";
-import PrevIcon from "@mui/icons-material/ArrowBackIos";
-import SubmitIcon from "@mui/icons-material/Publish";
+import { Button } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
-import AddSample from "./AddSample";
-import YourSample from "./YourSample";
-import Success from "./Success";
-import Error from "./Error";
-
-import DataViewConsumer from "../../services/useDataView";
+import DataViewConsumer from "../services/useDataView";
 import DataViewFilterContent from "./DVFilterContent";
 
-import CustomDialog from "../CustomDialog";
+import CustomDialog from "./CustomDialog";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({});
@@ -31,8 +21,6 @@ export default function DataViewFilterModal() {
     handleCloseFilterModal  
   } = DataViewConsumer();
 
-  const classes = useStyles();
-  const theme = useTheme();
 
   let applyFilter = async () => {
     fetch(`/api/sample/filter`, {      method: "POST",
@@ -41,16 +29,15 @@ export default function DataViewFilterModal() {
         return response.json();
       }).then((data) => {
         console.log(data);
-        setRowList(data.row);
-        setHeadCellList(data.types);
+        // setRowList(data.row);
+        // setHeadCellList(data.types);
       })
       console.log("Filtering!");
       handleCloseFilterModal();
     };
 
   // Define the footer for the modal. By default, there's no footer.
-  let footer = null;
-  footer = (
+  let footer = (
     <>
     <Button
       variant="contained"
@@ -67,7 +54,7 @@ export default function DataViewFilterModal() {
       Apply
     </Button>
   </>
-  )
+  );
 
   return (
     <>

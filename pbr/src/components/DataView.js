@@ -4,7 +4,6 @@ import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
 
 import DataViewSampleModal from "./DataViewSample/SampleModal";
 import DataViewFilterModal from "./FilterModal";
-import DataViewAddSample from "./DataViewSample/AddSample";
 import DVTableToolbar from "./DVTableToolbar";
 
 import EnhancedTable from "./DataViewTable/EnhancedTable";
