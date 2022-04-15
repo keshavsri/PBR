@@ -1,7 +1,27 @@
 import { createTheme, responsiveFontSizes } from "@mui/material/styles";
 
-let mainTheme = createTheme({
+let tempTheme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   components: {
+    MuiToolbar: {
+      styleOverrides: {
+        MuiButtonBase: {
+          styleOverrides: {
+            root: {
+              borderRadius: "333px",
+            },
+          },
+        },
+      },
+    },
     MuiIcon: {
       styleOverrides: {
         root: {
@@ -15,8 +35,7 @@ let mainTheme = createTheme({
     MuiButtonBase: {
       styleOverrides: {
         root: {
-          borderRadius: "333px",
-          height: "42px",
+          // height: "42px",
         },
       },
     },
@@ -28,6 +47,9 @@ let mainTheme = createTheme({
     },
     secondary: {
       main: "#2E3B52",
+    },
+    secondaryLight: {
+      main: "#EEEEEE",
     },
     warning: {
       main: "#FFC700",
@@ -41,11 +63,18 @@ let mainTheme = createTheme({
     text: {
       secondary: "#2E3B52",
     },
+    lighttext: {
+      main: "rgba(0, 0, 0, 0.50)",
+    },
+    background: {
+      default: "rgb(40, 40, 40)",
+    },
   },
   typography: {
     button: {
       fontSize: "1.15rem", // works
-      fontWeight: 700,
+      fontWeight: 600,
+      textTransform: "none",
     },
     fontFamily: [
       "Univers",
@@ -69,8 +98,4 @@ let mainTheme = createTheme({
   },
 });
 
-mainTheme = responsiveFontSizes(mainTheme);
-
-export const themes = {
-  mainTheme,
-};
+export const mainTheme = responsiveFontSizes(tempTheme);

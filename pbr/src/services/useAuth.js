@@ -7,6 +7,7 @@ const AuthContext = React.createContext();
 export function useAuth() {
   const [user, setUser] = React.useState(null);
   const [loadingAuth, setLoadingAuth] = React.useState(true);
+  const [recredentialize, setRecredentialize] = React.useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -15,21 +16,38 @@ export function useAuth() {
     fetch("/api/user/me", {
       method: "GET",
     })
-      .then(handleResponse)
+      .then(checkResponseAuth)
+      .then((response) => response.json())
       .then((user) => {
-        if (user) {
-          setUser(user);
-          setLoadingAuth(false);
-        } else {
-          setUser(null);
-          setLoadingAuth(false);
-        }
+        console.log(user);
+        setLoadingAuth(false);
+        setRecredentialize(false);
+        setUser(user);
+        setRecredentialize(false);
       })
       .catch((err) => {
+        console.log(err);
         setUser(null);
         setLoadingAuth(false);
       });
   }, []);
+
+  // let apiCall = (method, endpoint, callback = null, options = null) => {
+  //   // Check HTTP method
+  //   if (
+  //     !method ||
+  //     ["GET", "POST", "PUSH", "DELETE", "PATCH"].indexOf(method) !== -1
+  //   ) {
+  //     throw new Error("Invalid HTTP method.");
+  //   }
+  //   // Check if endpoint was provided
+  //   if (!endpoint) {
+  //     throw new Error("Missing Endpoint.");
+  //   }
+  //   fetch(`${endpoint}`, {
+  //     method: `${method}`,
+  //   }).then(checkResponseAuth).then((response) => console.log(response));
+  // };
 
   let login = async (email, password) => {
     console.log("useAuth(): Logging in.");
@@ -49,6 +67,7 @@ export function useAuth() {
         .then(handleResponse)
         .then((user) => {
           setUser(user);
+          setRecredentialize(false);
           resolve("Success. Logging in.");
         })
         .catch((err) => {
@@ -70,10 +89,35 @@ export function useAuth() {
       })
       .catch((err) => {
         return new Promise((rej) => {
+          setUser(null);
           rej(err);
         });
       });
   };
+
+  function checkResponseAuth(response) {
+    if (!response.ok) {
+      if ([419].indexOf(response.status) !== -1) {
+        // Token expired. We need to reprompt to login.
+        console.log("Token expired. We need to reprompt to login.");
+        setRecredentialize(true);
+        setLoadingAuth(false);
+        return Promise.reject();
+      }
+      if ([401, 403].indexOf(response.status) !== -1) {
+        // auto logout if 401 Unauthorized or 403 Forbidden response returned from api
+        console.log("User is unauthorized. Forbid!.");
+        logout();
+        setLoadingAuth(false);
+        return Promise.reject();
+      } else {
+        return response;
+      }
+    } else {
+      console.log("User is valid. Return.");
+      return response;
+    }
+  }
 
   function handleResponse(response) {
     if (!response.ok) {
@@ -94,6 +138,9 @@ export function useAuth() {
     login,
     logout,
     loadingAuth,
+    recredentialize,
+    setRecredentialize,
+    checkResponseAuth,
   };
 }
 

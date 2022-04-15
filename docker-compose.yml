@@ -27,6 +27,7 @@ services:
       - DATABASE_URL=mysql+pymysql://root:${MYSQL_ROOT_PASSWORD}@db/pbr
       - JWT_SIGN_ALGORITHM=HS256
       - JWT_TTL=60
+      - JWT_SECRET=mjMCI,y?&kY$R!SyaVgQXQ.,V[.7*}
     depends_on:
       - db
 
@@ -36,6 +37,7 @@ services:
     restart: unless-stopped
     environment:
       - HOST=0.0.0.0
+      - MYSQL_ROOT_PASSWORD=password
 
   db:
     image: mysql
@@ -48,7 +50,6 @@ services:
     environment:
       - MYSQL_DATABASE=pbr
       # - MYSQL_ROOT_PASSWORD=choose_a_password # I suggest you set this via a .env file
-    command: mysqld --default-authentication-plugin=mysql_native_password
 
 volumes:
   dbdata: 

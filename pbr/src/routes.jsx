@@ -1,32 +1,33 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import useAuth from "./services/useAuth";
+import AuthConsumer from "./services/useAuth";
+import { DataViewProvider } from "./services/useDataView";
 
 import MainLayout from "./layouts/MainLayout";
-import DataView from "./layouts/LoginLayout";
 import LoginBackdrop from "./layouts/LoginLayout";
 import Error404 from "./layouts/404Error";
-
+import DataView from "./components/DataView";
+import OrganizationView from "./components/OrganizationView";
+import LoggingView from "./components/LoggingView";
 import LoginCard from "./components/login/LoginCard";
 import RegisterCard from "./components/login/RegisterCard";
 import RecoveryCard from "./components/login/RecoveryCard";
 import ManageUsers from "./components/ManageUsers";
 
-
 function RequireAuth({ children }) {
-  const { user } = useAuth();
+  const { user, recredentialize } = AuthConsumer();
   const location = useLocation();
-
-  return user ? (
+  console.log("requireauth");
+  return user || recredentialize ? (
     children
   ) : (
     <Navigate to="/login" replace state={{ path: location.pathname }} />
   );
 }
 function NonAuth({ children }) {
-  const { user } = useAuth();
+  const { user } = AuthConsumer();
   const location = useLocation();
-
+  console.log("nonauth");
   return user ? (
     <Navigate to="/data-view" replace state={{ path: location.pathname }} />
   ) : (
@@ -35,7 +36,6 @@ function NonAuth({ children }) {
 }
 
 const routes = [
-
   {
     path: "/login",
     element: (
@@ -70,7 +70,9 @@ const routes = [
     path: "/data-view",
     element: (
       <RequireAuth>
-        <MainLayout card={<DataView />} />
+        <MainLayout>
+          <DataView />
+        </MainLayout>
       </RequireAuth>
     ),
   },
@@ -78,7 +80,7 @@ const routes = [
     path: "/generate-reports",
     element: (
       <RequireAuth>
-        <MainLayout view={<DataView />} />
+        <MainLayout />
       </RequireAuth>
     ),
   },
@@ -96,7 +98,19 @@ const routes = [
     path: "/manage-organization",
     element: (
       <RequireAuth>
-        <MainLayout />
+        <MainLayout>
+          <OrganizationView />
+        </MainLayout>
+      </RequireAuth>
+    ),
+  },
+  {
+    path: "/logging-view",
+    element: (
+      <RequireAuth>
+        <MainLayout>
+          <LoggingView />
+        </MainLayout>
       </RequireAuth>
     ),
   },
@@ -112,7 +126,7 @@ const routes = [
     path: "/",
     element: (
       <RequireAuth>
-        <MainLayout card={<DataView />} />
+        <MainLayout />
       </RequireAuth>
     ),
   },

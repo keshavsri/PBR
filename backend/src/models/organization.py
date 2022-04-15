@@ -1,26 +1,44 @@
-from unicodedata import name
+from dataclasses import dataclass
 from server import db
 from models.enums import States
-from flask_serialize import FlaskSerialize
+from typing import List
 
-fs_mixin = FlaskSerialize(db)
+from models.source import Source
 
-class Organization(db.Model, fs_mixin):
+
+@dataclass
+class Organization(db.Model):
     __tablename__ = 'organization'
     __table_args__ = {'extend_existing': True}
-    # need to add other one to many 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120))
-    street_address = db.Column(db.String(120))
-    city = db.Column(db.String(120))
-    state = db.Column(db.String(20))
-    zip = db.Column(db.String(10))
-    mainContact = db.Column(db.Integer, db.ForeignKey('user.id'))
-    notes = db.Column(db.String(500))
-    sources = None
-
     
-    __fs_create_fields__ = __fs_update_fields__ = ['name','street_address', 'city', 'state', 'zip', 'mainContact','notes']
+    # need to add ot    # The fields below are stored in the database, they are assigned both a python and a database type
+    id:int = db.Column(db.Integer, primary_key=True)
+    name: str = db.Column(db.String(120), unique=True)
+    street_address: str = db.Column(db.String(120))
+    city: str = db.Column(db.String(120))
+    state: States = db.Column(db.Enum(States))
+    zip: str = db.Column(db.String(10))
+    notes: str = db.Column(db.String(500))
+    organizationCode: str = db.Column(db.String(6), unique=True)
+    from models.source import Source
+    sources: List[Source] = None
+    # TODO: sort this out
+    #organizationCodeExpiry = db.Column(db.DateTime)
 
-def createTable():
+    # initialize the class from a json object from the frontend
+    def __init__ (self, requestJSON):
+        self.name = requestJSON.get('name')
+        self.street_address = requestJSON.get('street_address')
+        self.city = requestJSON.get('city')
+        self.state = requestJSON.get('state')
+        self.zip = requestJSON.get('zip')
+
+    # creates the table in the database
+    def createTable():
+        from models.user import User
+        mainContact: User = db.Column(db.Integer, db.ForeignKey('user.id'))
+        organization_source = db.Table('organization-source', db.metadata, db.Column('organization_id', db.Integer, db.ForeignKey('organization.id')), db.Column('source_id', db.Integer, db.ForeignKey('source.id')), extend_existing=True)
+        Organization.sources = db.relationship('Source', secondary=organization_source, backref = 'organizations')
         db.create_all()
+
+

@@ -1,0 +1,32 @@
+         VetScan VS2          
+ Avian/Reptilian Profile Plus 
+15 Oct 2021           08:39 AM
+Sample Type:             Other
+Patient ID:           101521-5
+Rotor Lot Number:      1104AC0
+Serial Number:      0000V33943
+..............................
+01 0ECF  FFFF  BEFF  FFFF     
+02 EACF  FFFF  D6FD  5CFF     
+03 0000  0000  0000  0000     
+04 0000  0000  0000  0000     
+05 0000  0000  8800  0000     
+06 0000                       
+AST     284   0000 0000    U/L
+BA        6   0001 0000 umol/L
+CK     3429   0000 0000    U/L
+UA      1.8   0000 0000  mg/dL
+GLU     257   0000 0000  mg/dL
+CA     11.2   0000 0000  mg/dL
+PHOS    7.5   0000 0000  mg/dL
+TP      3.7   0000 0000   g/dL
+ALB     2.1   0000 0001   g/dL
+GLOB    1.6   0000 0000   g/dL
+K+      4.0   0000 0000 mmol/L
+NA+     152   0000 0000 mmol/L
+                              
+RQC: 102                      
+HEM 2     LIP 224   ICT 0     
+Version:                3.1.33
+
+
