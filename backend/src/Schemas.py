@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from pydantic import BaseModel, constr
-from src.enums import States, Species, ProductionTypes, BirdGenders, AgeUnits, ValidationTypes, SampleTypes
+from src.enums import States, Species, ProductionTypes, BirdGenders, AgeUnits, ValidationTypes, SampleTypes, Roles, LogActions
 from typing import List, Optional
 
 
@@ -15,19 +15,6 @@ from typing import List, Optional
 class Machinetype(BaseModel):
     id: Optional[int]
     name: constr(max_length=120)
-    class Config:
-        orm_mode = True
-
-# ------------------------------
-# Machine
-# ------------------------------
-class Machine(BaseModel):
-    id: Optional[int]
-    serial_number: constr(max_length=120)
-    # References to Foreign Objects
-    machinetype_id: int
-    machinetype: Optional[Machinetype]
-    organization_id: int
     class Config:
         orm_mode = True
 
@@ -45,14 +32,27 @@ class MeasurementType(BaseModel):
     class Config:
         orm_mode = True
 
+
+# ------------------------------
+# Machine
+# ------------------------------
+class Machine(BaseModel):
+    id: Optional[int]
+    serial_number: constr(max_length=120)
+    # References to Foreign Objects
+    machinetype_id: int
+    machinetype: Optional[Machinetype]
+    organization_id: int
+    measurements: "Optional[List[Measurement]]"
+    class Config:
+        orm_mode = True
 # ------------------------------
 # Measurement
 # ------------------------------
 class Measurement(BaseModel):
     id: Optional[int]
-    machine_id: int
-    machine: Optional[Machine]
-    measurementtype_id: int
+    machine_id: Optional[int]
+    measurementtype_id: Optional[int]
     measurementtype: Optional[MeasurementType]
     class Config:
         orm_mode = True
@@ -66,7 +66,7 @@ class MeasurementValue(BaseModel):
     measurement: Optional[Measurement]
     sample_id: int
     value: float
-    timestamp_added: Optional[str]
+    timestamp_added: Optional[datetime]
     class Config:
         orm_mode = True
 
@@ -121,6 +121,7 @@ class Sample(BaseModel):
     entered_by_id: Optional[int]
     timestamp_added: Optional[datetime]
     organization: Optional[Organization]
+    measurement_values: Optional[List[MeasurementValue]]
     class Config:
         orm_mode = True
 
@@ -138,9 +139,23 @@ class Flock(BaseModel):
     organization_id: int
     source_id: int
     birthday: datetime
+    timestamp_added: Optional[datetime]
     class Config:
         orm_mode = True
 
+Machine.update_forward_refs()
+
+
 # ------------------------------
-# ?
+# Logs
 # ------------------------------
+class Log(BaseModel):
+    id: int
+    role: Roles
+    action: LogActions
+    logContent: constr(max_length=500)
+    logTime: datetime
+    user_id: int
+    organization_id: int
+    class Config:
+        orm_mode = True

@@ -2,6 +2,8 @@ from flask import Blueprint, jsonify, request
 from src.api.APIUserController import token_required
 from src import Models
 from src.enums import Roles, LogActions
+from src import helpers
+from src.Schemas import Log
 
 logBlueprint = Blueprint('log', __name__)
 
@@ -17,19 +19,19 @@ def handleLog(current_user, item_id = None):
         if item_id:
             log =  Models.Log.query.get(item_id)
             if current_user.role == Roles.Super_Admin:
-                responseJSON = jsonify(log)
+                responseJSON = Log.from_orm(log).dict()
             elif log.organization == current_Organization:
-                responseJSON = jsonify(log)
+                responseJSON = Log.from_orm(log).dict()
             else:
                 return jsonify({'message': 'You cannot access this log'}), 403
             
         # otherwise it will return all the organizations in the database
         elif current_user.role == Roles.Super_Admin:
-            responseJSON = jsonify( Models.Log.query.all())
+            responseJSON = jsonify(helpers.get_logs())
         else:
-            responseJSON = jsonify( Models.Log.query.filter_by(organization_id=current_Organization).all())
+            responseJSON = helpers.get_logs_by_org(current_Organization)
         # if the response json is empty then return a 404 not found
-        if responseJSON.json is None:
+        if responseJSON is None:
             responseJSON = jsonify({'message': 'No records found'})
             return responseJSON, 404
         else:

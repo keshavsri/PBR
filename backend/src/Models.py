@@ -73,8 +73,11 @@ class Sample(db.Model):
     validation_status: ValidationTypes = db.Column(db.Enum(ValidationTypes), server_default=ValidationTypes.Pending)
     sample_type: SampleTypes = db.Column(db.Enum(SampleTypes))
 
+    measurement_values = db.relationship('MeasurementValue')
+
+
     # Foreign References to this Object
-    measurementValue = db.relationship('MeasurementValue', backref='Sample')
+    # measurementValue = db.relationship('MeasurementValue', backref='Sample')
     # organization = db.column_property(db.select(Organization).where())
     organizationsource_flock_sample_id: int = db.Column(db.Integer, db.ForeignKey('OrganizationSource-Flock-Sample.id'))
 
@@ -99,7 +102,9 @@ class Measurement(db.Model):
 
     # References to Foreign Objects
     machine_id: int = db.Column(db.Integer, db.ForeignKey('Machine.id'), nullable=False)
+    machine = db.relationship('Machine', back_populates='measurement', uselist=False)
     measurementtype_id: int = db.Column(db.Integer, db.ForeignKey('MeasurementType.id'), nullable=False)
+    measurementtype = db.relationship('MeasurementType', back_populates='measurement', uselist=False)
 
     # Foreign References to this Object
     measurementValue = db.relationship('MeasurementValue', backref='Measurement')
@@ -133,8 +138,9 @@ class Machine(db.Model):
 
     # References to Foreign Objects
     machinetype_id: int = db.Column(db.Integer, db.ForeignKey('MachineType.id'), nullable=False)
-    machinetype = db.relationship('MachineType')
+    machinetype = db.relationship('MachineType', backref='machine', uselist=False)
     organization_id: int = db.Column(db.Integer, db.ForeignKey('Organization.id'), nullable=False)
+    measurements: List[Measurement] = db.relationship('Measurement', back_populates='machine')
 
     # Foreign References to this Object
     measurement = db.relationship('Measurement', backref='Machine')
@@ -164,6 +170,8 @@ class Log(db.Model):
         self.role = role
         self.action = action
         self.logContent = logContent
+
+
 class Flock(db.Model):
     __tablename__ = 'Flock'
     id: int = db.Column(db.Integer, primary_key=True)
