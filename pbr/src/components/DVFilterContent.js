@@ -456,9 +456,9 @@ export default function DataViewFilterContent() {
             <FormControl sx={{ width: "100%" }}>
               <InputLabel>Organization</InputLabel>
               <Select
-                value={generalFilterState.organization}
+                value={generalFilterState.organizationID}
                 label="Organization"
-                onChange={handleGeneralFilterChange("organization")}
+                onChange={handleGeneralFilterChange("organizationID")}
               >
                 <MenuItem value={""}></MenuItem>
               </Select>

@@ -41,7 +41,7 @@ export function useDataView() {
     sampleType: "",
     batch: "",
     dataCollector: "",
-    organiztion: "",
+    organization: "",
   });
 
   let openSampleModal = () => {
