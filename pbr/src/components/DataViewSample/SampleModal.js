@@ -13,11 +13,10 @@ import CategorizeSample from "./CategorizeSample";
 import Success from "./Success";
 import Error from "./Error";
 
-import DataViewConsumer from "../../services/useDataView";
-import AuthConsumer from "../../services/useAuth";
-
 import CustomDialog from "../CustomDialog";
 import { makeStyles } from "@mui/styles";
+import useAuth from "../../services/useAuth";
+import useDataView from "../../services/useDataView";
 
 const useStyles = makeStyles({});
 
@@ -40,8 +39,8 @@ export default function DataViewSampleModal() {
     sampleType,
     sampleLoading,
     setSampleLoading,
-  } = DataViewConsumer();
-  const { checkResponseAuth, user } = AuthConsumer();
+  } = useDataView();
+  const { checkResponseAuth, user } = useAuth();
 
   let dismissError = () => {
     setError({});

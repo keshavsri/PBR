@@ -27,11 +27,11 @@ import {
   Switch,
   IconButton,
 } from "@mui/material";
-import DataViewConsumer from "../../services/useDataView";
 
 import { sampleTypes } from "../../models/enums";
 
 import { makeStyles } from "@mui/styles";
+import useDataView from "../../services/useDataView";
 
 const useStyles = makeStyles({
   container: {
@@ -42,7 +42,7 @@ const useStyles = makeStyles({
 export default function CategorizeSample() {
   const classes = useStyles();
   useTheme();
-  const { sampleType, setSampleType } = DataViewConsumer();
+  const { sampleType, setSampleType } = useDataView();
 
   const handleSampleTypeChange = (event) => {
     setSampleType(event.target.value);

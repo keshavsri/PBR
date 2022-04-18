@@ -3,17 +3,17 @@ import { useTheme } from "@mui/material/styles";
 
 import { Typography, Box, Button, Tooltip, IconButton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import DataViewConsumer from "../services/useDataView";
 import BulkIcon from "@mui/icons-material/UploadFile";
 import ReportIcon from "@mui/icons-material/Assessment";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import SampleIcon from "@mui/icons-material/Science";
+import useDataView from "../services/useDataView";
 
 const useStyles = makeStyles({});
 
 export default function DVTableToolbar({ handleOpenFilterModal }) {
   const classes = useStyles();
-  const { openSampleModal } = DataViewConsumer();
+  const { openSampleModal } = useDataView();
 
   useTheme();
 

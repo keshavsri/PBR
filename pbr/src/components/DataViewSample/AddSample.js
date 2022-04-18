@@ -39,10 +39,10 @@ import FlagIcon from "@mui/icons-material/Flag";
 import OutlinedFlagIcon from "@mui/icons-material/OutlinedFlag";
 import { tooltipClasses } from "@mui/material/Tooltip";
 import { createFilterOptions } from "@mui/material/Autocomplete";
-import DataViewConsumer from "../../services/useDataView";
-import AuthConsumer from "../../services/useAuth";
 import VetScanUpload from "./VetScanUpload";
 import IStatUpload from "./IStatUpload";
+import useAuth from "../../services/useAuth";
+import useDataView from "../../services/useDataView";
 
 const filter = createFilterOptions();
 
@@ -142,8 +142,8 @@ export default function DataViewAddSample({
     timestamp,
     setTimestamp,
     sampleValidationErrors,
-  } = DataViewConsumer();
-  const { checkResponseAuth } = AuthConsumer();
+  } = useDataView();
+  const { checkResponseAuth } = useAuth();
 
   // General Section Data
 

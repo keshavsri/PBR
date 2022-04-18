@@ -2,7 +2,7 @@ import * as React from "react";
 
 const DataViewContext = React.createContext();
 
-export function useDataView() {
+function useCreateDataView() {
   const [sampleLoading, setSampleLoading] = React.useState(false);
   const [samplePayload, setSamplePayload] = React.useState({});
   const [sampleModalVisibility, setSampleModalVisibility] =
@@ -129,7 +129,7 @@ export function useDataView() {
 }
 
 export function DataViewProvider({ children }) {
-  const dataview = useDataView();
+  const dataview = useCreateDataView();
 
   return (
     <DataViewContext.Provider value={dataview}>
@@ -138,6 +138,16 @@ export function DataViewProvider({ children }) {
   );
 }
 
-export default function DataViewConsumer() {
+export function DataViewConsumer({ children }) {
+  return (
+    <DataViewContext.Consumer>
+      {(context) => {
+        return children(context);
+      }}
+    </DataViewContext.Consumer>
+  );
+}
+
+export default function useDataView() {
   return React.useContext(DataViewContext);
 }
