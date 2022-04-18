@@ -217,20 +217,20 @@ def get_samples(access_allowed, current_user, given_org_id=None):
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
         current_Organization = current_user.organization_id
-        responseJSON = jsonify(Models.Sample.query.all())
-        # if given_org_id:
-        #     if current_user.role == Roles.Super_Admin:
-        #         responseJSON = src.helpers.get_sample_by_org(given_org_id)
-        #     elif current_user.organization_id == given_org_id:
-        #         responseJSON = src.helpers.get_sample_by_org(given_org_id)
-        #     else:
-        #         responseJSON = jsonify({'message': 'Insufficient Permissions'})
-        #         return responseJSON, 401
-        # else:
-        #     if current_user.role == Roles.Super_Admin:
-        #         responseJSON = jsonify(Models.Sample.query.all())
-        #     else:
-        #         responseJSON = src.helpers.get_sample_by_org(current_Organization)
+
+        if current_Organization == given_org_id:
+            # If the user is an admin, they can see all samples.
+            if current_user.roled == 1:
+                responseJSON = helpers.get_sample_by_org(given_org_id)
+            else:
+                # Otherwise, they can only see samples that are assigned to them.
+                responseJSON = helpers.get_samples_by_user(current_user.id)
+        elif current_user.role == 0:
+            # If the user is an super admin, they can see all samples.
+            if given_org_id is None:
+                responseJSON = helpers.get_sample_by_org(current_Organization)
+            else:
+                responseJSON = helpers.get_all_samples()
 
         # if the response json is empty then return a 404 not found
         if responseJSON is None:

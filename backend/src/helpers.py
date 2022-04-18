@@ -14,7 +14,8 @@ from src.Models import OrganizationSource as OrganizationSourceORM
 from src.Models import OrganizationSource_Flock_Sample as OrganizationSource_Flock_SampleORM
 from src.Models import MeasurementType as MeasurementTypeORM
 from src.Models import MeasurementValue as MeasurementValueORM
-from src.Schemas import Flock, Organization, Source, Sample, Machine, Machinetype, Measurement, MeasurementType, MeasurementValue
+from src.Models import Log as LogORM
+from src.Schemas import Flock, Organization, Source, Sample, Machine, Machinetype, Measurement, MeasurementType, MeasurementValue, Log
 
 def get_machines_by_org(org_id: int) -> List[dict]:
     machines = MachineORM.query.filter_by(organization_id=org_id).all()
@@ -37,7 +38,8 @@ def get_machine_by_id(id: int) -> dict:
 def create_machine(machine_dict: dict):
     machine:MachineORM = MachineORM()
     for name, value in Machine.parse_obj(machine_dict):
-        setattr(machine, name, value)
+        if name != 'measurements':
+            setattr(machine, name, value)
     machine.machinetype = MachineTypeORM.query.filter_by(id=machine_dict['machinetype_id']).first()
     db.session.add(machine)
     db.session.commit()
@@ -180,8 +182,12 @@ def create_measurement(measurement_dict: dict):
 def create_sample(sample_dict: dict):
     sample:SampleORM = SampleORM()
     for name, value in Sample.parse_obj(sample_dict):
-        setattr(sample, name, value)
-
+        if name != 'measurement_values':
+            setattr(sample, name, value)
+        else:
+            values = []
+            for measurement_value_dict in value:
+                values.append(create_measurement_value(measurement_value_dict))
     db.session.add(sample)
     db.session.commit()
     db.session.refresh(sample)
@@ -198,12 +204,14 @@ def get_sample_by_org(org_id: int) -> List[dict]:
     # print("SAMPLE 1", json.dumps(samples[0].street_address, default=str))
     ret = []
     for sample in samples:
+        sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
         ret.append(Sample.from_orm(sample).dict())
     print(ret)
     return json.dumps(ret, default=str)
 
 def get_sample_by_id(id: int) -> dict:
     sample = SampleORM.query.filter_by(id=id).first()
+    sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
     return Sample.from_orm(sample).dict()
 
 # def get_sample_by_org(org_id: int) -> List[dict]:
@@ -217,6 +225,7 @@ def get_sample_by_user(user_id: int) -> List[dict]:
     samples = SampleORM.query.filter_by(entered_by_id=user_id).all()
     ret = []
     for sample in samples:
+        sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
         ret.append(Sample.from_orm(sample).dict())
     return json.dumps(ret)
 
@@ -224,6 +233,7 @@ def get_samples() -> List[dict]:
     samples = SampleORM.query.filter_by().all()
     ret = []
     for sample in samples:
+        sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
         ret.append(Sample.from_orm(sample).dict())
     return json.dumps(ret)
 
@@ -235,6 +245,26 @@ def create_measurement_value(measurement_value_dict: dict):
     db.session.commit()
     db.session.refresh(measurement_value)
     return measurement_value
+
+def get_measurement_value_ORM_by_sample_id(sample_id: int) -> dict:
+    measurement_values = MeasurementValueORM.query.filter_by(sample_id=sample_id).all()
+    for value in measurement_values:
+        value.measurement = MeasurementORM.query.filter_by(id=value.measurement_id).first()
+    return measurement_values
+
+def get_logs_by_org(org_id: int) -> List[dict]:
+    logs = LogORM.query.filter_by(organization_id=org_id).all()
+    ret = []
+    for log in logs:
+        ret.append(Log.from_orm(log).dict())
+    return ret
+
+def get_logs() -> List[dict]:
+    logs = LogORM.query.filter_by().all()
+    ret = []
+    for log in logs:
+        ret.append(Log.from_orm(log).dict())
+    return ret
 
 # def create_sample(sample_dict: dict):
 #     sample:SampleORM = SampleORM()

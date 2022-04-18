@@ -42,7 +42,7 @@ def getFlocks(access_allowed, current_user, given_org_id=None):
         return jsonify({'message': 'Role not allowed'}), 403
 
 
-@flockBlueprint.route('/<int:item_id>', methods=['GET'])
+@flockBlueprint.route('/id/<int:item_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def getFlock(access_allowed, current_user, item_id):
@@ -50,7 +50,7 @@ def getFlock(access_allowed, current_user, item_id):
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
         current_Organization = current_user.organization_id
-        flock = Models.Flock.query.get(item_id)
+        flock = src.helpers.get_flock_by_id(item_id)
         if flock is None:
             return jsonify({'message': 'No record found'}), 404
         if current_user.role == Roles.Super_Admin or flock.organization == current_Organization:
