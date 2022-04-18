@@ -22,3 +22,5 @@ NA+     156             mmol/L
                               
 QC     OK                     
 HEM 2+    LIP 0     ICT 0     
+
+
