@@ -9,12 +9,12 @@ export function useDataView() {
   const [error, setError] = React.useState({});
   const [timestamp, setTimestamp] = React.useState(Date.now());
   const [generalDetails, setGeneralDetails] = React.useState({
-    organization: "",
+    organizationID: "",
     flockID: null,
     species: "",
     strain: "",
     gender: "",
-    source: "",
+    sourceID: "",
     productionType: "",
     ageNumber: "",
     ageUnit: "",

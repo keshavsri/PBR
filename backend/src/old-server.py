@@ -12,6 +12,7 @@ from api.APIOrganizationController import organizationBlueprint
 from api.APILogController import logBlueprint
 from api.APIFlockController import flockBlueprint
 from api.APIDataController import sampleBlueprint
+from Models import db
 
 app = Flask(__name__)
 app.register_blueprint(apiBlueprint, url_prefix='/api')
@@ -23,7 +24,13 @@ app.register_blueprint(sampleBlueprint, url_prefix='/api/sample')
 app.config['SECRET_KEY'] = os.environ.get("JWT_SECRET")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
-db = SQLAlchemy(app)
+
+db.init_app(app = app)
+
+with app.app_context():
+    print("Creating database tables...")
+    db.create_all()
+    print("Done!")
 
 
 @app.route('/')
