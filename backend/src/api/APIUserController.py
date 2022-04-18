@@ -7,26 +7,16 @@ import jwt
 import json
 from src.auth_token import Auth_Token
 from functools import wraps
-<<<<<<< HEAD
-
-userBlueprint = Blueprint('user', __name__)
-
-
-=======
 from src import Models
 from src.enums import Roles, LogActions
 
 userBlueprint = Blueprint('user', __name__)
 
->>>>>>> pydantic-dev
 def allowed_roles(roles):
   def wrapper(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-<<<<<<< HEAD
-      from models.user import User
-=======
->>>>>>> pydantic-dev
+
       token = None
       allowed = False
       # jwt is passed in the request header
@@ -39,12 +29,9 @@ def allowed_roles(roles):
         # PULL OUT DATA FROM TOKEN
         data = Auth_Token.decode_token(token)
         # GET AND RETURN CURRENT USER
-<<<<<<< HEAD
-        current_user = User.query.filter_by(id=data["id"]).first()
-        from models.enums import Roles
-=======
+
         current_user = Models.User.query.filter_by(id=data["id"]).first()
->>>>>>> pydantic-dev
+        
         for role in roles:
           if current_user.role == 0 or int(current_user.role) is role:
             allowed = True
@@ -73,17 +60,10 @@ def token_required(f):
       # PULL OUT DATA FROM TOKEN
       data = Auth_Token.decode_token(token)
       # GET AND RETURN CURRENT USER
-<<<<<<< HEAD
-      current_user = User.query.filter_by(id=data["id"]).first()
-    except jwt.ExpiredSignatureError as error:
-      data = Auth_Token.decode_token(token, verify_expiration=False)
-      current_user = User.query.filter_by(email=data["email"]).first()
-=======
       current_user = Models.User.query.filter_by(id=data["id"]).first()
     except jwt.ExpiredSignatureError as error:
       data = Auth_Token.decode_token(token, verify_expiration=False)
       current_user = Models.User.query.filter_by(email=data["email"]).first()
->>>>>>> pydantic-dev
       ret_user = {
         "email": current_user.email,
         "firstname": current_user.first_name,
