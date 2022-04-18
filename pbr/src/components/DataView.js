@@ -20,22 +20,23 @@ import AuthConsumer from "../services/useAuth";
 
 const useStyles = makeStyles({});
 
-// const getAPICall = () => {
-//   fetch(`/api/sample`, {method: "GET",})
-//     .then((response) => {
-//       return response.json();
-//     }).then((data) => {
-//       console.log(data);
-//       setRowList(data.row);
-//       setHeadCellList(data.types);
-//     })
+const getSamples = () => {
+  fetch(`/api/sample/`, { method: "GET" })
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      // setRowList(data.row);
+      // setHeadCellList(data.types);
+    });
 
-//     addApiColumnNamesToHeadCells(headCellNamesFromAPI);
-//     console.log(headCellList)
-//     denestMachineData(rowList)
-//     assignRowHtml()
-//     console.log(rows)
-// };
+  // addApiColumnNamesToHeadCells(headCellNamesFromAPI);
+  // console.log(headCellList);
+  // denestMachineData(rowList);
+  // assignRowHtml();
+  // console.log(rows);
+};
 
 export default function DataView() {
   const [rowList, setRowList] = React.useState([]);
@@ -522,11 +523,12 @@ export default function DataView() {
     // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
     // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
     // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
-  } 
+  };
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
   React.useEffect(() => {
     getData();
     getHeadCells();
+    getSamples();
   }, []);
 
   return (
@@ -540,7 +542,7 @@ export default function DataView() {
           }
           selected={selected}
           setSelected={setSelected}
-          onDelete = {onDelete}
+          onDelete={onDelete}
         ></EnhancedTable>
       </Paper>
       <DataViewFilterModal setRowList={setRowList} setHeadCellList={setHeadCellList}/>

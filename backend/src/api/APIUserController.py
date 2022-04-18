@@ -7,7 +7,7 @@ import jwt
 import json
 from src.auth_token import Auth_Token
 from functools import wraps
-from src import Models
+from src import Models, helpers
 from src.enums import Roles, LogActions
 
 userBlueprint = Blueprint('user', __name__)
@@ -66,6 +66,7 @@ def token_required(f):
         "firstname": current_user.first_name,
         "lastname": current_user.last_name,
         "role": current_user.role,
+        "organization_id": current_user.organization_id
       }
       return jsonify(ret_user), 419
     except Exception as error:
@@ -90,6 +91,7 @@ def me(current_user):
       "firstname": current_user.first_name,
       "lastname": current_user.last_name,
       "role": current_user.role,
+      "organization_id": current_user.organization_id,
     }
     return jsonify(ret_user), 200
   else:
@@ -113,6 +115,7 @@ def login():
     data["email"] = data["email"].lower()
     print(data["email"])
     dbUser = Models.User.query.filter_by(email=data["email"]).first()
+
     print(dbUser)
     if not dbUser:
       print("USER DOES NOT EXIST.")
@@ -124,6 +127,8 @@ def login():
         "email": dbUser.email,
         "firstname": dbUser.first_name,
         "lastname": dbUser.last_name,
+        "role": dbUser.role,
+        "organization_id": dbUser.organization_id,
       }
       response = make_response(jsonify(ret_user), 200)
       response.set_cookie(key="pbr_token", value=Auth_Token.create_token(dbUser), expires=datetime.now(tz=timezone.utc) + timedelta(days=1), secure=True, httponly = True, samesite="Strict")

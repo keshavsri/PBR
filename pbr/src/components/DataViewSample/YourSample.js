@@ -43,20 +43,30 @@ const useStyles = makeStyles({
   reportSection: {
     border: "lightgrey 1px solid",
     height: "700px",
+    justifyContent: "center",
+    alignItems: "center",
+    display: "flex",
   },
 });
 
-export default function YourSample({ errorTitle, errorMessage }) {
+export default function YourSample() {
   const classes = useStyles();
   useTheme();
 
-  const [pdfReport, setPdfReport] = React.useState(
-    "http://www.africau.edu/images/default/sample.pdf"
-  );
   const [orgSwitch, setOrgSwitch] = React.useState(false);
+
+  const reportData = React.useState({});
+
+  React.useEffect(() => {
+    console.log("Rendered Sample Entry.");
+  }, []);
 
   const handleOrgSwitchChange = (event) => {
     setOrgSwitch(event.target.checked);
+    console.log(
+      "Switching Org:",
+      !event.target.checked ? "Just this org" : "All Orgs"
+    );
   };
 
   return (
@@ -69,15 +79,7 @@ export default function YourSample({ errorTitle, errorMessage }) {
       </Typography>
       <Box>
         <Grid container spacing={2} sx={{ mb: -2 }}>
-          <Grid item xs={12} sm={6}>
-            <FormControl sx={{ width: "100%", mb: 2 }}>
-              <InputLabel>Measurement</InputLabel>
-              <Select label="Measurement">
-                <MenuItem value={""}></MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} sm={6} className={classes.compareSection}>
+          <Grid item xs={12} sm={12} className={classes.compareSection}>
             <Typography variant="h4" className={classes.compareTitle}>
               Compare To:
             </Typography>
@@ -94,7 +96,9 @@ export default function YourSample({ errorTitle, errorMessage }) {
         </Grid>
       </Box>
       <Divider />
-      <Box className={classes.reportSection}></Box>
+      <Box className={classes.reportSection}>
+        <Typography>Insert Data Here</Typography>
+      </Box>
     </>
   );
 }

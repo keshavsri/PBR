@@ -55,46 +55,55 @@ class States (str, Enum):
     WV = "West Virginia"
     WY = "Wyoming"
 
+
 class Roles(IntEnum):
     Super_Admin = 0
     Admin = 1
     Supervisor = 2
     Data_Collector = 3
     Guest = 4
-    
-class BirdGenders(IntEnum):
-    Female = 1
-    Male = 2
-    Mixed = 3
-    Not_Reported = 4
 
-class AgeUnits(IntEnum):
-    Days = 0
-    Weeks = 1
-    Months = 2
-    Years = 3
 
-class ValidationTypes(IntEnum):
-    Pending = 0
-    Accepted = 1
-    Rejected = 2
+class BirdGenders(str, Enum):
+    Female = "Female"
+    Male = "Male"
+    Mixed = "Mixed"
+    Unknown = "Unknown"
 
-class SampleTypes(IntEnum):
+
+class AgeUnits(str, Enum):
+    Days = "Days"
+    Weeks = "Weeks"
+    Months = "Months"
+    Years = "Years"
+
+
+class ValidationTypes(str, Enum):
+    Pending = "Pending"
+    Accepted = "Accepted"
+    Rejected = "Rejected"
+
+
+class SampleTypes(str, Enum):
     # Healthy
-    Surveillance = 0
+    Surveillance = "Surveillance"
     # Unhealthy
-    Diagnostic = 1
+    Diagnostic = "Diagnostic"
 
-class Species(IntEnum):
-    Turkey = 0
-    Chicken = 1
-    
-class ProductionTypes(IntEnum):
-    Meat = 0
-    Broiler = 1
-    Layer = 2
-    Breeder = 3
-    Broiler_Breeder = 4
+
+class Species(str, Enum):
+    Turkey = "Turkey"
+    Chicken = "Chicken"
+
+
+class ProductionTypes(str, Enum):
+    Meat = "Meat"
+    Layer = "Layer"
+    Breeder = "Breeder"
+    Broiler_Breeder = "Broiler Breeder"
+    BYP = "BYP"
+
+
 class LogActions(IntEnum):
     # User
     ACCOUNT_CREATED = 101

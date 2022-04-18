@@ -57,14 +57,14 @@ export default function IStatUpload({
 
   return (
     <>
-      <Button
+      {/* <Button
         variant="contained"
         size="small"
         component="span"
         onClick={handleClick}
       >
         Upload
-      </Button>
+      </Button> */}
 
       <Menu
         id="basic-menu"

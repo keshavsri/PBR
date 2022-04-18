@@ -7,23 +7,36 @@ from src.enums import Roles, LogActions
 machineBlueprint = Blueprint('machine', __name__)
 
 @machineBlueprint.route('/', methods=['GET'])
+@machineBlueprint.route('/organization/<int:given_org_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
-def get_machines(access_allowed, current_user):
+def get_machines(access_allowed, current_user, given_org_id=None):
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
         current_Organization = current_user.organization_id
-        if current_user.role == Roles.Super_Admin:
-            responseJSON = src.helpers.get_machines()
+
+        if given_org_id:
+            if current_user.role == Roles.Super_Admin:
+                responseJSON = src.helpers.get_machines_by_org(current_Organization)
+            elif current_user.organization_id == given_org_id:
+                responseJSON = src.helpers.get_machines_by_org(current_Organization)
+            else:
+                responseJSON = jsonify({'message': 'Insufficient Permissions'})
+                return responseJSON, 401
         else:
-            responseJSON = src.helpers.get_machines_by_org(current_Organization)
+            if current_user.role == Roles.Super_Admin:
+                responseJSON = src.helpers.get_machines()
+            else:
+                responseJSON = src.helpers.get_sample_by_org(current_Organization)
+
         # if the response json is empty then return a 404 not found
         if responseJSON is None:
             responseJSON = jsonify({'message': 'No records found'})
             return responseJSON, 404
         else:
             return responseJSON, 200
+
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 

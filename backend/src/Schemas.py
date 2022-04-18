@@ -1,5 +1,7 @@
+from datetime import datetime
+
 from pydantic import BaseModel, constr
-from src.enums import States, Species, ProductionTypes, BirdGenders, AgeUnits
+from src.enums import States, Species, ProductionTypes, BirdGenders, AgeUnits, ValidationTypes, SampleTypes
 from typing import List, Optional
 
 
@@ -22,7 +24,6 @@ class Machinetype(BaseModel):
 class Machine(BaseModel):
     id: Optional[int]
     serial_number: constr(max_length=120)
-
     # References to Foreign Objects
     machinetype_id: int
     machinetype: Optional[Machinetype]
@@ -30,15 +31,6 @@ class Machine(BaseModel):
     class Config:
         orm_mode = True
 
-# ------------------------------
-# Measurement
-# ------------------------------
-class Measurement(BaseModel):
-    id: Optional[int]
-    machine_id: int
-    measurementtype_id: int
-    class Config:
-        orm_mode = True
 
 # ------------------------------
 # MeasurementType
@@ -50,6 +42,18 @@ class MeasurementType(BaseModel):
     units: constr(max_length=120)
     required: bool
     general: bool
+    class Config:
+        orm_mode = True
+
+# ------------------------------
+# Measurement
+# ------------------------------
+class Measurement(BaseModel):
+    id: Optional[int]
+    machine_id: int
+    machine: Optional[Machine]
+    measurementtype_id: int
+    measurementtype: Optional[MeasurementType]
     class Config:
         orm_mode = True
 
@@ -81,19 +85,6 @@ class Source(BaseModel):
     class Config:
         orm_mode = True
 
-# ------------------------------
-# Sample
-# ------------------------------
-
-class Sample(BaseModel):
-    flock_age: int
-    flock_age_unit: AgeUnits
-    flagged: bool
-    comments: str
-    id: Optional[int]
-    measurement_values: List[MeasurementValue]
-    class Config:
-        orm_mode = True
 
 # ------------------------------
 # Organization
@@ -114,6 +105,26 @@ class Organization(BaseModel):
         orm_mode = True
 
 # ------------------------------
+# Sample
+# ------------------------------
+
+class Sample(BaseModel):
+    flock_age: int
+    flock_age_unit: AgeUnits
+    flagged: bool
+    comments: Optional[str]
+    id: Optional[int]
+    measurement_values: Optional[List[MeasurementValue]]
+    timestamp_added: Optional[str]
+    validation_status: Optional[ValidationTypes]
+    sample_type: SampleTypes
+    entered_by_id: Optional[int]
+    timestamp_added: Optional[datetime]
+    organization: Optional[Organization]
+    class Config:
+        orm_mode = True
+
+# ------------------------------
 # Flock
 # ------------------------------
 
@@ -126,7 +137,7 @@ class Flock(BaseModel):
     id: Optional[int]
     organization_id: int
     source_id: int
-
+    birthday: datetime
     class Config:
         orm_mode = True
 
