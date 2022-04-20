@@ -17,6 +17,8 @@ import {
   ListItemText,
   MenuItem,
   IconButton,
+  Autocomplete,
+  TextField
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import {
@@ -25,8 +27,11 @@ import {
   sampleTypes,
   productionTypes,
 } from "../models/enums";
+import { createFilterOptions } from "@mui/material/Autocomplete";
 
 import DataViewConsumer from "../services/useDataView";
+
+const filter = createFilterOptions();
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -161,10 +166,25 @@ export default function DataViewFilterContent() {
     // console.log(mockedOrgCode);
     // setOrgCodeData(mockedOrgCode);
   };
+  const [flocks, setFlocks] = React.useState([]);
+  const getFlocks = () => {
+    let mockFlocks = [{ id: 1852 }, { id: 2531 }, { id: 3491 }];
+    setFlocks(mockFlocks);
+  };
 
+  const handleFlockChange = (id) => {
+
+    setGeneralFilterState({
+      ...generalFilterState,
+      flockID: id,
+    });
+  };
   // Always run
+  React.useEffect(() => {
 
-  React.useEffect(() => {}, []);
+    getFlocks();
+
+  }, []);
 
   return (
     <>
@@ -173,16 +193,46 @@ export default function DataViewFilterContent() {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <FormControl sx={{ width: "100%", mb: 2 }}>
-              <InputLabel>Flock ID</InputLabel>
-              <Select
-                value={generalFilterState.flockID}
-                label="Flock ID"
-                onChange={handleGeneralFilterChange("flockID")}
-              >
-                <MenuItem value={""}></MenuItem>
-              </Select>
-            </FormControl>
+          <Autocomplete
+              value={generalFilterState.flockID}
+              sx={{ width: "100%", mb: 2 }}
+              onChange={(event, newValue) => {
+                handleFlockChange(newValue);
+              }}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+
+                const { inputValue } = params;
+                // Suggest the creation of a new value
+                const isExisting = options.some(
+                  (option) => inputValue === option.id
+                );
+                if (inputValue !== "" && !isExisting) {
+                  filtered.push({
+                    inputValue,
+                    title: `Add Flock "${inputValue}"`,
+                  });
+                }
+
+                return filtered;
+              }}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              options={flocks}
+              getOptionLabel={(option) => {
+                // Value selected with enter, right from the input
+                // Regular option
+                if (option.id) {
+                  return `Flock ${option.id}`;
+                }
+              }}
+              renderOption={(props, option) => <li {...props}>{option.id}</li>}
+              freeSolo
+              renderInput={(params) => (
+                <TextField {...params} label="Flock ID" />
+              )}
+            />
             <FormControl sx={{ width: "100%", mb: 2 }}>
               <InputLabel>Species</InputLabel>
               <Select
