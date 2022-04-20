@@ -1,0 +1,26 @@
+version: '3.5'
+
+services:
+  api:
+    build: ./backend
+    volumes:
+      - ./backend/src:/backend/src
+    environment:
+      - DEBUG_MODE=true
+    restart: "no"
+
+  app:
+    build: ./pbr
+    volumes:
+      - ./pbr/src:/pbr/src
+      - ./pbr/public:/pbr/public
+    restart: "no"
+    environment:
+      - WDS_SOCKET_PORT=80
+
+  db:
+    ports:
+      - "3306:3306" #Expose the port so that you can connect to it directly, like from HeidiSQL
+
+volumes:
+  dbdata: 
