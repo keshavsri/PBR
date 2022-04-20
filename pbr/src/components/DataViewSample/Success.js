@@ -3,8 +3,8 @@ import { useTheme } from "@mui/material/styles";
 
 import { Typography, Box } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import AuthConsumer from "../../services/useAuth";
-import DataViewConsumer from "../../services/useDataView";
+import useDataView from "../../services/useDataView";
+import useAuth from "../../services/useAuth";
 
 const useStyles = makeStyles({
   successMsg: {
@@ -14,8 +14,8 @@ const useStyles = makeStyles({
 
 export default function Error() {
   const classes = useStyles();
-  const { error } = DataViewConsumer();
-  const { user } = AuthConsumer();
+  const { error } = useDataView();
+  const { user } = useAuth();
   useTheme();
 
   let message =

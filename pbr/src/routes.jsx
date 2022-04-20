@@ -1,6 +1,5 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import AuthConsumer from "./services/useAuth";
 import { DataViewProvider } from "./services/useDataView";
 
 import MainLayout from "./layouts/MainLayout";
@@ -13,9 +12,10 @@ import LoginCard from "./components/login/LoginCard";
 import RegisterCard from "./components/login/RegisterCard";
 import RecoveryCard from "./components/login/RecoveryCard";
 import ManageUsers from "./components/ManageUsers";
+import useAuth from "./services/useAuth";
 
 function RequireAuth({ children }) {
-  const { user, recredentialize } = AuthConsumer();
+  const { user, recredentialize } = useAuth();
   const location = useLocation();
   console.log("requireauth");
   return user || recredentialize ? (
@@ -25,7 +25,7 @@ function RequireAuth({ children }) {
   );
 }
 function NonAuth({ children }) {
-  const { user } = AuthConsumer();
+  const { user } = useAuth();
   const location = useLocation();
   console.log("nonauth");
   return user ? (
