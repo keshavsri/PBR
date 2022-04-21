@@ -27,7 +27,7 @@ const getSamples = () => {
     })
     .then((data) => {
       console.log(data);
-      // setRowList(data.row);
+      // setRowList(data.rows);
       // setHeadCellList(data.types);
     });
 

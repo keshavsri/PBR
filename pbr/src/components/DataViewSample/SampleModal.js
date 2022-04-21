@@ -17,6 +17,7 @@ import CustomDialog from "../CustomDialog";
 import { makeStyles } from "@mui/styles";
 import useAuth from "../../services/useAuth";
 import useDataView from "../../services/useDataView";
+import { DataArray } from "@mui/icons-material";
 
 const useStyles = makeStyles({});
 
@@ -103,14 +104,25 @@ export default function DataViewSampleModal() {
   };
 
   let onSubmit = async () => {
+    let measurementValues = [];
+    for (let i = 0; i < machineDetails.length; i++) {
+      let currentMachine = machineDetails[i];
+      for (let j = 0; j < currentMachine.length; j++) {
+        let currentMeasurement = currentMachine.data[i];
+        measurementValues.push({
+          measurement_id: currentMeasurement.id,
+          value: currentMeasurement.value,
+        });
+      }
+    }
     let payload = {
       flagged: generalDetails.flagged,
       comments: generalDetails.comments,
       flock_age: generalDetails.ageNumber,
       flock_age_unit: generalDetails.ageUnit,
-      machineDetails: machineDetails,
       sample_type: sampleType,
       organization_id: generalDetails.organizationID,
+      measurement_values: measurementValues,
       flockDetails: {
         name: generalDetails.flockName,
         strain: generalDetails.strain,
@@ -133,6 +145,8 @@ export default function DataViewSampleModal() {
       .then(checkResponseAuth)
       .then((response) => {
         setSampleLoading(false);
+
+        console.log(response);
         if (!response.ok) {
           setError({
             title: `${response.status} - ${response.statusText}`,
@@ -142,9 +156,6 @@ export default function DataViewSampleModal() {
           sampleNextAction();
           return response.json();
         }
-      })
-      .then((data) => {
-        console.log(data);
       });
   };
 
@@ -166,8 +177,10 @@ export default function DataViewSampleModal() {
 
   const [flocks, setFlocks] = React.useState([]);
   const getFlocks = async () => {
-    console.log(`Getting Flocks: /api/flock/${generalDetails.organizationID}`);
-    await fetch(`/api/flock/${generalDetails.organizationID}`, {
+    console.log(
+      `Getting Flocks: /api/flock/organization/${generalDetails.organizationID}`
+    );
+    await fetch(`/api/flock/organization/${generalDetails.organizationID}`, {
       method: "GET",
     })
       .then(checkResponseAuth)

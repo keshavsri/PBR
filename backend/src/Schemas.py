@@ -29,6 +29,7 @@ class MeasurementType(BaseModel):
     units: constr(max_length=120)
     required: bool
     general: bool
+
     class Config:
         orm_mode = True
 
@@ -44,6 +45,7 @@ class Machine(BaseModel):
     machinetype: Optional[Machinetype]
     organization_id: int
     measurements: "Optional[List[Measurement]]"
+
     class Config:
         orm_mode = True
 # ------------------------------
@@ -138,6 +140,7 @@ class Flock(BaseModel):
     id: Optional[int]
     organization_id: int
     source_id: int
+    source: Optional[Source]
     birthday: datetime
     timestamp_added: Optional[datetime]
     class Config:
