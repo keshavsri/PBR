@@ -2,9 +2,10 @@ import src.helpers
 from src.api.APIUserController import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
 from src import Models, Schemas
-from src.enums import Roles, LogActions
+from src.enums import LogActions
 
 measurementBlueprint = Blueprint('measurement', __name__)
+
 
 @measurementBlueprint.route('/type/', methods=['GET'])
 @token_required
@@ -12,15 +13,16 @@ measurementBlueprint = Blueprint('measurement', __name__)
 def get_measurement_types(access_allowed, current_user):
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
-        responseJSON = src.helpers.get_measurement_types()
+        response_json = src.helpers.get_measurement_types()
         # if the response json is empty then return a 404 not found
-        if responseJSON is None:
-            responseJSON = jsonify({'message': 'No records found'})
-            return responseJSON, 404
+        if response_json is None:
+            response_json = jsonify({'message': 'No records found'})
+            return response_json, 404
         else:
-            return responseJSON, 200
+            return response_json, 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
+
 
 @measurementBlueprint.route('/type/<int:item_id>', methods=['GET'])
 @token_required
@@ -28,15 +30,16 @@ def get_measurement_types(access_allowed, current_user):
 def get_measurement_type(access_allowed, current_user, item_id):
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
-        responseJSON = src.helpers.get_measurement_type_by_id(item_id)
+        response_json = src.helpers.get_measurement_type_by_id(item_id)
         # if the response json is empty then return a 404 not found
-        if responseJSON is None:
-            responseJSON = jsonify({'message': 'No records found'})
-            return responseJSON, 404
+        if response_json is None:
+            response_json = jsonify({'message': 'No records found'})
+            return response_json, 404
         else:
-            return responseJSON, 200
+            return response_json, 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
+
 
 @measurementBlueprint.route('/type/', methods=['POST'])
 @token_required
@@ -58,12 +61,13 @@ def create_measurement_type(access_allowed, current_user):
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
+
 @measurementBlueprint.route('/type/<int:item_id>', methods=['PUT'])
 @token_required
 @allowed_roles([0, 1])
 def update_measurement_type(access_allowed, current_user, item_id):
     if access_allowed:
-        #check if the Measurement Type exists in the database if it does then update the Measurement Type
+        # check if the Measurement Type exists in the database if it does then update the Measurement Type
         if Models.MeasurementType.query.filter_by(id=item_id).first() is None:
             return jsonify({'message': 'Measurement Type does not exist'}), 404
         else:
@@ -86,6 +90,7 @@ def update_measurement_type(access_allowed, current_user, item_id):
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
+
 @measurementBlueprint.route('/type/<int:item_id>', methods=['DELETE'])
 @token_required
 @allowed_roles([0, 1])
@@ -103,21 +108,23 @@ def delete_measurement_type(access_allowed, current_user, item_id):
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
+
 @measurementBlueprint.route('/', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_measurements(access_allowed, current_user):
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
-        responseJSON = src.helpers.get_measurements()
+        response_json = src.helpers.get_measurements()
         # if the response json is empty then return a 404 not found
-        if responseJSON is None:
-            responseJSON = jsonify({'message': 'No records found'})
-            return responseJSON, 404
+        if response_json is None:
+            response_json = jsonify({'message': 'No records found'})
+            return response_json, 404
         else:
-            return responseJSON, 200
+            return response_json, 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
+
 
 @measurementBlueprint.route('/<int:item_id>', methods=['GET'])
 @token_required
@@ -131,6 +138,7 @@ def get_measurement(access_allowed, current_user, item_id):
             return jsonify(src.helpers.get_measurement_by_id(item_id)), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
+
 
 @measurementBlueprint.route('/', methods=['POST'])
 @token_required
@@ -152,12 +160,13 @@ def create_measurement(access_allowed, current_user):
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
+
 @measurementBlueprint.route('/<int:item_id>', methods=['PUT'])
 @token_required
 @allowed_roles([0, 1])
 def update_measurement(access_allowed, current_user, item_id):
     if access_allowed:
-        #check if the Measurement exists in the database if it does then update the Measurement Type
+        # check if the Measurement exists in the database if it does then update the Measurement Type
         if Models.Measurement.query.filter_by(id=item_id).first() is None:
             return jsonify({'message': 'Measurement does not exist'}), 404
         else:
@@ -168,6 +177,7 @@ def update_measurement(access_allowed, current_user, item_id):
             return Schemas.Measurement.from_orm(edited_measurement).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
+
 
 @measurementBlueprint.route('/<int:item_id>', methods=['DELETE'])
 @token_required

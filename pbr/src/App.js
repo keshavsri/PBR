@@ -25,8 +25,8 @@ function App() {
           <>
             <GlobalStyles />
             <AuthConsumer>
-              {(context) => {
-                if (context.loadingAuth) {
+              {(authContext) => {
+                if (authContext.loadingAuth) {
                   return (
                     <Grid
                       container

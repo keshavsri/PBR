@@ -81,17 +81,21 @@ function useCreateDataView() {
 
   let samplePrevAction = () => {
     if (sampleModalScreen > 0) {
+      console.log("Go Back One Screen");
       setSampleModalScreen(sampleModalScreen - 1);
     } else {
+      console.log("Cancel");
       closeSampleModal();
     }
   };
 
   let sampleNextAction = () => {
+    console.log("Advancing to Next Screen");
     setSampleModalScreen(sampleModalScreen + 1);
   };
 
   let restartSample = () => {
+    console.log("Sample Restarted");
     setSampleModalScreen(0);
     setGeneralDetails({
       organizationID: generalDetails.organizationID,
