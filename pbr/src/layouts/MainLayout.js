@@ -1,7 +1,7 @@
 import React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import { makeStyles, createStyles } from "@mui/styles";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import AuthConsumer from "../services/useAuth";
 
 import MuiDrawer from "@mui/material/Drawer";
@@ -27,7 +27,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import PendingActionsIcon from '@mui/icons-material/PendingActions';
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDatabase } from "@fortawesome/free-solid-svg-icons";
@@ -45,7 +45,7 @@ const drawerWidth = 250;
 const pageData = [
   [
     {
-      path: "data-view",
+      path: "/data-view",
       title: "Data View",
       icon: (
         <FontAwesomeIcon
@@ -55,31 +55,31 @@ const pageData = [
       ),
     },
     {
-      path: "generate-reports",
+      path: "/generate-reports",
       title: "Generate Reports",
       icon: <ReportsIcon />,
     },
   ],
   [
     {
-      path: "manage-users",
+      path: "/manage-users",
       title: "Manage Users",
       icon: <UsersIcon />,
     },
     {
-      path: "manage-organization",
+      path: "/manage-organization",
       title: "Manage Organization",
       icon: <OrganizationIcon />,
     },
   ],
   [
     {
-      path: "logging-view",
+      path: "/logging-view",
       title: "View System Logs",
       icon: <PendingActionsIcon />,
     },
     {
-      path: "settings",
+      path: "/settings",
       title: "Settings",
       icon: <SettingsIcon />,
     },
@@ -193,6 +193,7 @@ const Drawer = styled(MuiDrawer, {
 export default function MainLayout(props) {
   const theme = useTheme();
   useStyles();
+  const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(pageData[0][0]);
@@ -220,6 +221,12 @@ export default function MainLayout(props) {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  console.log(location.pathname);
+  let page = pageData.find((page) => page.path === location.pathname);
+  console.log(page);
+  setCurrentPage(page);
+  console.log(currentPage);
 
   return (
     <Box sx={{ display: "flex" }}>

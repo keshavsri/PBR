@@ -56,7 +56,7 @@ class Organization(db.Model):
     machine = db.relationship('Machine',  backref='Organization')
     log = db.relationship('Log', backref='Organization')
     sources: List['Source'] = db.relationship('Source', secondary='OrganizationSource', back_populates='organizations', uselist=True)
-
+    flocks: List['Flock'] = db.relationship('Flock', secondary='OrganizationSourceFlockSample')
 
 class Source(db.Model):
     __tablename__ = 'Source'
@@ -85,8 +85,8 @@ class Flock(db.Model):
     timestamp_added: str = db.Column(db.DateTime, server_default=db.func.now())
 
     # References to Foreign Objects
-    # source_id = db.Column(db.Integer, db.ForeignKey('Source.id'))
-    # organization_id = db.Column(db.Integer, db.ForeignKey('Organization.id'))
+    source_id = db.Column(db.Integer, db.ForeignKey('Source.id'))
+    organization_id = db.Column(db.Integer, db.ForeignKey('Organization.id'))
     # source: Source = db.relationship('Source', secondary='OrganizationSourceFlockSample', innerjoin=True, uselist=False, viewonly=True)
 
 
@@ -110,7 +110,7 @@ class OrganizationSource_Flock_Sample(db.Model):
             source_id, flock_id
         )
     )
-    organization: Organization = db.relationship(Organization, innerjoin=True, uselist=False)
+    organization: Organization = db.relationship(Organization, innerjoin=True, uselist=False, backref='organizationsourceflocksample')
     source: Source = db.relationship(Source, innerjoin=True, uselist=False)
     flock: Flock = db.relationship(Flock, innerjoin=True, uselist=False)
 
@@ -160,6 +160,14 @@ def get_sample_organization_joined(session):
         joinedload(Sample.organization)
     )
 
+def get_flock_organization_joined(session):
+    return session.query(Organization).options(
+        # Include only joins that you need to access
+        # This reduces any duplicate joins SQLAlchemy
+        # might attempt to add and the innerjoin=True
+        # prevents it from making these LEFT OUTER JOIN.
+        joinedload(Sample.organization)
+    )
 
 class Measurement(db.Model):
     __tablename__ = 'Measurement'

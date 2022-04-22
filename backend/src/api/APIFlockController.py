@@ -19,9 +19,9 @@ def get_flocks(access_allowed, current_user, given_org_id=None):
 
         if given_org_id:
             if current_user.role == Roles.Super_Admin:
-                response_json = src.helpers.get_flock_by_org(given_org_id)
+                response_json = src.helpers.get_flocks_by_org(given_org_id)
             elif current_user.organization_id == given_org_id:
-                response_json = src.helpers.get_flock_by_org(given_org_id)
+                response_json = src.helpers.get_flocks_by_org(given_org_id)
             else:
                 response_json = jsonify({'message': 'Insufficient Permissions'})
                 return response_json, 401
@@ -29,7 +29,7 @@ def get_flocks(access_allowed, current_user, given_org_id=None):
             if current_user.role == Roles.Super_Admin:
                 response_json = src.helpers.get_all_flocks()
             else:
-                response_json = src.helpers.get_flock_by_org(current_organization)
+                response_json = src.helpers.get_flocks_by_org(current_organization)
 
         # if the response json is empty then return a 404 not found
         if response_json is None:
