@@ -29,6 +29,7 @@ class MeasurementType(BaseModel):
     units: constr(max_length=120)
     required: bool
     general: bool
+
     class Config:
         orm_mode = True
 
@@ -44,6 +45,7 @@ class Machine(BaseModel):
     machinetype: Optional[Machinetype]
     organization_id: int
     measurements: "Optional[List[Measurement]]"
+
     class Config:
         orm_mode = True
 # ------------------------------
@@ -105,12 +107,34 @@ class Organization(BaseModel):
         orm_mode = True
 
 # ------------------------------
+# Flock
+# ------------------------------
+
+class Flock(BaseModel):
+    name: str
+    strain: str
+    species: Species
+    production_type: ProductionTypes
+    gender: BirdGenders
+    id: Optional[int]
+    organization_id: int
+    source_id: int
+    source: Optional[Source]
+    birthday: datetime
+    timestamp_added: Optional[datetime]
+    class Config:
+        orm_mode = True
+
+Machine.update_forward_refs()
+
+# ------------------------------
 # Sample
 # ------------------------------
 
 class Sample(BaseModel):
     flock_age: int
     flock_age_unit: AgeUnits
+    flock: Optional[Flock]
     flagged: bool
     comments: Optional[str]
     id: Optional[int]
@@ -124,27 +148,6 @@ class Sample(BaseModel):
     measurement_values: Optional[List[MeasurementValue]]
     class Config:
         orm_mode = True
-
-# ------------------------------
-# Flock
-# ------------------------------
-
-class Flock(BaseModel):
-    name: str
-    strain: str
-    species: Species
-    production_type: ProductionTypes
-    gender: BirdGenders
-    id: Optional[int]
-    organization_id: int
-    source_id: int
-    birthday: datetime
-    timestamp_added: Optional[datetime]
-    class Config:
-        orm_mode = True
-
-Machine.update_forward_refs()
-
 
 # ------------------------------
 # Logs

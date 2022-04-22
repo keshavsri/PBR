@@ -2,7 +2,7 @@ import * as React from "react";
 
 const DataViewContext = React.createContext();
 
-export function useDataView() {
+function useCreateDataView() {
   const [sampleLoading, setSampleLoading] = React.useState(false);
   const [samplePayload, setSamplePayload] = React.useState({});
   const [sampleModalVisibility, setSampleModalVisibility] =
@@ -60,17 +60,21 @@ export function useDataView() {
 
   let samplePrevAction = () => {
     if (sampleModalScreen > 0) {
+      console.log("Go Back One Screen");
       setSampleModalScreen(sampleModalScreen - 1);
     } else {
+      console.log("Cancel");
       closeSampleModal();
     }
   };
 
   let sampleNextAction = () => {
+    console.log("Advancing to Next Screen");
     setSampleModalScreen(sampleModalScreen + 1);
   };
 
   let restartSample = () => {
+    console.log("Sample Restarted");
     setSampleModalScreen(0);
     setGeneralDetails({
       organizationID: generalDetails.organizationID,
@@ -129,7 +133,7 @@ export function useDataView() {
 }
 
 export function DataViewProvider({ children }) {
-  const dataview = useDataView();
+  const dataview = useCreateDataView();
 
   return (
     <DataViewContext.Provider value={dataview}>
@@ -138,6 +142,16 @@ export function DataViewProvider({ children }) {
   );
 }
 
-export default function DataViewConsumer() {
+export function DataViewConsumer({ children }) {
+  return (
+    <DataViewContext.Consumer>
+      {(context) => {
+        return children(context);
+      }}
+    </DataViewContext.Consumer>
+  );
+}
+
+export default function useDataView() {
   return React.useContext(DataViewContext);
 }

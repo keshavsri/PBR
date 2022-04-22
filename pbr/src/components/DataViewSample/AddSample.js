@@ -39,10 +39,10 @@ import FlagIcon from "@mui/icons-material/Flag";
 import OutlinedFlagIcon from "@mui/icons-material/OutlinedFlag";
 import { tooltipClasses } from "@mui/material/Tooltip";
 import { createFilterOptions } from "@mui/material/Autocomplete";
-import DataViewConsumer from "../../services/useDataView";
-import AuthConsumer from "../../services/useAuth";
 import VetScanUpload from "./VetScanUpload";
 import IStatUpload from "./IStatUpload";
+import useAuth from "../../services/useAuth";
+import useDataView from "../../services/useDataView";
 
 const filter = createFilterOptions();
 
@@ -142,8 +142,8 @@ export default function DataViewAddSample({
     timestamp,
     setTimestamp,
     sampleValidationErrors,
-  } = DataViewConsumer();
-  const { checkResponseAuth } = AuthConsumer();
+  } = useDataView();
+  const { checkResponseAuth } = useAuth();
 
   // General Section Data
 
@@ -158,6 +158,7 @@ export default function DataViewAddSample({
     });
   };
 
+  const [flockNames, setFlockNames] = React.useState([]);
   const [strains, setStrains] = React.useState([]);
 
   const getStrains = async (species) => {
@@ -210,16 +211,16 @@ export default function DataViewAddSample({
     console.log(generalDetails);
   };
 
-  const handleFlockChange = (fl) => {
-    console.log("FLOCK NAME CHANGED:", fl);
-    if (fl == null) {
+  const handleFlockChange = (flockName) => {
+    console.log("FLOCK NAME CHANGED:", flockName);
+    if (flockName == null) {
       return;
     }
-    if (fl.inputValue) {
+    if (flockName.inputValue) {
       console.log("NEW FLOCK");
       setGeneralDetails({
         ...generalDetails,
-        flockName: fl.inputValue,
+        flockName: flockName.inputValue,
         species: "",
         strain: "",
         gender: "",
@@ -229,7 +230,7 @@ export default function DataViewAddSample({
         ageUnit: "",
       });
     } else {
-      let matchedFlock = flocks.find((flock) => flock.name === fl.name);
+      let matchedFlock = flocks.find((flock) => flock.name === flockName);
       console.log("FOUND FLOCK:", matchedFlock);
       let currentDateTime = new Date();
       let flockBirthday = new Date(matchedFlock.birthday);
@@ -459,6 +460,7 @@ export default function DataViewAddSample({
   };
 
   const parseMachineDetails = () => {
+    console.log("Parsing Machine Details");
     let tmpMachineDetails = [];
     for (let i = 0; i < machineList.length; i++) {
       let currentMachine = machineList[i];
@@ -501,6 +503,14 @@ export default function DataViewAddSample({
   React.useEffect(() => {
     parseMachineDetails();
   }, [machineList]);
+
+  React.useEffect(() => {
+    let flockNamesRet = [];
+    for (let i = 0; i < flocks.length; i++) {
+      flockNamesRet.push(flocks[i].name);
+    }
+    setFlockNames(flockNamesRet);
+  }, [flocks]);
 
   const [accordionExpanded, setAccordionExpanded] = React.useState(false);
 
@@ -630,7 +640,7 @@ export default function DataViewAddSample({
                       flockName: "",
                       species: "",
                       strain: "",
-                      gender: "",
+                      gender: "Female",
                       sourceID: "",
                       productionType: "",
                       ageUnit: "",
@@ -659,7 +669,7 @@ export default function DataViewAddSample({
                 selectOnFocus
                 clearOnBlur
                 handleHomeEndKeys
-                options={flocks}
+                options={flockNames}
                 getOptionLabel={(option) => {
                   // Value selected with enter, right from the input
                   if (typeof option === "string") {
@@ -669,12 +679,8 @@ export default function DataViewAddSample({
                   if (option.inputValue) {
                     return option.inputValue;
                   }
-                  // Regular option
-                  return option.name;
                 }}
-                renderOption={(props, option) => (
-                  <li {...props}>{option.name}</li>
-                )}
+                renderOption={(props, option) => <li {...props}>{option}</li>}
                 sx={{ width: "100%" }}
                 freeSolo
                 renderInput={(params) => (

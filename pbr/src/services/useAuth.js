@@ -4,7 +4,7 @@ import * as React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 const AuthContext = React.createContext();
 
-export function useAuth() {
+function useCreateAuth() {
   const [user, setUser] = React.useState(null);
   const [loadingAuth, setLoadingAuth] = React.useState(true);
   const [recredentialize, setRecredentialize] = React.useState(false);
@@ -145,11 +145,21 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  const auth = useAuth();
+  const auth = useCreateAuth();
 
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 }
 
-export default function AuthConsumer() {
+export function AuthConsumer({ children }) {
+  return (
+    <AuthContext.Consumer>
+      {(context) => {
+        return children(context);
+      }}
+    </AuthContext.Consumer>
+  );
+}
+
+export default function useAuth() {
   return React.useContext(AuthContext);
 }
