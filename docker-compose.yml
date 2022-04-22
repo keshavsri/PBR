@@ -18,8 +18,6 @@ services:
     build: ./backend
     container_name: backend
     restart: unless-stopped
-    env_file:
-      - .env
     environment:
       - BACKEND_PORT=3005
       - SERVER_NAME=0.0.0.0
@@ -36,7 +34,7 @@ services:
     container_name: pbr
     restart: unless-stopped
     environment:
-      - HOST=0.0.0.0
+      - PORt=3030
       - MYSQL_ROOT_PASSWORD=password
 
       # Fine on dev not on Production see: https://stackoverflow.com/a/60250859
@@ -45,8 +43,6 @@ services:
   db:
     image: mysql
     container_name: db
-    env_file:
-      - .env
     volumes:
       - dbdata:/var/lib/mysql
     restart: unless-stopped
