@@ -222,11 +222,11 @@ export default function MainLayout(props) {
     setAnchorElUser(null);
   };
 
-  console.log(location.pathname);
-  let page = pageData.find((page) => page.path === location.pathname);
-  console.log(page);
-  setCurrentPage(page);
-  console.log(currentPage);
+  // console.log(location.pathname);
+  // let page = pageData.find((page) => page.path === location.pathname);
+  // console.log(page);
+  // setCurrentPage(page);
+  // console.log(currentPage);
 
   return (
     <Box sx={{ display: "flex" }}>
