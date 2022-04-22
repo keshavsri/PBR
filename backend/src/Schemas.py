@@ -107,27 +107,6 @@ class Organization(BaseModel):
         orm_mode = True
 
 # ------------------------------
-# Sample
-# ------------------------------
-
-class Sample(BaseModel):
-    flock_age: int
-    flock_age_unit: AgeUnits
-    flagged: bool
-    comments: Optional[str]
-    id: Optional[int]
-    measurement_values: Optional[List[MeasurementValue]]
-    timestamp_added: Optional[str]
-    validation_status: Optional[ValidationTypes]
-    sample_type: SampleTypes
-    entered_by_id: Optional[int]
-    timestamp_added: Optional[datetime]
-    organization: Optional[Organization]
-    measurement_values: Optional[List[MeasurementValue]]
-    class Config:
-        orm_mode = True
-
-# ------------------------------
 # Flock
 # ------------------------------
 
@@ -148,6 +127,27 @@ class Flock(BaseModel):
 
 Machine.update_forward_refs()
 
+# ------------------------------
+# Sample
+# ------------------------------
+
+class Sample(BaseModel):
+    flock_age: int
+    flock_age_unit: AgeUnits
+    flock: Optional[Flock]
+    flagged: bool
+    comments: Optional[str]
+    id: Optional[int]
+    measurement_values: Optional[List[MeasurementValue]]
+    timestamp_added: Optional[str]
+    validation_status: Optional[ValidationTypes]
+    sample_type: SampleTypes
+    entered_by_id: Optional[int]
+    timestamp_added: Optional[datetime]
+    organization: Optional[Organization]
+    measurement_values: Optional[List[MeasurementValue]]
+    class Config:
+        orm_mode = True
 
 # ------------------------------
 # Logs
