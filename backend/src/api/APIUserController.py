@@ -16,6 +16,7 @@ def allowed_roles(roles):
   def wrapper(f):
     @wraps(f)
     def decorated(*args, **kwargs):
+
       token = None
       allowed = False
       # jwt is passed in the request header
@@ -28,7 +29,9 @@ def allowed_roles(roles):
         # PULL OUT DATA FROM TOKEN
         data = Auth_Token.decode_token(token)
         # GET AND RETURN CURRENT USER
+
         current_user = Models.User.query.filter_by(id=data["id"]).first()
+        
         for role in roles:
           if current_user.role == 0 or int(current_user.role) is role:
             allowed = True

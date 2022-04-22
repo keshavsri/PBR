@@ -1,0 +1,55 @@
+version: '3.5'
+
+services:
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    restart: unless-stopped
+
+
+  api:
+    build: ./backend
+    container_name: backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - BACKEND_PORT=3005
+      - SERVER_NAME=0.0.0.0
+      # - DATABASE_URL=sqlite:///pbrDatabase.sqlite3
+      - DATABASE_URL=mysql+pymysql://root:${MYSQL_ROOT_PASSWORD}@db/pbr
+      - JWT_SIGN_ALGORITHM=HS256
+      - JWT_TTL=60
+      - JWT_SECRET=mjMCI,y?&kY$R!SyaVgQXQ.,V[.7*}
+    depends_on:
+      - db
+
+  app:
+    build: ./pbr
+    container_name: pbr
+    restart: unless-stopped
+    environment:
+      - HOST=0.0.0.0
+      - MYSQL_ROOT_PASSWORD=password
+
+  db:
+    image: mysql
+    container_name: db
+    env_file:
+      - .env
+    volumes:
+      - dbdata:/var/lib/mysql
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=pbr
+      # - MYSQL_ROOT_PASSWORD=choose_a_password # I suggest you set this via a .env file
+
+volumes:
+  dbdata: 
