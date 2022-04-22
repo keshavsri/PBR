@@ -106,6 +106,17 @@ def get_flock_by_id(id: int) -> Flock:
     print(flock)
     return Flock.from_orm(flock).dict()
 
+# def get_osf_from_org(org_id: int) -> Flock:
+#     osf = OrganizationSource_Flock_SampleORM.query.filter_by(organization_id=org_id).first()
+#     print(osf)
+#     sources = []
+#     for source in osf.
+#     retJson = {
+#         "organization": Organization.from_orm(osf.organization),
+#         "source":
+#     }
+#     return Flock.from_orm(flock).dict()
+
 def get_flock_by_name(name: str) -> Flock:
     flock = FlockORM.query.filter_by(name=name).first()
     print(flock)
@@ -114,12 +125,15 @@ def get_flock_by_name(name: str) -> Flock:
         ret = Flock.from_orm(flock).dict()
     return ret
 
-def get_flock_by_org(org_id: int) -> List[dict]:
-    flocks = FlockORM.query.filter_by(organization_id=org_id).all()
+def get_flocks_by_org(org_id: int) -> List[dict]:
+    org = OrganizationORM.query.filter_by(id=org_id).first()
+    print(org.flocks)
+
     ret = []
-    for flock in flocks:
+    for flock in org.flocks:
+        print(flock)
+        print(flock.source_id)
         ret.append(Flock.from_orm(flock).dict())
-    print(ret)
     return json.dumps(ret, default=str)
 
 
