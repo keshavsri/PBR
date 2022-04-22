@@ -39,6 +39,9 @@ services:
       - HOST=0.0.0.0
       - MYSQL_ROOT_PASSWORD=password
 
+      # Fine on dev not on Production see: https://stackoverflow.com/a/60250859
+      - DANGEROUSLY_DISABLE_HOST_CHECK=true
+
   db:
     image: mysql
     container_name: db

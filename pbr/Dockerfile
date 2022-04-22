@@ -8,4 +8,4 @@ RUN npm ci
 # Copy all files from current directory to working dir in image
 COPY . .
 
-CMD ["npm", "start"]
+CMD ["npm","run" ,"start"]
