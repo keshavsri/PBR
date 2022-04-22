@@ -31,8 +31,8 @@ import {
 } from "../models/enums";
 import { createFilterOptions } from "@mui/material/Autocomplete";
 
-import DataViewConsumer from "../services/useDataView";
-import AuthConsumer from "../services/useAuth";
+import useDataView from "../services/useDataView";
+import useAuth from "../services/useAuth";
 
 const filter = createFilterOptions();
 
@@ -67,8 +67,8 @@ export default function DataViewFilterContent() {
   const {
     generalFilterState,
     setGeneralFilterState
-  } = DataViewConsumer();
-  const { checkResponseAuth } = AuthConsumer();
+  } = useDataView();
+  const { checkResponseAuth } = useAuth();
 
   const handleGeneralFilterChange = (prop) => (event) => {
     console.log("General Filter changed: ", prop, event.target.value);

@@ -17,6 +17,7 @@ import CustomDialog from "./CustomDialog";
 import { makeStyles } from "@mui/styles";
 import { DataViewProvider } from "../services/useDataView";
 import AuthConsumer from "../services/useAuth";
+import useAuth from "../services/useAuth";
 
 const useStyles = makeStyles({});
 
@@ -43,7 +44,7 @@ export default function DataView() {
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
 
-  const { checkResponseAuth } = AuthConsumer();
+  const { checkResponseAuth } = useAuth();
   
   
 
@@ -386,41 +387,26 @@ export default function DataView() {
     //     ],
     //   },
     // ];
-    await fetch(`/api/datapoint`, {method: "GET",})
+    await fetch(`/api/sample/`, {method: "GET",})
     .then((response) => {
       return response.json();
     }).then(checkResponseAuth)
     .then((data) => {
       console.log(data);
-      denestMachineData(data.row);
-      assignRowHtml(data.row);
-      setRowList(data.row);
-      setHeadCellList(data.types);
+      denestMachineData(data.rows);
+      assignRowHtml(data.rows);
+      setRowList(data.rows);
+      setHeadCellNamesFromAPI(data.types);
     })
     // denestMachineData(apiRows);
     // assignRowHtml(apiRows);
     // setRowList(apiRows);
   };
 
+  const [headCellNamesFromAPI, setHeadCellNamesFromAPI] = React.useState([]);
   const getHeadCells = () => {
-    let headCellNamesFromAPI = [
-      {
-        machineName: "iStat",
-        data: [
-          { type: { name: "PH", units: "mg" } },
-          { type: { name: "PC02", units: "mg" } },
-          { type: { name: "BE", units: "mg" } },
-          { type: { name: "HC03", units: "mg" } },
-          { type: { name: "TCO2", units: "mg" } },
-          { type: { name: "S02", units: "mg" } },
-          { type: { name: "NAK", units: "mg" } },
-          { type: { name: "ICA", units: "mg" } },
-          { type: { name: "GLU", units: "mg" } },
-          { type: { name: "HCT", units: "mg" } },
-          { type: { name: "HB", units: "mg" } },
-        ],
-      },
-    ];
+
+    
 
     const headCells = [
       {
@@ -445,7 +431,7 @@ export default function DataView() {
         label: "Source",
       },
       {
-        id: "timestamp",
+        id: "timestamp_added",
         numeric: false,
         disablePadding: true,
         label: "Date Entered",
@@ -480,12 +466,12 @@ export default function DataView() {
     setHeadCellList(headCells);
   };
 
-  let machineHeadCells = [];
+
   const addApiColumnNamesToHeadCells = (headCellNamesFromAPI, headCells) => {
     headCellNamesFromAPI.map((item) => {
-      item.data.map((point, index) => {
+      item.data.type.map((point, index) => {
         headCells.push(createHeadCell(point, item.machineName, index));
-        machineHeadCells.push(createHeadCell(point, item.machineName, index));
+
       });
     });
   };
@@ -493,24 +479,23 @@ export default function DataView() {
   function createHeadCell(point, machineName, index) {
     return {
       machineName: machineName,
-      name: point.type.name,
-      id: machineName + "_" + point.type.name,
+      name: point.name,
+      id: "measurement." + point.id,
       numeric: false,
       disablePadding: true,
-      label: " " + point.type.name + " (" + point.type.units + ")",
+      label: " " + point.abbreviation + " (" + point.units + ")",
       sublabel: "" + machineName,
     };
   }
   const denestMachineData = (rows) => {
     rows.map((row, index) => {
-      row.machines.map((machine, index2) => {
-        machine.data.map((dataPoint, index3) => {
-          let temp = machine.machineName + "_" + dataPoint.type.name;
-          row[temp] = dataPoint.value + " " + dataPoint.type.units;
-        });
+      row.measurement_values.map((m, index2) => {
+          let temp = "measurement." + m.measurement_id;
+          row[temp] = m.value + " " + m.measurement.measurementtype.units;
       });
     });
   };
+
   const onDelete = async () => {
     console.log("DELETE TEST")
     let path = `/api/datapoint/`

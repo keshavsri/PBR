@@ -37,10 +37,9 @@ export default function DVTableToolbar() {
     setOpenFilterModal,
     handleOpenFilterModal,
     handleCloseFilterModal  
-  } = DataViewConsumer();
+  } = useDataView();
   const classes = useStyles();
 
-  const { openSampleModal } = useDataView();
 
   useTheme();
 
