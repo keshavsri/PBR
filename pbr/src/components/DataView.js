@@ -42,23 +42,11 @@ const getSamples = () => {
 export default function DataView() {
   const [rowList, setRowList] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
+
+  const [headCellNamesFromAPI, setHeadCellNamesFromAPI] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
 
   const { checkResponseAuth } = useAuth();
-  
-  
-
-  function createHeadCell(point, machineName, index) {
-    return {
-      machineName: machineName,
-      name: point.type.name,
-      id: machineName + "_" + point.type.name,
-      numeric: false,
-      disablePadding: true,
-      label: " " + point.type.name + " (" + point.type.units + ")",
-      sublabel: "" + machineName,
-    };
-  }
 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
@@ -69,324 +57,25 @@ export default function DataView() {
         </>
       );
 
-      row.buttons = (
-        <>
-          <IconButton aria-label="edit" size="small">
-            <EditIcon />
-          </IconButton>
-          <IconButton aria-label="validate" size="small">
-            <FactCheckIcon />
-          </IconButton>
-        </>
-      );
-      row.timestamp = new Date(row.timestamp).toLocaleString();
-      row.age = new Date(row.age).toLocaleString();
+      // Used for slotting in edit and validation buttons - no functionality implemented yes
+      // row.buttons = (
+      //   <>
+      //     <IconButton aria-label="edit" size="small">
+      //       <EditIcon />
+      //     </IconButton>
+      //     <IconButton aria-label="validate" size="small">
+      //       <FactCheckIcon />
+      //     </IconButton>
+      //   </>
+      // );
+      row.timestamp_added = new Date(row.timestamp_added).toLocaleString();
+      row["flock.birthday"] = new Date(row["flock.birthday"]).toLocaleString();
+      // TEMPORARY
+      row.deletable = true;
     });
   };
 
-
-
   const getData = async () => {
-    // let apiRows = [
-    //   {
-    //     deletable: true,
-    //     id: "1",
-    //     bird_type: "Turkey",
-    //     source: "SOURCE C",
-    //     timestamp: "2022-12-10T13:45:00.000Z",
-    //     age: "2022-11-13T11:30:00.000Z",
-    //     gender: "Male",
-    //     comments: "days",
-    //     status: "Validated",
-    //     sample_type: "Surveillance",
-    //     machines: [
-    //       {
-    //         machineName: "iStat",
-    //         data: [
-    //           { type: { name: "PH", units: "mg" }, value: "40" },
-    //           { type: { name: "PC02", units: "mg" }, value: "40" },
-    //           { type: { name: "BE", units: "mg" }, value: "40" },
-    //           { type: { name: "HC03", units: "mg" }, value: "40" },
-    //           { type: { name: "TCO2", units: "mg" }, value: "40" },
-    //           { type: { name: "S02", units: "mg" }, value: "40" },
-    //           { type: { name: "NAK", units: "mg" }, value: "40" },
-    //           { type: { name: "ICA", units: "mg" }, value: "40" },
-    //           { type: { name: "GLU", units: "mg" }, value: "40" },
-    //           { type: { name: "HCT", units: "mg" }, value: "40" },
-    //           { type: { name: "HB", units: "mg" }, value: "40" },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     deletable: false,
-    //     id: "2",
-    //     bird_type: "Turkey",
-    //     source: "SOURCE C",
-    //     timestamp: "2022-12-10T13:45:00.000Z",
-    //     age: "2022-11-13T11:30:00.000Z",
-    //     gender: "Male",
-    //     comments: "days",
-    //     status: "Pending Validation",
-    //     sample_type: "Surveillance",
-    //     machines: [
-    //       {
-    //         machineName: "iStat",
-    //         data: [
-    //           { type: { name: "PH", units: "mg" }, value: "40" },
-    //           { type: { name: "PC02", units: "mg" }, value: "40" },
-    //           { type: { name: "BE", units: "mg" }, value: "40" },
-    //           { type: { name: "HC03", units: "mg" }, value: "40" },
-    //           { type: { name: "TCO2", units: "mg" }, value: "40" },
-    //           { type: { name: "S02", units: "mg" }, value: "40" },
-    //           { type: { name: "NAK", units: "mg" }, value: "40" },
-    //           { type: { name: "ICA", units: "mg" }, value: "40" },
-    //           { type: { name: "GLU", units: "mg" }, value: "40" },
-    //           { type: { name: "HCT", units: "mg" }, value: "40" },
-    //           { type: { name: "HB", units: "mg" }, value: "40" },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     deletable: false,
-    //     id: "3",
-    //     bird_type: "Turkey",
-    //     source: "SOURCE B",
-    //     timestamp: "2022-12-10T13:45:00.000Z",
-    //     age: "2022-11-13T11:30:00.000Z",
-    //     gender: "Male",
-    //     comments: "days",
-    //     status: "Validated",
-    //     sample_type: "Surveillance",
-    //     machines: [
-    //       {
-    //         machineName: "iStat",
-    //         data: [
-    //           { type: { name: "PH", units: "mg" }, value: "40" },
-    //           { type: { name: "PC02", units: "mg" }, value: "40" },
-    //           { type: { name: "BE", units: "mg" }, value: "40" },
-    //           { type: { name: "HC03", units: "mg" }, value: "40" },
-    //           { type: { name: "TCO2", units: "mg" }, value: "40" },
-    //           { type: { name: "S02", units: "mg" }, value: "40" },
-    //           { type: { name: "NAK", units: "mg" }, value: "40" },
-    //           { type: { name: "ICA", units: "mg" }, value: "40" },
-    //           { type: { name: "GLU", units: "mg" }, value: "40" },
-    //           { type: { name: "HCT", units: "mg" }, value: "40" },
-    //           { type: { name: "HB", units: "mg" }, value: "40" },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     deletable: true,
-    //     id: "4",
-    //     bird_type: "Chicken",
-    //     source: "SOURCE C",
-    //     timestamp: "2022-12-10T13:45:00.000Z",
-    //     age: "2022-11-13T11:30:00.000Z",
-    //     gender: "Female",
-    //     comments: "days",
-    //     status: "Validated",
-    //     sample_type: "Surveillance",
-    //     machines: [
-    //       {
-    //         machineName: "iStat",
-    //         data: [
-    //           { type: { name: "PH", units: "mg" }, value: "40" },
-    //           { type: { name: "PC02", units: "mg" }, value: "40" },
-    //           { type: { name: "BE", units: "mg" }, value: "40" },
-    //           { type: { name: "HC03", units: "mg" }, value: "40" },
-    //           { type: { name: "TCO2", units: "mg" }, value: "40" },
-    //           { type: { name: "S02", units: "mg" }, value: "40" },
-    //           { type: { name: "NAK", units: "mg" }, value: "40" },
-    //           { type: { name: "ICA", units: "mg" }, value: "40" },
-    //           { type: { name: "GLU", units: "mg" }, value: "40" },
-    //           { type: { name: "HCT", units: "mg" }, value: "40" },
-    //           { type: { name: "HB", units: "mg" }, value: "40" },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     deletable: true,
-    //     id: "5",
-    //     bird_type: "Turkey",
-    //     source: "SOURCE C",
-    //     timestamp: "2022-12-10T13:45:00.000Z",
-    //     age: "2022-11-13T11:30:00.000Z",
-    //     gender: "Male",
-    //     comments: "days",
-    //     status: "Validated",
-    //     sample_type: "Surveillance",
-    //     machines: [
-    //       {
-    //         machineName: "iStat",
-    //         data: [
-    //           { type: { name: "PH", units: "mg" }, value: "40" },
-    //           { type: { name: "PC02", units: "mg" }, value: "40" },
-    //           { type: { name: "BE", units: "mg" }, value: "40" },
-    //           { type: { name: "HC03", units: "mg" }, value: "40" },
-    //           { type: { name: "TCO2", units: "mg" }, value: "40" },
-    //           { type: { name: "S02", units: "mg" }, value: "40" },
-    //           { type: { name: "NAK", units: "mg" }, value: "40" },
-    //           { type: { name: "ICA", units: "mg" }, value: "40" },
-    //           { type: { name: "GLU", units: "mg" }, value: "40" },
-    //           { type: { name: "HCT", units: "mg" }, value: "40" },
-    //           { type: { name: "HB", units: "mg" }, value: "40" },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     deletable: false,
-    //     id: "6",
-    //     bird_type: "Chicken",
-    //     source: "SOURCE A",
-    //     timestamp: "2022-12-10T13:45:00.000Z",
-    //     age: "2022-11-13T11:30:00.000Z",
-    //     gender: "Male",
-    //     comments: "days",
-    //     status: "Validated",
-    //     sample_type: "Surveillance",
-    //     machines: [
-    //       {
-    //         machineName: "iStat",
-    //         data: [
-    //           { type: { name: "PH", units: "mg" }, value: "40" },
-    //           { type: { name: "PC02", units: "mg" }, value: "40" },
-    //           { type: { name: "BE", units: "mg" }, value: "40" },
-    //           { type: { name: "HC03", units: "mg" }, value: "40" },
-    //           { type: { name: "TCO2", units: "mg" }, value: "40" },
-    //           { type: { name: "S02", units: "mg" }, value: "40" },
-    //           { type: { name: "NAK", units: "mg" }, value: "40" },
-    //           { type: { name: "ICA", units: "mg" }, value: "40" },
-    //           { type: { name: "GLU", units: "mg" }, value: "40" },
-    //           { type: { name: "HCT", units: "mg" }, value: "40" },
-    //           { type: { name: "HB", units: "mg" }, value: "40" },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     deletable: false,
-    //     id: "7",
-    //     bird_type: "Turkey",
-    //     source: "SOURCE C",
-    //     timestamp: "2022-12-10T13:45:00.000Z",
-    //     age: "2022-11-13T11:30:00.000Z",
-    //     gender: "Male",
-    //     comments: "days",
-    //     status: "Validated",
-    //     sample_type: "Surveillance",
-    //     machines: [
-    //       {
-    //         machineName: "iStat",
-    //         data: [
-    //           { type: { name: "PH", units: "mg" }, value: "40" },
-    //           { type: { name: "PC02", units: "mg" }, value: "40" },
-    //           { type: { name: "BE", units: "mg" }, value: "40" },
-    //           { type: { name: "HC03", units: "mg" }, value: "40" },
-    //           { type: { name: "TCO2", units: "mg" }, value: "40" },
-    //           { type: { name: "S02", units: "mg" }, value: "40" },
-    //           { type: { name: "NAK", units: "mg" }, value: "40" },
-    //           { type: { name: "ICA", units: "mg" }, value: "40" },
-    //           { type: { name: "GLU", units: "mg" }, value: "40" },
-    //           { type: { name: "HCT", units: "mg" }, value: "40" },
-    //           { type: { name: "HB", units: "mg" }, value: "40" },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     id: "8",
-    //     bird_type: "Turkey",
-    //     source: "SOURCE C",
-    //     timestamp: "2022-12-10T13:45:00.000Z",
-    //     age: "2022-11-13T11:30:00.000Z",
-    //     gender: "Male",
-    //     comments: "days",
-    //     status: "Validated",
-    //     sample_type: "Surveillance",
-    //     machines: [
-    //       {
-    //         machineName: "iStat",
-    //         data: [
-    //           { type: { name: "PH", units: "mg" }, value: "40" },
-    //           { type: { name: "PC02", units: "mg" }, value: "40" },
-    //           { type: { name: "BE", units: "mg" }, value: "40" },
-    //           { type: { name: "HC03", units: "mg" }, value: "40" },
-    //           { type: { name: "TCO2", units: "mg" }, value: "40" },
-    //           { type: { name: "S02", units: "mg" }, value: "40" },
-    //           { type: { name: "NAK", units: "mg" }, value: "40" },
-    //           { type: { name: "ICA", units: "mg" }, value: "40" },
-    //           { type: { name: "GLU", units: "mg" }, value: "40" },
-    //           { type: { name: "HCT", units: "mg" }, value: "40" },
-    //           { type: { name: "HB", units: "mg" }, value: "40" },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     deletable: true,
-    //     id: "9",
-    //     bird_type: "Chicken",
-    //     source: "SOURCE C",
-    //     timestamp: "2022-12-10T13:45:00.000Z",
-    //     age: "2022-11-13T11:30:00.000Z",
-    //     gender: "Male",
-    //     comments: "days",
-    //     status: "Pending Validation",
-    //     sample_type: "Diagnostic",
-    //     machines: [
-    //       {
-    //         machineName: "iStat",
-    //         data: [
-    //           { type: { name: "PH", units: "mg" }, value: "0" },
-    //           { type: { name: "PC02", units: "mg" }, value: "47" },
-    //           { type: { name: "BE", units: "mg" }, value: "20" },
-    //           { type: { name: "HC03", units: "mg" }, value: "40" },
-    //           { type: { name: "TCO2", units: "mg" }, value: "40" },
-    //           { type: { name: "S02", units: "mg" }, value: "4" },
-    //           { type: { name: "NAK", units: "mg" }, value: "85" },
-    //           { type: { name: "ICA", units: "mg" }, value: "40" },
-    //           { type: { name: "GLU", units: "mg" }, value: "85" },
-    //           { type: { name: "HCT", units: "mg" }, value: "674" },
-    //           { type: { name: "HB", units: "mg" }, value: "40" },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     id: "10",
-    //     bird_type: "Turkey",
-    //     source: "SOURCE C",
-    //     timestamp: "2022-12-10T13:45:00.000Z",
-    //     age: "2022-11-13T11:30:00.000Z",
-    //     gender: "Male",
-    //     comments: "days",
-    //     status: "Validated",
-    //     sample_type: "Surveillance",
-    //     machines: [
-    //       {
-    //         machineName: "iStat",
-    //         data: [
-    //           { type: { name: "PH", units: "mg" }, value: "40" },
-    //           { type: { name: "PC02", units: "mg" }, value: "40" },
-    //           { type: { name: "BE", units: "mg" }, value: "40" },
-    //           { type: { name: "HC03", units: "mg" }, value: "40" },
-    //           { type: { name: "TCO2", units: "mg" }, value: "40" },
-    //           { type: { name: "S02", units: "mg" }, value: "40" },
-    //           { type: { name: "NAK", units: "mg" }, value: "40" },
-    //           { type: { name: "ICA", units: "mg" }, value: "40" },
-    //           { type: { name: "GLU", units: "mg" }, value: "40" },
-    //           { type: { name: "HCT", units: "mg" }, value: "40" },
-    //           { type: { name: "HB", units: "mg" }, value: "40" },
-    //         ],
-    //       },
-    //     ],
-    //   },
-    // ];
     await fetch(`/api/sample/`, {method: "GET",})
     .then((response) => {
       return response.json();
@@ -396,18 +85,15 @@ export default function DataView() {
       denestMachineData(data.rows);
       assignRowHtml(data.rows);
       setRowList(data.rows);
-      setHeadCellNamesFromAPI(data.types);
+      getHeadCells(data.types);
+      
     })
     // denestMachineData(apiRows);
     // assignRowHtml(apiRows);
     // setRowList(apiRows);
   };
 
-  const [headCellNamesFromAPI, setHeadCellNamesFromAPI] = React.useState([]);
-  const getHeadCells = () => {
-
-    
-
+  const getHeadCells = (types) => {
     const headCells = [
       {
         id: "id",
@@ -419,16 +105,28 @@ export default function DataView() {
         id: "buttons",
       },
       {
-        id: "bird_type",
+        id: "flock.id",
         numeric: false,
         disablePadding: true,
-        label: "Bird Type",
+        label: "Flock ID",
       },
       {
-        id: "source",
+        id: "flock.name",
+        numeric: false,
+        disablePadding: true,
+        label: "Flock Name",
+      },
+      {
+        id: "flock.source_name",
         numeric: false,
         disablePadding: true,
         label: "Source",
+      },
+      {
+        id: "flock.production_type",
+        numeric: false,
+        disablePadding: true,
+        label: "Production Type",
       },
       {
         id: "timestamp_added",
@@ -437,19 +135,25 @@ export default function DataView() {
         label: "Date Entered",
       },
       {
-        id: "age",
+        id: "flock.birthday",
         numeric: false,
         disablePadding: true,
-        label: "Age",
+        label: "Birthday",
       },
       {
-        id: "gender",
+        id: "flock_age_combined",
+        numeric: false,
+        disablePadding: true,
+        label: "Flock Age",
+      },
+      {
+        id: "flock.gender",
         numeric: false,
         disablePadding: true,
         label: "Gender",
       },
       {
-        id: "status",
+        id: "validation_status",
         numeric: false,
         disablePadding: true,
         label: "Status",
@@ -462,8 +166,10 @@ export default function DataView() {
       },
     ];
 
-    addApiColumnNamesToHeadCells(headCellNamesFromAPI, headCells);
+    addApiColumnNamesToHeadCells(types, headCells);
     setHeadCellList(headCells);
+    console.log(headCells);
+
   };
 
 
@@ -471,7 +177,7 @@ export default function DataView() {
     headCellNamesFromAPI.map((item) => {
       item.data.type.map((point, index) => {
         headCells.push(createHeadCell(point, item.machineName, index));
-
+      
       });
     });
   };
@@ -489,9 +195,20 @@ export default function DataView() {
   }
   const denestMachineData = (rows) => {
     rows.map((row, index) => {
+      row["flock_age_combined"] = "" + row.flock_age + " " + row.flock_age_unit;
       row.measurement_values.map((m, index2) => {
           let temp = "measurement." + m.measurement_id;
           row[temp] = m.value + " " + m.measurement.measurementtype.units;
+      });
+      Object.keys(row.flock).map((key) => {
+        let temp = "flock." + key;
+        row[temp] = row.flock[key];
+        if(key == "source_id"){
+          row.organization.sources.map((source) => {
+            if(source["id"] == row.flock["id"])
+              row["flock.source_name"] = source["name"];
+          });
+        }
       });
     });
   };
@@ -512,7 +229,6 @@ export default function DataView() {
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
   React.useEffect(() => {
     getData();
-    getHeadCells();
     getSamples();
   }, []);
 
