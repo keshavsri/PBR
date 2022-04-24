@@ -22,7 +22,7 @@ services:
       - BACKEND_PORT=3005
       - SERVER_NAME=0.0.0.0
       # - DATABASE_URL=sqlite:///pbrDatabase.sqlite3
-      - DATABASE_URL=mysql+pymysql://root:${MYSQL_ROOT_PASSWORD}@db/pbr
+      - DATABASE_URL=mysql+pymysql://root:${MYSQL_ROOT_PASSWORD:?err}@db/pbr
       - JWT_SIGN_ALGORITHM=HS256
       - JWT_TTL=60
       - JWT_SECRET=mjMCI,y?&kY$R!SyaVgQXQ.,V[.7*}
@@ -34,7 +34,7 @@ services:
     container_name: pbr
     restart: unless-stopped
     environment:
-      - PORt=3030
+      - PORT=3030
       - MYSQL_ROOT_PASSWORD=password
 
       # Fine on dev not on Production see: https://stackoverflow.com/a/60250859
@@ -48,7 +48,7 @@ services:
     restart: unless-stopped
     environment:
       - MYSQL_DATABASE=pbr
-      # - MYSQL_ROOT_PASSWORD=choose_a_password # I suggest you set this via a .env file
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:?err} # I suggest you set this via a .env file
 
 volumes:
   dbdata: 
