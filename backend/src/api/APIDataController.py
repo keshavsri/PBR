@@ -229,6 +229,32 @@ def get_samples(access_allowed, current_user, given_org_id=None):
         return jsonify({'message': 'Role not allowed'}), 403
 
 
+# Returns list of filtered samples based on a set of strings #
+@sampleBlueprint.route('/datapoint/filter', methods=['POST'])
+@token_required
+@allowed_roles([0,1,2,3])
+def filter_samples(access_allowed, current_user):
+    if access_allowed:
+        responseJSON = jsonify(Models.Sample.query.filter_by(
+            id=request.json.get('id'), 
+            flock_id=request.json.get('flockID'),
+            species=request.json.get('species'),
+            strain=request.json.get('strain'),
+            gender=request.json.get('gender'),
+            age_range=request.json.get('ageRange'),
+            validation_status=request.json.get('validationStatus'),
+            sample_type=request.json.get('sampleType'),
+            batch=request.json.get('batch'),
+            data_collector=request.json.get('dataCollector'),
+            organization=request.json.get('organization') ))
+        if responseJSON.json is None:
+            responseJSON = jsonify({'message': 'Samples cannot be returned.'})
+            return responseJSON, 404
+        else:
+            return responseJSON, 200
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+
 # Deletes specified sample #
 @sampleBlueprint.route('/datapoint/<int:item_id>', methods=['DELETE'])
 @token_required
