@@ -1,22 +1,15 @@
 import * as React from "react";
 
-import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
+import { Paper, Chip } from "@mui/material";
 
 import DataViewSampleModal from "./DataViewSample/SampleModal";
 import DataViewFilterModal from "./FilterModal";
 import DVTableToolbar from "./DVTableToolbar";
 
 import EnhancedTable from "./DataViewTable/EnhancedTable";
-import BulkIcon from "@mui/icons-material/UploadFile";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import ReportIcon from "@mui/icons-material/Assessment";
-import EditIcon from "@mui/icons-material/Edit";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
 
-import CustomDialog from "./CustomDialog";
 import { makeStyles } from "@mui/styles";
 import { DataViewProvider } from "../services/useDataView";
-import AuthConsumer from "../services/useAuth";
 import useAuth from "../services/useAuth";
 
 const useStyles = makeStyles({});
@@ -42,8 +35,6 @@ const getSamples = () => {
 export default function DataView() {
   const [rowList, setRowList] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
-
-  const [headCellNamesFromAPI, setHeadCellNamesFromAPI] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
 
   const { checkResponseAuth } = useAuth();
@@ -215,9 +206,9 @@ export default function DataView() {
 
   const onDelete = async () => {
     console.log("DELETE TEST")
-    let path = `/api/datapoint/`
-    selected.map(async (row, index) => {
-      await fetch(path + row.id, {method: "DELETE",})
+    let path = `/api/sample/`
+    selected.map(async (id, index) => {
+      await fetch(path + id, {method: "DELETE",})
       .then((response) => {
         return response.json();
       })

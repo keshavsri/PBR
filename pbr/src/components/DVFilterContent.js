@@ -58,9 +58,25 @@ function getStyles(name, filterList, theme) {
   };
 }
 
-export default function DataViewFilterContent() {
+export default function DataViewFilterContent(props) {
+  const {
+    rows,
+  } = props;
   const classes = useStyles();
   const theme = useTheme();
+
+  const parseRows = () => {
+    let orgIDList = [];
+    rows.map((row, index) => {
+      row.organization.map((org) => {
+        if (!orgIDList.includes(org.id)){
+          let temp = organizationsList;
+          temp.append(org);
+          setOrganizationsList(temp);
+        }
+      })
+    });
+  }
 
   // General Section Data
 
