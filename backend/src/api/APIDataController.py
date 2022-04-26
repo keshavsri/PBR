@@ -2,7 +2,7 @@ from flask import request, Blueprint, jsonify
 from http import HTTPStatus
 import re
 import src.helpers
-from src.enums import LogActions, ValidationTypes
+from src.enums import LogActions, ValidationTypes, Roles
 from src.api.APIUserController import token_required, allowed_roles
 from src import Models, helpers
 
@@ -206,7 +206,7 @@ def get_samples(access_allowed, current_user, given_org_id=None):
         current_organization = current_user.organization_id
 
         if current_organization == given_org_id:
-            if current_user.roled == 1:
+            if current_user.role == Roles.Super_Admin:
                 response_json = helpers.get_samples_by_org(given_org_id)
             else:
                 # Otherwise, they can only see samples that are assigned to them.

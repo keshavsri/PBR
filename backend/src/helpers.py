@@ -426,7 +426,7 @@ def get_sample_by_id(id: int) -> dict:
 #         ret.append(Sample.from_orm(sample).dict())
 #     return json.dumps(ret)
 
-def get_sample_by_user(user_id: int) -> List[dict]:
+def get_samples_by_user(user_id: int) -> List[dict]:
     """
     The get_sample_by_user function accepts an integer id as input and returns a list of dictionaries containing
     the samples' information.
