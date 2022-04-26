@@ -15,6 +15,25 @@ db = SQLAlchemy()
 
 
 class User(db.Model):
+
+    """ ORM model for the User table
+
+    This table contains all the information about the users of the application.
+
+    Attributes:
+        id:int unique identifier for the user.
+        email: email address for the user
+        password: password for the user
+        role: role enum of the user
+        notes: notes for the user
+        organization_id: id of the organization the user belongs to
+
+        sample: foreign reference to the samples the user is assigned to
+        log: foreign reference to the logs the user is assigned to
+
+
+    """
+
     __tablename__ = 'User'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email: str = db.Column(db.String(120), index=True, unique=True, nullable=False)
@@ -34,12 +53,43 @@ class User(db.Model):
 
 
 class OrganizationSource(db.Model):
+    """ ORM model for the OrganizationSource tabl
+
+    This table is the jointable between the Organization and Source table.
+
+    Attributes:
+        organization_id: id of the organization the source belongs to
+        source_id: id of the source
+    """
     __tablename__ = 'OrganizationSource'
     organization_id: int = db.Column('organization_id', db.Integer, db.ForeignKey('Organization.id'), primary_key=True, nullable=False)
     source_id: int = db.Column('source_id', db.Integer, db.ForeignKey('Source.id'), primary_key=True, nullable=False)
 
 
 class Organization(db.Model):
+
+    """ ORM model for the Organization table
+
+    This table contains all the infromation about the organizations of the application.
+
+    Attributes:
+        id: unique identifier for the organization
+        name: name of the organization
+        street: street address of the organization
+        city: city of the organization
+        state: state enum of the organization
+        zip: zip code of the organization
+        notes: notes for the organization
+        sources: list of sources used by the organization
+
+        organization_code: NOT IMPLEMENTED yet But will be used to generate a unique organization code which is used to register a user to an organization on account creation
+
+
+        user: foreign reference to user
+        machine: foreign reference to machine
+        log: foreign reference to log
+
+    """
     __tablename__ = 'Organization'
     # The fields below are stored in the database, they are assigned both a python and a database type
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -59,6 +109,20 @@ class Organization(db.Model):
     flocks: List['Flock'] = db.relationship('Flock', secondary='OrganizationSourceFlockSample')
 
 class Source(db.Model):
+    """ ORM model for the Source table
+
+    This table contains the sources from which the flock data is collected.
+
+    Attributes:
+        id: unique identifier for the source
+        name: name of the source
+        street_address: street address of the source
+        city: city of the source
+        state: state enum of the source
+        zip: zip code of the source
+
+        organizations: list of organizations using the source
+    """
     __tablename__ = 'Source'
     # The fields below are stored in the database, they are assigned both a python and a database type
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -74,6 +138,22 @@ class Source(db.Model):
 
 
 class Flock(db.Model):
+
+    """ ORM model for the Flock table
+
+    This table contains the flocks from which the samples are collected.
+
+    Attributes:
+        id: unique identifier for the flock
+        name: name of the flock
+        strain: strain of the flock
+        species: species of the flock
+        gender: gender of the flock
+        production_type: The type of flock it is.
+        birthday: The birthdate calculated from the user input
+        timestamp_added: The timestamp of flock creation
+    """
+
     __tablename__ = 'Flock'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(255), unique=True, nullable=False)
@@ -91,6 +171,17 @@ class Flock(db.Model):
 
 
 class OrganizationSource_Flock_Sample(db.Model):
+
+    """ ORM model for the OrganizationSource_Flock_Sample table
+
+    This table acts as a join table for the OrganizationSource, Flock, and Sample tables.
+
+    Attributes:
+        id: unique identifier
+        organization_id: id of the organization
+        source_id: id of the source
+        flock_id: id of the flock
+    """
     __tablename__ = 'OrganizationSourceFlockSample'
     id: int = db.Column('id', db.Integer, primary_key=True, autoincrement=True)
     organization_id: int = db.Column('organization_id', db.Integer, db.ForeignKey('Organization.id'), nullable=False)
@@ -116,6 +207,30 @@ class OrganizationSource_Flock_Sample(db.Model):
 
 
 class Sample(db.Model):
+
+    """ ORM model for the Sample table
+
+    This table contains the bloodwork samples for a flock of birds.
+
+    Attributes:
+        id: unique identifier for the sample
+        timestamp_added: timestamp of the sample
+        comments: comments for the sample
+        entered_by_id: user who entered the sample
+        batch_id: NOT IMPLEMENTED batch the sample belongs to
+        flock_age: age of the flock the sample belongs to
+        flock_age_unit: unit of the flock age
+        flagged: boolean value for if the sample is flagged for review
+        deleted: boolean value for if the sample is deleted
+        validation_status: validation status of the sample
+        sample_type: type of the sample
+
+        measurement_values: list of measurement values for the sample
+
+        organizationsource_flock_sample_id: join table for the sample and organization, with it's sample and flock
+
+    """
+
     __tablename__ = 'Sample'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     timestamp_added: str = db.Column(db.DateTime, server_default=db.func.now())
@@ -170,6 +285,17 @@ def get_flock_organization_joined(session):
     )
 
 class Measurement(db.Model):
+    """ This table acts almost like a join table between the machine and the measurement type.
+
+        Attributes:
+            id: Primary Key
+            machine_id: Foreign Key to Machine
+            measurement_type_id: Foreign Key to Measurement Type
+            machine: Machine object
+            measurement_type: Measurement Type object
+
+            measurement_value: foreign reference to MeasurementValue
+    """
     __tablename__ = 'Measurement'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
@@ -180,10 +306,20 @@ class Measurement(db.Model):
     measurementtype = db.relationship('MeasurementType', back_populates='measurement', uselist=False)
 
     # Foreign References to this Object
-    measurementValue = db.relationship('MeasurementValue', backref='Measurement')
+    measurement_value = db.relationship('MeasurementValue', backref='Measurement')
 
 
 class MeasurementValue(db.Model):
+    """ This table stores the actual measurement value.
+
+        Attributes:
+            id: Primary Key
+            value: The value of the measurement
+            timestamp_added: The time the measurement was added to the database
+
+            measurement_id: Foreign Key to Measurement
+            sample_id: Foreign Key to Sample
+    """
     __tablename__ = 'MeasurementValue'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     value: str = db.Column(db.String(120))
@@ -195,6 +331,20 @@ class MeasurementValue(db.Model):
 
 
 class MeasurementType(db.Model):
+    """ This table stores the measurement types.
+
+    These hold the additional information about the measurement which is shared between all measurements of the same type.
+
+        Attributes:
+            id: Primary Key
+            name: The name of the measurement type
+            abbreviation: The abbreviation of the measurement type
+            unit: The unit of the measurement type
+            required: Whether or not the measurement type is required
+            general: ???
+
+            measurement: foreign reference to Measurement
+    """
     __tablename__ = 'MeasurementType'
     id: int = db.Column(db.Integer, unique=True, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(120), nullable=False, unique=True)
@@ -208,6 +358,21 @@ class MeasurementType(db.Model):
 
 
 class Machine(db.Model):
+    """ This table stores the machines.
+
+    These hold the additional information about the machine which is shared between all measurements of the same machine.
+
+        Attributes:
+            id: Primary Key
+            serial_number: The serial number of the machine
+
+            machine_type_id: Foreign Key to MachineType
+            machine_type: foreign reference to MachineType
+            organization_id: Foreign Key to Organization
+            measurements: list of Measurements from this machine
+
+            measurement: foreign reference to this object
+    """
     __tablename__ = 'Machine'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     serial_number: str = db.Column(db.String(120), unique=True,nullable=False)
@@ -223,12 +388,36 @@ class Machine(db.Model):
 
 
 class MachineType(db.Model):
+    """ This table stores the machine types.
+
+    It pretty much just stores the names of the machine types.
+
+        Attributes:
+            id: Primary Key
+            name: The name of the machine type
+    """
     __tablename__ = 'MachineType'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(120), unique=True, nullable=False)
 
 
 class Log(db.Model):
+    """ This table stores the logs.
+
+    The logs store the user who did the action, their role, the enum for the action, the content is a more readable
+    version of the action with an ID or name of the affected object.
+
+        Attributes:
+            id: Primary Key
+            user: The user who did the action
+            role: The role of the user
+            action: The action that was performed
+            content: A more readable version of the action with an ID or name of the affected object
+            log_time: The time the action was performed
+
+            user_id: Foreign Key to User
+            organization_id: Foreign Key to Organization
+    """
     __tablename__ = 'Log'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user = db.relationship('User')
@@ -250,6 +439,15 @@ class Log(db.Model):
 
 
 class Batch(db.Model):
+    """ This table stores the batches.
+    NOT IMPLEMENTED
+
+        Attributes:
+            id: Primary Key
+            name: The name of the batch
+
+            sample: Foreign reference to the samples in this batch
+    """
     __tablename__ = 'Batch'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(120))
@@ -259,6 +457,15 @@ class Batch(db.Model):
 
 
 def createLog(current_user, action, logContent):
+    """ This function creates a log entry.
+
+    It takes the current user, the action that was performed, and the content of the action.
+
+    Args:
+        current_user: The user who did the action
+        action: The action that was performed
+        logContent: A more readable version of the action with an ID or name of the affected object
+    """
     log = Log(current_user.id, current_user.organization_id, current_user.role, action, logContent)
     db.session.add(log)
     db.session.commit()

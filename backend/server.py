@@ -8,6 +8,11 @@ load_dotenv(find_dotenv())
 @app.before_first_request
 def create_tables():
     print("Creating database tables...")
+    print(os.getenv("DB_USER"))
+    print(os.getenv("DB_PASS"))
+    print(os.getenv("DB_HOST"))
+    print(os.getenv("DB_NAME"))
+    print(os.getenv("DATABASE_URL"))
     db.create_all()
     print("Done!")
 
