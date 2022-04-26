@@ -17,6 +17,8 @@ import {
   ListItemText,
   MenuItem,
   IconButton,
+  Autocomplete,
+  TextField
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import {
@@ -24,7 +26,15 @@ import {
   validationStates,
   sampleTypes,
   productionTypes,
+  ageUnits,
+  speciesTypes,
 } from "../models/enums";
+import { createFilterOptions } from "@mui/material/Autocomplete";
+
+import useDataView from "../services/useDataView";
+import useAuth from "../services/useAuth";
+
+const filter = createFilterOptions();
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -48,32 +58,58 @@ function getStyles(name, filterList, theme) {
   };
 }
 
-export default function DataViewFilterContent() {
+export default function DataViewFilterContent(props) {
+  const {
+    rows,
+  } = props;
   const classes = useStyles();
   const theme = useTheme();
 
+  const parseRows = () => {
+    let orgIDList = [];
+    rows.map((row, index) => {
+      row.organization.map((org) => {
+        if (!orgIDList.includes(org.id)){
+          let temp = organizationsList;
+          temp.append(org);
+          setOrganizationsList(temp);
+        }
+      })
+    });
+  }
+
   // General Section Data
 
-  const [generalFilterState, setGeneralFilterState] = React.useState({
-    flockID: "",
-    species: "",
-    strain: "",
-    gender: "",
-    ageRange: "",
-    validationStatus: "",
-    sampleType: "",
-    batch: "",
-    dataCollector: "",
-    organiztion: "",
-  });
+  const {
+    generalFilterState,
+    setGeneralFilterState
+  } = useDataView();
+  const { checkResponseAuth } = useAuth();
 
   const handleGeneralFilterChange = (prop) => (event) => {
     console.log("General Filter changed: ", prop, event.target.value);
-    setGeneralFilterState({
-      ...generalFilterState,
-      [prop]: event.target.value,
-    });
-    console.log(generalFilterState);
+
+    if (prop === "species") {
+      setGeneralFilterState({
+        ...generalFilterState,
+        species: event.target.value,
+        strain: "",
+      });
+      getStrains(event.target.value);
+    } else if (prop === "organizationID") {
+      setGeneralFilterState({
+        ...generalFilterState,
+        organizationID: event.target.value,
+        flockID: null,
+      });
+      getSources(event.target.value);
+    } else {
+      setGeneralFilterState({
+        ...generalFilterState,
+        [prop]: event.target.value,
+      });
+      console.log(generalFilterState);
+    }
   };
 
   const handleValidationStatusChange = () => (event) => {
@@ -167,10 +203,127 @@ export default function DataViewFilterContent() {
     // console.log(mockedOrgCode);
     // setOrgCodeData(mockedOrgCode);
   };
+  const [flocks, setFlocks] = React.useState([]);
+  const [strains, setStrains] = React.useState([]);
+  const [batches, setBatches] = React.useState([]);
+  const [sources, setSources] = React.useState([]);
+  const [organizations, setOrganizations] = React.useState([]);
 
+  const getSources = async (organization) => {
+    console.log("Getting sources for " + organization.name);
+    // await fetch(`/api/source`, {
+    //   method: "GET",
+    // })
+    //   .then(handleAPIResponse)
+    //   .then((response)=> {
+    //     return response.json()
+    //   })
+    //   .then((data) => {
+    //     console.log(data);
+    //     setSources(data);
+    //   });
+    let mockSources = [
+      {
+        id: "1",
+        name: "Source A",
+        street_address: "123 Main Street",
+        city: "Raleigh",
+        state: "NC",
+        zip: "27606",
+      },
+      {
+        id: "2",
+        name: "Source B",
+        street_address: "456 Main Street",
+        city: "Raleigh",
+        state: "NC",
+        zip: "27606",
+      },
+    ];
+    setSources(mockSources);
+  };
+
+  const getFlocks = () => {
+    let mockFlocks = [{ id: 1852 }, { id: 2531 }, { id: 3491 }];
+    setFlocks(mockFlocks);
+  };
+
+  const handleFlockChange = (id) => {
+
+    setGeneralFilterState({
+      ...generalFilterState,
+      flockID: id,
+    });
+  };
+  const getStrains = async (species) => {
+    await fetch(`/api/sample/strains/${species}`, {
+      method: "GET",
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setStrains(data);
+      });
+  };
+
+  const getBatches = async () => {
+    await fetch(`/api/datapoint/batch`, {
+      method: "GET",
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setBatches(data);
+      });
+  };
+
+  const getOrganizations = async () => {
+    // await fetch(`/api/organization`, {
+    //   method: "GET",
+    // })
+    //   .then(handleAPIResponse)
+    //   .then((response)=> {
+    //     return response.json()
+    //   })
+    //   .then((data) => {
+    //     console.log(data);
+    //     setSources(data);
+    //   });
+    let mockOrganizations = [
+      {
+        id: "1",
+        name: "Organization A",
+        street_address: "123 Main Street",
+        city: "Raleigh",
+        state: "NC",
+        zip: "27606",
+        default: "true",
+      },
+      {
+        id: "2",
+        name: "Organization B",
+        street_address: "456 Main Street",
+        city: "Raleigh",
+        state: "NC",
+        zip: "27606",
+      },
+    ];
+    setOrganizations(mockOrganizations);
+  };
   // Always run
-
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    getOrganizations();
+    getFlocks();
+    getBatches();
+  }, []);
 
   return (
     <>
@@ -179,16 +332,46 @@ export default function DataViewFilterContent() {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <FormControl sx={{ width: "100%", mb: 2 }}>
-              <InputLabel>Flock ID</InputLabel>
-              <Select
-                value={generalFilterState.flockID}
-                label="Flock ID"
-                onChange={handleGeneralFilterChange("flockID")}
-              >
-                <MenuItem value={""}></MenuItem>
-              </Select>
-            </FormControl>
+          <Autocomplete
+              value={generalFilterState.flockID}
+              sx={{ width: "100%", mb: 2 }}
+              onChange={(event, newValue) => {
+                handleFlockChange(newValue);
+              }}
+              filterOptions={(options, params) => {
+                const filtered = filter(options, params);
+
+                const { inputValue } = params;
+                // Suggest the creation of a new value
+                const isExisting = options.some(
+                  (option) => inputValue === option.id
+                );
+                if (inputValue !== "" && !isExisting) {
+                  filtered.push({
+                    inputValue,
+                    title: `Add Flock "${inputValue}"`,
+                  });
+                }
+
+                return filtered;
+              }}
+              selectOnFocus
+              clearOnBlur
+              handleHomeEndKeys
+              options={flocks}
+              getOptionLabel={(option) => {
+                // Value selected with enter, right from the input
+                // Regular option
+                if (option.id) {
+                  return `Flock ${option.id}`;
+                }
+              }}
+              renderOption={(props, option) => <li {...props}>{option.id}</li>}
+              freeSolo
+              renderInput={(params) => (
+                <TextField {...params} label="Flock ID" />
+              )}
+            />
             <FormControl sx={{ width: "100%", mb: 2 }}>
               <InputLabel>Species</InputLabel>
               <Select
@@ -196,17 +379,30 @@ export default function DataViewFilterContent() {
                 label="Species"
                 onChange={handleGeneralFilterChange("species")}
               >
-                <MenuItem value={""}></MenuItem>
+                {Object.values(speciesTypes).map((species, index) => {
+                  return (
+                    <MenuItem value={species} key={index}>
+                      {species}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%", mb: 2 }}>
               <InputLabel>Strain</InputLabel>
               <Select
                 value={generalFilterState.strain}
+                disabled={!generalFilterState.species ? true : false}
                 label="Strain"
                 onChange={handleGeneralFilterChange("strain")}
               >
-                <MenuItem value={""}></MenuItem>
+                {strains.map((strain, index) => {
+                  return (
+                    <MenuItem value={strain} key={index}>
+                      {strain}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
             <FormControl sx={{ width: "100%" }}>
@@ -216,7 +412,6 @@ export default function DataViewFilterContent() {
                 label="Gender"
                 onChange={handleGeneralFilterChange("gender")}
               >
-                <MenuItem value={""}></MenuItem>
                 {Object.values(genders).map((gender, index) => {
                   return (
                     <MenuItem value={gender} key={index}>
@@ -285,7 +480,13 @@ export default function DataViewFilterContent() {
                 label="Batch"
                 onChange={handleGeneralFilterChange("batch")}
               >
-                <MenuItem value={""}></MenuItem>
+                {Object.values(batches).map((batch, index) => {
+                  return (
+                    <MenuItem value={batch} key={index}>
+                      {batch.id}
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
           </Grid>
@@ -462,11 +663,18 @@ export default function DataViewFilterContent() {
             <FormControl sx={{ width: "100%" }}>
               <InputLabel>Organization</InputLabel>
               <Select
-                value={generalFilterState.organization}
+                value={generalFilterState.organizationID}
                 label="Organization"
-                onChange={handleGeneralFilterChange("organization")}
+                onChange={handleGeneralFilterChange("organizationID")}
               >
-                <MenuItem value={""}></MenuItem>
+                {organizations.map((org, index) => {
+                  return (
+                    <MenuItem value={org} key={index}>
+                      {org.name} ({org.street_address}, {org.city}, {org.state}{" "}
+                      {org.zip})
+                    </MenuItem>
+                  );
+                })}
               </Select>
             </FormControl>
           </Grid>

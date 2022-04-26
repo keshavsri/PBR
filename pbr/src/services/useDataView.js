@@ -7,6 +7,14 @@ function useCreateDataView() {
   const [samplePayload, setSamplePayload] = React.useState({});
   const [sampleModalVisibility, setSampleModalVisibility] =
     React.useState(false);
+  const [openFilterModal, setOpenFilterModal] = React.useState(false);
+  let handleOpenFilterModal = () => {
+      setOpenFilterModal(true);
+    };
+  let handleCloseFilterModal = () => {
+      setOpenFilterModal(false);
+    };
+  
   const [sampleModalScreen, setSampleModalScreen] = React.useState(0);
   const [sampleValidationErrors, setSampleValidationErrors] = React.useState(
     {}
@@ -30,6 +38,19 @@ function useCreateDataView() {
   });
   const [machineDetails, setMachineDetails] = React.useState([]);
   const [sampleType, setSampleType] = React.useState("");
+
+  const [generalFilterState, setGeneralFilterState] = React.useState({
+    flockID: "",
+    species: "",
+    strain: "",
+    gender: "",
+    ageRange: "",
+    validationStatus: "",
+    sampleType: "",
+    batch: "",
+    dataCollector: "",
+    organization: "",
+  });
 
   let openSampleModal = () => {
     setSampleModalVisibility(true);
@@ -123,6 +144,12 @@ function useCreateDataView() {
     restartSample,
     timestamp,
     setTimestamp,
+    generalFilterState,
+    setGeneralFilterState,
+    openFilterModal, 
+    setOpenFilterModal,
+    handleOpenFilterModal,
+    handleCloseFilterModal,
     sampleValidationErrors,
     setSampleValidationErrors,
     sampleType,
