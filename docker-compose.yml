@@ -18,14 +18,13 @@ services:
     build: ./backend
     container_name: backend
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
       - BACKEND_PORT=3005
       - SERVER_NAME=0.0.0.0
       # - DATABASE_URL=sqlite:///pbrDatabase.sqlite3
       - DATABASE_URL=mysql+pymysql://root:${MYSQL_ROOT_PASSWORD:?err}@db/pbr
-      - JWT_SIGN_ALGORITHM=HS256
-      - JWT_TTL=60
-      - JWT_SECRET=mjMCI,y?&kY$R!SyaVgQXQ.,V[.7*}
     depends_on:
       - db
 
@@ -42,6 +41,7 @@ services:
 
   db:
     image: mysql
+    platform: linux/amd64 #uncomment if on M1 chip Mac
     container_name: db
     volumes:
       - dbdata:/var/lib/mysql
