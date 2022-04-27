@@ -465,9 +465,38 @@ def get_samples_by_org(org_id: int) -> List[dict]:
             machJson["data"].append({"type":meas})
         ret["types"].append(machJson)
     for sample in samples:
-        sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
-        ret["rows"].append(Sample.from_orm(sample).dict())
+        if not sample.deleted:
+            print("The deleted string:" + str(sample.deleted))
+            sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
+            ret["rows"].append(Sample.from_orm(sample).dict())
+            # print(f"Measurement ID: {sample.measurement_values[0].Measurement}")
+            for measurement_value in sample.measurement_values:
+                print(measurement_value.Measurement.machine)
+                current_machine_name = measurement_value.Measurement.machine.machinetype.name
+                current_machine_id = measurement_value.Measurement.machine.machinetype.id
 
+            # Check to see if this measurement's machine already exists in the types array
+                try:
+                    type_entry = next(item for item in ret["types"] if item["machineId"] == current_machine_id)
+                # Just append to the data array.
+                    type_entry["data"].append({
+                        type: MeasurementType.from_orm(measurement_value.Measurement.measurementtype).dict()
+                    })
+                except:
+                    print("Exception! Adding type")
+                # Not found. Add a new entry with this in the data array.
+                    ret["types"].append({
+                        "machineName": current_machine_name,
+                        "machineId": current_machine_id,
+                        "data": {
+                            "type": [MeasurementType.from_orm(measurement_value.Measurement.measurementtype).dict()]
+                        }
+                    })
+    print(f"RET {ret}")
+
+
+    # print(json.dumps(rows, default=str))
+    # ret = rows
     return json.dumps(ret, default=str)
 
 def get_sample_by_id(id: int) -> dict:

@@ -206,8 +206,8 @@ export default function DataView() {
         // return response.json();
       });
     });
-    getData();
-   });
+    await getData();
+    setSelected([])
     // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
     // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
     // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
