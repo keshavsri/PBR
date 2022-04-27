@@ -59,26 +59,30 @@ export default function DataView() {
       //     </IconButton>
       //   </>
       // );
-      row.timestamp_added = new Date(row.timestamp_added).toLocaleString();
-      row["flock.birthday"] = new Date(row["flock.birthday"]).toLocaleString();
+      row.timestamp_added = new Date(row.timestamp_added).toLocaleString(
+        "en-US",
+        {
+          timeZone: "America/New_York",
+        }
+      );
       // TEMPORARY
       row.deletable = true;
     });
   };
 
   const getData = async () => {
-    await fetch(`/api/sample/`, {method: "GET",})
-    .then((response) => {
-      return response.json();
-    }).then(checkResponseAuth)
-    .then((data) => {
-      console.log(data);
-      denestMachineData(data.rows);
-      assignRowHtml(data.rows);
-      setRowList(data.rows);
-      getHeadCells(data.types);
-      
-    })
+    await fetch(`/api/sample/`, { method: "GET" })
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        console.log(data);
+        denestMachineData(data.rows);
+        assignRowHtml(data.rows);
+        setRowList(data.rows);
+        getHeadCells(data.types);
+      });
     // denestMachineData(apiRows);
     // assignRowHtml(apiRows);
     // setRowList(apiRows);
@@ -126,12 +130,6 @@ export default function DataView() {
         label: "Date Entered",
       },
       {
-        id: "flock.birthday",
-        numeric: false,
-        disablePadding: true,
-        label: "Birthday",
-      },
-      {
         id: "flock_age_combined",
         numeric: false,
         disablePadding: true,
@@ -160,27 +158,34 @@ export default function DataView() {
     addApiColumnNamesToHeadCells(types, headCells);
     setHeadCellList(headCells);
     console.log(headCells);
-
   };
 
-
   const addApiColumnNamesToHeadCells = (headCellNamesFromAPI, headCells) => {
-    headCellNamesFromAPI.map((item) => {
-      item.data.type.map((point, index) => {
-        headCells.push(createHeadCell(point, item.machineName, index));
-      
+    console.log(headCellNamesFromAPI);
+    headCellNamesFromAPI.map((machine) => {
+      machine.data.map((point, index) => {
+        headCells.push(createHeadCell(point.type, machine.machineName, index));
       });
     });
   };
 
   function createHeadCell(point, machineName, index) {
+    let headerLabel = "";
+    if (point.abbreviation) {
+      headerLabel += point.abbreviation;
+    } else {
+      headerLabel += point.name;
+    }
+    if (point.units) {
+      headerLabel += ` (${point.units})`;
+    }
     return {
       machineName: machineName,
       name: point.name,
       id: "measurement." + point.id,
       numeric: false,
       disablePadding: true,
-      label: " " + point.abbreviation + " (" + point.units + ")",
+      label: headerLabel,
       sublabel: "" + machineName,
     };
   }
@@ -188,15 +193,18 @@ export default function DataView() {
     rows.map((row, index) => {
       row["flock_age_combined"] = "" + row.flock_age + " " + row.flock_age_unit;
       row.measurement_values.map((m, index2) => {
-          let temp = "measurement." + m.measurement_id;
-          row[temp] = m.value + " " + m.measurement.measurementtype.units;
+        let temp = "measurement." + m.measurement_id;
+        row[temp] = m.value;
+        if (m.measurement.measurementtype.units) {
+          row[temp] += ` ${m.measurement.measurementtype.units}`;
+        }
       });
       Object.keys(row.flock).map((key) => {
         let temp = "flock." + key;
         row[temp] = row.flock[key];
-        if(key == "source_id"){
+        if (key == "source_id") {
           row.organization.sources.map((source) => {
-            if(source["id"] == row.flock["id"])
+            if (source["id"] == row.flock["id"])
               row["flock.source_name"] = source["name"];
           });
         }
@@ -205,14 +213,13 @@ export default function DataView() {
   };
 
   const onDelete = async () => {
-    console.log("DELETE TEST")
-    let path = `/api/sample/`
+    console.log("DELETE TEST");
+    let path = `/api/sample/`;
     selected.map(async (id, index) => {
-      await fetch(path + id, {method: "DELETE",})
-      .then((response) => {
+      await fetch(path + id, { method: "DELETE" }).then((response) => {
         return response.json();
-      })
-    })
+      });
+    });
     // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
     // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
     // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
@@ -229,15 +236,16 @@ export default function DataView() {
         <EnhancedTable
           headCells={headCellList}
           rows={rowList}
-          toolbarButtons={
-            <DVTableToolbar/>
-          }
+          toolbarButtons={<DVTableToolbar />}
           selected={selected}
           setSelected={setSelected}
           onDelete={onDelete}
         ></EnhancedTable>
       </Paper>
-      <DataViewFilterModal setRowList={setRowList} setHeadCellList={setHeadCellList}/>
+      <DataViewFilterModal
+        setRowList={setRowList}
+        setHeadCellList={setHeadCellList}
+      />
       <DataViewSampleModal />
     </DataViewProvider>
   );

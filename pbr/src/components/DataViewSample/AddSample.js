@@ -380,7 +380,7 @@ export default function DataViewAddSample({
       console.log(data.measurements);
       for (let i = 0; i < data.measurements.length; i++) {
         let meas = updatedMachine.measurements.find(
-          (meas) => meas.metadata.abbrev === data.measurements[i].key
+          (meas) => meas.metadata.abbreviation === data.measurements[i].key
         );
         if (meas) {
           meas.value = data.measurements[i].value;
@@ -614,7 +614,7 @@ export default function DataViewAddSample({
                       flockName: "",
                       species: "",
                       strain: "",
-                      gender: "Female",
+                      gender: "",
                       sourceID: "",
                       productionType: "",
                       ageUnit: "",
@@ -1092,9 +1092,10 @@ export default function DataViewAddSample({
                           }
                         >
                           <InputLabel>
-                            {measurement.metadata.name
-                              ? `${measurement.metadata.name} (${measurement.metadata.abbrev})`
-                              : `${measurement.metadata.abbrev}`}
+                            {measurement.metadata.name &&
+                            measurement.metadata.name != ""
+                              ? `${measurement.metadata.name} (${measurement.metadata.abbreviation})`
+                              : `${measurement.metadata.abbreviation}`}
                           </InputLabel>
                           <OutlinedInput
                             type={measurement.metadata.datatype}
@@ -1104,9 +1105,10 @@ export default function DataViewAddSample({
                               measurement.metadata.id
                             )}
                             label={
-                              measurement.metadata.name
-                                ? `${measurement.metadata.name} (${measurement.metadata.abbrev})`
-                                : `${measurement.metadata.abbrev}`
+                              measurement.metadata.name &&
+                              measurement.metadata.name != ""
+                                ? `${measurement.metadata.name} (${measurement.metadata.abbreviation})`
+                                : `${measurement.metadata.abbreviation}`
                             }
                             endAdornment={
                               <InputAdornment position="end">
@@ -1137,9 +1139,10 @@ export default function DataViewAddSample({
                           }
                         >
                           <InputLabel>
-                            {measurement.metadata.name
-                              ? `${measurement.metadata.name} (${measurement.metadata.abbrev})`
-                              : `${measurement.metadata.abbrev}`}
+                            {measurement.metadata.name &&
+                            measurement.metadata.name != ""
+                              ? `${measurement.metadata.name} (${measurement.metadata.abbreviation})`
+                              : `${measurement.metadata.abbreviation}`}
                           </InputLabel>
                           <OutlinedInput
                             type={measurement.metadata.datatype}
@@ -1149,13 +1152,16 @@ export default function DataViewAddSample({
                               measurement.metadata.id
                             )}
                             label={
-                              measurement.metadata.name
-                                ? `${measurement.metadata.name} (${measurement.metadata.abbrev})`
-                                : `${measurement.metadata.abbrev}`
+                              measurement.metadata.name &&
+                              measurement.metadata.name != ""
+                                ? `${measurement.metadata.name} (${measurement.metadata.abbreviation})`
+                                : `${measurement.metadata.abbreviation}`
                             }
                             endAdornment={
                               <InputAdornment position="end">
-                                {measurement.metadata.units}
+                                {measurement.metadata.units
+                                  ? measurement.metadata.units
+                                  : ""}
                               </InputAdornment>
                             }
                           />
