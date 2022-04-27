@@ -21,7 +21,7 @@ import { DataArray } from "@mui/icons-material";
 
 const useStyles = makeStyles({});
 
-export default function DataViewSampleModal() {
+export default function DataViewSampleModal({ getData }) {
   const {
     sampleModalVisibility,
     sampleModalScreen,
@@ -156,6 +156,7 @@ export default function DataViewSampleModal() {
           });
         } else {
           sampleNextAction();
+          getData();
           return response.json();
         }
       });

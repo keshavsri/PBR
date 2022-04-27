@@ -14,7 +14,6 @@ import useAuth from "../services/useAuth";
 
 const useStyles = makeStyles({});
 
-
 export default function DataView() {
   const [rowList, setRowList] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
@@ -196,18 +195,17 @@ export default function DataView() {
   };
 
   const onDelete = async () => {
-    console.log("DELETE TEST")
-    let path = `/api/sample/datapoint/`
+    console.log("DELETE TEST");
+    let path = `/api/sample/datapoint/`;
     selected.map(async (id, index) => {
       let temp = path + id;
-      await fetch(temp, {method: 'DELETE'})
-      .then((response) => {
+      await fetch(temp, { method: "DELETE" }).then((response) => {
         console.log(response.json());
         // return response.json();
       });
     });
     await getData();
-    setSelected([])
+    setSelected([]);
     // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
     // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
     // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
@@ -229,8 +227,13 @@ export default function DataView() {
           onDelete={onDelete}
         ></EnhancedTable>
       </Paper>
-      <DataViewFilterModal setRowList={setRowList} setHeadCellList={setHeadCellList} getData={getData} rows={rowList}/>
-      <DataViewSampleModal />
+      <DataViewFilterModal
+        setRowList={setRowList}
+        setHeadCellList={setHeadCellList}
+        getData={getData}
+        rows={rowList}
+      />
+      <DataViewSampleModal getData={getData} />
     </DataViewProvider>
   );
 }
