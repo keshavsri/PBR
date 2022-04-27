@@ -28,7 +28,7 @@ def get_machines(access_allowed, current_user, given_org_id=None):
             if current_user.role == Roles.Super_Admin:
                 responseJSON = src.helpers.get_machines()
             else:
-                responseJSON = src.helpers.get_sample_by_org(current_Organization)
+                responseJSON = src.helpers.get_machines_by_org(current_Organization)
 
         # if the response json is empty then return a 404 not found
         if responseJSON is None:

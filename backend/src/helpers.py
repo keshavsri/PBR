@@ -28,17 +28,63 @@ def get_machines_by_org(org_id: int) -> List[dict]:
     :doc-author: Trelent
     """
     machines = MachineORM.query.filter_by(organization_id=org_id).all()
-    ret = []
+    pydanticMachines = []
     for machine in machines:
-        ret.append(Machine.from_orm(machine).dict())
-    return json.dumps(ret)
+        pydanticMachines.append(Machine.from_orm(machine).dict())
+
+    formatted_machine_json = []
+    for machine in pydanticMachines:
+        formatted_machine = {
+            "name": machine,
+            "id": 1,
+            "info": [],
+            "measurements": []
+        }
+        print(f"Machjine: {machine}")
+        for measurement in machine["measurements"]:
+            formatted_meas = {
+                "id": measurement['measurementtype']["id"],
+                "name": measurement['measurementtype']['name'],
+                "abbreviation": measurement['measurementtype']['abbreviation'],
+                "units": measurement['measurementtype']['units'],
+                "required": measurement['measurementtype']['required'],
+            }
+            if measurement['measurementtype']['general']:
+                formatted_machine["info"].append(formatted_meas)
+            else:
+                formatted_machine["measurements"].append(formatted_meas)
+        formatted_machine_json.append(formatted_machine)
+    return json.dumps(formatted_machine_json)
 
 def get_machines() -> List[dict]:
     machines = MachineORM.query.filter_by().all()
-    ret = []
+    pydanticMachines = []
     for machine in machines:
-        ret.append(Machine.from_orm(machine).dict())
-    return json.dumps(ret)
+        pydanticMachines.append(Machine.from_orm(machine).dict())
+        
+    formatted_machine_json = []
+    for machine in pydanticMachines:
+        formatted_machine = {
+            "name": machine,
+            "id": 1,
+            "info": [],
+            "measurements": []
+        }
+        print(f"Machjine: {machine}")
+        for measurement in machine["measurements"]:
+            formatted_meas = {
+                "id": measurement['measurementtype']["id"],
+                "name": measurement['measurementtype']['name'],
+                "abbreviation": measurement['measurementtype']['abbreviation'],
+                "units": measurement['measurementtype']['units'],
+                "required": measurement['measurementtype']['required'],
+            }
+            if measurement['measurementtype']['general']:
+                formatted_machine["info"].append(formatted_meas)
+            else:
+                formatted_machine["measurements"].append(formatted_meas)
+        formatted_machine_json.append(formatted_machine)
+    return json.dumps(formatted_machine_json)
 
 def get_machine_by_id(id: int) -> dict:
     """
@@ -242,6 +288,36 @@ def get_all_flocks() -> List[dict]:
         ret.append(Flock.from_orm(flock).dict())
     return json.dumps(ret, default=str)
 
+def update_flock(flock_dict: dict):
+    """
+    The update_flock function accepts a dictionary containing the flock's information and updates an existing flock using
+    the pydantic model to parse and the ORM model to store the information.
+
+    :param flock_dict:dict: Used to specify the flock's information.
+    :return: flock:Flock: the updated flock
+    """
+
+    flock:FlockORM = FlockORM.query.filter_by(name=flock_dict["name"]).first()
+
+    print(f"Flock is {flock}")
+    print(f"Flock Parsed is {Flock.parse_obj(flock_dict)}")
+
+    flockSchema = Flock.parse_obj(flock_dict)
+   
+    for name, value in flockSchema:
+        if name != "id":
+            setattr(flock, name, value)
+    
+    print(f"FLOCK: {flock}")
+    db.session.commit()
+    db.session.refresh(flock)
+
+    osf = OrganizationSource_Flock_SampleORM.query.filter_by(flock_id=flock.id).first()
+    setattr(osf, "organization_id", flockSchema.organization_id)
+    setattr(osf, "source_id", flockSchema.source_id)
+    db.session.commit()
+    
+    return flock
 
 def create_flock(flock_dict: dict):
     """
@@ -357,11 +433,6 @@ def create_sample(sample_dict: dict, current_user):
     for name, value in Sample.parse_obj(sample_dict):
         if name != 'measurement_values':
             setattr(sample, name, value)
-        else:
-            values = []
-            for measurement_value_dict in value:
-                values.append(create_measurement_value(measurement_value_dict))
-            setattr(sample, name, values)
     setattr(sample, "entered_by_id", current_user.id)
 
     # Get OrgSourceFlockSample ID
@@ -383,6 +454,15 @@ def create_sample(sample_dict: dict, current_user):
     db.session.add(sample)
     db.session.commit()
     db.session.refresh(sample)
+    
+    values = []
+    for meas_value in sample_dict["measurement_values"]:
+        meas_value["sample_id"] = sample.id
+        print(f"SID: {sample.id}")
+        values.append(create_measurement_value(meas_value))
+    
+    setattr(sample, "measurement_values", values)
+    db.session.commit()
     return sample
 
 
@@ -489,6 +569,7 @@ def create_measurement_value(measurement_value_dict: dict):
     value that we want to create.
     :return: measurement_value:MeasurementValue: A measurement value sqlalchemy model.
     """
+    print("Creating Measurement Values")
     measurement_value:MeasurementValueORM = MeasurementValueORM()
     for name, value in MeasurementValue.parse_obj(measurement_value_dict):
         setattr(measurement_value, name, value)

@@ -107,12 +107,14 @@ export default function DataViewSampleModal() {
     let measurementValues = [];
     for (let i = 0; i < machineDetails.length; i++) {
       let currentMachine = machineDetails[i];
-      for (let j = 0; j < currentMachine.length; j++) {
-        let currentMeasurement = currentMachine.data[i];
-        measurementValues.push({
-          measurement_id: currentMeasurement.id,
-          value: currentMeasurement.value,
-        });
+      for (let j = 0; j < currentMachine.measurements.length; j++) {
+        let currentMeasurement = currentMachine.measurements[j];
+        if (currentMeasurement.value) {
+          measurementValues.push({
+            measurement_id: currentMeasurement.metadata.id,
+            value: currentMeasurement.value,
+          });
+        }
       }
     }
     let payload = {
@@ -205,16 +207,17 @@ export default function DataViewSampleModal() {
 
   const [machineList, setMachineList] = React.useState([]);
   const getMachineList = async () => {
-    // await fetch(`/api/machine/organization/${generalDetails.organizationID}`, {
-    //   method: "GET",
-    // })
-    //   .then(checkResponseAuth)
-    //   .then((response) => {
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //   });
+    await fetch(`/api/machine/organization/${generalDetails.organizationID}`, {
+      method: "GET",
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        // setMachineList(data);
+      });
     let mockMachineList = [
       {
         name: "VetScan VS2",

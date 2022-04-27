@@ -174,8 +174,8 @@ def create_sample(access_allowed, current_user):
         if current_flock:
             print("Flock already exists")
             # If so, see if things were edited.
-            print(current_flock)
-            print(payload['flockDetails'])
+            src.helpers.update_flock(payload['flockDetails'])
+            Models.createLog(current_user, LogActions.EDIT_FLOCK, 'Updated Flock: ' + current_flock["name"])
         else:
             print("Brand new flock. Add it.")
             # If flock doesn't exist, make it.
