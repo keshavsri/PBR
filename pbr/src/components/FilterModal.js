@@ -13,8 +13,10 @@ const useStyles = makeStyles({});
 
 export default function DataViewFilterModal(props) {
   const {
+    rows,
     setRowList,
-    setHeadCellList
+    setHeadCellList,
+    getData
   } = props;
   const {
     generalFilterState,
@@ -27,18 +29,40 @@ export default function DataViewFilterModal(props) {
 
 
   let applyFilter = async () => {
-    fetch(`/api/sample/filter`, {      method: "POST",
-       body: generalFilterState,})
-      .then((response) => {
-        return response.json();
-      }).then((data) => {
-        console.log(data);
-        setRowList(data.row);
-        setHeadCellList(data.types);
-      })
+    // let payload = {
+    //   flagged: generalDetails.flagged,
+    //   comments: generalDetails.comments,
+    //   flock_age: generalDetails.ageNumber,
+    //   flock_age_unit: generalDetails.ageUnit,
+    //   sample_type: sampleType,
+    //   organization_id: generalDetails.organizationID,
+    //   measurement_values: measurementValues,
+    //   flockDetails: {
+    //     name: generalDetails.flockName,
+    //     strain: generalDetails.strain,
+    //     species: generalDetails.species,
+    //     gender: generalDetails.gender,
+    //     production_type: generalDetails.productionType,
+    //     source_id: generalDetails.sourceID,
+    //     organization_id: generalDetails.organizationID,
+    //   },
+    // };
+    // fetch(`/api/sample/datapoint/filter`, {      method: "POST",
+    //    body: payload,})
+    //   .then((response) => {
+    //     return response.json();
+    //   }).then((data) => {
+    //     console.log(data);
+    //     setRowList(data.row);
+    //     setHeadCellList(data.types);
+    //   })
+      // Future API call for filtering (passsed in from dataview.js)
+      // getData(generalFilterState);
       console.log("Filtering!");
+      console.log(generalFilterState);
       handleCloseFilterModal();
     };
+    
 
   // Define the footer for the modal. By default, there's no footer.
   let footer = (
@@ -70,7 +94,7 @@ export default function DataViewFilterModal(props) {
         handleClose={handleCloseFilterModal}
         footer={footer}
       >
-        <DataViewFilterContent />
+        <DataViewFilterContent rows={rows} />
       </CustomDialog>
     </>
   );

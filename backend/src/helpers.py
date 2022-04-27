@@ -465,9 +465,11 @@ def get_samples_by_org(org_id: int) -> List[dict]:
             machJson["data"].append({"type":meas})
         ret["types"].append(machJson)
     for sample in samples:
-        sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
-        ret["rows"].append(Sample.from_orm(sample).dict())
-
+        if not sample.deleted:
+            sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
+            ret["rows"].append(Sample.from_orm(sample).dict())
+    print(f"RET {ret}")
+    
     return json.dumps(ret, default=str)
 
 def get_sample_by_id(id: int) -> dict:

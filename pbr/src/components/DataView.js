@@ -14,23 +14,6 @@ import useAuth from "../services/useAuth";
 
 const useStyles = makeStyles({});
 
-const getSamples = () => {
-  fetch(`/api/sample/`, { method: "GET" })
-    .then((response) => {
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-      // setRowList(data.rows);
-      // setHeadCellList(data.types);
-    });
-
-  // addApiColumnNamesToHeadCells(headCellNamesFromAPI);
-  // console.log(headCellList);
-  // denestMachineData(rowList);
-  // assignRowHtml();
-  // console.log(rows);
-};
 
 export default function DataView() {
   const [rowList, setRowList] = React.useState([]);
@@ -213,13 +196,18 @@ export default function DataView() {
   };
 
   const onDelete = async () => {
-    console.log("DELETE TEST");
-    let path = `/api/sample/`;
+    console.log("DELETE TEST")
+    let path = `/api/sample/datapoint/`
     selected.map(async (id, index) => {
-      await fetch(path + id, { method: "DELETE" }).then((response) => {
-        return response.json();
+      let temp = path + id;
+      await fetch(temp, {method: 'DELETE'})
+      .then((response) => {
+        console.log(response.json());
+        // return response.json();
       });
     });
+    await getData();
+    setSelected([])
     // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
     // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
     // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
@@ -227,7 +215,6 @@ export default function DataView() {
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
   React.useEffect(() => {
     getData();
-    getSamples();
   }, []);
 
   return (
@@ -242,10 +229,7 @@ export default function DataView() {
           onDelete={onDelete}
         ></EnhancedTable>
       </Paper>
-      <DataViewFilterModal
-        setRowList={setRowList}
-        setHeadCellList={setHeadCellList}
-      />
+      <DataViewFilterModal setRowList={setRowList} setHeadCellList={setHeadCellList} getData={getData} rows={rowList}/>
       <DataViewSampleModal />
     </DataViewProvider>
   );

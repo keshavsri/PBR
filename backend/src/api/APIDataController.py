@@ -4,7 +4,7 @@ import re
 import src.helpers
 from src.enums import LogActions, ValidationTypes, Roles
 from src.api.APIUserController import token_required, allowed_roles
-from src import Models, helpers
+from src import Models, helpers, Schemas
 
 sampleBlueprint = Blueprint('sample', __name__)
 batchBluePrint = Blueprint('batch', __name__)
@@ -192,7 +192,7 @@ def create_sample(access_allowed, current_user):
             return jsonify({'message': 'Invalid Request'}), 400
 
         Models.createLog(current_user, LogActions.ADD_SAMPLE, 'Created new sample: ' + str(new_sample.id))
-        return jsonify(Models.Sample.query.get(request.json.get('id'))), 201
+        return Schemas.Sample.from_orm(Models.Sample.query.get(request.json.get('id'))).dict(), 201
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -207,7 +207,6 @@ def get_samples(access_allowed, current_user, given_org_id=None):
         # response json is created here and gets returned at the end of the block for GET requests.
         response_json = None
         current_organization = current_user.organization_id
-
         print(f"currID: {current_organization}, givenID: {given_org_id}")
         
         if given_org_id:
@@ -241,32 +240,6 @@ def get_samples(access_allowed, current_user, given_org_id=None):
         return jsonify({'message': 'Role not allowed'}), 403
 
 
-# Returns list of filtered samples based on a set of strings #
-@sampleBlueprint.route('/datapoint/filter', methods=['POST'])
-@token_required
-@allowed_roles([0,1,2,3])
-def filter_samples(access_allowed, current_user):
-    if access_allowed:
-        responseJSON = jsonify(Models.Sample.query.filter_by(
-            id=request.json.get('id'), 
-            flock_id=request.json.get('flockID'),
-            species=request.json.get('species'),
-            strain=request.json.get('strain'),
-            gender=request.json.get('gender'),
-            age_range=request.json.get('ageRange'),
-            validation_status=request.json.get('validationStatus'),
-            sample_type=request.json.get('sampleType'),
-            batch=request.json.get('batch'),
-            data_collector=request.json.get('dataCollector'),
-            organization=request.json.get('organization') ))
-        if responseJSON.json is None:
-            responseJSON = jsonify({'message': 'Samples cannot be returned.'})
-            return responseJSON, 404
-        else:
-            return responseJSON, 200
-    else:
-        return jsonify({'message': 'Role not allowed'}), 403
-
 # Deletes specified sample #
 @sampleBlueprint.route('/datapoint/<int:item_id>', methods=['DELETE'])
 @token_required
@@ -277,10 +250,11 @@ def delete_sample(access_allowed, current_user, item_id):
             return jsonify({'message': 'Sample cannot be found.'}), 404
         else:
             deleted_sample = Models.Sample.query.get(item_id)
-            Models.db.session.delete(Models.Sample.query.get(item_id))
+            # Models.db.session.delete(Models.Sample.query.get(item_id))
+            Models.Sample.query.filter_by(id=item_id).update({'deleted' : True})
             Models.db.session.commit()
-            Models.createLog(current_user, LogActions.DELETE_SAMPLE, 'Deleted sample: ' + deleted_sample.id)
-            return jsonify(deleted_sample), 200
+            Models.createLog(current_user, LogActions.DELETE_SAMPLE, 'Deleted sample: ' + str(deleted_sample.id))
+            return Schemas.Sample.from_orm(deleted_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -298,7 +272,7 @@ def edit_datapoint(access_allowed, current_user, item_id):
             Models.db.session.commit()
             edited_sample = Models.Sample.query.get(item_id)
             Models.createLog(current_user, LogActions.EDIT_SAMPLE, 'Edited sample: ' + str(edited_sample.id))
-            return jsonify(edited_sample), 200
+            return Schemas.Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
