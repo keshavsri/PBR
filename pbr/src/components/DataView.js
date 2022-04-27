@@ -199,12 +199,15 @@ export default function DataView() {
     let path = `/api/sample/datapoint/`;
     selected.map(async (id, index) => {
       let temp = path + id;
-      await fetch(temp, { method: "DELETE" }).then((response) => {
-        console.log(response.json());
-        // return response.json();
-      });
+      await fetch(temp, { method: "DELETE" })
+        .then((response) => {
+          console.log(response.json());
+          // return response.json();
+        })
+        .then(() => {
+          getData();
+        });
     });
-    await getData();
     setSelected([]);
     // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
     // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
