@@ -13,8 +13,10 @@ const useStyles = makeStyles({});
 
 export default function DataViewFilterModal(props) {
   const {
+    rows,
     setRowList,
-    setHeadCellList
+    setHeadCellList,
+    getData
   } = props;
   const {
     generalFilterState,
@@ -36,9 +38,13 @@ export default function DataViewFilterModal(props) {
         setRowList(data.row);
         setHeadCellList(data.types);
       })
+      // Future API call for filtering (passsed in from dataview.js)
+      // getData(generalFilterState);
       console.log("Filtering!");
+      console.log(generalFilterState);
       handleCloseFilterModal();
     };
+    
 
   // Define the footer for the modal. By default, there's no footer.
   let footer = (
@@ -70,7 +76,7 @@ export default function DataViewFilterModal(props) {
         handleClose={handleCloseFilterModal}
         footer={footer}
       >
-        <DataViewFilterContent />
+        <DataViewFilterContent rows={rows} />
       </CustomDialog>
     </>
   );

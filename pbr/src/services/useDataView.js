@@ -49,7 +49,7 @@ function useCreateDataView() {
     sampleType: "",
     batch: "",
     dataCollector: "",
-    organization: "",
+    organizationID: "",
   });
 
   let openSampleModal = () => {

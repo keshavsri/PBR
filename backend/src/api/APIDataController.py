@@ -236,17 +236,15 @@ def get_samples(access_allowed, current_user, given_org_id=None):
 def filter_samples(access_allowed, current_user):
     if access_allowed:
         responseJSON = jsonify(Models.Sample.query.filter_by(
-            id=request.json.get('id'), 
             flock_id=request.json.get('flockID'),
             species=request.json.get('species'),
             strain=request.json.get('strain'),
             gender=request.json.get('gender'),
-            age_range=request.json.get('ageRange'),
             validation_status=request.json.get('validationStatus'),
             sample_type=request.json.get('sampleType'),
             batch=request.json.get('batch'),
             data_collector=request.json.get('dataCollector'),
-            organization=request.json.get('organization') ))
+            organization=request.json.get('organizationID') ))
         if responseJSON.json is None:
             responseJSON = jsonify({'message': 'Samples cannot be returned.'})
             return responseJSON, 404

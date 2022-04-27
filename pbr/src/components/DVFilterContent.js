@@ -68,13 +68,11 @@ export default function DataViewFilterContent(props) {
   const parseRows = () => {
     let orgIDList = [];
     rows.map((row, index) => {
-      row.organization.map((org) => {
-        if (!orgIDList.includes(org.id)){
-          let temp = organizationsList;
-          temp.append(org);
-          setOrganizationsList(temp);
-        }
-      })
+      if (!orgIDList.includes(row.organization.id)){
+        let temp = organizationsList;
+        temp.append(row.organization);
+        setOrganizationsList(temp);
+      }
     });
   }
 
@@ -84,7 +82,7 @@ export default function DataViewFilterContent(props) {
     generalFilterState,
     setGeneralFilterState
   } = useDataView();
-  const { checkResponseAuth } = useAuth();
+  const { checkResponseAuth, user } = useAuth();
 
   const handleGeneralFilterChange = (prop) => (event) => {
     console.log("General Filter changed: ", prop, event.target.value);
@@ -102,7 +100,7 @@ export default function DataViewFilterContent(props) {
         organizationID: event.target.value,
         flockID: null,
       });
-      getSources(event.target.value);
+      getSources();
     } else {
       setGeneralFilterState({
         ...generalFilterState,
@@ -209,43 +207,31 @@ export default function DataViewFilterContent(props) {
   const [sources, setSources] = React.useState([]);
   const [organizations, setOrganizations] = React.useState([]);
 
-  const getSources = async (organization) => {
-    console.log("Getting sources for " + organization.name);
-    // await fetch(`/api/source`, {
-    //   method: "GET",
-    // })
-    //   .then(handleAPIResponse)
-    //   .then((response)=> {
-    //     return response.json()
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //     setSources(data);
-    //   });
-    let mockSources = [
-      {
-        id: "1",
-        name: "Source A",
-        street_address: "123 Main Street",
-        city: "Raleigh",
-        state: "NC",
-        zip: "27606",
-      },
-      {
-        id: "2",
-        name: "Source B",
-        street_address: "456 Main Street",
-        city: "Raleigh",
-        state: "NC",
-        zip: "27606",
-      },
-    ];
-    setSources(mockSources);
-  };
+  // const getSources = async (organization) => {
+  //   console.log("Getting Sources for ", organization.name);
+  //   setSourcesList(organization.sources);
+  //   console.log("NEW SOURCES:", organization.sources);
+  // };
+  // const getFlocks = () => {
+  //   let mockFlocks = [{ id: 1852 }, { id: 2531 }, { id: 3491 }];
+  //   setFlocks(mockFlocks);
+  // };
 
-  const getFlocks = () => {
-    let mockFlocks = [{ id: 1852 }, { id: 2531 }, { id: 3491 }];
-    setFlocks(mockFlocks);
+  const getFlocks = async () => {
+    console.log(
+      `Getting Flocks: /api/flock/organization/${generalFilterState.organizationID}`
+    );
+    await fetch(`/api/flock/organization/${generalFilterState.organizationID}`, {
+      method: "GET",
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log("NEW FLOCKS:", data);
+        setFlocks(data);
+      });
   };
 
   const handleFlockChange = (id) => {
@@ -255,8 +241,10 @@ export default function DataViewFilterContent(props) {
       flockID: id,
     });
   };
+
   const getStrains = async (species) => {
-    await fetch(`/api/sample/strains/${species}`, {
+    console.log("Getting Strains");
+    await fetch(`/api/flock/strains/${species}`, {
       method: "GET",
     })
       .then(checkResponseAuth)
@@ -271,7 +259,7 @@ export default function DataViewFilterContent(props) {
   };
 
   const getBatches = async () => {
-    await fetch(`/api/datapoint/batch`, {
+    await fetch(`/api/sample/datapoint/batch`, {
       method: "GET",
     })
       .then(checkResponseAuth)
@@ -285,46 +273,78 @@ export default function DataViewFilterContent(props) {
       });
   };
 
+  // const getOrganizations = async () => {
+  //   // await fetch(`/api/organization`, {
+  //   //   method: "GET",
+  //   // })
+  //   //   .then(handleAPIResponse)
+  //   //   .then((response)=> {
+  //   //     return response.json()
+  //   //   })
+  //   //   .then((data) => {
+  //   //     console.log(data);
+  //   //     setSources(data);
+  //   //   });
+  //   let mockOrganizations = [
+  //     {
+  //       id: "1",
+  //       name: "Organization A",
+  //       street_address: "123 Main Street",
+  //       city: "Raleigh",
+  //       state: "NC",
+  //       zip: "27606",
+  //       default: "true",
+  //     },
+  //     {
+  //       id: "2",
+  //       name: "Organization B",
+  //       street_address: "456 Main Street",
+  //       city: "Raleigh",
+  //       state: "NC",
+  //       zip: "27606",
+  //     },
+  //   ];
+  //   setOrganizations(mockOrganizations);
+  // };
+
   const getOrganizations = async () => {
-    // await fetch(`/api/organization`, {
-    //   method: "GET",
-    // })
-    //   .then(handleAPIResponse)
-    //   .then((response)=> {
-    //     return response.json()
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //     setSources(data);
-    //   });
-    let mockOrganizations = [
-      {
-        id: "1",
-        name: "Organization A",
-        street_address: "123 Main Street",
-        city: "Raleigh",
-        state: "NC",
-        zip: "27606",
-        default: "true",
-      },
-      {
-        id: "2",
-        name: "Organization B",
-        street_address: "456 Main Street",
-        city: "Raleigh",
-        state: "NC",
-        zip: "27606",
-      },
-    ];
-    setOrganizations(mockOrganizations);
+    console.log("Getting Organizations");
+    const response = await fetch(`/api/organization/`, {
+      method: "GET",
+    }).then(checkResponseAuth);
+    const data = await response.json();
+    console.log(data);
+    setOrganizations(data);
+    setGeneralFilterState({
+      ...generalFilterState,
+      organizationID: user.organization_id,
+    });
+    console.log(user.organization_id);
+    console.log("Set Org in Gen Filter:", generalFilterState.organizationID);
+  };
+
+  const getSources = async () => {
+    console.log("Getting Sources for ", generalFilterState.organizationID);
+    console.log(generalFilterState.organizationID);
+    let org = organizations.find(
+      (org) => org.id === generalFilterState.organizationID
+    );
+    console.log(org);
+    setSourcesList(org.sources);
+    console.log("NEW SOURCES:", org.sources);
   };
   // Always run
   React.useEffect(() => {
     getOrganizations();
-    getFlocks();
     getBatches();
   }, []);
 
+  React.useEffect(() => {
+    if (generalFilterState.organizationID) {
+      getFlocks();
+      getSources();
+    }
+  }, [generalFilterState.organizationID]);
   return (
     <>
       <Typography variant="h3">Filter Table Data</Typography>
@@ -332,7 +352,7 @@ export default function DataViewFilterContent(props) {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-          <Autocomplete
+          {/* <Autocomplete
               value={generalFilterState.flockID}
               sx={{ width: "100%", mb: 2 }}
               onChange={(event, newValue) => {
@@ -371,7 +391,7 @@ export default function DataViewFilterContent(props) {
               renderInput={(params) => (
                 <TextField {...params} label="Flock ID" />
               )}
-            />
+            /> */}
             <FormControl sx={{ width: "100%", mb: 2 }}>
               <InputLabel>Species</InputLabel>
               <Select
@@ -423,7 +443,7 @@ export default function DataViewFilterContent(props) {
             </FormControl>
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormControl sx={{ width: "100%", mb: 2 }}>
+            {/* <FormControl sx={{ width: "100%", mb: 2 }}>
               <InputLabel>Age Range</InputLabel>
               <Select
                 value={generalFilterState.ageRange}
@@ -432,7 +452,7 @@ export default function DataViewFilterContent(props) {
               >
                 <MenuItem value={""}></MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
             <FormControl sx={{ width: "100%", mb: 2 }}>
               <InputLabel>Validation Status</InputLabel>
               <Select
@@ -482,7 +502,7 @@ export default function DataViewFilterContent(props) {
               >
                 {Object.values(batches).map((batch, index) => {
                   return (
-                    <MenuItem value={batch} key={index}>
+                    <MenuItem value={batch.id} key={index}>
                       {batch.id}
                     </MenuItem>
                   );
@@ -554,16 +574,15 @@ export default function DataViewFilterContent(props) {
           )}
           MenuProps={MenuProps}
         >
-          {sourcesList.map((name) => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, sourcesFilter, theme)}
-            >
-              <Checkbox checked={sourcesFilter.indexOf(name) > -1} />
-              <ListItemText primary={name} />
-            </MenuItem>
-          ))}
+          
+          {sourcesList.map((source, index) => {
+                  return (
+                    <MenuItem value={source.id} key={index}>
+                      {source.name} ({source.street_address}, {source.city},{" "}
+                      {source.state} {source.zip})
+                    </MenuItem>
+                  );
+                })}
         </Select>
       </FormControl>
       <Divider />
@@ -648,7 +667,7 @@ export default function DataViewFilterContent(props) {
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <FormControl sx={{ width: "100%" }}>
+            {/* <FormControl sx={{ width: "100%" }}>
               <InputLabel>Data Collector</InputLabel>
               <Select
                 value={generalFilterState.dataCollector}
@@ -657,7 +676,7 @@ export default function DataViewFilterContent(props) {
               >
                 <MenuItem value={""}></MenuItem>
               </Select>
-            </FormControl>
+            </FormControl> */}
           </Grid>
           <Grid item xs={12} sm={6}>
             <FormControl sx={{ width: "100%" }}>
@@ -669,7 +688,7 @@ export default function DataViewFilterContent(props) {
               >
                 {organizations.map((org, index) => {
                   return (
-                    <MenuItem value={org} key={index}>
+                    <MenuItem value={org.id} key={index}>
                       {org.name} ({org.street_address}, {org.city}, {org.state}{" "}
                       {org.zip})
                     </MenuItem>
