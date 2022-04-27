@@ -192,12 +192,12 @@ def create_sample(access_allowed, current_user):
             return jsonify({'message': 'Invalid Request'}), 400
 
         Models.createLog(current_user, LogActions.ADD_SAMPLE, 'Created new sample: ' + str(new_sample.id))
-        return Schemas.Sample.from_orm(Models.Sample.query.get(request.json.get('id'))).dict(), 201
+        return Schemas.Sample.from_orm(new_sample).dict(), 201
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
 
-# Retrieves all available samples for a given user, or organization if provided#
+# Retrieves all available samples for a given user, or organization if provided
 @sampleBlueprint.route('/', methods=['GET'])
 @sampleBlueprint.route('/organization/<int:given_org_id>', methods=['GET'])
 @token_required

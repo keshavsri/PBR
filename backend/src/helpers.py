@@ -503,6 +503,7 @@ def get_samples_by_user(user_id: int) -> List[dict]:
     ret = []
     for sample in samples:
         sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
+        sample.timestamp_added = str(sample.timestamp_added)
         ret.append(Sample.from_orm(sample).dict())
     return json.dumps(ret)
 
