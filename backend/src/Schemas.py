@@ -213,8 +213,7 @@ class Flock(BaseModel):
     id: Optional[int]
     organization_id: int
     source_id: int
-    source: Optional[Source]
-    birthday: datetime
+    birthday: Optional[datetime]
     timestamp_added: Optional[datetime]
     class Config:
         orm_mode = True

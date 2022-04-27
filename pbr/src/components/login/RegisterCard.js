@@ -149,13 +149,15 @@ export default function RegisterCard() {
         orgCode: values.orgCode,
       }),
     })
-      .then((response) => {
+      .then(async (response) => {
         console.log(response);
+        let responseJson = await response.json();
         setLoading(false);
         if (!response.ok) {
           let err = "Failed. Try again.";
           if ([422].indexOf(response.status) !== -1) {
-            err = "User already exists with this email.";
+            console.log(response.json());
+            err = responseJson.message;
           }
           if ([400].indexOf(response.status) !== -1) {
             err = "Invalid Request!";

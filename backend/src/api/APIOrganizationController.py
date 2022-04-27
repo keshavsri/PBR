@@ -1,6 +1,9 @@
 
+from threading import currentThread
 from src.api.APIUserController import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
+from itsdangerous import json
+
 from src import Models, Schemas
 from src.enums import Roles, LogActions
 import src.helpers
@@ -14,10 +17,15 @@ organizationBlueprint = Blueprint('organization', __name__)
 def get_organizations(access_allowed, current_user):
     if access_allowed:
         if current_user.role == Roles.Super_Admin:
+            print("Super Admin")
             responseJSON = src.helpers.get_all_organizations()
         else:
+            print("Not Super Admin")
+            responseJSON = []
             current_org_id = current_user.organization_id
-            responseJSON = src.helpers.get_organization_by_id(current_org_id)
+            responseJSON = json.dumps([src.helpers.get_organization_by_id(current_org_id)])
+            
+        print(f"Response JSON: {responseJSON}")
         return responseJSON, 200
     else:
         return jsonify({'message': 'Role not allowed' + str(access_allowed)}), 403

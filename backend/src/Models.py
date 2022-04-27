@@ -1,3 +1,4 @@
+from email.policy import default
 from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
@@ -161,7 +162,7 @@ class Flock(db.Model):
     species: Species = db.Column(db.Enum(Species), nullable=False)
     gender: BirdGenders = db.Column(db.Enum(BirdGenders), nullable=False)
     production_type: ProductionTypes = db.Column(db.Enum(ProductionTypes), nullable=False)
-    birthday = db.Column(db.DateTime)
+    birthday = db.Column(db.DateTime, nullable=True)
     timestamp_added: str = db.Column(db.DateTime, server_default=db.func.now())
 
     # References to Foreign Objects
@@ -347,11 +348,11 @@ class MeasurementType(db.Model):
     """
     __tablename__ = 'MeasurementType'
     id: int = db.Column(db.Integer, unique=True, primary_key=True, autoincrement=True)
-    name: str = db.Column(db.String(120), nullable=False, unique=True)
-    abbreviation: str = db.Column(db.String(120), nullable=False)
-    units: str = db.Column(db.String(120), nullable=False)
-    required: bool = db.Column(db.Boolean)
-    general: bool = db.Column(db.Boolean)
+    name: str = db.Column(db.String(120), unique=True)
+    abbreviation: str = db.Column(db.String(120))
+    units: str = db.Column(db.String(120))
+    required: bool = db.Column(db.Boolean, default=0, nullable=False)
+    general: bool = db.Column(db.Boolean, default=0, nullable=False)
 
     # Foreign References to this Object
     measurement = db.relationship('Measurement', backref='MeasurementType')

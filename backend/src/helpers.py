@@ -136,6 +136,7 @@ def get_all_organizations() -> List[dict]:
         ret.append(Organization.from_orm(organization).dict())
     return json.dumps(ret)
 
+
 def create_organization(org_dict: dict):
     """
     The create_organization function accepts a dictionary containing the organization's information and creates a new
@@ -253,9 +254,15 @@ def create_flock(flock_dict: dict):
     flock:FlockORM = FlockORM()
     for name, value in Flock.parse_obj(flock_dict):
         setattr(flock, name, value)
+    
+    print(f"FLOCK: {flock}")
     db.session.add(flock)
     db.session.commit()
     db.session.refresh(flock)
+
+    orgSourceFlock = OrganizationSource_Flock_SampleORM(organization_id=flock.organization_id, source_id=flock.source_id, flock_id=flock.id)
+    db.session.add(orgSourceFlock)
+    db.session.commit()
     return flock
 
 def get_measurement_types() -> List[dict]:
@@ -337,7 +344,7 @@ def create_measurement(measurement_dict: dict):
     return measurement
 
 
-def create_sample(sample_dict: dict):
+def create_sample(sample_dict: dict, current_user):
     """
     The create_sample function accepts a dictionary containing the sample's information and creates
     a new sample using the pydantic model to parse and the ORM model to store the information.
@@ -346,6 +353,7 @@ def create_sample(sample_dict: dict):
     :return: sample:Sample: A Sample sqlalchemy model.
     """
     sample:SampleORM = SampleORM()
+    print(f"SAMPLE DICT: {sample_dict}")
     for name, value in Sample.parse_obj(sample_dict):
         if name != 'measurement_values':
             setattr(sample, name, value)
@@ -354,6 +362,24 @@ def create_sample(sample_dict: dict):
             for measurement_value_dict in value:
                 values.append(create_measurement_value(measurement_value_dict))
             setattr(sample, name, values)
+    setattr(sample, "entered_by_id", current_user.id)
+
+    # Get OrgSourceFlockSample ID
+    flock = Flock.from_orm(FlockORM.query.filter_by(name=sample_dict["flockDetails"]['name']).first())
+    print(f"FLOCK: {flock}")
+    OrganizationSourceFlock = db.session.query(OrganizationSource_Flock_SampleORM).filter_by(
+        organization_id=flock.organization_id,
+        source_id=flock.source_id,
+        flock_id=flock.id
+    ).first()
+
+    if not OrganizationSourceFlock:
+        return None
+
+    setattr(sample, "organizationsource_flock_sample_id", OrganizationSourceFlock.id)
+    
+    print(f"SAMPLE: {sample}")
+
     db.session.add(sample)
     db.session.commit()
     db.session.refresh(sample)

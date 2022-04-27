@@ -1,3 +1,5 @@
+import code
+from src.Models import Organization
 from flask import request, Blueprint, jsonify, Response, make_response
 import bcrypt
 from datetime import datetime, timedelta, timezone
@@ -122,7 +124,7 @@ def login():
     print(dbUser)
     if not dbUser:
       print("USER DOES NOT EXIST.")
-      return "Not Logged in", 401
+      return jsonify({"message": "Not Logged in"}), 401
     
     if bcrypt.checkpw(data["password"].encode('utf8'), dbUser.password.encode('utf8')):
 
@@ -139,9 +141,9 @@ def login():
       return response
     else:
       print("FAIL")
-      return "Not Logged in", 401
+      return jsonify({"message": "Not Logged in"}), 401
 
-  return "Not Logged in!", 401
+  return jsonify({"message": "Not Logged in!"}), 401
   
 
 @userBlueprint.route('/logout', methods=['POST'])
@@ -151,7 +153,7 @@ def logout():
   if 'pbr_token' in request.cookies:
     token = request.cookies['pbr_token']
     Auth_Token.invalidate_token(token)
-  response = make_response("Logged out.", 200)
+  response = jsonify({"message": "Logged out."}), 200
   response.set_cookie(key="pbr_token", value="", expires=datetime.now(tz=timezone.utc), secure=True, httponly = True, samesite="Strict")
   return response
 
@@ -165,17 +167,25 @@ def register():
   if not data["email"] or not data["firstname"] or not data["lastname"] or not data["password"] or not data["orgCode"]:
     print("MISSING FIELDS.")
     Models.db.session.rollback()
-    return "Invalid Request!", 400
+    return jsonify({"message": "Invalid Request!"}), 400
   
   if Models.User.query.filter_by(email=data["email"]).first():
     print("USER ALREADY EXISTS.")
     Models.db.session.rollback()
-    return "User Already Exists", 422
+    return jsonify({"message":"User Already Exists with this Email"}), 422
 
+  
+  user_org = Models.Organization.query.filter_by(organization_code=data["orgCode"]).first()
+
+  if not user_org:
+    print("INVALID ORGANIZATION ID.")
+    Models.db.session.rollback()
+    return jsonify({"message": "Invalid Organization ID"}), 422
+    
   salt = bcrypt.gensalt()
   hashedPW = bcrypt.hashpw(data["password"].encode('utf8'), salt)
-  user = Models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
+  user = Models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin, organization_id=user_org.id )
   Models.db.session.add(user)
   Models.db.session.commit()
   print("User was successfully added.")
-  return 'Success', 200
+  return jsonify({"message": 'Success'}), 200

@@ -1,7 +1,0 @@
-from dataclasses import dataclass
-from server import db
-
-@dataclass
-class MachineType(db.Model):
-    id: int = db.Column(db.Integer, primary_key=True)
-    name: str = db.Column(db.String(120))
