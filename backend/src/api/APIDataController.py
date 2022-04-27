@@ -263,9 +263,10 @@ def delete_sample(access_allowed, current_user, item_id):
             return jsonify({'message': 'Sample cannot be found.'}), 404
         else:
             deleted_sample = Models.Sample.query.get(item_id)
-            Models.db.session.delete(Models.Sample.query.get(item_id))
+            Models.Sample.query.filter_by(id=item_id).update({'deleted': True})
+            # Models.db.session.delete(Models.Sample.query.get(item_id))
             Models.db.session.commit()
-            Models.createLog(current_user, LogActions.DELETE_SAMPLE, 'Deleted sample: ' + deleted_sample.id)
+            Models.createLog(current_user, LogActions.DELETE_SAMPLE, 'Deleted sample: ' + str(deleted_sample.id))
             return jsonify(deleted_sample), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

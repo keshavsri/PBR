@@ -56,10 +56,12 @@ export default function DataView() {
     }).then(checkResponseAuth)
     .then((data) => {
       console.log(data);
-      denestMachineData(data.rows);
-      assignRowHtml(data.rows);
-      setRowList(data.rows);
-      getHeadCells(data.types);
+      if(data){
+        denestMachineData(data.rows);
+        assignRowHtml(data.rows);
+        setRowList(data.rows);
+        getHeadCells(data.types);
+      }
       
     })
     // fetch(`/api/sample/filter`, {      method: "POST",
@@ -205,6 +207,7 @@ export default function DataView() {
         // return response.json();
       });
     });
+    getData();
     // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
     // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
     // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
