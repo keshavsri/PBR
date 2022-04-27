@@ -4,7 +4,7 @@ import re
 import src.helpers
 from src.enums import LogActions, ValidationTypes, Roles
 from src.api.APIUserController import token_required, allowed_roles
-from src import Models, helpers
+from src import Models, helpers, Schemas
 
 sampleBlueprint = Blueprint('sample', __name__)
 batchBluePrint = Blueprint('batch', __name__)
@@ -189,7 +189,7 @@ def create_sample(access_allowed, current_user):
         new_sample = src.helpers.create_sample(payload)
         new_sample.entered_by_id = current_user.id
         Models.createLog(current_user, LogActions.ADD_SAMPLE, 'Created new sample: ' + str(new_sample.id))
-        return jsonify(Models.Sample.query.get(request.json.get('id'))), 201
+        return Schemas.Sample.from_orm(Models.Sample.query.get(request.json.get('id'))).dict(), 201
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -206,12 +206,12 @@ def get_samples(access_allowed, current_user, given_org_id=None):
         current_organization = current_user.organization_id
 
         if current_organization == given_org_id:
-            if current_user.role == Roles.Super_Admin:
+            if current_user.role == Roles.Admin:
                 response_json = helpers.get_samples_by_org(given_org_id)
             else:
                 # Otherwise, they can only see samples that are assigned to them.
                 response_json = helpers.get_samples_by_user(current_user.id)
-        elif current_user.role == 0:
+        elif current_user.role == Roles.Super_Admin:
             if given_org_id is None:
                 response_json = helpers.get_samples_by_org(current_organization)
             else:
@@ -267,7 +267,7 @@ def delete_sample(access_allowed, current_user, item_id):
             # Models.db.session.delete(Models.Sample.query.get(item_id))
             Models.db.session.commit()
             Models.createLog(current_user, LogActions.DELETE_SAMPLE, 'Deleted sample: ' + str(deleted_sample.id))
-            return jsonify(deleted_sample), 200
+            return Schemas.Sample.from_orm(deleted_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -285,7 +285,7 @@ def edit_datapoint(access_allowed, current_user, item_id):
             Models.db.session.commit()
             edited_sample = Models.Sample.query.get(item_id)
             Models.createLog(current_user, LogActions.EDIT_SAMPLE, 'Edited sample: ' + str(edited_sample.id))
-            return jsonify(edited_sample), 200
+            return Schemas.Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
