@@ -29,8 +29,26 @@ export default function DataViewFilterModal(props) {
 
 
   let applyFilter = async () => {
-    fetch(`/api/sample/filter`, {      method: "POST",
-       body: generalFilterState,})
+    let payload = {
+      flagged: generalDetails.flagged,
+      comments: generalDetails.comments,
+      flock_age: generalDetails.ageNumber,
+      flock_age_unit: generalDetails.ageUnit,
+      sample_type: sampleType,
+      organization_id: generalDetails.organizationID,
+      measurement_values: measurementValues,
+      flockDetails: {
+        name: generalDetails.flockName,
+        strain: generalDetails.strain,
+        species: generalDetails.species,
+        gender: generalDetails.gender,
+        production_type: generalDetails.productionType,
+        source_id: generalDetails.sourceID,
+        organization_id: generalDetails.organizationID,
+      },
+    };
+    fetch(`/api/sample/datapoint/filter`, {      method: "POST",
+       body: payload,})
       .then((response) => {
         return response.json();
       }).then((data) => {

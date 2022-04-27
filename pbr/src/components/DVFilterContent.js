@@ -399,6 +399,9 @@ export default function DataViewFilterContent(props) {
                 label="Species"
                 onChange={handleGeneralFilterChange("species")}
               >
+              <MenuItem value={""}>
+                     
+                    </MenuItem>
                 {Object.values(speciesTypes).map((species, index) => {
                   return (
                     <MenuItem value={species} key={index}>
