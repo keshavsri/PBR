@@ -42,9 +42,9 @@ class MeasurementType(BaseModel):
         general (bool): ???
     """
     id: Optional[int]
-    name: constr(max_length=120)
-    abbreviation: constr(max_length=120)
-    units: constr(max_length=120)
+    name: Optional[constr(max_length=120)]
+    abbreviation: Optional[constr(max_length=120)]
+    units: Optional[constr(max_length=120)]
     required: bool
     general: bool
 
@@ -118,8 +118,8 @@ class MeasurementValue(BaseModel):
     id: Optional[int]
     measurement_id: int
     measurement: Optional[Measurement]
-    sample_id: int
-    value: float
+    sample_id: Optional[int]
+    value: str
     timestamp_added: Optional[datetime]
     class Config:
         orm_mode = True
@@ -213,8 +213,7 @@ class Flock(BaseModel):
     id: Optional[int]
     organization_id: int
     source_id: int
-    source: Optional[Source]
-    birthday: datetime
+    birthday: Optional[datetime]
     timestamp_added: Optional[datetime]
     class Config:
         orm_mode = True

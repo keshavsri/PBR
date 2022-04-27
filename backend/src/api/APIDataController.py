@@ -174,20 +174,23 @@ def create_sample(access_allowed, current_user):
         if current_flock:
             print("Flock already exists")
             # If so, see if things were edited.
-            print(current_flock)
-            print(payload['flockDetails'])
+            src.helpers.update_flock(payload['flockDetails'])
+            Models.createLog(current_user, LogActions.EDIT_FLOCK, 'Updated Flock: ' + current_flock["name"])
         else:
             print("Brand new flock. Add it.")
             # If flock doesn't exist, make it.
+            
             new_flock = src.helpers.create_flock(payload['flockDetails'])
-
+            
             print(new_flock)
             # stages and then commits the new Flock to the database
             Models.createLog(current_user, LogActions.ADD_FLOCK, 'Created new Flock: ' + new_flock.name)
 
         payload["validation_status"] = ValidationTypes.Pending
-        new_sample = src.helpers.create_sample(payload)
-        new_sample.entered_by_id = current_user.id
+        new_sample = src.helpers.create_sample(payload, current_user)
+        if not new_sample:
+            return jsonify({'message': 'Invalid Request'}), 400
+
         Models.createLog(current_user, LogActions.ADD_SAMPLE, 'Created new sample: ' + str(new_sample.id))
         return Schemas.Sample.from_orm(Models.Sample.query.get(request.json.get('id'))).dict(), 201
     else:
@@ -204,20 +207,28 @@ def get_samples(access_allowed, current_user, given_org_id=None):
         # response json is created here and gets returned at the end of the block for GET requests.
         response_json = None
         current_organization = current_user.organization_id
-
-        if current_organization == given_org_id:
-            if current_user.role == Roles.Admin:
-                response_json = helpers.get_samples_by_org(given_org_id)
+        print(f"currID: {current_organization}, givenID: {given_org_id}")
+        
+        if given_org_id:
+            if current_organization == given_org_id:
+                if current_user.role == Roles.Super_Admin:
+                    response_json = helpers.get_samples_by_org(given_org_id)
+                else:
+                    # Otherwise, they can only see samples that are assigned to them.
+                    response_json = helpers.get_samples_by_user(current_user.id)
+            elif current_user.role == 0:
+                if given_org_id is None:
+                    response_json = helpers.get_samples_by_org(current_organization)
+                else:
+                    response_json = helpers.get_all_samples()
+            else:
+                return jsonify({'message': 'You can only access samples within your organization'}), 403
+        else:
+            if current_user.role == Roles.Super_Admin:
+                    response_json = helpers.get_samples_by_org(current_organization)
             else:
                 # Otherwise, they can only see samples that are assigned to them.
                 response_json = helpers.get_samples_by_user(current_user.id)
-        elif current_user.role == Roles.Super_Admin:
-            if given_org_id is None:
-                response_json = helpers.get_samples_by_org(current_organization)
-            else:
-                response_json = helpers.get_all_samples()
-        else:
-            return jsonify({'message': 'You can only access samples within your organization'}), 403
 
         # if the response json is empty then return a 404 not found
         if response_json is None:

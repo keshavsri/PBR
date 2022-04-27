@@ -107,12 +107,14 @@ export default function DataViewSampleModal() {
     let measurementValues = [];
     for (let i = 0; i < machineDetails.length; i++) {
       let currentMachine = machineDetails[i];
-      for (let j = 0; j < currentMachine.length; j++) {
-        let currentMeasurement = currentMachine.data[i];
-        measurementValues.push({
-          measurement_id: currentMeasurement.id,
-          value: currentMeasurement.value,
-        });
+      for (let j = 0; j < currentMachine.measurements.length; j++) {
+        let currentMeasurement = currentMachine.measurements[j];
+        if (currentMeasurement.value) {
+          measurementValues.push({
+            measurement_id: currentMeasurement.metadata.id,
+            value: currentMeasurement.value,
+          });
+        }
       }
     }
     let payload = {
@@ -205,142 +207,143 @@ export default function DataViewSampleModal() {
 
   const [machineList, setMachineList] = React.useState([]);
   const getMachineList = async () => {
-    // await fetch(`/api/machine/organization/${generalDetails.organizationID}`, {
-    //   method: "GET",
-    // })
-    //   .then(checkResponseAuth)
-    //   .then((response) => {
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //   });
-    let mockMachineList = [
-      {
-        name: "VetScan VS2",
-        id: 12415,
-        info: [
-          {
-            id: 4,
-            name: "Timestamp of Test",
-            type: "timestamp",
-            datatype: "text",
-          },
-          { id: 1, name: "Patient ID", datatype: "text" },
-          {
-            id: 2,
-            name: "Rotor Lot Number",
-            datatype: "text",
-          },
-          {
-            id: 3,
-            name: "Serial Number",
-            datatype: "text",
-          },
-        ],
-        measurements: [
-          { id: 1, abbrev: "AST", units: "U/L", datatype: "text" },
-          { id: 2, abbrev: "BA", units: "umol/L", datatype: "text" },
-          { id: 3, abbrev: "CK", units: "U/L", datatype: "text" },
-          { id: 4, abbrev: "UA", units: "mg/dL", datatype: "text" },
-          {
-            id: 5,
-            name: "Glucose",
-            abbrev: "GLU",
-            units: "mg/dL",
-            datatype: "text",
-          },
-          {
-            id: 6,
-            name: "Total Calcium",
-            abbrev: "CA",
-            units: "mg/dL",
-            datatype: "text",
-          },
-          {
-            id: 7,
-            name: "Phosphorus",
-            abbrev: "PHOS",
-            units: "mg/dL",
-            datatype: "text",
-          },
-          {
-            id: 8,
-            name: "Total Protein",
-            abbrev: "TP",
-            units: "g/dL",
-            datatype: "text",
-          },
-          {
-            id: 9,
-            name: "Albumen",
-            abbrev: "ALB",
-            units: "g/dL",
-            datatype: "text",
-          },
-          {
-            id: 10,
-            name: "Globulin",
-            abbrev: "GLOB",
-            units: "g/dL",
-            datatype: "text",
-          },
-          {
-            id: 11,
-            name: "Potassium",
-            abbrev: "K+",
-            units: "mmol/L",
-            datatype: "text",
-          },
-          {
-            id: 12,
-            name: "Sodium",
-            abbrev: "NA+",
-            units: "mmol/L",
-            datatype: "text",
-          },
-          { id: 13, abbrev: "RQC", datatype: "text" },
-          { id: 14, abbrev: "QC", datatype: "text" },
-          { id: 15, abbrev: "HEM", datatype: "text" },
-          { id: 16, abbrev: "LIP", datatype: "text" },
-          { id: 17, abbrev: "ICT", datatype: "text" },
-        ],
-      },
-      {
-        name: "iStat",
-        id: 12152,
-        info: [
-          {
-            id: 4,
-            name: "Timestamp of Test",
-            type: "timestamp",
-            datatype: "text",
-          },
-          {
-            id: 2,
-            name: "iStat Number",
-            datatype: "number",
-          },
-        ],
-        measurements: [
-          { id: 1, abbrev: "pH", units: "", datatype: "number" },
-          { id: 2, abbrev: "pCO2", units: "", datatype: "number" },
-          { id: 3, abbrev: "pO2", units: "", datatype: "number" },
-          { id: 4, abbrev: "BE", units: "", datatype: "number" },
-          { id: 5, abbrev: "HCO3", units: "", datatype: "number" },
-          { id: 6, abbrev: "tCO2", units: "", datatype: "number" },
-          { id: 7, abbrev: "sO2", units: "", datatype: "number" },
-          { id: 8, abbrev: "Na", units: "", datatype: "number" },
-          { id: 9, abbrev: "K", units: "", datatype: "number" },
-          { id: 10, abbrev: "iCa", units: "", datatype: "number" },
-          { id: 11, abbrev: "Glu", units: "", datatype: "number" },
-          { id: 12, abbrev: "Hct", units: "", datatype: "number" },
-          { id: 13, abbrev: "Hb", units: "", datatype: "number" },
-        ],
-      },
-    ];
+    await fetch(`/api/machine/organization/${generalDetails.organizationID}`, {
+      method: "GET",
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setMachineList(data);
+      });
+    // let mockMachineList = [
+    //   {
+    //     name: "VetScan VS2",
+    //     id: 12415,
+    //     info: [
+    //       {
+    //         id: 4,
+    //         name: "Timestamp of Test",
+    //         type: "timestamp",
+    //         datatype: "text",
+    //       },
+    //       { id: 1, name: "Patient ID", datatype: "text" },
+    //       {
+    //         id: 2,
+    //         name: "Rotor Lot Number",
+    //         datatype: "text",
+    //       },
+    //       {
+    //         id: 3,
+    //         name: "Serial Number",
+    //         datatype: "text",
+    //       },
+    //     ],
+    //     measurements: [
+    //       { id: 1, abbrev: "AST", units: "U/L", datatype: "text" },
+    //       { id: 2, abbrev: "BA", units: "umol/L", datatype: "text" },
+    //       { id: 3, abbrev: "CK", units: "U/L", datatype: "text" },
+    //       { id: 4, abbrev: "UA", units: "mg/dL", datatype: "text" },
+    //       {
+    //         id: 5,
+    //         name: "Glucose",
+    //         abbrev: "GLU",
+    //         units: "mg/dL",
+    //         datatype: "text",
+    //       },
+    //       {
+    //         id: 6,
+    //         name: "Total Calcium",
+    //         abbrev: "CA",
+    //         units: "mg/dL",
+    //         datatype: "text",
+    //       },
+    //       {
+    //         id: 7,
+    //         name: "Phosphorus",
+    //         abbrev: "PHOS",
+    //         units: "mg/dL",
+    //         datatype: "text",
+    //       },
+    //       {
+    //         id: 8,
+    //         name: "Total Protein",
+    //         abbrev: "TP",
+    //         units: "g/dL",
+    //         datatype: "text",
+    //       },
+    //       {
+    //         id: 9,
+    //         name: "Albumen",
+    //         abbrev: "ALB",
+    //         units: "g/dL",
+    //         datatype: "text",
+    //       },
+    //       {
+    //         id: 10,
+    //         name: "Globulin",
+    //         abbrev: "GLOB",
+    //         units: "g/dL",
+    //         datatype: "text",
+    //       },
+    //       {
+    //         id: 11,
+    //         name: "Potassium",
+    //         abbrev: "K+",
+    //         units: "mmol/L",
+    //         datatype: "text",
+    //       },
+    //       {
+    //         id: 12,
+    //         name: "Sodium",
+    //         abbrev: "NA+",
+    //         units: "mmol/L",
+    //         datatype: "text",
+    //       },
+    //       { id: 13, abbrev: "RQC", datatype: "text" },
+    //       { id: 14, abbrev: "QC", datatype: "text" },
+    //       { id: 15, abbrev: "HEM", datatype: "text" },
+    //       { id: 16, abbrev: "LIP", datatype: "text" },
+    //       { id: 17, abbrev: "ICT", datatype: "text" },
+    //     ],
+    //   },
+    //   {
+    //     name: "iStat",
+    //     id: 12152,
+    //     info: [
+    //       {
+    //         id: 4,
+    //         name: "Timestamp of Test",
+    //         type: "timestamp",
+    //         datatype: "text",
+    //       },
+    //       {
+    //         id: 2,
+    //         name: "iStat Number",
+    //         datatype: "number",
+    //       },
+    //     ],
+    //     measurements: [
+    //       { id: 1, abbrev: "pH", units: "", datatype: "number" },
+    //       { id: 2, abbrev: "pCO2", units: "", datatype: "number" },
+    //       { id: 3, abbrev: "pO2", units: "", datatype: "number" },
+    //       { id: 4, abbrev: "BE", units: "", datatype: "number" },
+    //       { id: 5, abbrev: "HCO3", units: "", datatype: "number" },
+    //       { id: 6, abbrev: "tCO2", units: "", datatype: "number" },
+    //       { id: 7, abbrev: "sO2", units: "", datatype: "number" },
+    //       { id: 8, abbrev: "Na", units: "", datatype: "number" },
+    //       { id: 9, abbrev: "K", units: "", datatype: "number" },
+    //       { id: 10, abbrev: "iCa", units: "", datatype: "number" },
+    //       { id: 11, abbrev: "Glu", units: "", datatype: "number" },
+    //       { id: 12, abbrev: "Hct", units: "", datatype: "number" },
+    //       { id: 13, abbrev: "Hb", units: "", datatype: "number" },
+    //     ],
+    //   },
+    // ];
 
-    setMachineList(mockMachineList);
+    // setMachineList(mockMachineList);
   };
 
   React.useEffect(() => {

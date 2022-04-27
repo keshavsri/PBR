@@ -28,7 +28,6 @@ app.register_blueprint(measurementBlueprint, url_prefix='/api/measurement')
 app.config['SECRET_KEY'] = os.environ.get("JWT_SECRET")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
-app.config['SQLALCHEMY_ECHO'] = True
 
 from src import Models
 Models.db.init_app(app)

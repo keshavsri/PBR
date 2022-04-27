@@ -112,18 +112,6 @@ const HtmlTooltip = styled(({ className, ...props }) => (
   },
 }));
 
-function yearDiff(dateFrom, dateTo) {
-  return dateTo.getYear() - dateFrom.getYear();
-}
-
-function monthDiff(dateFrom, dateTo) {
-  return (
-    dateTo.getMonth() -
-    dateFrom.getMonth() +
-    12 * (dateTo.getFullYear() - dateFrom.getFullYear())
-  );
-}
-
 export default function DataViewAddSample({
   organizations,
   sources,
@@ -232,22 +220,7 @@ export default function DataViewAddSample({
     } else {
       let matchedFlock = flocks.find((flock) => flock.name === flockName);
       console.log("FOUND FLOCK:", matchedFlock);
-      let currentDateTime = new Date();
-      let flockBirthday = new Date(matchedFlock.birthday);
-      let flockAgeDays = parseInt(
-        (currentDateTime - flockBirthday) / (24 * 60 * 60 * 1000)
-      );
 
-      let flockAge = flockAgeDays;
-      let flockAgeUnit = ageUnits.DAYS;
-
-      if (flockAge >= 365) {
-        flockAgeUnit = ageUnits.YEARS;
-        flockAge = yearDiff(flockBirthday, currentDateTime);
-      }
-      console.log("Flock's birthday:", flockBirthday);
-      console.log("Current Datetime:", currentDateTime);
-      console.log(`Age: ${flockAge} ${flockAgeUnit}`);
       getStrains(matchedFlock.species);
       setGeneralDetails({
         ...generalDetails,
@@ -257,8 +230,8 @@ export default function DataViewAddSample({
         gender: matchedFlock.gender,
         sourceID: matchedFlock.source_id,
         productionType: matchedFlock.production_type,
-        ageNumber: flockAge,
-        ageUnit: flockAgeUnit,
+        ageNumber: "",
+        ageUnit: "",
       });
     }
     console.log(generalDetails);
@@ -407,7 +380,7 @@ export default function DataViewAddSample({
       console.log(data.measurements);
       for (let i = 0; i < data.measurements.length; i++) {
         let meas = updatedMachine.measurements.find(
-          (meas) => meas.metadata.abbrev === data.measurements[i].key
+          (meas) => meas.metadata.abbreviation === data.measurements[i].key
         );
         if (meas) {
           meas.value = data.measurements[i].value;
@@ -581,6 +554,7 @@ export default function DataViewAddSample({
                 label="Organization"
                 onChange={handleGeneralDetailsChange("organizationID")}
               >
+                {console.log(organizations)}
                 {organizations.map((org, index) => {
                   return (
                     <MenuItem value={org.id} key={index}>
@@ -640,7 +614,7 @@ export default function DataViewAddSample({
                       flockName: "",
                       species: "",
                       strain: "",
-                      gender: "Female",
+                      gender: "",
                       sourceID: "",
                       productionType: "",
                       ageUnit: "",
@@ -653,10 +627,14 @@ export default function DataViewAddSample({
                   const filtered = filter(options, params);
 
                   const { inputValue } = params;
+                  console.log(`Filtering: ${options}, ${inputValue}`);
+
                   // Suggest the creation of a new value
                   const isExisting = options.some(
                     (option) => inputValue === option.name
                   );
+
+                  console.log(`isExisting: ${isExisting}`);
                   if (inputValue !== "" && !isExisting) {
                     filtered.push({
                       inputValue,
@@ -664,6 +642,7 @@ export default function DataViewAddSample({
                     });
                   }
 
+                  console.log("Finished Filter");
                   return filtered;
                 }}
                 selectOnFocus
@@ -673,14 +652,18 @@ export default function DataViewAddSample({
                 getOptionLabel={(option) => {
                   // Value selected with enter, right from the input
                   if (typeof option === "string") {
+                    console.log("Value from Existing");
                     return option;
                   }
                   // Add "xxx" option created dynamically
                   if (option.inputValue) {
+                    console.log("Value from New Input");
                     return option.inputValue;
                   }
                 }}
-                renderOption={(props, option) => <li {...props}>{option}</li>}
+                renderOption={(props, option) => (
+                  <li {...props}>{option.inputValue ? option.name : option}</li>
+                )}
                 sx={{ width: "100%" }}
                 freeSolo
                 renderInput={(params) => (
@@ -1109,9 +1092,10 @@ export default function DataViewAddSample({
                           }
                         >
                           <InputLabel>
-                            {measurement.metadata.name
-                              ? `${measurement.metadata.name} (${measurement.metadata.abbrev})`
-                              : `${measurement.metadata.abbrev}`}
+                            {measurement.metadata.name &&
+                            measurement.metadata.name != ""
+                              ? `${measurement.metadata.name} (${measurement.metadata.abbreviation})`
+                              : `${measurement.metadata.abbreviation}`}
                           </InputLabel>
                           <OutlinedInput
                             type={measurement.metadata.datatype}
@@ -1121,9 +1105,10 @@ export default function DataViewAddSample({
                               measurement.metadata.id
                             )}
                             label={
-                              measurement.metadata.name
-                                ? `${measurement.metadata.name} (${measurement.metadata.abbrev})`
-                                : `${measurement.metadata.abbrev}`
+                              measurement.metadata.name &&
+                              measurement.metadata.name != ""
+                                ? `${measurement.metadata.name} (${measurement.metadata.abbreviation})`
+                                : `${measurement.metadata.abbreviation}`
                             }
                             endAdornment={
                               <InputAdornment position="end">
@@ -1154,9 +1139,10 @@ export default function DataViewAddSample({
                           }
                         >
                           <InputLabel>
-                            {measurement.metadata.name
-                              ? `${measurement.metadata.name} (${measurement.metadata.abbrev})`
-                              : `${measurement.metadata.abbrev}`}
+                            {measurement.metadata.name &&
+                            measurement.metadata.name != ""
+                              ? `${measurement.metadata.name} (${measurement.metadata.abbreviation})`
+                              : `${measurement.metadata.abbreviation}`}
                           </InputLabel>
                           <OutlinedInput
                             type={measurement.metadata.datatype}
@@ -1166,13 +1152,16 @@ export default function DataViewAddSample({
                               measurement.metadata.id
                             )}
                             label={
-                              measurement.metadata.name
-                                ? `${measurement.metadata.name} (${measurement.metadata.abbrev})`
-                                : `${measurement.metadata.abbrev}`
+                              measurement.metadata.name &&
+                              measurement.metadata.name != ""
+                                ? `${measurement.metadata.name} (${measurement.metadata.abbreviation})`
+                                : `${measurement.metadata.abbreviation}`
                             }
                             endAdornment={
                               <InputAdornment position="end">
-                                {measurement.metadata.units}
+                                {measurement.metadata.units
+                                  ? measurement.metadata.units
+                                  : ""}
                               </InputAdornment>
                             }
                           />
