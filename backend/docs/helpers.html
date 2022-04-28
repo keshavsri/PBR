@@ -1,0 +1,532 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>helpers &#8212; PBR 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="helpers">
+<h1>helpers<a class="headerlink" href="#helpers" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-src.helpers"></span><dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.create_flock">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">create_flock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">flock_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.helpers.create_flock" title="Permalink to this definition">¶</a></dt>
+<dd><p>The create_flock function accepts a dictionary containing the flock’s information and creates a new flock using
+the pydantic model to parse and the ORM model to store the information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>flock_dict:dict</strong> – Used to specify the flock’s information.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>flock:Flock: A Flock sqlalchemy model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.create_machine">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">create_machine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machine_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.helpers.create_machine" title="Permalink to this definition">¶</a></dt>
+<dd><p>The create_machine function accepts a dictionary containing the machine’s information and creates a new machine
+using the pydantic model to parse and the ORM model to store the information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>machine_dict:dict</strong> – Used to specify the machine’s information.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>machine:Machine: A machine sqlalchemy model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.create_machine_type">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">create_machine_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">machinetype_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.helpers.create_machine_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The create_machine_type function accepts a dictionary containing the machine type’s information and creates a new
+machine type using the pydantic model to parse and the ORM model to store the information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>machinetype_dict:dict</strong> – Used to specify the machine type’s information.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>machinetype:MachineType: A machine type sqlalchemy model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.create_measurement">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">create_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.helpers.create_measurement" title="Permalink to this definition">¶</a></dt>
+<dd><p>The create_measurement function accepts a dictionary containing the measurement’s information and creates
+a new measurement using the pydantic model to parse and the ORM model to store the information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>measurement_dict:dict</strong> – Used to specify the measurement’s information.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>measurement:Measurement: A Measurement sqlalchemy model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.create_measurement_type">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">create_measurement_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement_type_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.helpers.create_measurement_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The create_measurement_type function accepts a dictionary containing the measurement type’s information and creates
+a new measurement type using the pydantic model to parse and the ORM model to store the information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>measurement_type_dict:dict</strong> – Used to specify the measurement type’s information.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>measurement_type:MeasurementType: A MeasurementType sqlalchemy model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.create_measurement_value">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">create_measurement_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement_value_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.helpers.create_measurement_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The create_measurement_value function accepts a dictionary containing the information of a measurement value and
+creates a new measurement value using pydantic to parse and ORM model to save it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>measurement_value_dict:dict</strong> – Used to specify the dictionary containing the information of the measurement</p>
+</dd>
+</dl>
+<p>value that we want to create.
+:return: measurement_value:MeasurementValue: A measurement value sqlalchemy model.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.create_organization">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">create_organization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.helpers.create_organization" title="Permalink to this definition">¶</a></dt>
+<dd><p>The create_organization function accepts a dictionary containing the organization’s information and creates a new
+organization using the pydantic model to parse and the ORM model to store the information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>org_dict:dict</strong> – Used to specify the organization’s information.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>organization:Organization: An organization sqlalchemy model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.create_sample">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">create_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.helpers.create_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>The create_sample function accepts a dictionary containing the sample’s information and creates
+a new sample using the pydantic model to parse and the ORM model to store the information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sample_dict:dict</strong> – Used to specify the sample’s information.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>sample:Sample: A Sample sqlalchemy model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.create_source">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">create_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_dict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.helpers.create_source" title="Permalink to this definition">¶</a></dt>
+<dd><p>The create_source function accepts a dictionary containing the source’s information and creates a new source using
+the pydantic model to parse and the ORM model to store the information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>source_dict:dict</strong> – Used to specify the source’s information.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>source:Source: A source sqlalchemy model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_all_flocks">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_all_flocks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.helpers.get_all_flocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_all_flocks function returns a list of dictionaries containing the flocks’ information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of dictionaries containing the flocks formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_all_organizations">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_all_organizations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.helpers.get_all_organizations" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_all_organizations function returns a list of dictionaries containing all the organizations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of dictionaries containing all the organizations formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_flock_by_id">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_flock_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="schemas.html#src.Schemas.Flock" title="src.Schemas.Flock"><span class="pre">src.Schemas.Flock</span></a></span></span><a class="headerlink" href="#src.helpers.get_flock_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_flock_by_id function accepts an integer id as input and returns a dictionary containing the flock’s
+information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>id:int</strong> – Used to specify the id of the flock that we want to retrieve.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary containing the flock formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_flock_by_name">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_flock_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="schemas.html#src.Schemas.Flock" title="src.Schemas.Flock"><span class="pre">src.Schemas.Flock</span></a></span></span><a class="headerlink" href="#src.helpers.get_flock_by_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_flock_by_name function accepts a string name as input and returns a dictionary containing the flock’s
+information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name:str</strong> – Used to specify the name of the flock that we want to retrieve.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary containing the flock formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_flocks_by_org">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_flocks_by_org</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.helpers.get_flocks_by_org" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_flocks_by_org function accepts an integer org_id as input and returns a list of dictionaries containing
+the flocks’ information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>org_id:int</strong> – Used to specify the id of the organization that we want to retrieve the flocks from.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of dictionaries containing the flocks formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_logs">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_logs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.helpers.get_logs" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_logs function returns a list of dictionaries containing all the logs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of dictionaries containing the logs formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_logs_by_org">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_logs_by_org</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.helpers.get_logs_by_org" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_logs_by_org function accepts an integer id as input and returns a list of dictionaries containing
+the logs’ information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>org_id:int</strong> – Used to specify the id of the organization that we want to retrieve the logs from.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of dictionaries containing the logs formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_machine_by_id">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_machine_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#src.helpers.get_machine_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_machine_by_id function accepts an integer id as input and returns a dictionary containing the machine’s
+information. If no machine is found with that id, it returns None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>id:int</strong> – Used to Specify the id of the machine that we want to retrieve.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary with the following keys:.</p>
+</dd>
+<dt class="field-odd">Doc-author</dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_machine_type_by_id">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_machine_type_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#src.helpers.get_machine_type_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_machine_type_by_id function accepts an integer id as input and returns a dictionary containing the machine
+type’s information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>id:int</strong> – Used to specify the id of the machine type that we want to retrieve.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary containing the machine type formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_machine_types">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_machine_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.helpers.get_machine_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_machine_types function returns a list of dictionaries containing all the machine types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of dictionaries containing all the machine types formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_machines">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_machines</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.helpers.get_machines" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_machines_by_org">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_machines_by_org</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.helpers.get_machines_by_org" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_machines_by_org function returns a list of all machines in an organization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>org_id:int</strong> – Used to Filter the machines by organization.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of dictionaries.</p>
+</dd>
+<dt class="field-odd">Doc-author</dt>
+<dd class="field-odd"><p>Trelent</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_measurement_by_id">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_measurement_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#src.helpers.get_measurement_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_measurement_by_id function accepts an integer id as input and returns a dictionary containing the
+measurement’s information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>id:int</strong> – Used to specify the id of the measurement that we want to retrieve.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary containing the measurement formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_measurement_type_by_id">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_measurement_type_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#src.helpers.get_measurement_type_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_measurement_type_by_id function accepts an integer id as input and returns a dictionary containing the
+measurement type’s information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>id:int</strong> – Used to specify the id of the measurement type that we want to retrieve.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary containing the measurement type formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_measurement_types">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_measurement_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.helpers.get_measurement_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_measurement_types function returns a list of dictionaries containing the measurement types’ information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of dictionaries containing the measurement types formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_measurement_value_ORM_by_sample_id">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_measurement_value_ORM_by_sample_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#src.helpers.get_measurement_value_ORM_by_sample_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_measurement_value_ORM_by_sample_id function accepts an integer id as input and returns a list of
+dictionaries containing the measurement values’ information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>sample_id:int</strong> – Used to specify the id of the sample that we want to retrieve the measurement values from.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of dictionaries containing the measurement values formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_measurements">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_measurements</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.helpers.get_measurements" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_measurements function returns a list of dictionaries containing the measurements’ information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of dictionaries containing the measurements formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_organization_by_id">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_organization_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.helpers.get_organization_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_organization_by_id function accepts an integer id as input and returns a dictionary containing the
+organization’s information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>id:int</strong> – Used to specify the id of the organization that we want to retrieve.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary containing the organization formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_sample_by_id">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_sample_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#src.helpers.get_sample_by_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_sample_by_id function accepts an integer id as input and returns a dictionary containing the sample’s
+information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>id:int</strong> – Used to specify the id of the sample that we want to retrieve.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A dictionary containing the sample formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_sample_by_user">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_sample_by_user</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.helpers.get_sample_by_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_sample_by_user function accepts an integer id as input and returns a list of dictionaries containing
+the samples’ information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>user_id:int</strong> – Used to specify the id of the user that we want to retrieve the samples from.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of dictionaries containing the samples formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_samples">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_samples</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.helpers.get_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_samples function returns a list of dictionaries containing all the samples.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of dictionaries containing the samples formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.helpers.get_samples_by_org">
+<span class="sig-prename descclassname"><span class="pre">src.helpers.</span></span><span class="sig-name descname"><span class="pre">get_samples_by_org</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">org_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#src.helpers.get_samples_by_org" title="Permalink to this definition">¶</a></dt>
+<dd><p>The get_samples_by_org function accepts an integer id as input and returns a list of dictionaries containing
+the samples’ information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>org_id:int</strong> – Used to specify the id of the organization that we want to retrieve the samples from.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of dictionaries containing the samples formatted by pydantic.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">PBR</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, AANISH BHIRUD, DAVID CELEMEN, GAVIN DACIER,JEEHE HAN, AARON PENNY.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/helpers.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
