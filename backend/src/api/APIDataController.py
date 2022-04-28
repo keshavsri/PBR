@@ -207,7 +207,6 @@ def get_samples(access_allowed, current_user, given_org_id=None):
         # response json is created here and gets returned at the end of the block for GET requests.
         response_json = None
         current_user_organization = current_user.organization_id
-<<<<<<< HEAD
         
         if given_org_id:
             if current_user_organization == given_org_id:
@@ -224,31 +223,14 @@ def get_samples(access_allowed, current_user, given_org_id=None):
                 return jsonify({'message': 'You can only access samples within your organization'}), 403
         else:
             if current_user.role == Roles.Super_Admin:
-                    # Super Admins can see all samples from all orgs
-                    response_json = helpers.get_all_samples()
-            elif current_user.role >= Roles.Supervisor:
-                    # If Supervisor or Greater, return all samples of that org
-                    response_json = helpers.get_samples_by_org(current_user_organization)
-                else:
-            else:
-                # Otherwise, they can only see samples that are assigned to them.
-                response_json = helpers.get_samples_by_user(current_user.id)
-=======
-
-        if current_organization == given_org_id:
-            if current_user.role == Roles.Admin:
-                response_json = helpers.get_samples_by_org(given_org_id)
-            else:
-                # Otherwise, they can only see samples that are assigned to them.
-                response_json = helpers.get_samples_by_user(current_user.id)
-        elif current_user.role == Roles.Super_Admin:
-            if given_org_id is None:
-                response_json = helpers.get_samples_by_org(current_organization)
-            else:
+                # Super Admins can see all samples from all orgs
                 response_json = helpers.get_all_samples()
-        else:
-            return jsonify({'message': 'You can only access samples within your organization'}), 403
->>>>>>> pydantic-dev
+            elif current_user.role >= Roles.Supervisor:
+                # If Supervisor or Greater, return all samples of that org
+                response_json = helpers.get_samples_by_org(current_user_organization)
+            else:
+                # Otherwise, they can only see samples that are assigned to them.
+                response_json = helpers.get_samples_by_user(current_user.id)
 
         # if the response json is empty then return a 404 not found
         if response_json is None:
@@ -273,11 +255,7 @@ def delete_sample(access_allowed, current_user, item_id):
             # Models.db.session.delete(Models.Sample.query.get(item_id))
             Models.Sample.query.filter_by(id=item_id).update({'deleted' : True})
             Models.db.session.commit()
-<<<<<<< HEAD
             Models.createLog(current_user, LogActions.DELETE_SAMPLE, 'Deleted sample: ' + str(deleted_sample.id))
-=======
-            Models.createLog(current_user, LogActions.DELETE_SAMPLE, 'Deleted sample: ' + deleted_sample.id)
->>>>>>> pydantic-dev
             return Schemas.Sample.from_orm(deleted_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
