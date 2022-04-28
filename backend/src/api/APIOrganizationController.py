@@ -12,6 +12,16 @@ organizationBlueprint = Blueprint('organization', __name__)
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_organizations(access_allowed, current_user):
+
+    """
+    This function will return all the organizations in the database.
+
+    :param access_allowed: This is the access_allowed variable that is passed in from the token_required function.
+    :param current_user: This is the current_user variable that is passed in from the token_required function.
+
+    :return: This function will return all the organizations in the database.
+    """
+
     if access_allowed:
         if current_user.role == Roles.Super_Admin:
             responseJSON = src.helpers.get_all_organizations()
@@ -28,6 +38,17 @@ def get_organizations(access_allowed, current_user):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_organization(access_allowed, current_user, item_id):
+
+    """
+    This function will return the organization with the id that is passed in.
+
+    :param access_allowed: This is the access_allowed variable that is passed in from the token_required function.
+    :param current_user: This is the current_user variable that is passed in from the token_required function.
+    :param item_id: This is the id of the organization that is passed in.
+
+    :return: This function will return the organization with the id that is passed in.
+    """
+
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
@@ -48,6 +69,17 @@ def get_organization(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0])
 def post_organization(access_allowed, current_user):
+
+    """
+    This function will create a new organization in the database.
+
+    :param access_allowed: This is the access_allowed variable that is passed in from the token_required function.
+    :param current_user: This is the current_user variable that is passed in from the token_required function.
+    :param request.json: This is the json that is used to create the new organization.
+
+    :return: This function will create a new organization in the database.
+    """
+
     if access_allowed:        
         # checks if the organization already exists in the database
         if Models.Organization.query.filter_by(name=request.json.get('name')).first() is None:
@@ -67,6 +99,18 @@ def post_organization(access_allowed, current_user):
 @token_required
 @allowed_roles([0, 1])
 def put_organization(access_allowed, current_user, item_id):
+
+    """
+    This function will update an existing organization in the database.
+
+    :param access_allowed: This is the access_allowed variable that is passed in from the token_required function.
+    :param current_user: This is the current_user variable that is passed in from the token_required function.
+    :param item_id: This is the id of the organization that is passed in.
+    :param request.json: This is the json that is used to update the organization.
+
+    :return: This function will update an existing organization in the database.
+    """
+
     if access_allowed:
         #check if the organization exists in the database if it does then update the organization
         if Models.Organization.query.get(item_id) is None:
@@ -136,6 +180,18 @@ def put_organization(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0])
 def deleteSource(access_allowed, current_user, item_id, source_id):
+
+    """
+    Deletes a source from an organization
+
+    :param access_allowed: boolean, whether the user has access to the route
+    :param current_user: the user object of the user making the request
+    :param item_id: the id of the organization to delete the source from
+    :param source_id: the id of the source to delete
+
+    :return: a json response with the source deleted
+    """
+
     if access_allowed:
         if current_user.organization_id is not item_id and current_user.role is not Roles.Super_Admin:
             return jsonify({'message': 'Cannot delete in another organization'}), 403
@@ -154,5 +210,13 @@ def deleteSource(access_allowed, current_user, item_id, source_id):
 @organizationBlueprint.route('/<int:item_id>')
 @organizationBlueprint.route('/')
 def invalid_method(item_id = None):
+
+    """
+    Invalid method handler
+
+    :param item_id: accepts an item id if the method is called with an id
+    :return: a json response with the message that the method is not allowed
+    """
+
     return jsonify({'message': 'Invalid Method'}), 405
 

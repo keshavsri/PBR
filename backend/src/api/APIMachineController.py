@@ -11,6 +11,17 @@ machineBlueprint = Blueprint('machine', __name__)
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_machines(access_allowed, current_user, given_org_id=None):
+
+    """
+    This function handles GET requests for all machines or all machines in a given organization.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param given_org_id: The organization id of the organization to get all machines from if given.
+
+    :return: A list of all machines in the database if no organization id is given.
+    """
+
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
@@ -44,6 +55,17 @@ def get_machines(access_allowed, current_user, given_org_id=None):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_machine(access_allowed, current_user, item_id):
+
+    """
+    This function handles GET requests for a single machine.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the machine to get.
+
+    :return: A single machine if it exists in the database.
+    """
+
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
@@ -63,6 +85,16 @@ def get_machine(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1])
 def create_machine(access_allowed, current_user):
+
+    """
+    This function handles POST requests for creating a machine.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param request.json: The json data from which to create the machine.
+
+    :return: The machine that was created.
+    """
     if access_allowed:
         # checks if the Machine already exists in the database
         if Models.Machine.query.filter_by(serial_number=request.json.get('serial_number')).first() is None:
@@ -83,6 +115,18 @@ def create_machine(access_allowed, current_user):
 @token_required
 @allowed_roles([0, 1])
 def edit_machine(access_allowed, current_user, item_id):
+
+    """
+    This function handles PUT requests for editing a machine.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the machine to edit.
+    :param request.json: The json data from which to edit the machine.
+
+    :return: The machine that was edited.
+    """
+
     if access_allowed:
         #check if the Machine exists in the database if it does then update the Flock
         if Models.Machine.query.filter_by(organization_id=current_user.organization_id, id=item_id).first() is None:
@@ -101,6 +145,17 @@ def edit_machine(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1])
 def delete_machine(access_allowed, current_user, item_id):
+
+    """
+    This function handles DELETE requests for deleting a machine.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the machine to delete.
+
+    :return: The machine that was deleted.
+    """
+
     if access_allowed:
         #check if the Machine exists in the database if it does then delete the Flock
         if Models.Machine.query.filter_by(organization_id=current_user.organization_id, id=item_id).first() is None:
@@ -120,6 +175,16 @@ def delete_machine(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_machine_types(access_allowed, current_user):
+
+    """
+    This function handles GET requests for getting all machine types.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+
+    :return: A list of all machine types.
+    """
+
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = src.helpers.get_machine_types()
@@ -136,6 +201,17 @@ def get_machine_types(access_allowed, current_user):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_machine_type(access_allowed, current_user, item_id):
+
+    """
+    This function handles GET requests for getting a machine type.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the machine type to get.
+
+    :return: The machine type that was requested.
+    """
+
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
@@ -151,6 +227,17 @@ def get_machine_type(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1])
 def create_machine_type(access_allowed, current_user):
+
+    """
+    This function handles POST requests for creating a machine type.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param request.json: The json that will be used to create the machine type.
+
+    :return: The machine type that was created.
+    """
+
     if access_allowed:
         # checks if the Machine already exists in the database
         if Models.MachineType.query.filter_by(name=request.json.get('name')).first() is None:
@@ -171,6 +258,18 @@ def create_machine_type(access_allowed, current_user):
 @token_required
 @allowed_roles([0, 1])
 def edit_machine_type(access_allowed, current_user, item_id):
+
+    """
+    This function handles PUT requests for editing a machine type.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the machine type to edit.
+    :param request.json: The json that will be used to edit the machine type.
+
+    :return: The machine type that was edited.
+    """
+
     if access_allowed:
         #check if the Machine exists in the database if it does then update the Machine
         if Models.MachineType.query.filter_by(id=item_id).first() is None:
@@ -188,6 +287,17 @@ def edit_machine_type(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1])
 def delete_machine_type(access_allowed, current_user, item_id):
+
+    """
+    This function handles DELETE requests for deleting a machine type.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the machine type to delete.
+
+    :return: The machine type that was deleted.
+    """
+
     if access_allowed:
         #check if the Machine exists in the database if it does then delete the Machine
         if Models.MachineType.query.filter_by(id=item_id).first() is None:

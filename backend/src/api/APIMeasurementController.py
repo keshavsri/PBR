@@ -11,6 +11,16 @@ measurementBlueprint = Blueprint('measurement', __name__)
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_measurement_types(access_allowed, current_user):
+
+    """
+    This function returns all Measurement Types in the database.
+
+    :param access_allowed: boolean, whether the user has access to the endpoint
+    :param current_user: the user object of the user making the request
+
+    :return: a json response containing all Measurement Types in the database
+    """
+
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         response_json = src.helpers.get_measurement_types()
@@ -28,6 +38,16 @@ def get_measurement_types(access_allowed, current_user):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_measurement_type(access_allowed, current_user, item_id):
+
+    """
+    This function returns a Measurement Type in the database.
+
+    :param access_allowed: boolean, whether the user has access to the endpoint
+    :param current_user: the user object of the user making the request
+
+    :return: a json response containing a Measurement Type in the database
+    """
+
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         response_json = src.helpers.get_measurement_type_by_id(item_id)
@@ -45,6 +65,17 @@ def get_measurement_type(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1])
 def create_measurement_type(access_allowed, current_user):
+
+    """
+    This function creates a Measurement Type in the database.
+
+    :param access_allowed: boolean, whether the user has access to the endpoint
+    :param current_user: the user object of the user making the request
+    :param request.json: the json object used to create the Measurement Type
+
+    :return: a json response containing the created Measurement Type
+    """
+
     if access_allowed:
         # checks if the Measurement Type already exists in the database
         if Models.MeasurementType.query.filter_by(name=request.json.get('name')).first() is None:
@@ -66,6 +97,18 @@ def create_measurement_type(access_allowed, current_user):
 @token_required
 @allowed_roles([0, 1])
 def update_measurement_type(access_allowed, current_user, item_id):
+
+    """
+    This function updates a Measurement Type in the database.
+
+    :param access_allowed: boolean, whether the user has access to the endpoint
+    :param current_user: the user object of the user making the request
+    :param item_id: the id of the Measurement Type to be updated
+    :param request.json: the json object used to update the Measurement Type
+
+    :return: a json response containing the updated Measurement Type
+    """
+
     if access_allowed:
         # check if the Measurement Type exists in the database if it does then update the Measurement Type
         if Models.MeasurementType.query.filter_by(id=item_id).first() is None:
@@ -95,6 +138,17 @@ def update_measurement_type(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1])
 def delete_measurement_type(access_allowed, current_user, item_id):
+
+    """
+    This function deletes a Measurement Type from the database.
+
+    :param access_allowed: boolean, whether the user has access to the endpoint
+    :param current_user: the user object of the user making the request
+    :param item_id: the id of the Measurement Type to be deleted
+
+    :return: a json response containing the deleted Measurement Type
+    """
+
     if access_allowed:
         # check if the Measurement Type exists in the database if it does then delete the Measurement Type
         if Models.MeasurementType.query.filter_by(id=item_id).first() is None:
@@ -113,6 +167,16 @@ def delete_measurement_type(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_measurements(access_allowed, current_user):
+
+    """
+    This function gets all Measurements from the database.
+
+    :param access_allowed: boolean, whether the user has access to the endpoint
+    :param current_user: the user object of the user making the request
+
+    :return: a json response containing all Measurements
+    """
+
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         response_json = src.helpers.get_measurements()
@@ -130,6 +194,17 @@ def get_measurements(access_allowed, current_user):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_measurement(access_allowed, current_user, item_id):
+
+    """
+    This function gets a Measurement from the database.
+
+    :param access_allowed: boolean, whether the user has access to the endpoint
+    :param current_user: the user object of the user making the request
+    :param item_id: the id of the Measurement to be retrieved
+
+    :return: a json response containing the retrieved Measurement
+    """
+
     if access_allowed:
         # check if the Measurement exists in the database if it does then return the Measurement
         if Models.Measurement.query.filter_by(id=item_id).first() is None:
@@ -144,6 +219,16 @@ def get_measurement(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1])
 def create_measurement(access_allowed, current_user):
+
+    """
+    This function creates a Measurement in the database.
+
+    :param access_allowed: boolean, whether the user has access to the endpoint
+    :param current_user: the user object of the user making the request
+
+    :return: a json response containing the created Measurement
+    """
+
     if access_allowed:
         # checks if the Measurement already exists in the database
         if Models.Measurement.query.filter_by(machine_id=request.json.get('machine_id'), measurementtype_id=request.json.get('measurementtype_id')).first() is None:
@@ -165,6 +250,17 @@ def create_measurement(access_allowed, current_user):
 @token_required
 @allowed_roles([0, 1])
 def update_measurement(access_allowed, current_user, item_id):
+
+    """
+    This function updates a Measurement in the database.
+
+    :param access_allowed: boolean, whether the user has access to the endpoint
+    :param current_user: the user object of the user making the request
+    :param item_id: the id of the Measurement to be updated
+
+    :return: a json response containing the updated Measurement
+    """
+
     if access_allowed:
         # check if the Measurement exists in the database if it does then update the Measurement Type
         if Models.Measurement.query.filter_by(id=item_id).first() is None:
@@ -183,6 +279,17 @@ def update_measurement(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1])
 def delete_measurement(access_allowed, current_user, item_id):
+
+    """
+    This function deletes a Measurement from the database.
+
+    :param access_allowed: boolean, whether the user has access to the endpoint
+    :param current_user: the user object of the user making the request
+    :param item_id: the id of the Measurement to be deleted
+
+    :return: a json response containing the deleted Measurement
+    """
+
     if access_allowed:
         # check if the Measurement Type exists in the database if it does then delete the Measurement Type
         if Models.Measurement.query.filter_by(id=item_id).first() is None:

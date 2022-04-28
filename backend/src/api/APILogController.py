@@ -11,6 +11,16 @@ logBlueprint = Blueprint('log', __name__)
 @logBlueprint.route('/<int:item_id>', methods=['GET'])
 @token_required
 def handleLog(current_user, item_id = None):
+
+    """
+    This function handles the GET request for the logs.
+
+    :param current_user: The user who made the request.
+    :param item_id: The id of the log to get.
+
+    :return: A JSON object containing the logs.
+    """
+
     if request.method == 'GET':
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None

@@ -18,6 +18,11 @@ ALLOWED_EXTENSIONS = {'txt'}
 # Inspiration from https://roytuts.com/python-flask-rest-api-file-upload/
 @sampleBlueprint.route('/parse', methods=['POST'])
 def parse_machine_data():
+    """
+    Parses the data from a given machine output file and returns the data in a JSON format
+    :param file: The file to parse from the POST request
+    :return: JSON data of the parsed machine output file
+    """
     # check if the post request has the file part
     if 'file' not in request.files:
         resp = jsonify({'message': 'No file part in the request'})
@@ -45,10 +50,20 @@ def parse_machine_data():
 
 # Method to check the filetype of a given filename
 def check_allowed_filetype(filename):
+    """
+    Checks if the filetype is allowed
+    :param filename: The filename to check
+    :return: True if the filetype is allowed, False otherwise
+    """
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 def parse_data_from_file(file):
+    """
+    Parses the data from a given machine output file and returns the data in a JSON format
+    :param file: The file to parse from the POST request
+    :return: JSON data of the parsed machine output file
+    """
     if not check_allowed_filetype(file.filename):
         raise Exception("Invalid file type")
 
@@ -67,6 +82,11 @@ def parse_data_from_file(file):
 
 
 def _parse_vetscan_vs2(content_lines):
+    """
+    Parses the data from a given VetScan VS2 output file and returns the data in a JSON format
+    :param content_lines: The lines of the file to parse
+    :return: JSON data of the parsed machine output file
+    """
     ret_dict = {
         "name": content_lines[0],
         "info": [
@@ -150,6 +170,11 @@ def _parse_vetscan_vs2(content_lines):
 
 
 def _is_error_file(content_lines):
+    """
+    Checks if the file is an error file.
+    :param content_lines:
+    :return: True if error file, False otherwise
+    """
     is_error_file = False
 
     temp = re.search(r"^[0-9]{2} ([0-9A-F]{1,4}[ ]*){1,4}", content_lines[8])
@@ -163,6 +188,13 @@ def _is_error_file(content_lines):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def create_sample(access_allowed, current_user):
+    """
+    Creates a new sample, from a given sample json and returns the newly created sample.
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param request.json: The sample json to create the sample from.
+    :return: The newly created sample.
+    """
     if access_allowed:
         payload = request.json
         print(payload)
@@ -200,6 +232,13 @@ def create_sample(access_allowed, current_user):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_samples(access_allowed, current_user, given_org_id=None):
+    """
+    Retrieves all available samples for a given organization if provided.
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param given_org_id: The organization id to get samples for, if provided, else all samples for the current user.
+    :return: The list of samples.
+    """
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         response_json = None
@@ -234,6 +273,13 @@ def get_samples(access_allowed, current_user, given_org_id=None):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def delete_sample(access_allowed, current_user, item_id):
+    """
+    Deletes specified sample.
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the sample to delete.
+    :return: The deleted sample.
+    """
     if access_allowed:
         if Models.Sample.query.get(item_id) is None:
             return jsonify({'message': 'Sample cannot be found.'}), 404
@@ -252,6 +298,14 @@ def delete_sample(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def edit_datapoint(access_allowed, current_user, item_id):
+    """
+    Edits existing sample.
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the sample to edit.
+    :param request.json: The updated sample as a json object.
+    :return: The edited sample.
+    """
     if access_allowed:
         if Models.Sample.query.get(item_id) is None:
             return jsonify({'message': 'Sample cannot be found.'}), 404
@@ -272,6 +326,9 @@ def edit_datapoint(access_allowed, current_user, item_id):
 @allowed_roles([0, 1, 2, 3])
 # batch_data is a BatchData.JSON
 def create_batch_data(access_allowed, current_user, batch_data):
+    """
+    NOT IMPLEMENTED YET.
+    """
     if access_allowed:
         Models.db.session.add(batch_data)
         Models.db.session.commit()
@@ -286,6 +343,9 @@ def create_batch_data(access_allowed, current_user, batch_data):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_batches(access_allowed, current_user):
+    """
+    NOT IMPLEMENTED YET.
+    """
     if access_allowed:
         response_json = jsonify(Models.Batch.query.all())
         if response_json.json is None:
@@ -302,6 +362,9 @@ def get_batches(access_allowed, current_user):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_batch(access_allowed, current_user, item_id):
+    """
+    NOT IMPLEMENTED YET.
+    """
     if access_allowed:
         response_json = jsonify(Models.Batch.query.get(item_id))
         if response_json.json is None:
@@ -318,6 +381,9 @@ def get_batch(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def edit_batch(access_allowed, current_user, item_id):
+    """
+    NOT IMPLEMENTED YET.
+    """
     if access_allowed:
         if Models.Batch.query.get(item_id) is None:
             return jsonify({'message': 'Batch cannot be found.'}), 404
@@ -336,6 +402,9 @@ def edit_batch(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def delete_batch(access_allowed, current_user, item_id):
+    """
+    NOT IMPLEMENTED YET.
+    """
     if access_allowed:
         if Models.Batch.query.get(item_id) is None:
             return jsonify({'message': 'Batch cannot be found.'}), 404
