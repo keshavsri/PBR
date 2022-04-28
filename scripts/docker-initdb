@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "====> Starting Database Migrations"
+docker exec backend flask init_db
+echo "==> Database initialized."
+

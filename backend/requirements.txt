@@ -9,6 +9,7 @@ Flask==2.0.2
 flask-restx==0.5.1
 Flask-SQLAlchemy==2.5.1
 flask-serialize==2.0.3
+flask-cli==0.4.0
 greenlet==1.1.2
 idna==3.3
 inflection==0.5.1

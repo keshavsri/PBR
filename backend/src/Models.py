@@ -342,7 +342,7 @@ class MeasurementType(db.Model):
             abbreviation: The abbreviation of the measurement type
             unit: The unit of the measurement type
             required: Whether or not the measurement type is required
-            general: ???
+            general: Whether the measurement is a general setting of the machine or a bloodwork-related measurement
 
             measurement: foreign reference to Measurement
     """
