@@ -13,6 +13,11 @@ from src.enums import Roles, LogActions
 userBlueprint = Blueprint('user', __name__)
 
 def allowed_roles(roles):
+  """ Accepts a list of roles and returns true to the decorated function if the user has one of those roles, false otherwise
+  
+      :param roles:List[int]: the list of roles that are allowed to access the route
+      :return: bool: true if the user has one of the roles, false otherwise      
+  """
   def wrapper(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -47,6 +52,10 @@ def allowed_roles(roles):
 # decorator for verifying the JWT
 # Template from GeeksForGeeks: https://www.geeksforgeeks.org/using-jwt-for-user-authentication-in-flask/
 def token_required(f):
+  """ Decorator for authenticating the user via the JWT in the request header and returning the current user to the decorated function
+
+      :return: User: the current user as a SQLAlchemy model
+  """
   @wraps(f)
   def decorated(*args, **kwargs):
     token = None
