@@ -4,6 +4,7 @@ from itsdangerous import json
 
 from src.Models import db
 from src.Models import Flock as FlockORM
+from src.Models import User as UserORM
 from src.Models import Organization as OrganizationORM
 from src.Models import Source as SourceORM
 from src.Models import Sample as SampleORM
@@ -467,8 +468,8 @@ def get_samples_by_org(org_id: int) -> List[dict]:
     for sample in samples:
         if not sample.deleted:
             sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
+            sample.timestamp_added = str(sample.timestamp_added)
             ret["rows"].append(Sample.from_orm(sample).dict())
-    print(f"RET {ret}")
     
     return json.dumps(ret, default=str)
 
@@ -481,15 +482,11 @@ def get_sample_by_id(id: int) -> dict:
     :return: A dictionary containing the sample formatted by pydantic.
     """
     sample = SampleORM.query.filter_by(id=id).first()
-    sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
-    return Sample.from_orm(sample).dict()
-
-# def get_sample_by_org(org_id: int) -> List[dict]:
-#     samples = SampleORM.query.filter_by(organization_id=org_id).all()
-#     ret = []
-#     for sample in samples:
-#         ret.append(Sample.from_orm(sample).dict())
-#     return json.dumps(ret)
+    if not sample.deleted:
+        sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
+        return Sample.from_orm(sample).dict()
+    else:
+        return None
 
 def get_samples_by_user(user_id: int) -> List[dict]:
     """
@@ -499,26 +496,67 @@ def get_samples_by_user(user_id: int) -> List[dict]:
     :param user_id:int: Used to specify the id of the user that we want to retrieve the samples from.
     :return: A list of dictionaries containing the samples formatted by pydantic.
     """
-    samples = SampleORM.query.filter_by(entered_by_id=user_id).all()
-    ret = []
-    for sample in samples:
-        sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
-        sample.timestamp_added = str(sample.timestamp_added)
-        ret.append(Sample.from_orm(sample).dict())
-    return json.dumps(ret)
 
-def get_samples() -> List[dict]:
+    samples = get_sample_organization_joined(db.session).filter_by(entered_by_id=user_id).all()
+    user = UserORM.query.filter_by(id=user_id).first()
+    machines = json.loads(get_machines_by_org(user.organization_id))
+    ret = {
+        "rows": [],
+        "types": []
+    }
+
+    for machine in machines:
+        machJson = {
+            "machineName": machine["name"],
+            "machineId": machine["id"],
+            "data": []
+        }
+        for info in machine["info"]:
+            machJson["data"].append({"type":info})
+        for meas in machine["measurements"]:   
+            machJson["data"].append({"type":meas})
+        ret["types"].append(machJson)
+    for sample in samples:
+        if not sample.deleted:
+            sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
+            sample.timestamp_added = str(sample.timestamp_added)
+            ret["rows"].append(Sample.from_orm(sample).dict())
+    
+    return json.dumps(ret, default=str)
+
+
+def get_all_samples() -> List[dict]:
     """
-    The get_samples function returns a list of dictionaries containing all the samples.
+    The get_all_samples function returns a list of dictionaries containing all the samples.
 
     :return: A list of dictionaries containing the samples formatted by pydantic.
     """
-    samples = SampleORM.query.filter_by().all()
-    ret = []
+    samples = get_sample_organization_joined(db.session).all()
+    machines = json.loads(get_machines())
+    ret = {
+        "rows": [],
+        "types": []
+    }
+
+    for machine in machines:
+        machJson = {
+            "machineName": machine["name"],
+            "machineId": machine["id"],
+            "data": []
+        }
+        for info in machine["info"]:
+            machJson["data"].append({"type":info})
+        for meas in machine["measurements"]:   
+            machJson["data"].append({"type":meas})
+        ret["types"].append(machJson)
     for sample in samples:
-        sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
-        ret.append(Sample.from_orm(sample).dict())
-    return json.dumps(ret)
+        if not sample.deleted:
+            sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
+            sample.timestamp_added = str(sample.timestamp_added)
+            ret["rows"].append(Sample.from_orm(sample).dict())
+    
+    return json.dumps(ret, default=str)
+
 
 def create_measurement_value(measurement_value_dict: dict):
     """
