@@ -21,6 +21,11 @@ services:
     environment:
       - BACKEND_PORT=3005
       - SERVER_NAME=0.0.0.0
+      - DEBUG_MODE=${DEBUG_MODE:?err}
+      - JWT_SECRET=${JWT_SECRET:?err}
+      - JWT_SIGN_ALGORITHM=${JWT_SIGN_ALGORITHM:?err}
+      - JWT_TTL=${JWT_TTL:?err}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:?err}
       # - DATABASE_URL=sqlite:///pbrDatabase.sqlite3
       - DATABASE_URL=mysql+pymysql://root:${MYSQL_ROOT_PASSWORD:?err}@db/pbr
     depends_on:
