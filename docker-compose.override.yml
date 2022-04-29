@@ -6,7 +6,7 @@ services:
     volumes:
       - ./backend/src:/backend/src
     environment:
-      - DEBUG_MODE=true
+      - DEBUG_MODE=${DEBUG_MODE:?err}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-password}
     restart: "no"
 
