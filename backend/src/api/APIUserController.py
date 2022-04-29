@@ -193,7 +193,7 @@ def register():
     
   salt = bcrypt.gensalt()
   hashedPW = bcrypt.hashpw(data["password"].encode('utf8'), salt)
-  user = Models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin, organization_id=user_org.id )
+  user = Models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Guest, organization_id=user_org.id )
   Models.db.session.add(user)
   Models.db.session.commit()
   print("User was successfully added.")

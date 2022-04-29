@@ -1094,7 +1094,9 @@ export default function DataViewAddSample({
                           <InputLabel>
                             {measurement.metadata.name &&
                             measurement.metadata.name != ""
-                              ? `${measurement.metadata.name} (${measurement.metadata.abbreviation})`
+                              ? measurement.metadata.abbreviation
+                                ? `${measurement.metadata.name} (${measurement.metadata.abbreviation})`
+                                : `${measurement.metadata.name}`
                               : `${measurement.metadata.abbreviation}`}
                           </InputLabel>
                           <OutlinedInput
@@ -1112,7 +1114,9 @@ export default function DataViewAddSample({
                             }
                             endAdornment={
                               <InputAdornment position="end">
-                                {measurement.metadata.units}
+                                {measurement.metadata.units
+                                  ? measurement.metadata.units
+                                  : ""}
                               </InputAdornment>
                             }
                           />
@@ -1141,7 +1145,9 @@ export default function DataViewAddSample({
                           <InputLabel>
                             {measurement.metadata.name &&
                             measurement.metadata.name != ""
-                              ? `${measurement.metadata.name} (${measurement.metadata.abbreviation})`
+                              ? measurement.metadata.abbreviation
+                                ? `${measurement.metadata.name} (${measurement.metadata.abbreviation})`
+                                : `${measurement.metadata.name}`
                               : `${measurement.metadata.abbreviation}`}
                           </InputLabel>
                           <OutlinedInput

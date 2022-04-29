@@ -239,7 +239,7 @@ else:
 
             mt13 = MeasurementType(
                 id=13,
-                name="RQC",
+                abbreviation="RQC",
                 required=0,
                 general=0
             )
@@ -247,7 +247,7 @@ else:
 
             mt14 = MeasurementType(
                 id=14,
-                name="QC",
+                abbreviation="QC",
                 required=0,
                 general=0
             )
@@ -255,7 +255,7 @@ else:
 
             mt15 = MeasurementType(
                 id=15,
-                name="HEM",
+                abbreviation="HEM",
                 required=0,
                 general=0
             )
@@ -263,7 +263,7 @@ else:
 
             mt16 = MeasurementType(
                 id=16,
-                name="LIP",
+                abbreviation="LIP",
                 required=0,
                 general=0
             )
@@ -271,7 +271,7 @@ else:
 
             mt17 = MeasurementType(
                 id=17,
-                name="ICT",
+                abbreviation="ICT",
                 required=0,
                 general=0
             )
