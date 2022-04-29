@@ -13,6 +13,16 @@ flockBlueprint = Blueprint('flock', __name__)
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_flocks(access_allowed, current_user, given_org_id=None):
+
+    """
+    This function handles the GET request for all Flocks or flocks belonging to a specific organization.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param given_org_id: The organization id of the organization that the user wants to get the flocks of.
+    :return: A list of all Flocks or a list of all Flocks belonging to a specific organization depending on the request.
+    """
+
     if access_allowed:
 
         current_organization = current_user.organization_id
@@ -45,6 +55,14 @@ def get_flocks(access_allowed, current_user, given_org_id=None):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def get_flock(access_allowed, current_user, item_id):
+    """
+    This function handles the GET request for a specific flock.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the flock that the user wants to get.
+    :return: A specific flock if it exists, a 404 not found otherwise.
+    """
     if access_allowed:
 
         current_organization = current_user.organization_id
@@ -64,6 +82,14 @@ def get_flock(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1])
 def post_flock(access_allowed, current_user):
+    """
+    This function handles the POST request for creating a new flock.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param request.json: The json data that the user wants to create a new flock with.
+    :return: A new flock if the request is valid, a 400 bad request otherwise.
+    """
     if access_allowed:
         # checks if the Flock already exists in the database
         if Models.Flock.query.filter_by(name=request.json.get('name')).first() is None:
@@ -85,6 +111,17 @@ def post_flock(access_allowed, current_user):
 @token_required
 @allowed_roles([0, 1])
 def put_flock(access_allowed, current_user, item_id):
+
+    """
+    This function handles the PUT request for updating a specific flock.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the flock that the user wants to update.
+    :param request.json: The json data that the user wants to update the flock with.
+    :return: A specific flock if it exists, a 404 not found otherwise.
+    """
+
     if access_allowed:
         # check if the Flock exists in the database if it does then update the Flock
         if Models.Flock.query.filter_by(organization=current_user.organization_id, id=item_id).first() is None:
@@ -106,6 +143,16 @@ def put_flock(access_allowed, current_user, item_id):
 @token_required
 @allowed_roles([0, 1])
 def delete_flock(access_allowed, current_user, item_id):
+
+    """
+    This function handles the DELETE request for deleting a specific flock.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the flock that the user wants to delete.
+    :return: The deleted flock if it exists, a 404 not found otherwise.
+    """
+
     if access_allowed:
         # check if the Flock exists in the database if it does then delete the Flock
         if Models.Flock.query.filter_by(organization_id=current_user.organization_id, id=item_id).first() is None:
@@ -123,12 +170,28 @@ def delete_flock(access_allowed, current_user, item_id):
 @flockBlueprint.route('/<int:item_id>')
 @flockBlueprint.route('/')
 def invalid_method(item_id=None):
+
+    """
+    This function handles an invalid method.
+
+    :param item_id: accepts an id if the user tries to pass one.
+    :return: A message saying that the method is invalid.
+    """
+
     return jsonify({'message': 'Invalid Method'}), 405
 
 
 # Inspiration from https://roytuts.com/python-flask-rest-api-file-upload/
 @flockBlueprint.route('/strains/<string:species>', methods=['GET'])
 def get_strains(species=None):
+
+    """
+    This function handles the GET request for getting all the strains of a specific species.
+
+    :param species: The species of the strain that the user wants to get.
+    :return: The strains of the species if it exists, a 404 not found otherwise.
+    """
+
     print(species.lower())
     # Move this to a database soon
     strains = {

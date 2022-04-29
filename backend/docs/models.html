@@ -1,0 +1,964 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Models &#8212; PBR 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-src.Models">
+<span id="models"></span><h1>Models<a class="headerlink" href="#module-src.Models" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Models.Batch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">Batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.Batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Model</span></code></p>
+<p>This table stores the batches.
+NOT IMPLEMENTED</p>
+<blockquote>
+<div><dl>
+<dt>Attributes:</dt><dd><p>id: Primary Key
+name: The name of the batch</p>
+<p>sample: Foreign reference to the samples in this batch</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Batch.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Batch.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Batch.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Batch.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Batch.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><a class="headerlink" href="#src.Models.Batch.sample" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Models.Flock">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">Flock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.Flock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Model</span></code></p>
+<p>ORM model for the Flock table</p>
+<p>This table contains the flocks from which the samples are collected.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>id: unique identifier for the flock
+name: name of the flock
+strain: strain of the flock
+species: species of the flock
+gender: gender of the flock
+production_type: The type of flock it is.
+birthday: The birthdate calculated from the user input
+timestamp_added: The timestamp of flock creation</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Flock.birthday">
+<span class="sig-name descname"><span class="pre">birthday</span></span><a class="headerlink" href="#src.Models.Flock.birthday" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Flock.gender">
+<span class="sig-name descname"><span class="pre">gender</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.BirdGenders</span></em><a class="headerlink" href="#src.Models.Flock.gender" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Flock.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Flock.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Flock.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Flock.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Flock.organization_id">
+<span class="sig-name descname"><span class="pre">organization_id</span></span><a class="headerlink" href="#src.Models.Flock.organization_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Flock.production_type">
+<span class="sig-name descname"><span class="pre">production_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.ProductionTypes</span></em><a class="headerlink" href="#src.Models.Flock.production_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Flock.source_id">
+<span class="sig-name descname"><span class="pre">source_id</span></span><a class="headerlink" href="#src.Models.Flock.source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Flock.species">
+<span class="sig-name descname"><span class="pre">species</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.Species</span></em><a class="headerlink" href="#src.Models.Flock.species" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Flock.strain">
+<span class="sig-name descname"><span class="pre">strain</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Flock.strain" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Flock.timestamp_added">
+<span class="sig-name descname"><span class="pre">timestamp_added</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Flock.timestamp_added" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Models.Log">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">Log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">organization</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logContent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.Log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Model</span></code></p>
+<p>This table stores the logs.</p>
+<p>The logs store the user who did the action, their role, the enum for the action, the content is a more readable
+version of the action with an ID or name of the affected object.</p>
+<blockquote>
+<div><dl>
+<dt>Attributes:</dt><dd><p>id: Primary Key
+user: The user who did the action
+role: The role of the user
+action: The action that was performed
+content: A more readable version of the action with an ID or name of the affected object
+log_time: The time the action was performed</p>
+<p>user_id: Foreign Key to User
+organization_id: Foreign Key to Organization</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Log.Organization">
+<span class="sig-name descname"><span class="pre">Organization</span></span><a class="headerlink" href="#src.Models.Log.Organization" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Log.User">
+<span class="sig-name descname"><span class="pre">User</span></span><a class="headerlink" href="#src.Models.Log.User" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Log.action">
+<span class="sig-name descname"><span class="pre">action</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.LogActions</span></em><a class="headerlink" href="#src.Models.Log.action" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Log.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Log.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Log.logContent">
+<span class="sig-name descname"><span class="pre">logContent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Log.logContent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Log.logTime">
+<span class="sig-name descname"><span class="pre">logTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Log.logTime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Log.organization_id">
+<span class="sig-name descname"><span class="pre">organization_id</span></span><a class="headerlink" href="#src.Models.Log.organization_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Log.role">
+<span class="sig-name descname"><span class="pre">role</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.Roles</span></em><a class="headerlink" href="#src.Models.Log.role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Log.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#src.Models.Log.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Log.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><a class="headerlink" href="#src.Models.Log.user_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Models.Machine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">Machine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.Machine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Model</span></code></p>
+<p>This table stores the machines.</p>
+<p>These hold the additional information about the machine which is shared between all measurements of the same machine.</p>
+<blockquote>
+<div><dl>
+<dt>Attributes:</dt><dd><p>id: Primary Key
+serial_number: The serial number of the machine</p>
+<p>machine_type_id: Foreign Key to MachineType
+machine_type: foreign reference to MachineType
+organization_id: Foreign Key to Organization
+measurements: list of Measurements from this machine</p>
+<p>measurement: foreign reference to this object</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Machine.Organization">
+<span class="sig-name descname"><span class="pre">Organization</span></span><a class="headerlink" href="#src.Models.Machine.Organization" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Machine.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Machine.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Machine.machinetype">
+<span class="sig-name descname"><span class="pre">machinetype</span></span><a class="headerlink" href="#src.Models.Machine.machinetype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Machine.machinetype_id">
+<span class="sig-name descname"><span class="pre">machinetype_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Machine.machinetype_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Machine.measurement">
+<span class="sig-name descname"><span class="pre">measurement</span></span><a class="headerlink" href="#src.Models.Machine.measurement" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Machine.measurements">
+<span class="sig-name descname"><span class="pre">measurements</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Models.Measurement" title="src.Models.Measurement"><span class="pre">src.Models.Measurement</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Models.Machine.measurements" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Machine.organization_id">
+<span class="sig-name descname"><span class="pre">organization_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Machine.organization_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Machine.serial_number">
+<span class="sig-name descname"><span class="pre">serial_number</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Machine.serial_number" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Models.MachineType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">MachineType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.MachineType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Model</span></code></p>
+<p>This table stores the machine types.</p>
+<p>It pretty much just stores the names of the machine types.</p>
+<blockquote>
+<div><dl class="simple">
+<dt>Attributes:</dt><dd><p>id: Primary Key
+name: The name of the machine type</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MachineType.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.MachineType.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MachineType.machine">
+<span class="sig-name descname"><span class="pre">machine</span></span><a class="headerlink" href="#src.Models.MachineType.machine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MachineType.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.MachineType.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Models.Measurement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">Measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.Measurement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Model</span></code></p>
+<p>This table acts almost like a join table between the machine and the measurement type.</p>
+<dl>
+<dt>Attributes:</dt><dd><p>id: Primary Key
+machine_id: Foreign Key to Machine
+measurement_type_id: Foreign Key to Measurement Type
+machine: Machine object
+measurement_type: Measurement Type object</p>
+<p>measurement_value: foreign reference to MeasurementValue</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Measurement.Machine">
+<span class="sig-name descname"><span class="pre">Machine</span></span><a class="headerlink" href="#src.Models.Measurement.Machine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Measurement.MeasurementType">
+<span class="sig-name descname"><span class="pre">MeasurementType</span></span><a class="headerlink" href="#src.Models.Measurement.MeasurementType" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Measurement.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Measurement.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Measurement.machine">
+<span class="sig-name descname"><span class="pre">machine</span></span><a class="headerlink" href="#src.Models.Measurement.machine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Measurement.machine_id">
+<span class="sig-name descname"><span class="pre">machine_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Measurement.machine_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Measurement.measurement_value">
+<span class="sig-name descname"><span class="pre">measurement_value</span></span><a class="headerlink" href="#src.Models.Measurement.measurement_value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Measurement.measurementtype">
+<span class="sig-name descname"><span class="pre">measurementtype</span></span><a class="headerlink" href="#src.Models.Measurement.measurementtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Measurement.measurementtype_id">
+<span class="sig-name descname"><span class="pre">measurementtype_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Measurement.measurementtype_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Models.MeasurementType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">MeasurementType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.MeasurementType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Model</span></code></p>
+<p>This table stores the measurement types.</p>
+<p>These hold the additional information about the measurement which is shared between all measurements of the same type.</p>
+<blockquote>
+<div><dl>
+<dt>Attributes:</dt><dd><p>id: Primary Key
+name: The name of the measurement type
+abbreviation: The abbreviation of the measurement type
+unit: The unit of the measurement type
+required: Whether or not the measurement type is required
+general: ???</p>
+<p>measurement: foreign reference to Measurement</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MeasurementType.abbreviation">
+<span class="sig-name descname"><span class="pre">abbreviation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.MeasurementType.abbreviation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MeasurementType.general">
+<span class="sig-name descname"><span class="pre">general</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#src.Models.MeasurementType.general" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MeasurementType.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.MeasurementType.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MeasurementType.measurement">
+<span class="sig-name descname"><span class="pre">measurement</span></span><a class="headerlink" href="#src.Models.MeasurementType.measurement" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MeasurementType.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.MeasurementType.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MeasurementType.required">
+<span class="sig-name descname"><span class="pre">required</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#src.Models.MeasurementType.required" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MeasurementType.units">
+<span class="sig-name descname"><span class="pre">units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.MeasurementType.units" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Models.MeasurementValue">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">MeasurementValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.MeasurementValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Model</span></code></p>
+<p>This table stores the actual measurement value.</p>
+<dl>
+<dt>Attributes:</dt><dd><p>id: Primary Key
+value: The value of the measurement
+timestamp_added: The time the measurement was added to the database</p>
+<p>measurement_id: Foreign Key to Measurement
+sample_id: Foreign Key to Sample</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MeasurementValue.Measurement">
+<span class="sig-name descname"><span class="pre">Measurement</span></span><a class="headerlink" href="#src.Models.MeasurementValue.Measurement" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MeasurementValue.Sample">
+<span class="sig-name descname"><span class="pre">Sample</span></span><a class="headerlink" href="#src.Models.MeasurementValue.Sample" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MeasurementValue.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.MeasurementValue.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MeasurementValue.measurement_id">
+<span class="sig-name descname"><span class="pre">measurement_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.MeasurementValue.measurement_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MeasurementValue.sample_id">
+<span class="sig-name descname"><span class="pre">sample_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.MeasurementValue.sample_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MeasurementValue.timestamp_added">
+<span class="sig-name descname"><span class="pre">timestamp_added</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span></em><a class="headerlink" href="#src.Models.MeasurementValue.timestamp_added" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.MeasurementValue.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.MeasurementValue.value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Models.Organization">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">Organization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.Organization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Model</span></code></p>
+<p>ORM model for the Organization table</p>
+<p>This table contains all the infromation about the organizations of the application.</p>
+<dl>
+<dt>Attributes:</dt><dd><p>id: unique identifier for the organization
+name: name of the organization
+street: street address of the organization
+city: city of the organization
+state: state enum of the organization
+zip: zip code of the organization
+notes: notes for the organization
+sources: list of sources used by the organization</p>
+<p>organization_code: NOT IMPLEMENTED yet But will be used to generate a unique organization code which is used to register a user to an organization on account creation</p>
+<p>user: foreign reference to user
+machine: foreign reference to machine
+log: foreign reference to log</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Organization.city">
+<span class="sig-name descname"><span class="pre">city</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Organization.city" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Organization.flocks">
+<span class="sig-name descname"><span class="pre">flocks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Models.Flock" title="src.Models.Flock"><span class="pre">src.Models.Flock</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Models.Organization.flocks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Organization.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Organization.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Organization.log">
+<span class="sig-name descname"><span class="pre">log</span></span><a class="headerlink" href="#src.Models.Organization.log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Organization.machine">
+<span class="sig-name descname"><span class="pre">machine</span></span><a class="headerlink" href="#src.Models.Organization.machine" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Organization.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Organization.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Organization.notes">
+<span class="sig-name descname"><span class="pre">notes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Organization.notes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Organization.organization_code">
+<span class="sig-name descname"><span class="pre">organization_code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Organization.organization_code" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Organization.organizationsourceflocksample">
+<span class="sig-name descname"><span class="pre">organizationsourceflocksample</span></span><a class="headerlink" href="#src.Models.Organization.organizationsourceflocksample" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Organization.sources">
+<span class="sig-name descname"><span class="pre">sources</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Models.Source" title="src.Models.Source"><span class="pre">src.Models.Source</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Models.Organization.sources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Organization.state">
+<span class="sig-name descname"><span class="pre">state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.States</span></em><a class="headerlink" href="#src.Models.Organization.state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Organization.street_address">
+<span class="sig-name descname"><span class="pre">street_address</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Organization.street_address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Organization.user">
+<span class="sig-name descname"><span class="pre">user</span></span><a class="headerlink" href="#src.Models.Organization.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Organization.zip">
+<span class="sig-name descname"><span class="pre">zip</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Organization.zip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Models.OrganizationSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">OrganizationSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.OrganizationSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Model</span></code></p>
+<p>ORM model for the OrganizationSource tabl</p>
+<p>This table is the jointable between the Organization and Source table.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>organization_id: id of the organization the source belongs to
+source_id: id of the source</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.OrganizationSource.organization_id">
+<span class="sig-name descname"><span class="pre">organization_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.OrganizationSource.organization_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.OrganizationSource.source_id">
+<span class="sig-name descname"><span class="pre">source_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.OrganizationSource.source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Models.OrganizationSource_Flock_Sample">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">OrganizationSource_Flock_Sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.OrganizationSource_Flock_Sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Model</span></code></p>
+<p>ORM model for the OrganizationSource_Flock_Sample table</p>
+<p>This table acts as a join table for the OrganizationSource, Flock, and Sample tables.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>id: unique identifier
+organization_id: id of the organization
+source_id: id of the source
+flock_id: id of the flock</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.OrganizationSource_Flock_Sample.flock">
+<span class="sig-name descname"><span class="pre">flock</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#src.Models.Flock" title="src.Models.Flock"><span class="pre">src.Models.Flock</span></a></em><a class="headerlink" href="#src.Models.OrganizationSource_Flock_Sample.flock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.OrganizationSource_Flock_Sample.flock_id">
+<span class="sig-name descname"><span class="pre">flock_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.OrganizationSource_Flock_Sample.flock_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.OrganizationSource_Flock_Sample.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.OrganizationSource_Flock_Sample.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.OrganizationSource_Flock_Sample.organization">
+<span class="sig-name descname"><span class="pre">organization</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#src.Models.Organization" title="src.Models.Organization"><span class="pre">src.Models.Organization</span></a></em><a class="headerlink" href="#src.Models.OrganizationSource_Flock_Sample.organization" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.OrganizationSource_Flock_Sample.organization_id">
+<span class="sig-name descname"><span class="pre">organization_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.OrganizationSource_Flock_Sample.organization_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.OrganizationSource_Flock_Sample.source">
+<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#src.Models.Source" title="src.Models.Source"><span class="pre">src.Models.Source</span></a></em><a class="headerlink" href="#src.Models.OrganizationSource_Flock_Sample.source" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.OrganizationSource_Flock_Sample.source_id">
+<span class="sig-name descname"><span class="pre">source_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.OrganizationSource_Flock_Sample.source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Models.Sample">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">Sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.Sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Model</span></code></p>
+<p>ORM model for the Sample table</p>
+<p>This table contains the bloodwork samples for a flock of birds.</p>
+<dl>
+<dt>Attributes:</dt><dd><p>id: unique identifier for the sample
+timestamp_added: timestamp of the sample
+comments: comments for the sample
+entered_by_id: user who entered the sample
+batch_id: NOT IMPLEMENTED batch the sample belongs to
+flock_age: age of the flock the sample belongs to
+flock_age_unit: unit of the flock age
+flagged: boolean value for if the sample is flagged for review
+deleted: boolean value for if the sample is deleted
+validation_status: validation status of the sample
+sample_type: type of the sample</p>
+<p>measurement_values: list of measurement values for the sample</p>
+<p>organizationsource_flock_sample_id: join table for the sample and organization, with it’s sample and flock</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.Batch">
+<span class="sig-name descname"><span class="pre">Batch</span></span><a class="headerlink" href="#src.Models.Sample.Batch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.User">
+<span class="sig-name descname"><span class="pre">User</span></span><a class="headerlink" href="#src.Models.Sample.User" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.batch_id">
+<span class="sig-name descname"><span class="pre">batch_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Sample.batch_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.comments">
+<span class="sig-name descname"><span class="pre">comments</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Sample.comments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.deleted">
+<span class="sig-name descname"><span class="pre">deleted</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#src.Models.Sample.deleted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.entered_by_id">
+<span class="sig-name descname"><span class="pre">entered_by_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Sample.entered_by_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.flagged">
+<span class="sig-name descname"><span class="pre">flagged</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#src.Models.Sample.flagged" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.flock">
+<span class="sig-name descname"><span class="pre">flock</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#src.Models.Flock" title="src.Models.Flock"><span class="pre">src.Models.Flock</span></a></em><a class="headerlink" href="#src.Models.Sample.flock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.flock_age">
+<span class="sig-name descname"><span class="pre">flock_age</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Sample.flock_age" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.flock_age_unit">
+<span class="sig-name descname"><span class="pre">flock_age_unit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.AgeUnits</span></em><a class="headerlink" href="#src.Models.Sample.flock_age_unit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Sample.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.measurement_values">
+<span class="sig-name descname"><span class="pre">measurement_values</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Models.MeasurementValue" title="src.Models.MeasurementValue"><span class="pre">src.Models.MeasurementValue</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Models.Sample.measurement_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.organization">
+<span class="sig-name descname"><span class="pre">organization</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#src.Models.Organization" title="src.Models.Organization"><span class="pre">src.Models.Organization</span></a></em><a class="headerlink" href="#src.Models.Sample.organization" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.organizationsource_flock_sample">
+<span class="sig-name descname"><span class="pre">organizationsource_flock_sample</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#src.Models.OrganizationSource_Flock_Sample" title="src.Models.OrganizationSource_Flock_Sample"><span class="pre">src.Models.OrganizationSource_Flock_Sample</span></a></em><a class="headerlink" href="#src.Models.Sample.organizationsource_flock_sample" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.organizationsource_flock_sample_id">
+<span class="sig-name descname"><span class="pre">organizationsource_flock_sample_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Sample.organizationsource_flock_sample_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.sample_type">
+<span class="sig-name descname"><span class="pre">sample_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.SampleTypes</span></em><a class="headerlink" href="#src.Models.Sample.sample_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.source">
+<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#src.Models.Source" title="src.Models.Source"><span class="pre">src.Models.Source</span></a></em><a class="headerlink" href="#src.Models.Sample.source" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.timestamp_added">
+<span class="sig-name descname"><span class="pre">timestamp_added</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Sample.timestamp_added" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Sample.validation_status">
+<span class="sig-name descname"><span class="pre">validation_status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.ValidationTypes</span></em><a class="headerlink" href="#src.Models.Sample.validation_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Models.Source">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">Source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.Source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Model</span></code></p>
+<p>ORM model for the Source table</p>
+<p>This table contains the sources from which the flock data is collected.</p>
+<dl>
+<dt>Attributes:</dt><dd><p>id: unique identifier for the source
+name: name of the source
+street_address: street address of the source
+city: city of the source
+state: state enum of the source
+zip: zip code of the source</p>
+<p>organizations: list of organizations using the source</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Source.city">
+<span class="sig-name descname"><span class="pre">city</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Source.city" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Source.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Source.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Source.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Source.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Source.organizations">
+<span class="sig-name descname"><span class="pre">organizations</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Models.Organization" title="src.Models.Organization"><span class="pre">src.Models.Organization</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Models.Source.organizations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Source.state">
+<span class="sig-name descname"><span class="pre">state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.States</span></em><a class="headerlink" href="#src.Models.Source.state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Source.street_address">
+<span class="sig-name descname"><span class="pre">street_address</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.Source.street_address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.Source.zip">
+<span class="sig-name descname"><span class="pre">zip</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.Source.zip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Models.User">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">User</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Model</span></code></p>
+<p>ORM model for the User table</p>
+<p>This table contains all the information about the users of the application.</p>
+<dl>
+<dt>Attributes:</dt><dd><p>id:int unique identifier for the user.
+email: email address for the user
+password: password for the user
+role: role enum of the user
+notes: notes for the user
+organization_id: id of the organization the user belongs to</p>
+<p>sample: foreign reference to the samples the user is assigned to
+log: foreign reference to the logs the user is assigned to</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.User.email">
+<span class="sig-name descname"><span class="pre">email</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.User.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.User.first_name">
+<span class="sig-name descname"><span class="pre">first_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.User.first_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.User.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Models.User.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.User.last_name">
+<span class="sig-name descname"><span class="pre">last_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.User.last_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.User.log">
+<span class="sig-name descname"><span class="pre">log</span></span><a class="headerlink" href="#src.Models.User.log" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.User.notes">
+<span class="sig-name descname"><span class="pre">notes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.User.notes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.User.organization_id">
+<span class="sig-name descname"><span class="pre">organization_id</span></span><a class="headerlink" href="#src.Models.User.organization_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.User.password">
+<span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#src.Models.User.password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.User.phone_number">
+<span class="sig-name descname"><span class="pre">phone_number</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Models.User.phone_number" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.User.role">
+<span class="sig-name descname"><span class="pre">role</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.Roles</span></em><a class="headerlink" href="#src.Models.User.role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Models.User.sample">
+<span class="sig-name descname"><span class="pre">sample</span></span><a class="headerlink" href="#src.Models.User.sample" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.Models.createLog">
+<span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">createLog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logContent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.createLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates a log entry.</p>
+<p>It takes the current user, the action that was performed, and the content of the action.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>current_user: The user who did the action
+action: The action that was performed
+logContent: A more readable version of the action with an ID or name of the affected object</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.Models.get_flock_organization_joined">
+<span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">get_flock_organization_joined</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.get_flock_organization_joined" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.Models.get_sample_joined">
+<span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">get_sample_joined</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.get_sample_joined" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.Models.get_sample_organization_joined">
+<span class="sig-prename descclassname"><span class="pre">src.Models.</span></span><span class="sig-name descname"><span class="pre">get_sample_organization_joined</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Models.get_sample_organization_joined" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">PBR</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, AANISH BHIRUD, DAVID CELEMEN, GAVIN DACIER,JEEHE HAN, AARON PENNY.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/models.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,728 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Schemas &#8212; PBR 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="schemas">
+<h1>Schemas<a class="headerlink" href="#schemas" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-src.Schemas"></span><dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Flock">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Schemas.</span></span><span class="sig-name descname"><span class="pre">Flock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.enums.Species</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">production_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.enums.ProductionTypes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gender</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.enums.BirdGenders</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">organization_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.Schemas.Source" title="src.Schemas.Source"><span class="pre">src.Schemas.Source</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">birthday</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp_added</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Schemas.Flock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Pydantic model for the Flock table set to orm_mode=True</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>id (int): The id of the flock object, set as Optional to allow for creation of new flocks without an id
+name (str): The name of the flock
+strain (str): The strain of the flock
+species (Species): The species of the flock
+gender (BirdGenders): The gender of the flock
+production_type (ProductionType): The type of use the flock is for
+organization_id (int): The id of the organization the flock is from
+source_id (int): The id of the source the flock is from
+source (Source): The source of the flock, set as Optional to allow for creation of new flocks without a source
+birthdate (str): The birthdate of the flock
+timestamp_added (datetime): The timestamp the flock was added, set as Optional to allow for creation of new flocks without a timestamp as it is set by the DB</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Flock.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#src.Schemas.Flock.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Flock.Config.orm_mode">
+<span class="sig-name descname"><span class="pre">orm_mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#src.Schemas.Flock.Config.orm_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Flock.birthday">
+<span class="sig-name descname"><span class="pre">birthday</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span></em><a class="headerlink" href="#src.Schemas.Flock.birthday" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Flock.gender">
+<span class="sig-name descname"><span class="pre">gender</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.BirdGenders</span></em><a class="headerlink" href="#src.Schemas.Flock.gender" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Flock.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Flock.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Flock.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Schemas.Flock.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Flock.organization_id">
+<span class="sig-name descname"><span class="pre">organization_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Schemas.Flock.organization_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Flock.production_type">
+<span class="sig-name descname"><span class="pre">production_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.ProductionTypes</span></em><a class="headerlink" href="#src.Schemas.Flock.production_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Flock.source">
+<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Schemas.Source" title="src.Schemas.Source"><span class="pre">src.Schemas.Source</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Flock.source" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Flock.source_id">
+<span class="sig-name descname"><span class="pre">source_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Schemas.Flock.source_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Flock.species">
+<span class="sig-name descname"><span class="pre">species</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.Species</span></em><a class="headerlink" href="#src.Schemas.Flock.species" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Flock.strain">
+<span class="sig-name descname"><span class="pre">strain</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#src.Schemas.Flock.strain" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Flock.timestamp_added">
+<span class="sig-name descname"><span class="pre">timestamp_added</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Flock.timestamp_added" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Log">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Schemas.</span></span><span class="sig-name descname"><span class="pre">Log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">role</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.enums.Roles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.enums.LogActions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logContent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logTime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">organization_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Schemas.Log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Pydantic model for the Log table set to orm_mode=True</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>id (int): The id of the log object
+role (Roles): The role of the user who made the log
+user_id (int): The id of the user who made the log
+action (LogActions): The action that was taken
+logContent (LogContent): The content of the log
+logTime (datetime): The timestamp of the log
+organization_id (int): The id of the organization the log is from</p>
+</dd>
+<dt>Note:</dt><dd><p>None of the attributes are set as Optional as they are all required for a log to be created and cannot be null</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Log.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#src.Schemas.Log.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Log.Config.orm_mode">
+<span class="sig-name descname"><span class="pre">orm_mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#src.Schemas.Log.Config.orm_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Log.action">
+<span class="sig-name descname"><span class="pre">action</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.LogActions</span></em><a class="headerlink" href="#src.Schemas.Log.action" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Log.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Schemas.Log.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Log.logContent">
+<span class="sig-name descname"><span class="pre">logContent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.Schemas.ConstrainedStrValue</span></em><a class="headerlink" href="#src.Schemas.Log.logContent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Log.logTime">
+<span class="sig-name descname"><span class="pre">logTime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime.datetime</span></em><a class="headerlink" href="#src.Schemas.Log.logTime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Log.organization_id">
+<span class="sig-name descname"><span class="pre">organization_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Schemas.Log.organization_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Log.role">
+<span class="sig-name descname"><span class="pre">role</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.Roles</span></em><a class="headerlink" href="#src.Schemas.Log.role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Log.user_id">
+<span class="sig-name descname"><span class="pre">user_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Schemas.Log.user_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Machine">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Schemas.</span></span><span class="sig-name descname"><span class="pre">Machine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">serial_number</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">machinetype_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">machinetype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.Schemas.Machinetype" title="src.Schemas.Machinetype"><span class="pre">src.Schemas.Machinetype</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">organization_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Schemas.Measurement" title="src.Schemas.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Schemas.Machine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Pydantic model for the Machine table set to orm_mode=True</p>
+<dl>
+<dt>Attributes:</dt><dd><p>id (int): The id of the machine object, set as Optional to allow for creation of new machines without an id
+serial_number (str): The serial number of the machine</p>
+<p>machinetype_id (int): The id of the machinetype of the machine
+machinetype (Machinetype): The machinetype of the machine, set as Optional to allow for creation of new machines without an enitre machinetype
+organization_id (int): The id of the organization of the machine
+measurements (List[Measurement]): The measurements of the machine, set as Optional to allow for creation of new machines without measurements</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Machine.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#src.Schemas.Machine.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Machine.Config.orm_mode">
+<span class="sig-name descname"><span class="pre">orm_mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#src.Schemas.Machine.Config.orm_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Machine.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Machine.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Machine.machinetype">
+<span class="sig-name descname"><span class="pre">machinetype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Schemas.Machinetype" title="src.Schemas.Machinetype"><span class="pre">src.Schemas.Machinetype</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Machine.machinetype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Machine.machinetype_id">
+<span class="sig-name descname"><span class="pre">machinetype_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Schemas.Machine.machinetype_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Machine.measurements">
+<span class="sig-name descname"><span class="pre">measurements</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Schemas.Measurement" title="src.Schemas.Measurement"><span class="pre">src.Schemas.Measurement</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Machine.measurements" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Machine.organization_id">
+<span class="sig-name descname"><span class="pre">organization_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Schemas.Machine.organization_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Machine.serial_number">
+<span class="sig-name descname"><span class="pre">serial_number</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.Schemas.ConstrainedStrValue</span></em><a class="headerlink" href="#src.Schemas.Machine.serial_number" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Machinetype">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Schemas.</span></span><span class="sig-name descname"><span class="pre">Machinetype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Schemas.Machinetype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Pydantic model for the Machinetype table set to orm_mode=True</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>id (int): The id of the machinetype, set as Optional to allow for creation of new machinetypes without an id
+name (str): The name of the machinetype</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Machinetype.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#src.Schemas.Machinetype.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Machinetype.Config.orm_mode">
+<span class="sig-name descname"><span class="pre">orm_mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#src.Schemas.Machinetype.Config.orm_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Machinetype.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Machinetype.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Machinetype.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.Schemas.ConstrainedStrValue</span></em><a class="headerlink" href="#src.Schemas.Machinetype.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Measurement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Schemas.</span></span><span class="sig-name descname"><span class="pre">Measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">machine_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurementtype_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurementtype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.Schemas.MeasurementType" title="src.Schemas.MeasurementType"><span class="pre">src.Schemas.MeasurementType</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Schemas.Measurement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Pydantic model for the Measurement table set to orm_mode=True</p>
+<dl>
+<dt>Attributes:</dt><dd><p>id (int): The id of the measurement object, set as Optional to allow for creation of new measurements without an id
+machine_id (int): The id of the machine of the measurement, set as Optional to allow for creation of new measurements without a machine
+measurement_type_id (int): The id of the measurementtype of the measurement, set as Optional to allow for creation of new measurements without a measurementtype
+measurement_type (MeasurementType): The measurementtype of the measurement, set as Optional to allow for creation of new measurements without an enitre measurementtype</p>
+<p>A machine attribute was omitted as it caused an infinitely recursive loop</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Measurement.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#src.Schemas.Measurement.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Measurement.Config.orm_mode">
+<span class="sig-name descname"><span class="pre">orm_mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#src.Schemas.Measurement.Config.orm_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Measurement.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Measurement.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Measurement.machine_id">
+<span class="sig-name descname"><span class="pre">machine_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Measurement.machine_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Measurement.measurementtype">
+<span class="sig-name descname"><span class="pre">measurementtype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Schemas.MeasurementType" title="src.Schemas.MeasurementType"><span class="pre">src.Schemas.MeasurementType</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Measurement.measurementtype" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Measurement.measurementtype_id">
+<span class="sig-name descname"><span class="pre">measurementtype_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Measurement.measurementtype_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Schemas.</span></span><span class="sig-name descname"><span class="pre">MeasurementType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">abbreviation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">general</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Schemas.MeasurementType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Pydantic model for the MeasurementType table set to orm_mode=True</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>id (int): The id of the measurementtype object, set as Optional to allow for creation of new measurementtypes without an id
+name (str): The name of the measurementtype
+abbreviation (str): The abbreviation of the measurementtype
+units (str): The unit of the measurementtype
+required (bool): Whether the measurementtype is required or not
+general (bool): ???</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementType.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#src.Schemas.MeasurementType.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementType.Config.orm_mode">
+<span class="sig-name descname"><span class="pre">orm_mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#src.Schemas.MeasurementType.Config.orm_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementType.abbreviation">
+<span class="sig-name descname"><span class="pre">abbreviation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.Schemas.ConstrainedStrValue</span></em><a class="headerlink" href="#src.Schemas.MeasurementType.abbreviation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementType.general">
+<span class="sig-name descname"><span class="pre">general</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#src.Schemas.MeasurementType.general" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementType.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.MeasurementType.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementType.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.Schemas.ConstrainedStrValue</span></em><a class="headerlink" href="#src.Schemas.MeasurementType.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementType.required">
+<span class="sig-name descname"><span class="pre">required</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#src.Schemas.MeasurementType.required" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementType.units">
+<span class="sig-name descname"><span class="pre">units</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.Schemas.ConstrainedStrValue</span></em><a class="headerlink" href="#src.Schemas.MeasurementType.units" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementValue">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Schemas.</span></span><span class="sig-name descname"><span class="pre">MeasurementValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.Schemas.Measurement" title="src.Schemas.Measurement"><span class="pre">src.Schemas.Measurement</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp_added</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Schemas.MeasurementValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Pydantic model for the MeasurementValue table set to orm_mode=True</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>id (int): The id of the measurementvalue object, set as Optional to allow for creation of new measurementvalues without an id
+measurement_id (int): The id of the measurement of the measurementvalue, set as Optional to allow for creation of new measurementvalues without a measurement
+measurement (Measurement): The measurement of the measurementvalue, set as Optional to allow for creation of new measurementvalues without an enitre measurement
+sample_id (int): The id of the sample of the measurementvalue
+value (float): The value of the measurementvalue
+timestamp_added (datetime): The timestamp of when the measurementvalue was added, set as Optional as that is set by the database</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementValue.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#src.Schemas.MeasurementValue.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementValue.Config.orm_mode">
+<span class="sig-name descname"><span class="pre">orm_mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#src.Schemas.MeasurementValue.Config.orm_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementValue.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.MeasurementValue.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementValue.measurement">
+<span class="sig-name descname"><span class="pre">measurement</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Schemas.Measurement" title="src.Schemas.Measurement"><span class="pre">src.Schemas.Measurement</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.MeasurementValue.measurement" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementValue.measurement_id">
+<span class="sig-name descname"><span class="pre">measurement_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Schemas.MeasurementValue.measurement_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementValue.sample_id">
+<span class="sig-name descname"><span class="pre">sample_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Schemas.MeasurementValue.sample_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementValue.timestamp_added">
+<span class="sig-name descname"><span class="pre">timestamp_added</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.MeasurementValue.timestamp_added" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.MeasurementValue.value">
+<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#src.Schemas.MeasurementValue.value" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Organization">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Schemas.</span></span><span class="sig-name descname"><span class="pre">Organization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">street_address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">city</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.enums.States</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">organization_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Schemas.Source" title="src.Schemas.Source"><span class="pre">src.Schemas.Source</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Schemas.Organization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Pydantic model for the Organization table set to orm_mode=True</p>
+<dl>
+<dt>Attributes:</dt><dd><p>id (int): The id of the organization object, set as Optional to allow for creation of new organizations without an id
+name (str): The name of the organization
+street_address (str): The street address of the organization
+city (str): The city of the organization
+state (States): The state of the organization
+zip (str): The zip code of the organization
+notes (str): The notes on the organization
+organization_code (str): NOT IMPLEMENTED The organization code of the organization, set as Optional to allow for creation of new organizations without an organization code</p>
+<p>sources (List[Source]): The sources of the organization, set as Optional to allow for creation of new organizations without sources</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Organization.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#src.Schemas.Organization.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Organization.Config.orm_mode">
+<span class="sig-name descname"><span class="pre">orm_mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#src.Schemas.Organization.Config.orm_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Organization.city">
+<span class="sig-name descname"><span class="pre">city</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.Schemas.ConstrainedStrValue</span></em><a class="headerlink" href="#src.Schemas.Organization.city" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Organization.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Organization.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Organization.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.Schemas.ConstrainedStrValue</span></em><a class="headerlink" href="#src.Schemas.Organization.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Organization.notes">
+<span class="sig-name descname"><span class="pre">notes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">src.Schemas.ConstrainedStrValue</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Organization.notes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Organization.organization_code">
+<span class="sig-name descname"><span class="pre">organization_code</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">src.Schemas.ConstrainedStrValue</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Organization.organization_code" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Organization.sources">
+<span class="sig-name descname"><span class="pre">sources</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Schemas.Source" title="src.Schemas.Source"><span class="pre">src.Schemas.Source</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Organization.sources" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Organization.state">
+<span class="sig-name descname"><span class="pre">state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.States</span></em><a class="headerlink" href="#src.Schemas.Organization.state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Organization.street_address">
+<span class="sig-name descname"><span class="pre">street_address</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.Schemas.ConstrainedStrValue</span></em><a class="headerlink" href="#src.Schemas.Organization.street_address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Organization.zip">
+<span class="sig-name descname"><span class="pre">zip</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.Schemas.ConstrainedStrValue</span></em><a class="headerlink" href="#src.Schemas.Organization.zip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Sample">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Schemas.</span></span><span class="sig-name descname"><span class="pre">Sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flock_age</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flock_age_unit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.enums.AgeUnits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flock</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.Schemas.Flock" title="src.Schemas.Flock"><span class="pre">src.Schemas.Flock</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flagged</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">comments</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measurement_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Schemas.MeasurementValue" title="src.Schemas.MeasurementValue"><span class="pre">src.Schemas.MeasurementValue</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_status</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.enums.ValidationTypes</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.enums.SampleTypes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entered_by_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp_added</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime.datetime</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">organization</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#src.Schemas.Organization" title="src.Schemas.Organization"><span class="pre">src.Schemas.Organization</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Schemas.Sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Pydantic model for the Sample table set to orm_mode=True</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>id (int): The id of the sample object, set as Optional to allow for creation of new samples without an id
+flock_age (int): The age of the flock at the time of the sample
+flock_age_unit (AgeUnits): The unit of the flock age
+flock (Flock): The flock the sample is from, set as Optional to allow for creation of new samples without a flock
+flagged (bool): Whether the sample is flagged for review or not
+comments (str): The comments on the sample, set as Optional to allow for creation of new samples without comments
+measurement_values (List[MeasurementValue]): The values of the measurements of the sample, set as Optional to allow for creation of new samples without measurements
+timestamp_added (datetime): The timestamp the sample was added, set as Optional to allow for creation of new samples without a timestamp as it is set by the DB
+validation_status (ValidationStatus): The status of the sample, set as Optional to allow for creation of new samples without a validation status
+sample_type (SampleTypes): The type of the sample, set as Optional to allow for creation of new samples without a sample type
+entered_by_id (int): The id of the user who entered the sample, set as Optional to allow for creation of new samples without an entered by id as it is set by the helper function
+organization (Organization): The organization the sample is from, set as Optional to allow for creation of new samples without an organization</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Sample.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#src.Schemas.Sample.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Sample.Config.orm_mode">
+<span class="sig-name descname"><span class="pre">orm_mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#src.Schemas.Sample.Config.orm_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Sample.comments">
+<span class="sig-name descname"><span class="pre">comments</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Sample.comments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Sample.entered_by_id">
+<span class="sig-name descname"><span class="pre">entered_by_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Sample.entered_by_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Sample.flagged">
+<span class="sig-name descname"><span class="pre">flagged</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#src.Schemas.Sample.flagged" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Sample.flock">
+<span class="sig-name descname"><span class="pre">flock</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Schemas.Flock" title="src.Schemas.Flock"><span class="pre">src.Schemas.Flock</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Sample.flock" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Sample.flock_age">
+<span class="sig-name descname"><span class="pre">flock_age</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#src.Schemas.Sample.flock_age" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Sample.flock_age_unit">
+<span class="sig-name descname"><span class="pre">flock_age_unit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.AgeUnits</span></em><a class="headerlink" href="#src.Schemas.Sample.flock_age_unit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Sample.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Sample.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Sample.measurement_values">
+<span class="sig-name descname"><span class="pre">measurement_values</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Schemas.MeasurementValue" title="src.Schemas.MeasurementValue"><span class="pre">src.Schemas.MeasurementValue</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Sample.measurement_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Sample.organization">
+<span class="sig-name descname"><span class="pre">organization</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#src.Schemas.Organization" title="src.Schemas.Organization"><span class="pre">src.Schemas.Organization</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Sample.organization" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Sample.sample_type">
+<span class="sig-name descname"><span class="pre">sample_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.SampleTypes</span></em><a class="headerlink" href="#src.Schemas.Sample.sample_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Sample.timestamp_added">
+<span class="sig-name descname"><span class="pre">timestamp_added</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime.datetime</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Sample.timestamp_added" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Sample.validation_status">
+<span class="sig-name descname"><span class="pre">validation_status</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">src.enums.ValidationTypes</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Sample.validation_status" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Source">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Schemas.</span></span><span class="sig-name descname"><span class="pre">Source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">street_address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">city</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.enums.States</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">src.Schemas.ConstrainedStrValue</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Schemas.Source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pydantic.main.BaseModel</span></code></p>
+<p>Pydantic model for the Source table set to orm_mode=True</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>id (int): The id of the source object, set as Optional to allow for creation of new sources without an id
+name (str): The name of the source
+street_address (str): The street address of the source
+city (str): The city of the source
+state (States): The state of the source
+zip (str): The zip code of the source</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="src.Schemas.Source.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#src.Schemas.Source.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Source.Config.orm_mode">
+<span class="sig-name descname"><span class="pre">orm_mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#src.Schemas.Source.Config.orm_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Source.city">
+<span class="sig-name descname"><span class="pre">city</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.Schemas.ConstrainedStrValue</span></em><a class="headerlink" href="#src.Schemas.Source.city" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Source.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#src.Schemas.Source.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Source.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.Schemas.ConstrainedStrValue</span></em><a class="headerlink" href="#src.Schemas.Source.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Source.state">
+<span class="sig-name descname"><span class="pre">state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.enums.States</span></em><a class="headerlink" href="#src.Schemas.Source.state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Source.street_address">
+<span class="sig-name descname"><span class="pre">street_address</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.Schemas.ConstrainedStrValue</span></em><a class="headerlink" href="#src.Schemas.Source.street_address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="src.Schemas.Source.zip">
+<span class="sig-name descname"><span class="pre">zip</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">src.Schemas.ConstrainedStrValue</span></em><a class="headerlink" href="#src.Schemas.Source.zip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">PBR</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, AANISH BHIRUD, DAVID CELEMEN, GAVIN DACIER,JEEHE HAN, AARON PENNY.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/schemas.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

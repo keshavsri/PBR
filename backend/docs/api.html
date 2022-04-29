@@ -1,0 +1,853 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>API &#8212; PBR 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-src.api">
+<span id="api"></span><h1>API<a class="headerlink" href="#module-src.api" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.home">
+<span class="sig-prename descclassname"><span class="pre">src.api.</span></span><span class="sig-name descname"><span class="pre">home</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.api.home" title="Permalink to this definition">¶</a></dt>
+<dd><p>Home page for the API Just a endpoint to test if the API is working</p>
+</dd></dl>
+
+<span class="target" id="module-src.api.APIDataController"></span><dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIDataController.check_allowed_filetype">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIDataController.</span></span><span class="sig-name descname"><span class="pre">check_allowed_filetype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIDataController.check_allowed_filetype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if the filetype is allowed
+:param filename: The filename to check
+:return: True if the filetype is allowed, False otherwise</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIDataController.create_batch_data">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIDataController.</span></span><span class="sig-name descname"><span class="pre">create_batch_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIDataController.create_batch_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>NOT IMPLEMENTED YET.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIDataController.create_sample">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIDataController.</span></span><span class="sig-name descname"><span class="pre">create_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIDataController.create_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new sample, from a given sample json and returns the newly created sample.
+:param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+:param current_user: The user who is currently logged in. Check the decorator for more info.
+:param request.json: The sample json to create the sample from.
+:return: The newly created sample.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIDataController.delete_batch">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIDataController.</span></span><span class="sig-name descname"><span class="pre">delete_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIDataController.delete_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>NOT IMPLEMENTED YET.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIDataController.delete_sample">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIDataController.</span></span><span class="sig-name descname"><span class="pre">delete_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIDataController.delete_sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes specified sample.
+:param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+:param current_user: The user who is currently logged in. Check the decorator for more info.
+:param item_id: The id of the sample to delete.
+:return: The deleted sample.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIDataController.edit_batch">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIDataController.</span></span><span class="sig-name descname"><span class="pre">edit_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIDataController.edit_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>NOT IMPLEMENTED YET.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIDataController.edit_datapoint">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIDataController.</span></span><span class="sig-name descname"><span class="pre">edit_datapoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIDataController.edit_datapoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Edits existing sample.
+:param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+:param current_user: The user who is currently logged in. Check the decorator for more info.
+:param item_id: The id of the sample to edit.
+:param request.json: The updated sample as a json object.
+:return: The edited sample.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIDataController.get_batch">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIDataController.</span></span><span class="sig-name descname"><span class="pre">get_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIDataController.get_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>NOT IMPLEMENTED YET.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIDataController.get_batches">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIDataController.</span></span><span class="sig-name descname"><span class="pre">get_batches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIDataController.get_batches" title="Permalink to this definition">¶</a></dt>
+<dd><p>NOT IMPLEMENTED YET.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIDataController.get_samples">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIDataController.</span></span><span class="sig-name descname"><span class="pre">get_samples</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">given_org_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIDataController.get_samples" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves all available samples for a given organization if provided.
+:param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+:param current_user: The user who is currently logged in. Check the decorator for more info.
+:param given_org_id: The organization id to get samples for, if provided, else all samples for the current user.
+:return: The list of samples.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIDataController.parse_data_from_file">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIDataController.</span></span><span class="sig-name descname"><span class="pre">parse_data_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIDataController.parse_data_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the data from a given machine output file and returns the data in a JSON format
+:param file: The file to parse from the POST request
+:return: JSON data of the parsed machine output file</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIDataController.parse_machine_data">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIDataController.</span></span><span class="sig-name descname"><span class="pre">parse_machine_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIDataController.parse_machine_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the data from a given machine output file and returns the data in a JSON format
+:param file: The file to parse from the POST request
+:return: JSON data of the parsed machine output file</p>
+</dd></dl>
+
+<span class="target" id="module-src.api.APIFlockController"></span><dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIFlockController.delete_flock">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIFlockController.</span></span><span class="sig-name descname"><span class="pre">delete_flock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIFlockController.delete_flock" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles the DELETE request for deleting a specific flock.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+<li><p><strong>item_id</strong> – The id of the flock that the user wants to delete.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The deleted flock if it exists, a 404 not found otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIFlockController.get_flock">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIFlockController.</span></span><span class="sig-name descname"><span class="pre">get_flock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIFlockController.get_flock" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles the GET request for a specific flock.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+<li><p><strong>item_id</strong> – The id of the flock that the user wants to get.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A specific flock if it exists, a 404 not found otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIFlockController.get_flocks">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIFlockController.</span></span><span class="sig-name descname"><span class="pre">get_flocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">given_org_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIFlockController.get_flocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles the GET request for all Flocks or flocks belonging to a specific organization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+<li><p><strong>given_org_id</strong> – The organization id of the organization that the user wants to get the flocks of.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of all Flocks or a list of all Flocks belonging to a specific organization depending on the request.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIFlockController.get_strains">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIFlockController.</span></span><span class="sig-name descname"><span class="pre">get_strains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">species</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIFlockController.get_strains" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles the GET request for getting all the strains of a specific species.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>species</strong> – The species of the strain that the user wants to get.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The strains of the species if it exists, a 404 not found otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIFlockController.invalid_method">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIFlockController.</span></span><span class="sig-name descname"><span class="pre">invalid_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIFlockController.invalid_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles an invalid method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item_id</strong> – accepts an id if the user tries to pass one.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A message saying that the method is invalid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIFlockController.post_flock">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIFlockController.</span></span><span class="sig-name descname"><span class="pre">post_flock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIFlockController.post_flock" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles the POST request for creating a new flock.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+<li><p><strong>request.json</strong> – The json data that the user wants to create a new flock with.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A new flock if the request is valid, a 400 bad request otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIFlockController.put_flock">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIFlockController.</span></span><span class="sig-name descname"><span class="pre">put_flock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIFlockController.put_flock" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles the PUT request for updating a specific flock.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+<li><p><strong>item_id</strong> – The id of the flock that the user wants to update.</p></li>
+<li><p><strong>request.json</strong> – The json data that the user wants to update the flock with.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A specific flock if it exists, a 404 not found otherwise.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-src.api.APILogController"></span><dl class="py function">
+<dt class="sig sig-object py" id="src.api.APILogController.handleLog">
+<span class="sig-prename descclassname"><span class="pre">src.api.APILogController.</span></span><span class="sig-name descname"><span class="pre">handleLog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APILogController.handleLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles the GET request for the logs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>current_user</strong> – The user who made the request.</p></li>
+<li><p><strong>item_id</strong> – The id of the log to get.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A JSON object containing the logs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-src.api.APIMachineController"></span><dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMachineController.create_machine">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMachineController.</span></span><span class="sig-name descname"><span class="pre">create_machine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMachineController.create_machine" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles POST requests for creating a machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+<li><p><strong>request.json</strong> – The json data from which to create the machine.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The machine that was created.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMachineController.create_machine_type">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMachineController.</span></span><span class="sig-name descname"><span class="pre">create_machine_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMachineController.create_machine_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles POST requests for creating a machine type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+<li><p><strong>request.json</strong> – The json that will be used to create the machine type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The machine type that was created.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMachineController.delete_machine">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMachineController.</span></span><span class="sig-name descname"><span class="pre">delete_machine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMachineController.delete_machine" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles DELETE requests for deleting a machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+<li><p><strong>item_id</strong> – The id of the machine to delete.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The machine that was deleted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMachineController.delete_machine_type">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMachineController.</span></span><span class="sig-name descname"><span class="pre">delete_machine_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMachineController.delete_machine_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles DELETE requests for deleting a machine type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+<li><p><strong>item_id</strong> – The id of the machine type to delete.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The machine type that was deleted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMachineController.edit_machine">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMachineController.</span></span><span class="sig-name descname"><span class="pre">edit_machine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMachineController.edit_machine" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles PUT requests for editing a machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+<li><p><strong>item_id</strong> – The id of the machine to edit.</p></li>
+<li><p><strong>request.json</strong> – The json data from which to edit the machine.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The machine that was edited.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMachineController.edit_machine_type">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMachineController.</span></span><span class="sig-name descname"><span class="pre">edit_machine_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMachineController.edit_machine_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles PUT requests for editing a machine type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+<li><p><strong>item_id</strong> – The id of the machine type to edit.</p></li>
+<li><p><strong>request.json</strong> – The json that will be used to edit the machine type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The machine type that was edited.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMachineController.get_machine">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMachineController.</span></span><span class="sig-name descname"><span class="pre">get_machine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMachineController.get_machine" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles GET requests for a single machine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+<li><p><strong>item_id</strong> – The id of the machine to get.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A single machine if it exists in the database.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMachineController.get_machine_type">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMachineController.</span></span><span class="sig-name descname"><span class="pre">get_machine_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMachineController.get_machine_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles GET requests for getting a machine type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+<li><p><strong>item_id</strong> – The id of the machine type to get.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The machine type that was requested.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMachineController.get_machine_types">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMachineController.</span></span><span class="sig-name descname"><span class="pre">get_machine_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMachineController.get_machine_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles GET requests for getting all machine types.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of all machine types.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMachineController.get_machines">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMachineController.</span></span><span class="sig-name descname"><span class="pre">get_machines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">given_org_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMachineController.get_machines" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function handles GET requests for all machines or all machines in a given organization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – True if user has access, False otherwise Check the decorator for more info.</p></li>
+<li><p><strong>current_user</strong> – The user who is currently logged in. Check the decorator for more info.</p></li>
+<li><p><strong>given_org_id</strong> – The organization id of the organization to get all machines from if given.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of all machines in the database if no organization id is given.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-src.api.APIMeasurementController"></span><dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMeasurementController.create_measurement">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMeasurementController.</span></span><span class="sig-name descname"><span class="pre">create_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMeasurementController.create_measurement" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates a Measurement in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – boolean, whether the user has access to the endpoint</p></li>
+<li><p><strong>current_user</strong> – the user object of the user making the request</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a json response containing the created Measurement</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMeasurementController.create_measurement_type">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMeasurementController.</span></span><span class="sig-name descname"><span class="pre">create_measurement_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMeasurementController.create_measurement_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function creates a Measurement Type in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – boolean, whether the user has access to the endpoint</p></li>
+<li><p><strong>current_user</strong> – the user object of the user making the request</p></li>
+<li><p><strong>request.json</strong> – the json object used to create the Measurement Type</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a json response containing the created Measurement Type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMeasurementController.delete_measurement">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMeasurementController.</span></span><span class="sig-name descname"><span class="pre">delete_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMeasurementController.delete_measurement" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function deletes a Measurement from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – boolean, whether the user has access to the endpoint</p></li>
+<li><p><strong>current_user</strong> – the user object of the user making the request</p></li>
+<li><p><strong>item_id</strong> – the id of the Measurement to be deleted</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a json response containing the deleted Measurement</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMeasurementController.delete_measurement_type">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMeasurementController.</span></span><span class="sig-name descname"><span class="pre">delete_measurement_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMeasurementController.delete_measurement_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function deletes a Measurement Type from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – boolean, whether the user has access to the endpoint</p></li>
+<li><p><strong>current_user</strong> – the user object of the user making the request</p></li>
+<li><p><strong>item_id</strong> – the id of the Measurement Type to be deleted</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a json response containing the deleted Measurement Type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMeasurementController.get_measurement">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMeasurementController.</span></span><span class="sig-name descname"><span class="pre">get_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMeasurementController.get_measurement" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function gets a Measurement from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – boolean, whether the user has access to the endpoint</p></li>
+<li><p><strong>current_user</strong> – the user object of the user making the request</p></li>
+<li><p><strong>item_id</strong> – the id of the Measurement to be retrieved</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a json response containing the retrieved Measurement</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMeasurementController.get_measurement_type">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMeasurementController.</span></span><span class="sig-name descname"><span class="pre">get_measurement_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMeasurementController.get_measurement_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns a Measurement Type in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – boolean, whether the user has access to the endpoint</p></li>
+<li><p><strong>current_user</strong> – the user object of the user making the request</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a json response containing a Measurement Type in the database</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMeasurementController.get_measurement_types">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMeasurementController.</span></span><span class="sig-name descname"><span class="pre">get_measurement_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMeasurementController.get_measurement_types" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns all Measurement Types in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – boolean, whether the user has access to the endpoint</p></li>
+<li><p><strong>current_user</strong> – the user object of the user making the request</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a json response containing all Measurement Types in the database</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMeasurementController.get_measurements">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMeasurementController.</span></span><span class="sig-name descname"><span class="pre">get_measurements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMeasurementController.get_measurements" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function gets all Measurements from the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – boolean, whether the user has access to the endpoint</p></li>
+<li><p><strong>current_user</strong> – the user object of the user making the request</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a json response containing all Measurements</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMeasurementController.update_measurement">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMeasurementController.</span></span><span class="sig-name descname"><span class="pre">update_measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMeasurementController.update_measurement" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function updates a Measurement in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – boolean, whether the user has access to the endpoint</p></li>
+<li><p><strong>current_user</strong> – the user object of the user making the request</p></li>
+<li><p><strong>item_id</strong> – the id of the Measurement to be updated</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a json response containing the updated Measurement</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIMeasurementController.update_measurement_type">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIMeasurementController.</span></span><span class="sig-name descname"><span class="pre">update_measurement_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIMeasurementController.update_measurement_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function updates a Measurement Type in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – boolean, whether the user has access to the endpoint</p></li>
+<li><p><strong>current_user</strong> – the user object of the user making the request</p></li>
+<li><p><strong>item_id</strong> – the id of the Measurement Type to be updated</p></li>
+<li><p><strong>request.json</strong> – the json object used to update the Measurement Type</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a json response containing the updated Measurement Type</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-src.api.APIOrganizationController"></span><dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIOrganizationController.deleteSource">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIOrganizationController.</span></span><span class="sig-name descname"><span class="pre">deleteSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIOrganizationController.deleteSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a source from an organization</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – boolean, whether the user has access to the route</p></li>
+<li><p><strong>current_user</strong> – the user object of the user making the request</p></li>
+<li><p><strong>item_id</strong> – the id of the organization to delete the source from</p></li>
+<li><p><strong>source_id</strong> – the id of the source to delete</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a json response with the source deleted</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIOrganizationController.get_organization">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIOrganizationController.</span></span><span class="sig-name descname"><span class="pre">get_organization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIOrganizationController.get_organization" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will return the organization with the id that is passed in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – This is the access_allowed variable that is passed in from the token_required function.</p></li>
+<li><p><strong>current_user</strong> – This is the current_user variable that is passed in from the token_required function.</p></li>
+<li><p><strong>item_id</strong> – This is the id of the organization that is passed in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>This function will return the organization with the id that is passed in.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIOrganizationController.get_organizations">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIOrganizationController.</span></span><span class="sig-name descname"><span class="pre">get_organizations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIOrganizationController.get_organizations" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will return all the organizations in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – This is the access_allowed variable that is passed in from the token_required function.</p></li>
+<li><p><strong>current_user</strong> – This is the current_user variable that is passed in from the token_required function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>This function will return all the organizations in the database.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIOrganizationController.invalid_method">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIOrganizationController.</span></span><span class="sig-name descname"><span class="pre">invalid_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIOrganizationController.invalid_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invalid method handler</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>item_id</strong> – accepts an item id if the method is called with an id</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a json response with the message that the method is not allowed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIOrganizationController.post_organization">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIOrganizationController.</span></span><span class="sig-name descname"><span class="pre">post_organization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIOrganizationController.post_organization" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will create a new organization in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – This is the access_allowed variable that is passed in from the token_required function.</p></li>
+<li><p><strong>current_user</strong> – This is the current_user variable that is passed in from the token_required function.</p></li>
+<li><p><strong>request.json</strong> – This is the json that is used to create the new organization.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>This function will create a new organization in the database.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIOrganizationController.put_organization">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIOrganizationController.</span></span><span class="sig-name descname"><span class="pre">put_organization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_allowed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIOrganizationController.put_organization" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function will update an existing organization in the database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>access_allowed</strong> – This is the access_allowed variable that is passed in from the token_required function.</p></li>
+<li><p><strong>current_user</strong> – This is the current_user variable that is passed in from the token_required function.</p></li>
+<li><p><strong>item_id</strong> – This is the id of the organization that is passed in.</p></li>
+<li><p><strong>request.json</strong> – This is the json that is used to update the organization.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>This function will update an existing organization in the database.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-src.api.APIUserController"></span><dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIUserController.allowed_roles">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIUserController.</span></span><span class="sig-name descname"><span class="pre">allowed_roles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">roles</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIUserController.allowed_roles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Accepts a list of roles and returns true to the decorated function if the user has one of those roles, false otherwise</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>roles:List</strong><strong>[</strong><strong>int</strong><strong>]</strong> – the list of roles that are allowed to access the route</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>bool: true if the user has one of the roles, false otherwise</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIUserController.login">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIUserController.</span></span><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIUserController.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Logs the current user in, getting email and password from payload
+If user doesn’t exist, if fields are missing/invalid, incorrect password, return 401</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIUserController.logout">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIUserController.</span></span><span class="sig-name descname"><span class="pre">logout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIUserController.logout" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIUserController.me">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIUserController.</span></span><span class="sig-name descname"><span class="pre">me</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">current_user</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIUserController.me" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIUserController.register">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIUserController.</span></span><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIUserController.register" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIUserController.route_setting_all">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIUserController.</span></span><span class="sig-name descname"><span class="pre">route_setting_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIUserController.route_setting_all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="src.api.APIUserController.token_required">
+<span class="sig-prename descclassname"><span class="pre">src.api.APIUserController.</span></span><span class="sig-name descname"><span class="pre">token_required</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.api.APIUserController.token_required" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator for authenticating the user via the JWT in the request header and returning the current user to the decorated function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>User: the current user as a SQLAlchemy model</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">PBR</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, AANISH BHIRUD, DAVID CELEMEN, GAVIN DACIER,JEEHE HAN, AARON PENNY.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
