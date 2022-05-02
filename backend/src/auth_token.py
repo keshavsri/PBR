@@ -58,12 +58,12 @@ class Auth_Token:
         :returns: new token to take the place of the old one
         """
         print("Replacing token")
-        payload = decode_token(token)
+        payload = Auth_Token.decode_token(token)
         now = datetime.now(tz=timezone.utc)
         payload["iat"] = now
         payload["nbf"] = now
         payload["exp"] = now + timedelta(minutes=int(os.environ.get("JWT_TTL")))
-        invalidate_token(token)
+        Auth_Token.invalidate_token(token)
 
         return Auth_Token.__create_token_from_data(payload)
 
@@ -92,5 +92,3 @@ class Auth_Token:
         except jwt.InvalidTokenError as error:
             print(f'Invalid Token. {error}')
             raise
-
-
