@@ -196,7 +196,6 @@ export default function MainLayout(props) {
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
-  //TODO: set currentPage based on path: window.location.pathname
   const [currentPage, setCurrentPage] = React.useState(pageData[0][0]);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { user, logout, recredentialize, setRecredentialize } = AuthConsumer();
@@ -304,7 +303,7 @@ export default function MainLayout(props) {
                     return (
                       <NavLink
                         key={page.path}
-                        to={`${page.path}`}
+                        to={`/${page.path}`}
                         className={({ isActive }) =>
                           isActive ? "navbar-active" : ""
                         }
