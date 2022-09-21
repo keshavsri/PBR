@@ -176,27 +176,6 @@ export default function OrganizationView() {
   return (
     <>
       <Paper>
-        <EnhancedTable
-          headCells={headCellList}
-          rows={rowList}
-          toolbarButtons={
-            <>
-              <Tooltip title="Add Organization">
-                <Button
-                  variant="contained"
-                  //Need to create on click modal for organization
-                  startIcon={<SampleIcon />}
-                  sx={{ ml: 1 }}
-                >
-                  Add Organization
-                </Button>
-              </Tooltip>
-            </>
-          }
-          selected={selected}
-          setSelected={setSelected}
-          onDelete={onDelete}
-        ></EnhancedTable>
       </Paper>
     </>
   );
