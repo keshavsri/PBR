@@ -1,163 +1,56 @@
 import * as React from "react";
 
-import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
-
-import SampleIcon from "@mui/icons-material/Science";
-// Might need to change
-import EnhancedTable from "./DataViewTable/EnhancedTable";
-import EditIcon from "@mui/icons-material/Edit";
+import EditOrganization from "./OrganizationView/EditOrganization";
+import OrganizationDetails from "./OrganizationView/OrganizationDetails";
+import {
+  Button,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Box,
+  Typography,
+  Grid,
+  Select,
+  Card,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText
+} from '@mui/material';
+import {
+  Refresh,
+  Person,
+  Email,
+  Phone
+} from '@mui/icons-material';
 
 import { makeStyles } from "@mui/styles";
-
-const useStyles = makeStyles({});
-
-// const getSomethingAPICall = () => {
-//   fetch(`/api/sample`, {method: "GET",})
-//     .then((response) => {
-//       return response.json();
-//     }).then((data) => {
-//       console.log(data);
-//       setRowList(data.row);
-//       setHeadCellList(data.types);
-//     })
-//     addApiColumnNamesToHeadCells();
-//     console.log(headCells)
-//     denestMachineData(rows)
-//     assignRowHtml()
-//     console.log(rows)
-// console.log(headCells)
-// };
+import useAuth from "../services/useAuth";
 
 export default function OrganizationView() {
-  const [rowList, setRowList] = React.useState([]);
-  const [headCellList, setHeadCellList] = React.useState([]);
-  const [selected, setSelected] = React.useState([]);
+  const {checkResponseAuth, user} =  useAuth();
+  const [organization, setOrganization] = React.useState(null);
+  const [organizations, setOrganizations] = React.useState([]);
+  const [organizationEdit, setOrganizationEdit] = React.useState(null);
+  const [editing, setEditing] = React.useState(false);
+  const [adminContact, setAdminContact] = React.useState(null);
 
-  const assignRowHtml = (rows) => {
-    rows.map((row, index) => {
-      return (row.buttons = (
-        <>
-          <IconButton aria-label="edit" size="small">
-            <EditIcon />
-          </IconButton>
-        </>
-      ));
-    });
-  };
+  React.useEffect(() => {
+    getOrganizations();
+  }, [])
 
-  const getData = () => {
-    let apiRows = [
-      {
-        deletable: true,
-        id: 1,
-        name: "NCSU",
-        street_address: "123 Main St.",
-        city: "Raleigh",
-        state: "NC",
-        zip: "27607",
-        maincontact: {
-          id: "",
-          organization: "",
-          email: "",
-          name: "Rosio Crespo",
-          phone: "",
-          notes: "",
-        },
-        org_signup_code: "123456",
-        notes: "N/A",
-      },
-      {
-        deletable: true,
-        id: 2,
-        name: "UNC",
-        street_address: "456 Main St.",
-        city: "Chapel Hill",
-        state: "NC",
-        zip: "27607",
-        maincontact: {
-          id: "",
-          organization: "",
-          email: "",
-          name: "Other Name",
-          phone: "",
-          notes: "",
-        },
-        org_signup_code: "654321",
-        notes: "N/A",
-      },
-    ];
-    denestMachineData(apiRows);
-    assignRowHtml(apiRows);
-    setRowList(apiRows);
-  };
-
-  const getHeadCells = () => {
-    const headCells = [
-      {
-        id: "buttons",
-      },
-      {
-        id: "name",
-        numeric: false,
-        disablePadding: true,
-        label: "Name",
-      },
-      {
-        id: "street_address",
-        numeric: false,
-        disablePadding: true,
-        label: "Street Address",
-      },
-      {
-        id: "city",
-        numeric: false,
-        disablePadding: true,
-        label: "City",
-      },
-      {
-        id: "state",
-        numeric: false,
-        disablePadding: true,
-        label: "State",
-      },
-      {
-        id: "zip",
-        numeric: false,
-        disablePadding: true,
-        label: "Zip",
-      },
-      {
-        id: "maincontact.name",
-        numeric: false,
-        disablePadding: true,
-        label: "Main Contact",
-      },
-      {
-        id: "org_signup_code",
-        numeric: false,
-        disablePadding: true,
-        label: "Org Signup Code",
-      },
-      {
-        id: "notes",
-        numeric: false,
-        disablePadding: true,
-        label: "Notes",
-      },
-    ];
-
-    setHeadCellList(headCells);
-  };
-
-
-  const denestMachineData = (rows) => {
-    rows.map((row, index) => {
-      Object.entries(row.maincontact).forEach(([key, value]) => {
-        let temp = "maincontact." + key;
-        row[temp] = value;
+  const getOrganizations = async () => {
+    await fetch(`/api/organization`, { method: "GET" })
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        console.log(data);
+        setOrganizations(data);
       });
-    });
-  };
+  }
+
   const onDelete = () => {
     console.log("DELETE TEST")
 
@@ -167,37 +60,169 @@ export default function OrganizationView() {
   }
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
 
-  React.useEffect(() => {
-    getData();
-    getHeadCells();
-    console.log(rowList);
-  }, []);
+  const organizationSelected = event => {
+    console.log("org")
+    console.log(organization)
+    setOrganization(event.target.value)
+    setOrganizationEdit(event.target.value)
+  }
+
+  function OrganizationDropdown(props) {
+    return (
+      <FormControl sx={{ m: 1, minWidth: 300 }}>
+        <InputLabel id="label-select-organization">Organization</InputLabel>
+        <Select
+          labelId="label-select-organization"
+          id="select-organizations"
+          value={organization}
+          label="Organization"
+          onChange={organizationSelected}
+        >
+          {organizations.map((org) => {
+            return (
+              <MenuItem value={org}>{org.name}</MenuItem>
+            )
+          })}
+        </Select>
+      </FormControl>
+    )
+  }
+
+  function TopBar(props) {
+    return (
+      user.role == 0 ?
+      (<Card>
+        <Grid container spacing={1} sx={{p: 2, width: '100%'}}>
+          <Grid item xs={12} sm={6}>
+            <OrganizationDropdown/>
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Button variant="contained">Delete Organization</Button>
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Button variant="contained">Create New Organization</Button>
+          </Grid>
+          {organization ? null : (
+          <Grid item>
+            <Typography>Select an organization to manage.</Typography>
+          </Grid>
+          )}
+        </Grid>
+      </Card>) :
+      (<Card>
+        <Grid container spacing={1} sx={{p: 2, width: '100%'}}>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h5">{organization.name}</Typography>
+          </Grid>
+        </Grid>
+      </Card>)
+    )
+  }
+
+  function JoinCode(props) {
+    let expirationDate = new Date(2022, 8, 30, 5, 0, 0, 0);
+    let dateString = expirationDate.toDateString();
+    return (
+      <Card>
+        <Grid container rowSpacing={1} columnSpacing={1} sx={{padding: '15px'}}>
+          <Grid item sm={12}>
+            <Typography variant="h4">Organization Join Code</Typography>
+          </Grid>
+          <Grid container item columnSpacing={3}>
+            <Grid item>
+              <Typography variant="h4">{organization.organization_code}</Typography>
+            </Grid>
+            <Grid item sx={{mt: '10px'}}>
+              <Refresh/>
+            </Grid>
+            <Grid item sx={{mt: '10px'}}>
+              <Typography>{`Valid till: ${expirationDate.toDateString()}`}</Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Card>
+    )
+  }
+
+
+
+  function AdminContact(props) {
+    let adminContact = {
+      first_name: "Rocio",
+      last_name: "Crespo",
+      email: "rcrespo@gmail.com",
+      phone_number: "9199999999"
+    }
+    return (
+      <Card>
+        <Grid container spacing={1} sx={{padding: '15px'}}>
+          <Grid item sm={12}>
+            <Typography variant="h4">Admin Contact</Typography>
+          </Grid>
+          <Grid item>
+            <List>
+              <ListItem>
+                <ListItemIcon>
+                  <Person/>
+                </ListItemIcon>
+                <ListItemText primary={`${adminContact.first_name} ${adminContact.last_name}`}/>
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <Email/>
+                </ListItemIcon>
+                <ListItemText primary={adminContact.email}/>
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <Phone/>
+                </ListItemIcon>
+                <ListItemText primary={adminContact.phone_number}/>
+              </ListItem>
+            </List>
+          </Grid>
+        </Grid>
+
+      </Card>
+    )
+  }
+
 
   return (
     <>
-      <Paper>
-        <EnhancedTable
-          headCells={headCellList}
-          rows={rowList}
-          toolbarButtons={
-            <>
-              <Tooltip title="Add Organization">
-                <Button
-                  variant="contained"
-                  //Need to create on click modal for organization
-                  startIcon={<SampleIcon />}
-                  sx={{ ml: 1 }}
-                >
-                  Add Organization
-                </Button>
-              </Tooltip>
-            </>
-          }
-          selected={selected}
-          setSelected={setSelected}
-          onDelete={onDelete}
-        ></EnhancedTable>
-      </Paper>
+      <Box>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={12}>
+            <TopBar/>
+          </Grid>
+          {organization ? (
+          <>
+          <Grid item xs={12} sm={6}>
+            {editing ? (
+              <EditOrganization
+                organization={organizationEdit}
+                setOrganization={setOrganizationEdit}
+                setEditing={setEditing}
+              /> ) : (
+              <OrganizationDetails
+                organization={organization}
+                setEditing={setEditing}
+              />
+            )}
+          </Grid>
+          <Grid container item xs={12} sm={6} spacing={2}>
+            <Grid item xs={12} sm={12}>
+              <JoinCode/>
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <AdminContact/>
+            </Grid>          
+          </Grid>
+          </>
+          ) : null}
+        </Grid>
+        
+      </Box>
     </>
   );
 }
