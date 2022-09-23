@@ -6,9 +6,15 @@ import OrgCodeContent from "./OrgCodeContent";
 import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
 
 import SampleIcon from "@mui/icons-material/Science";
+import InputLabel from '@mui/material/InputLabel';
+import Grid from '@mui/material/Grid';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import NextIcon from "@mui/icons-material/ArrowForwardIos";
 import BackIcon from "@mui/icons-material/ArrowBackIosNew";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import useAuth from "../services/useAuth";
 
 // Might need to change
 import DataViewAddSample from "./DataViewSample/AddSample";
@@ -20,10 +26,12 @@ import FactCheckIcon from "@mui/icons-material/FactCheck";
 
 export default function ManageUsers() {
   const [openModal, setOpenModal] = React.useState(false);
-
+  const { checkResponseAuth, user } = useAuth();
   const [rowList, setRowList] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
+  const [organizations, setOrganizations] = React.useState([]);
+  const [organization, setOrganization] = React.useState(1);
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -32,17 +40,45 @@ export default function ManageUsers() {
     setOpenModal(false);
   };
 
-  function createHeadCell(point, machineName, index) {
-    return {
-      machineName: machineName,
-      name: point.type.name,
-      id: machineName + "_" + point.type.name,
-      numeric: false,
-      disablePadding: true,
-      label: " " + point.type.name + " (" + point.type.units + ")",
-      sublabel: "" + machineName,
-    };
-  }
+  React.useEffect(() => {
+    getOrganizations();
+    getUsers();
+    getHeadCells();
+    console.log(rowList);
+  }, []);
+
+  const getUsers = () => {
+    let orgId = user.organization_id;
+    if (user.role === 0) {
+      orgId = organization;
+    }
+    fetch(`/api/user/users/${orgId}`, { method: "GET", })
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      }).then((data) => {
+        console.log(data);
+        assignRowHtml(data.rows);
+        setRowList(data.rows);
+      }).catch((error) => {
+        console.log(error);
+      })
+  };
+
+  const getOrganizations = () => {
+    if (user.role === 0) {
+      fetch(`/api/organization`, { method: "GET", })
+        .then((response) => {
+          return response.json();
+        }).then((data) => {
+          console.log(data);
+          setOrganizations(data);
+        }).catch((error) => {
+          console.log(error);
+        })
+    }
+  };
+
 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
@@ -138,6 +174,8 @@ export default function ManageUsers() {
     setHeadCellList(headCells);
   };
 
+
+
   const onDelete = () => {
     console.log("DELETE TEST");
 
@@ -156,11 +194,34 @@ export default function ManageUsers() {
   //   )
   // }
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
-  React.useEffect(() => {
-    getData();
-    getHeadCells();
-    console.log(rowList);
-  }, []);
+
+  const organizationDropdown = () => {
+    return (
+      <Grid item xs={12} sm={6}>
+        <FormControl fullWidth>
+          
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={organization}
+            label="Organization"
+
+          >
+            {organizations.map((org) => {
+              console.log(organizations);
+              return (
+<MenuItem value={org.id}>{org.name}</MenuItem>
+              )
+              
+            })}
+          </Select>
+          <InputLabel id="demo-simple-select-label">Organization</InputLabel>
+        </FormControl>
+      </Grid>
+    )
+
+  }
+
 
   return (
     <>
@@ -169,34 +230,12 @@ export default function ManageUsers() {
           headCells={headCellList}
           rows={rowList}
           toolbarButtons={
-            <>
-              <Button
-                variant="contained"
-                onClick={handleOpenModal}
-                startIcon={<OrganizationIcon />}
-              >
-                Get Org Share Code
-              </Button>
+            (user.role === 0) && (
+              <>
+                {organizationDropdown()}
+              </>
+            )
 
-              <CustomDialog
-                open={openModal}
-                icon={<OrganizationIcon />}
-                title="Get Organization Share Code"
-                handleClose={handleCloseModal}
-              >
-                <OrgCodeContent />
-              </CustomDialog>
-              <Tooltip title="Add Organization">
-                <Button
-                  variant="contained"
-                  //Need to create on click modal for organization
-                  startIcon={<SampleIcon />}
-                  sx={{ ml: 1 }}
-                >
-                  Add Organization
-                </Button>
-              </Tooltip>
-            </>
           }
           selected={selected}
           setSelected={setSelected}

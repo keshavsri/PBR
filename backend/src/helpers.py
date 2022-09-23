@@ -17,7 +17,7 @@ from src.Models import OrganizationSource_Flock_Sample as OrganizationSource_Flo
 from src.Models import MeasurementType as MeasurementTypeORM
 from src.Models import MeasurementValue as MeasurementValueORM
 from src.Models import Log as LogORM
-from src.Schemas import Flock, Organization, Source, Sample, Machine, Machinetype, Measurement, MeasurementType, MeasurementValue, Log
+from src.Schemas import Flock, Organization, Source, Sample, Machine, Machinetype, Measurement, MeasurementType, MeasurementValue, Log, User
 
 def get_machines_by_org(org_id: int) -> List[dict]:
     """
@@ -626,3 +626,31 @@ def get_logs() -> List[dict]:
 #                 new_mv = create_measurement_value(measurement_value_dict)
 #                 sample.measurement_values.append(new_mv)
 #     return sample
+
+
+
+
+
+
+
+
+
+def get_users(org_id: int, current_user) -> List[dict]:
+    """
+    The get_samples_by_org function accepts an integer id as input and returns a list of dictionaries containing
+    the samples' information.
+
+    :param org_id:int: Used to specify the id of the organization that we want to retrieve the samples from.
+    :return: A list of dictionaries containing the samples formatted by pydantic.
+    """
+
+    users = UserORM.query.filter_by(organization_id=org_id)
+    ret = {
+        "rows": [],
+        "types": []
+    }
+    for user in users:
+        ret["rows"].append(User.from_orm(user).dict())
+    return json.dumps(ret)
+
+

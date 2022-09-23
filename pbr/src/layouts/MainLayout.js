@@ -303,7 +303,7 @@ export default function MainLayout(props) {
                     return (
                       <NavLink
                         key={page.path}
-                        to={`/${page.path}`}
+                        to={`${page.path}`}
                         className={({ isActive }) =>
                           isActive ? "navbar-active" : ""
                         }

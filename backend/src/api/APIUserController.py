@@ -10,6 +10,7 @@ import json
 from src.auth_token import Auth_Token
 from functools import wraps
 from src import Models, helpers
+import src.helpers
 from src.enums import Roles, LogActions
 
 userBlueprint = Blueprint('user', __name__)
@@ -198,3 +199,36 @@ def register():
   Models.db.session.commit()
   print("User was successfully added.")
   return jsonify({"message": 'Success'}), 200
+
+
+@userBlueprint.route('/users/<int:org_id>', methods=['GET'])
+@token_required
+@allowed_roles([0, 1, 2, 3])
+def get_users(access_allowed, current_user, org_id):
+
+    """
+    This function will return the users that are associated with the organization that the user is in.
+
+    :param access_allowed: This is the access_allowed variable that is passed in from the token_required function.
+    :param current_user: This is the current_user variable that is passed in from the token_required function.
+    :param item_id: This is the id of the user that is passed in.
+
+    :return: This function will return the users with the org id either attached to the user or one that is passed in.
+    """
+
+    if access_allowed:
+        # response json is created here and gets returned at the end of the block for GET requests.
+        responseJSON = None
+        # if item id exists then it will return the users in the organization
+        if org_id and current_user.role == Roles.Super_Admin:
+          responseJSON = src.helpers.get_users(org_id, current_user)
+        elif current_user.organization_id == org_id:
+          responseJSON = src.helpers.get_users(current_user.organization_id, current_user)
+        # otherwise it will return a 404
+        if responseJSON is None:
+            responseJSON = jsonify({'message': 'No records found'})
+            return responseJSON, 404
+        else:
+            return responseJSON, 200
+    else:
+        return jsonify({'message': 'Role not allowed' + str(access_allowed)}), 403

@@ -286,3 +286,23 @@ class Log(BaseModel):
     organization_id: int
     class Config:
         orm_mode = True
+
+
+
+
+
+class User(BaseModel):
+
+    id: int
+    email: constr(max_length=120)
+    password: constr(max_length=120)
+    first_name: constr(max_length=120)
+    last_name: constr(max_length=120)
+    phone_number: Optional[constr(max_length=120)]
+    role: Roles
+    notes: Optional[constr(max_length=500)]
+    organization_id: int
+
+    class Config:
+        orm_mode = True
+
