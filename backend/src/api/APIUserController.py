@@ -232,3 +232,35 @@ def get_users(access_allowed, current_user, org_id):
             return responseJSON, 200
     else:
         return jsonify({'message': 'Role not allowed' + str(access_allowed)}), 403
+
+
+@userBlueprint.route('/<int:user_id>', methods=['DELETE'])
+@token_required
+@allowed_roles([0, 1])
+def deleteUser(access_allowed, current_user, user_id):
+
+    """
+    Deletes a user from the organization
+
+    :param access_allowed: boolean, whether the user has access to the route
+    :param current_user: the user object of the user making the request
+    :param user_id: the id of the user to delete
+
+    :return: a json response with the user deleted
+    """
+
+    if access_allowed:
+        user = Models.User.query.get(user_id)
+        if user is None:
+            return jsonify({'message': 'Source does not exist'}), 404
+        elif user.organization_id != current_user.organization_id and user.role != Roles.Super_Admin:
+            return jsonify({'message': 'Cannot delete in another organization'}), 403
+        elif user.id == current_user.id:
+            return jsonify({'message': 'Cannot delete the current user'}), 403
+        else:
+            Models.db.session.delete(user)
+            Models.db.session.commit()
+            Models.createLog(current_user, LogActions.DELETE_SOURCE, f'Deleted user: ${user.first_name} ${user.last_name} in organization: ${Models.Organization.query.get(user.organization_id).name}')
+            return jsonify({'message': 'User deleted'}), 200
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403

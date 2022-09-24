@@ -3,8 +3,8 @@ import OrganizationIcon from "@mui/icons-material/Apartment";
 import CustomDialog from "./CustomDialog";
 import OrgCodeContent from "./OrgCodeContent";
 
-import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
-
+import { Paper, Button, Tooltip, IconButton, Chip, Box } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 import SampleIcon from "@mui/icons-material/Science";
 import InputLabel from '@mui/material/InputLabel';
 import Grid from '@mui/material/Grid';
@@ -32,6 +32,15 @@ export default function ManageUsers() {
   const [selected, setSelected] = React.useState([]);
   const [organizations, setOrganizations] = React.useState([]);
   const [organization, setOrganization] = React.useState(1);
+
+
+  const roleMap = {
+    0: "Super Admin",
+    1: "Admin",
+    2: "Supervisor",
+    3: "Data Collector",
+    4: "Guest"
+  }
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -79,6 +88,31 @@ export default function ManageUsers() {
     }
   };
 
+  const deleteUser = (deletedUser) => {
+
+    fetch(`/api/user/${deletedUser.id}`, { method: "DELETE", })
+      .then((response) => {
+        return response.json();
+      }).then((data) => {
+        console.log(data);
+      }).catch((error) => {
+        console.log(error);
+      })
+  }
+
+
+
+  const onDelete = () => {
+    if (user.role === 0 || user.role === 1) {
+      selected.map((deletedUser) => {
+        deleteUser(deletedUser);
+      }, () => {
+        getUsers();
+      })
+    }
+  }
+
+
 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
@@ -89,6 +123,16 @@ export default function ManageUsers() {
           </IconButton>
         </>
       );
+
+      console.log(row.id);
+      console.log(user);
+      if (user.role === 0 || user.role === 1) {
+        row.deletable = true;
+      } else {
+        row.deletable = false;
+      }
+      row.role = roleMap[Number(row.role)];
+
     });
   };
 
@@ -174,32 +218,11 @@ export default function ManageUsers() {
     setHeadCellList(headCells);
   };
 
-
-
-  const onDelete = () => {
-    console.log("DELETE TEST");
-
-    // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
-    // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
-    // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
-  };
-
-  // const denestMachineData = (rows) => {
-  //   rows.map((row, index) => {
-  //     Object.entries(row.maincontact).forEach(([key, value]) => {
-  //       let temp = "maincontact." + key
-  //       row[temp] = value
-  //       })
-  //     }
-  //   )
-  // }
-  // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
-
   const organizationDropdown = () => {
     return (
       <Grid item xs={12} sm={6}>
         <FormControl fullWidth>
-          
+
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
@@ -210,15 +233,28 @@ export default function ManageUsers() {
             {organizations.map((org) => {
               console.log(organizations);
               return (
-<MenuItem value={org.id}>{org.name}</MenuItem>
+                <MenuItem value={org.id}>{org.name}</MenuItem>
               )
-              
+
             })}
           </Select>
           <InputLabel id="demo-simple-select-label">Organization</InputLabel>
         </FormControl>
       </Grid>
     )
+
+  }
+
+  const renderToolbar = () => {
+    return (
+      <>
+        {user.role === 0 &&
+          organizationDropdown()
+        }
+      </>
+
+    );
+
 
   }
 
@@ -229,17 +265,19 @@ export default function ManageUsers() {
         <EnhancedTable
           headCells={headCellList}
           rows={rowList}
-          toolbarButtons={
-            (user.role === 0) && (
+          onDelete={onDelete}
+          toolbarButtons={() => {
+            return (
               <>
-                {organizationDropdown()}
+                {renderToolbar()}
               </>
             )
+          }
+
 
           }
           selected={selected}
           setSelected={setSelected}
-          onDelete={onDelete}
         ></EnhancedTable>
       </Paper>
     </>
