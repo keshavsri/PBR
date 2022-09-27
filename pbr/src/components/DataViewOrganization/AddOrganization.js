@@ -31,8 +31,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   organizationRoles
 } from "../../models/enums";
-import FlagIcon from "@mui/icons-material/Flag";
-import OutlinedFlagIcon from "@mui/icons-material/OutlinedFlag";
 import { tooltipClasses } from "@mui/material/Tooltip";
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import useAuth from "../../services/useAuth";
@@ -94,37 +92,77 @@ const useStyles = makeStyles({
   },
 });
 
+const [organizationDetails, setOrganizationDetails] = React.useState({
+  name: "",
+  street: "",
+  city: "",
+  state: "",
+  zip: "",
+  notes: ""
+});
+
+const handleOrganizationDetailsChange = (prop) => (event) => {
+  console.log("Handling Organization Details Change");
+
+  setOrganizationDetails({
+    ...organizationDetails,
+    [prop]: event.target.value,
+  });
+  
+  console.log(organizationDetails);
+};
+
+const getOrganizationData = async () => {
+  await fetch(`/api/organization/`, { method: "GET" })
+    .then((response) => {
+      return response.json();
+    })
+    .then(checkResponseAuth)
+    .then((data) => {
+      console.log(data);
+      // denestMachineData(data.rows);
+      // assignRowHtml(data.rows);
+      // setRowList(data.rows);
+      // getHeadCells(data.types);
+
+      // Do something with data
+    });
+};
+
 
 // Start of Add Organization Functionality
 
 export default function DataViewAddOrganization({
-    organizations,
-    sources,
-    getSources,
-    machineList,
+    organizations
   }) {
+    const classes = useStyles();
+    useTheme();
+    const {
+      sampleValidationErrors,
+    } = useDataView();
+    const { checkResponseAuth } = useAuth();
 
-    let payload = {
 
-        // Organization Parameters
-        /*
-        id: unique identifier for the organization
-        name: name of the organization
-        street: street address of the organization
-        city: city of the organization
-        state: state enum of the organization
-        zip: zip code of the organization
-        notes: notes for the organization
-        sources: list of sources used by the organization
-        */
-      };
 
-    const createOrganization = () => {
+      let onSubmit = async () => {
         console.log(`Creating new Organization`);
-        
-        // API Call for POST Organization --> Not Complete
 
-        /*
+        let payload = {
+
+          // Organization Parameters
+
+          name: organizationDetails.name,
+          street: organizationDetails.street,
+          city: organizationDetails.city,
+          state: organizationDetails.state,
+          zip: organizationDetails.zip,
+          notes: organizationDetails.notes
+
+        };
+        
+        // API Call for POST Organization
+
+        
         await fetch(`/api/organization/`, {
             method: "POST",
             body: JSON.stringify(payload),
@@ -138,30 +176,181 @@ export default function DataViewAddOrganization({
                 if (!response.ok) {
                 setError({
                     title: `${response.status} - ${response.statusText}`,
-                    description: `There was an error while creating the sample. Try again.`,
+                    description: `There was an error while creating the organization. Try again.`,
                 });
                 } else {
+                getOrganizationData();
                 return response.json();
                 }
             });
 
-        */
+        
     
     
       };
 
     return (
         <Box className={classes.root}>
-        <Box
-            className={classes.headerWithButton}
-            sx={{
-            display: "flex",
-            alignItems: "center",
-            }}
-        >
+          <Box
+              className={classes.headerWithButton}
+              sx={{
+              display: "flex",
+              alignItems: "center",
+              }}
+          >
             <Typography variant="h3">Add Organization</Typography>
 
-        </Box>
+            {/* Name Field */}
+            <Box sx={{ flexGrow: 1 }}>
+              <FormControl
+                required
+                sx={{ width: "100%", mb: 2 }}
+                error={
+                  organizationDetails.name === ""
+                    ? true
+                    : false
+                }
+              >
+                  <TextField
+                    error={
+                      organizationDetails.name === ""
+                        ? true
+                        : false
+                    }
+                    label="Organization Name *"
+                    value={organizationDetails.name}
+                    type="text"
+                    onChange={handleOrganizationDetailsChange("name")}
+                  />
+                  {organizationDetails.name === "" (
+                      <FormHelperText>
+                        {"Organization name field is required."}
+                      </FormHelperText>
+                    )}
+              </FormControl>
+            </Box>
+
+            {/* Street Field */}
+            <Box sx={{ flexGrow: 1 }}>
+              <FormControl
+                required
+                sx={{ width: "100%", mb: 2 }}
+                error={
+                  organizationDetails.street === ""
+                    ? true
+                    : false
+                }
+              >
+                  <TextField
+                    error={
+                      organizationDetails.street === ""
+                        ? true
+                        : false
+                    }
+                    label="Street *"
+                    value={organizationDetails.street}
+                    type="text"
+                    onChange={handleOrganizationDetailsChange("street")}
+                  />
+                  {organizationDetails.street === "" (
+                      <FormHelperText>
+                        {"Street field is required."}
+                      </FormHelperText>
+                    )}
+              </FormControl>
+            </Box>
+              
+              {/* City Field */}
+              <Box sx={{ flexGrow: 1 }}>
+              <FormControl
+                required
+                sx={{ width: "100%", mb: 2 }}
+                error={
+                  organizationDetails.city === ""
+                    ? true
+                    : false
+                }
+              >
+                  <TextField
+                    error={
+                      organizationDetails.city === ""
+                        ? true
+                        : false
+                    }
+                    label="City *"
+                    value={organizationDetails.city}
+                    type="text"
+                    onChange={handleOrganizationDetailsChange("city")}
+                  />
+                  {organizationDetails.city === "" (
+                      <FormHelperText>
+                        {"City field is required."}
+                      </FormHelperText>
+                    )}
+              </FormControl>
+            </Box>
+
+            {/* State Field */}
+            <Box sx={{ flexGrow: 1 }}>
+              <FormControl
+                required
+                sx={{ width: "100%", mb: 2 }}
+                error={
+                  organizationDetails.state === ""
+                    ? true
+                    : false
+                }
+              >
+                  <TextField
+                    error={
+                      organizationDetails.state === ""
+                        ? true
+                        : false
+                    }
+                    label="State *"
+                    value={organizationDetails.stetae}
+                    type="text"
+                    onChange={handleOrganizationDetailsChange("state")}
+                  />
+                  {organizationDetails.state === "" (
+                      <FormHelperText>
+                        {"State field is required."}
+                      </FormHelperText>
+                    )}
+              </FormControl>
+            </Box>
+
+            {/* Zip Field */}
+            <Box sx={{ flexGrow: 1 }}>
+              <FormControl
+                required
+                sx={{ width: "100%", mb: 2 }}
+                error={
+                  organizationDetails.zip === ""
+                    ? true
+                    : false
+                }
+              >
+                  <TextField
+                    error={
+                      organizationDetails.zip === ""
+                        ? true
+                        : false
+                    }
+                    label="Zip *"
+                    value={organizationDetails.zip}
+                    type="text"
+                    onChange={handleOrganizationDetailsChange("zip")}
+                  />
+                  {organizationDetails.zip === "" (
+                      <FormHelperText>
+                        {"Zip field is required."}
+                      </FormHelperText>
+                    )}
+              </FormControl>
+            </Box>
+
+          </Box>
         </Box>
     )
 }
