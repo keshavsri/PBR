@@ -3,12 +3,18 @@ import OrganizationIcon from "@mui/icons-material/Apartment";
 import CustomDialog from "./CustomDialog";
 import OrgCodeContent from "./OrgCodeContent";
 
-import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
-
+import { Paper, Button, Tooltip, IconButton, Chip, Box } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 import SampleIcon from "@mui/icons-material/Science";
+import InputLabel from '@mui/material/InputLabel';
+import Grid from '@mui/material/Grid';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import NextIcon from "@mui/icons-material/ArrowForwardIos";
 import BackIcon from "@mui/icons-material/ArrowBackIosNew";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import useAuth from "../services/useAuth";
 
 // Might need to change
 import DataViewAddSample from "./DataViewSample/AddSample";
@@ -20,10 +26,21 @@ import FactCheckIcon from "@mui/icons-material/FactCheck";
 
 export default function ManageUsers() {
   const [openModal, setOpenModal] = React.useState(false);
-
+  const { checkResponseAuth, user } = useAuth();
   const [rowList, setRowList] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
+  const [organizations, setOrganizations] = React.useState([]);
+  const [organization, setOrganization] = React.useState(1);
+
+
+  const roleMap = {
+    0: "Super Admin",
+    1: "Admin",
+    2: "Supervisor",
+    3: "Data Collector",
+    4: "Guest"
+  }
 
   const handleOpenModal = () => {
     setOpenModal(true);
@@ -32,17 +49,70 @@ export default function ManageUsers() {
     setOpenModal(false);
   };
 
-  function createHeadCell(point, machineName, index) {
-    return {
-      machineName: machineName,
-      name: point.type.name,
-      id: machineName + "_" + point.type.name,
-      numeric: false,
-      disablePadding: true,
-      label: " " + point.type.name + " (" + point.type.units + ")",
-      sublabel: "" + machineName,
-    };
+  React.useEffect(() => {
+    getOrganizations();
+    getUsers();
+    getHeadCells();
+    console.log(rowList);
+  }, []);
+
+  const getUsers = () => {
+    let orgId = user.organization_id;
+    if (user.role === 0) {
+      orgId = organization;
+    }
+    fetch(`/api/user/users/${orgId}`, { method: "GET", })
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      }).then((data) => {
+        console.log(data);
+        assignRowHtml(data.rows);
+        setRowList(data.rows);
+      }).catch((error) => {
+        console.log(error);
+      })
+  };
+
+  const getOrganizations = () => {
+    if (user.role === 0) {
+      fetch(`/api/organization`, { method: "GET", })
+        .then((response) => {
+          return response.json();
+        }).then((data) => {
+          console.log(data);
+          setOrganizations(data);
+        }).catch((error) => {
+          console.log(error);
+        })
+    }
+  };
+
+  const deleteUser = (deletedUser) => {
+
+    fetch(`/api/user/${deletedUser.id}`, { method: "DELETE", })
+      .then((response) => {
+        return response.json();
+      }).then((data) => {
+        console.log(data);
+      }).catch((error) => {
+        console.log(error);
+      })
   }
+
+
+
+  const onDelete = () => {
+    if (user.role === 0 || user.role === 1) {
+      selected.map((deletedUser) => {
+        deleteUser(deletedUser);
+      }, () => {
+        getUsers();
+      })
+    }
+  }
+
+
 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
@@ -53,6 +123,16 @@ export default function ManageUsers() {
           </IconButton>
         </>
       );
+
+      console.log(row.id);
+      console.log(user);
+      if (user.role === 0 || user.role === 1) {
+        row.deletable = true;
+      } else {
+        row.deletable = false;
+      }
+      row.role = roleMap[Number(row.role)];
+
     });
   };
 
@@ -138,29 +218,46 @@ export default function ManageUsers() {
     setHeadCellList(headCells);
   };
 
-  const onDelete = () => {
-    console.log("DELETE TEST");
+  const organizationDropdown = () => {
+    return (
+      <Grid item xs={12} sm={6}>
+        <FormControl fullWidth>
 
-    // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
-    // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
-    // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
-  };
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={organization}
+            label="Organization"
 
-  // const denestMachineData = (rows) => {
-  //   rows.map((row, index) => {
-  //     Object.entries(row.maincontact).forEach(([key, value]) => {
-  //       let temp = "maincontact." + key
-  //       row[temp] = value
-  //       })
-  //     }
-  //   )
-  // }
-  // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
-  React.useEffect(() => {
-    getData();
-    getHeadCells();
-    console.log(rowList);
-  }, []);
+          >
+            {organizations.map((org) => {
+              console.log(organizations);
+              return (
+                <MenuItem value={org.id}>{org.name}</MenuItem>
+              )
+
+            })}
+          </Select>
+          <InputLabel id="demo-simple-select-label">Organization</InputLabel>
+        </FormControl>
+      </Grid>
+    )
+
+  }
+
+  const renderToolbar = () => {
+    return (
+      <>
+        {user.role === 0 &&
+          organizationDropdown()
+        }
+      </>
+
+    );
+
+
+  }
+
 
   return (
     <>
@@ -168,39 +265,19 @@ export default function ManageUsers() {
         <EnhancedTable
           headCells={headCellList}
           rows={rowList}
-          toolbarButtons={
-            <>
-              <Button
-                variant="contained"
-                onClick={handleOpenModal}
-                startIcon={<OrganizationIcon />}
-              >
-                Get Org Share Code
-              </Button>
+          onDelete={onDelete}
+          toolbarButtons={() => {
+            return (
+              <>
+                {renderToolbar()}
+              </>
+            )
+          }
 
-              <CustomDialog
-                open={openModal}
-                icon={<OrganizationIcon />}
-                title="Get Organization Share Code"
-                handleClose={handleCloseModal}
-              >
-                <OrgCodeContent />
-              </CustomDialog>
-              <Tooltip title="Add Organization">
-                <Button
-                  variant="contained"
-                  //Need to create on click modal for organization
-                  startIcon={<SampleIcon />}
-                  sx={{ ml: 1 }}
-                >
-                  Add Organization
-                </Button>
-              </Tooltip>
-            </>
+
           }
           selected={selected}
           setSelected={setSelected}
-          onDelete={onDelete}
         ></EnhancedTable>
       </Paper>
     </>
