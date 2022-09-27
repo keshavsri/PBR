@@ -4,7 +4,7 @@ import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
 
 import SampleIcon from "@mui/icons-material/Science";
 // Might need to change
-import EnhancedTable from "./DataViewTable/EnhancedTable";
+import EnhancedTable from "../DataViewTable/EnhancedTable";
 import EditIcon from "@mui/icons-material/Edit";
 
 import { makeStyles } from "@mui/styles";

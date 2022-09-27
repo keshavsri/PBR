@@ -41,3 +41,12 @@ export const validationStates = Object.freeze({
   REJECTED: "Rejected",
   VALIDATED: "Validated",
 });
+
+// Stores the roles for users in the application
+export const organizationRoles = Object.freeze({
+  SUPERADMIN: "Super Admin",
+  ADMIN: "Admin",
+  SUPERVISOR: "Supervisor",
+  DATA_COLLECTOR: "Data Collector",
+  GUEST: "Guest",
+});
