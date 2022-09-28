@@ -7,6 +7,10 @@ import Toolbar from "./Toolbar";
 import OrganizationCode from "./OrganizationCode";
 
 import {
+  Button,
+  InputLabel,
+  MenuItem,
+  FormControl,
   Box,
   Typography,
   Grid,
@@ -126,6 +130,13 @@ export default function OrganizationView() {
           </>
           ) : null}
         </Grid>
+
+        <Grid container spacing={2}>
+        <Grid item xs={12} sm={12}>
+            <AddOrganization/>
+          </Grid>
+        </Grid>
+        
       </Box>
     </>
   );
