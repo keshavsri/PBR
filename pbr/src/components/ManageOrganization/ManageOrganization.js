@@ -2,6 +2,8 @@ import * as React from "react";
 
 import EditOrganization from "./EditOrganization";
 import OrganizationDetails from "./OrganizationDetails";
+import AddOrganization from "./AddOrganization";
+
 import {
   Button,
   InputLabel,
@@ -220,6 +222,12 @@ export default function OrganizationView() {
           </Grid>
           </>
           ) : null}
+        </Grid>
+
+        <Grid container spacing={2}>
+        <Grid item xs={12} sm={12}>
+            <AddOrganization/>
+          </Grid>
         </Grid>
         
       </Box>
