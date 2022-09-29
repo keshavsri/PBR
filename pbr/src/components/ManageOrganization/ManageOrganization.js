@@ -5,6 +5,7 @@ import OrganizationDetails from "./OrganizationDetails";
 import AdminContact from "./AdminContact";
 import Toolbar from "./Toolbar";
 import OrganizationCode from "./OrganizationCode";
+import AddOrganization from "./AddOrganization";
 
 import {
   Button,
