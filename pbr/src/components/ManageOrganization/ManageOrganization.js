@@ -27,7 +27,7 @@ export default function OrganizationView() {
       getOrganizations();
     } else {
       getOrganization();
-      getAdminContact(organization.id);
+      getAdminContact(user.organization_id);
     }
   }, [])
 
