@@ -34,7 +34,7 @@ export default function EditOrganization({
       if(organizationEdit[field] === "") {
         error = true;
         setErrorToggle(true)
-        setErrorMessage("Required fields (*) cannot be empty.")
+        setErrorMessage("Required fields * cannot be empty.")
       }
     })
     if(error) {
@@ -100,6 +100,7 @@ export default function EditOrganization({
             label="Street Adress"
             value={organizationEdit.street_address}
             onChange={handleEditOrganizationChange('street_address')}
+            error = {organizationEdit.street_address === "" ? true : false}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -109,6 +110,7 @@ export default function EditOrganization({
             label="City"
             value={organizationEdit.city}
             onChange={handleEditOrganizationChange('city')}
+            error = {organizationEdit.city === "" ? true : false}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -118,6 +120,7 @@ export default function EditOrganization({
             label="State"
             value={organizationEdit.state}
             onChange={handleEditOrganizationChange('state')}
+            error = {organizationEdit.state === "" ? true : false}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -127,6 +130,7 @@ export default function EditOrganization({
             label="Zip"
             value={organizationEdit.zip}
             onChange={handleEditOrganizationChange('zip')}
+            error = {organizationEdit.zip === "" ? true : false}
           />
         </Grid>
         <Grid item xs={12} sm={12}>

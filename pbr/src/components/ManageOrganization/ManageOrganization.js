@@ -28,6 +28,7 @@ export default function OrganizationView() {
       getOrganizations();
     } else {
       getOrganization();
+      getAdminContact();
     }
   }, [])
 
@@ -71,6 +72,7 @@ export default function OrganizationView() {
           organization={organization}
           setOrganization={setOrganization}
           organizations={organizations}
+          getAdminContact={getAdminContact}
         />)
     } else {
       return (organization &&
