@@ -19,27 +19,30 @@ export default function OrganizationView() {
   const {checkResponseAuth, user} =  useAuth();
   const [organization, setOrganization] = React.useState(null);
   const [organizations, setOrganizations] = React.useState([]);
-  //const [organizationEdit, setOrganizationEdit] = React.useState(null);
-  const [editing, setEditing] = React.useState(false);
   const [adminContact, setAdminContact] = React.useState(null);
+  const [editing, setEditing] = React.useState(false);
 
   React.useEffect(() => {
     if (user.role == 0) {
       getOrganizations();
     } else {
       getOrganization();
-      getAdminContact();
+      getAdminContact(organization.id);
     }
   }, [])
 
-  const getAdminContact = async () => {
-    await fetch(`/api/user/admin/${user.organization_id}`, { method: "GET" })
+  const getAdminContact = async (orgId) => {
+    await fetch(`/api/user/admin/${orgId}`, { method: "GET" })
       .then((response) => {
         return response.json();
       })
       .then(checkResponseAuth)
       .then((data) => {
-        setAdminContact(data);
+        if (!data.first_name) {
+          setAdminContact(null)
+        } else{
+          setAdminContact(data);
+        }
       });
   }
 

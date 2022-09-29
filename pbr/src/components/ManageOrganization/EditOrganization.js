@@ -21,7 +21,6 @@ export default function EditOrganization({
   const requiredFields = ["name", "street_address", "city", "state", "zip"]
 
   const handleEditOrganizationChange = (prop) => (event) => {
-    console.log(organizationEdit[prop])
     setOrganizationEdit({
       ...organizationEdit,
       [prop]: event.target.value,
@@ -52,8 +51,6 @@ export default function EditOrganization({
           setErrorToggle(true)
           setErrorMessage("Error updating organization.")
           return
-        } else {
-          console.log(response)
         }
       })
     await fetch(`/api/organization`, { method: "GET" })
@@ -61,7 +58,6 @@ export default function EditOrganization({
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         setOrganizations(data);
       });
     await fetch(`/api/organization/${organization.id}`, { method: "GET" })
@@ -69,7 +65,6 @@ export default function EditOrganization({
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         setOrganizationEdit(data);
         setOrganization(data);
       });
