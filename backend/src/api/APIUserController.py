@@ -9,7 +9,7 @@ import jwt
 import json
 from src.auth_token import Auth_Token
 from functools import wraps
-from src import Models, helpers
+from src import Models, helpers, Schemas
 import src.helpers
 from src.enums import Roles, LogActions
 
@@ -252,7 +252,7 @@ def deleteUser(access_allowed, current_user, user_id):
     if access_allowed:
         user = Models.User.query.get(user_id)
         if user is None:
-            return jsonify({'message': 'Source does not exist'}), 404
+            return jsonify({'message': 'User does not exist'}), 404
         elif user.organization_id != current_user.organization_id and user.role != Roles.Super_Admin:
             return jsonify({'message': 'Cannot delete in another organization'}), 403
         elif user.id == current_user.id:
@@ -262,5 +262,57 @@ def deleteUser(access_allowed, current_user, user_id):
             Models.db.session.commit()
             Models.createLog(current_user, LogActions.DELETE_SOURCE, f'Deleted user: ${user.first_name} ${user.last_name} in organization: ${Models.Organization.query.get(user.organization_id).name}')
             return jsonify({'message': 'User deleted'}), 200
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+
+
+@userBlueprint.route('/users/<int:user_id>', methods=['PUT'])
+@token_required
+@allowed_roles([0, 1, 2, 3])
+def update_user(access_allowed, current_user, user_id):
+
+    """
+    This function will edit a users information.
+
+    :param access_allowed: This is the access_allowed variable that is passed in from the token_required function.
+    :param current_user: This is the current_user variable that is passed in from the token_required function.
+    :param item_id: This is the id of the user to be edited.
+
+    :return: This function will return the edited user object as a dictionary.
+    """
+    if access_allowed:
+
+        updated_user = request.json
+        print("hi..................................", flush=True)
+        print(updated_user, flush=True)
+        user = Models.User.query.filter_by(id=updated_user.get("id")).first()
+
+        if user is None:
+            return jsonify({'message': 'User does not exist'}), 404
+        else:
+
+            if current_user.role == Roles.Supervisor:
+                if user.role == Roles.Admin: ## Cannot change an admins info
+                    updated_user = user ## Override new user info with prexisting info
+                    updated_user = updated_user.dict()
+
+            if current_user.role == Roles.Data_Collector:
+                if user.id != current_user.id: ## Cannot change anyone else's info
+                    updated_user = user ## Override new user info with prexisting info
+                    updated_user = updated_user.dict()
+
+            if user.id == current_user.id: ## Cannot change your own role
+                updated_user["role"] = user.role ## Override new role with prexisting role
+
+            updated_user['id'] = user.id
+            updated_user['password'] = user.password
+            updated_user.pop("deletable")
+
+            Models.User.query.filter_by(id=updated_user.get("id")).update(updated_user)
+            Models.db.session.commit()
+            edited_user = Models.User.query.get(updated_user.get("id"))
+            Models.createLog(current_user, LogActions.EDIT_USER, 'Edited user: ' + str(updated_user.get("id")))
+
+            return Schemas.User.from_orm(Models.User.query.filter_by(id=updated_user.get("id")).first()).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

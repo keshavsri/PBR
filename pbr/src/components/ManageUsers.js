@@ -1,7 +1,8 @@
 import React from "react";
 import OrganizationIcon from "@mui/icons-material/Apartment";
 import CustomDialog from "./CustomDialog";
-import OrgCodeContent from "./OrgCodeContent";
+import OrgCodeContent from "./DataViewOrganization/OrgCodeContent";
+import {EditUserForm} from "./EditUsers"
 
 import { Paper, Button, Tooltip, IconButton, Chip, Box } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -32,7 +33,7 @@ export default function ManageUsers() {
   const [selected, setSelected] = React.useState([]);
   const [organizations, setOrganizations] = React.useState([]);
   const [organization, setOrganization] = React.useState(1);
-
+  const [editForm, setEditForm] = React.useState([false])
 
   const roleMap = {
     0: "Super Admin",
@@ -89,7 +90,6 @@ export default function ManageUsers() {
   };
 
   const deleteUser = (deletedUser) => {
-
     fetch(`/api/user/${deletedUser.id}`, { method: "DELETE", })
       .then((response) => {
         return response.json();
@@ -100,7 +100,21 @@ export default function ManageUsers() {
       })
   }
 
-
+  const editUser = (editedUser) => {
+    fetch(`/api/user/users/${editedUser.id}`,
+          { method: "PUT",
+            body: JSON.stringify(editedUser),
+            headers: {"Content-Type" : "application/json"}})
+      .then((response) => {
+        return response.json();
+      }).then((data) => {
+        console.log(data);
+      }).catch((error) => {
+        console.log(error);
+      })
+      setEditForm(false);
+      console.log(editForm)
+  }
 
   const onDelete = () => {
     if (user.role === 0 || user.role === 1) {
@@ -112,18 +126,13 @@ export default function ManageUsers() {
     }
   }
 
-
+  const onEdit = () => {
+    setEditForm(true);
+    renderEditForm()
+  }
 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
-      row.buttons = (
-        <>
-          <IconButton aria-label="edit" size="small">
-            <EditIcon />
-          </IconButton>
-        </>
-      );
-
       console.log(row.id);
       console.log(user);
       if (user.role === 0 || user.role === 1) {
@@ -132,38 +141,7 @@ export default function ManageUsers() {
         row.deletable = false;
       }
       row.role = roleMap[Number(row.role)];
-
     });
-  };
-
-  const getData = () => {
-    let apiRows = [
-      {
-        deletable: true,
-        id: 1,
-        organization: "NCSU",
-        email: "rcrespo@ncsu.edu",
-        first_name: "Rosio",
-        last_name: "Crespo",
-        phone: "9191234567",
-        role: "Super Admin",
-        notes: "N/A",
-      },
-      {
-        deletable: false,
-        id: 2,
-        organization: "UNC",
-        email: "jwalker@unc.edu",
-        first_name: "John",
-        last_name: "Walker",
-        phone: "1234567890",
-        role: "Data Collector",
-        notes: "N/A",
-      },
-    ];
-    // denestMachineData(apiRows);
-    assignRowHtml(apiRows);
-    setRowList(apiRows);
   };
 
   const getHeadCells = () => {
@@ -214,7 +192,6 @@ export default function ManageUsers() {
         label: "Notes",
       },
     ];
-
     setHeadCellList(headCells);
   };
 
@@ -242,7 +219,6 @@ export default function ManageUsers() {
         </FormControl>
       </Grid>
     )
-
   }
 
   const renderToolbar = () => {
@@ -252,12 +228,18 @@ export default function ManageUsers() {
           organizationDropdown()
         }
       </>
-
     );
-
-
   }
 
+  const renderEditForm = () => {
+    return (
+      <EditUserForm
+        user={rowList.find(x => x.id === selected[0])}
+        editUser={editUser}
+        setEditForm={setEditForm}
+      />
+    );
+  }
 
   return (
     <>
@@ -272,10 +254,8 @@ export default function ManageUsers() {
                 {renderToolbar()}
               </>
             )
-          }
-
-
-          }
+          }}
+          onEdit={onEdit}
           selected={selected}
           setSelected={setSelected}
         ></EnhancedTable>

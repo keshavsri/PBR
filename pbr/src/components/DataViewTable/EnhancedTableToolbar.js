@@ -2,6 +2,7 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from '@mui/icons-material/Edit';
 import { makeStyles } from "@mui/styles";
 import {
   Toolbar,
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function EnhancedTableToolbar(props) {
-  const { numSelected, toolbarButtons, onDelete } = props;
+  const { numSelected, toolbarButtons, onDelete, onEdit} = props;
   let classes = useStyles();
 
   return (
@@ -64,6 +65,16 @@ export default function EnhancedTableToolbar(props) {
           id="tableTitle"
           component="div"
         ></Typography>
+      )}
+
+      {numSelected === 1 ? (
+        <Tooltip title="Edit">
+          <IconButton sx={{ ml: 1 }} onClick={onEdit}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+      ) : (
+        toolbarButtons
       )}
 
       {numSelected > 0 ? (

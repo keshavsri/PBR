@@ -1,7 +1,7 @@
 import React from "react";
 import OrganizationIcon from "@mui/icons-material/Apartment";
 import CustomDialog from "./CustomDialog";
-import OrgCodeContent from "./OrgCodeContent";
+import OrgCodeContent from "./DataViewOrganization/OrgCodeContent";
 
 import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
 
