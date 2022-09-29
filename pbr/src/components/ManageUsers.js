@@ -30,7 +30,7 @@ export default function ManageUsers() {
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
   const [organizations, setOrganizations] = React.useState([]);
-  const [organization, setOrganization] = React.useState(1);
+  const [organization, setOrganization] = React.useState(user.organization_id);
 
 
   const roleMap = {
@@ -52,8 +52,11 @@ export default function ManageUsers() {
     getOrganizations();
     getUsers();
     getHeadCells();
-    console.log(rowList);
   }, []);
+
+  React.useEffect(() => {
+    getUsers();
+  }, [organization]);
 
   const getUsers = () => {
     let orgId = user.organization_id;
@@ -62,10 +65,8 @@ export default function ManageUsers() {
     }
     fetch(`/api/user/users/${orgId}`, { method: "GET", })
       .then((response) => {
-        console.log(response);
         return response.json();
       }).then((data) => {
-        console.log(data);
         assignRowHtml(data.rows);
         setRowList(data.rows);
       }).catch((error) => {
@@ -79,7 +80,6 @@ export default function ManageUsers() {
         .then((response) => {
           return response.json();
         }).then((data) => {
-          console.log(data);
           setOrganizations(data);
         }).catch((error) => {
           console.log(error);
@@ -87,13 +87,12 @@ export default function ManageUsers() {
     }
   };
 
-  const deleteUser = (deletedUser) => {
+  const deleteUser = (deletedUserId) => {
 
-    fetch(`/api/user/${deletedUser.id}`, { method: "DELETE", })
+    fetch(`/api/user/${deletedUserId}`, { method: "DELETE", })
       .then((response) => {
         return response.json();
       }).then((data) => {
-        console.log(data);
       }).catch((error) => {
         console.log(error);
       })
@@ -103,18 +102,22 @@ export default function ManageUsers() {
 
   const onDelete = () => {
     if (user.role === 0 || user.role === 1) {
-      selected.map((deletedUser) => {
-        deleteUser(deletedUser);
+      selected.map((deletedUserId) => {
+        deleteUser(deletedUserId);
       }, () => {
         getUsers();
       })
     }
   }
 
+  const onChangeOrganization = (event) => {
+    setOrganization(event.target.value);
+  }
+
 
 
   const assignRowHtml = (rows) => {
-    rows.map((row, index) => {
+    rows.map((row, index) => { 
       row.buttons = (
         <>
           <IconButton aria-label="edit" size="small">
@@ -124,7 +127,7 @@ export default function ManageUsers() {
       );
 
       console.log(row.id);
-      console.log(user);
+      console.log(user.role);
       if (user.role === 0 || user.role === 1) {
         row.deletable = true;
       } else {
@@ -133,36 +136,6 @@ export default function ManageUsers() {
       row.role = roleMap[Number(row.role)];
 
     });
-  };
-
-  const getData = () => {
-    let apiRows = [
-      {
-        deletable: true,
-        id: 1,
-        organization: "NCSU",
-        email: "rcrespo@ncsu.edu",
-        first_name: "Rosio",
-        last_name: "Crespo",
-        phone: "9191234567",
-        role: "Super Admin",
-        notes: "N/A",
-      },
-      {
-        deletable: false,
-        id: 2,
-        organization: "UNC",
-        email: "jwalker@unc.edu",
-        first_name: "John",
-        last_name: "Walker",
-        phone: "1234567890",
-        role: "Data Collector",
-        notes: "N/A",
-      },
-    ];
-    // denestMachineData(apiRows);
-    assignRowHtml(apiRows);
-    setRowList(apiRows);
   };
 
   const getHeadCells = () => {
@@ -217,44 +190,27 @@ export default function ManageUsers() {
     setHeadCellList(headCells);
   };
 
-  const organizationDropdown = () => {
+  const OrganizationDropdown = () => {
     return (
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={6} >
         <FormControl fullWidth>
-
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={organization}
+            onChange={onChangeOrganization}
             label="Organization"
-
           >
             {organizations.map((org) => {
-              console.log(organizations);
               return (
-                <MenuItem value={org.id}>{org.name}</MenuItem>
+                <MenuItem key={org.id} value={org.id}>{org.name}</MenuItem>
               )
-
             })}
           </Select>
           <InputLabel id="demo-simple-select-label">Organization</InputLabel>
         </FormControl>
-      </Grid>
+      </Grid >
     )
-
-  }
-
-  const renderToolbar = () => {
-    return (
-      <>
-        {user.role === 0 &&
-          organizationDropdown()
-        }
-      </>
-
-    );
-
-
   }
 
 
@@ -265,14 +221,14 @@ export default function ManageUsers() {
           headCells={headCellList}
           rows={rowList}
           onDelete={onDelete}
-          toolbarButtons={() => {
-            return (
+          toolbarButtons={
               <>
-                {renderToolbar()}
+              {
+                user.role === 0 &&
+                <OrganizationDropdown/>
+              }
+                
               </>
-            )
-          }
-
 
           }
           selected={selected}
