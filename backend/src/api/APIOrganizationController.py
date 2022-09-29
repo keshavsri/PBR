@@ -44,7 +44,7 @@ def get_organizations(access_allowed, current_user):
 
 @organizationBlueprint.route('/<int:item_id>', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2, 3, 4])
 def get_organization(access_allowed, current_user, item_id):
 
     """
@@ -56,7 +56,6 @@ def get_organization(access_allowed, current_user, item_id):
 
     :return: This function will return the organization with the id that is passed in.
     """
-
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None

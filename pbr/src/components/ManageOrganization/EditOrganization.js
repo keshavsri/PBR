@@ -5,36 +5,76 @@ import {
   Grid,
   Card,
   TextField,
-  Button
+  Button,
+  Alert
 } from '@mui/material';
 
 export default function EditOrganization({
   organization,
   setOrganization,
+  setOrganizations,
   setEditing
 }) {
+  const [organizationEdit, setOrganizationEdit] = React.useState(organization)
+  const [errorToggle, setErrorToggle] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState("");
+  const requiredFields = ["name", "street_address", "city", "state", "zip"]
+
   const handleEditOrganizationChange = (prop) => (event) => {
-    console.log(organization[prop])
-    setOrganization({
-      ...organization,
+    console.log(organizationEdit[prop])
+    setOrganizationEdit({
+      ...organizationEdit,
       [prop]: event.target.value,
     });
   }
 
   let onSubmit = async() => {
-    console.log("Sumbitting!", organization);
+    let error = false;
+    requiredFields.forEach(field => {
+      if(organizationEdit[field] === "") {
+        error = true;
+        setErrorToggle(true)
+        setErrorMessage("Required fields * cannot be empty.")
+      }
+    })
+    if(error) {
+      return;
+    }
     await fetch(`/api/organization/${organization.id}`, {
       method: "PUT",
-      body: JSON.stringify(organization),
+      body: JSON.stringify(organizationEdit),
+      headers: {
+        "Content-Type": "application/json",
+      }
     })
       .then((response) => {
         if (!response.ok) {
-          console.log("ERROR")
-          console.log(response)
+          setErrorToggle(true)
+          setErrorMessage("Error updating organization.")
+          return
         } else {
           console.log(response)
         }
       })
+    await fetch(`/api/organization`, { method: "GET" })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setOrganizations(data);
+      });
+    await fetch(`/api/organization/${organization.id}`, { method: "GET" })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setOrganizationEdit(data);
+        setOrganization(data);
+      });
+    setEditing(false);
+      
   }
 
   return (
@@ -44,21 +84,23 @@ export default function EditOrganization({
           <Typography gutterBottom variant="h4">Details</Typography>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            fullWidth
-            label="Name"
-            value={organization.name}
-            onChange={handleEditOrganizationChange('name')}
-          />
+            <TextField
+              required
+              fullWidth
+              label="Name"
+              value={organizationEdit.name}
+              onChange={handleEditOrganizationChange('name')}
+              error = {organizationEdit.name === "" ? true : false}
+            />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
             fullWidth
             label="Street Adress"
-            value={organization.street_address}
+            value={organizationEdit.street_address}
             onChange={handleEditOrganizationChange('street_address')}
+            error = {organizationEdit.street_address === "" ? true : false}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -66,8 +108,9 @@ export default function EditOrganization({
             required
             fullWidth
             label="City"
-            value={organization.city}
+            value={organizationEdit.city}
             onChange={handleEditOrganizationChange('city')}
+            error = {organizationEdit.city === "" ? true : false}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -75,8 +118,9 @@ export default function EditOrganization({
             required
             fullWidth
             label="State"
-            value={organization.state}
+            value={organizationEdit.state}
             onChange={handleEditOrganizationChange('state')}
+            error = {organizationEdit.state === "" ? true : false}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -84,8 +128,9 @@ export default function EditOrganization({
             required
             fullWidth
             label="Zip"
-            value={organization.zip}
+            value={organizationEdit.zip}
             onChange={handleEditOrganizationChange('zip')}
+            error = {organizationEdit.zip === "" ? true : false}
           />
         </Grid>
         <Grid item xs={12} sm={12}>
@@ -93,10 +138,16 @@ export default function EditOrganization({
             label="Notes"
             fullWidth
             multiline
-            value={organization.notes}
+            value={organizationEdit.notes}
             onChange={handleEditOrganizationChange('notes')}
           />
         </Grid>
+        {errorToggle ? 
+        (<Grid item xs={12} sm={12}>
+          <Alert severity="error" color="error">
+            {errorMessage}
+          </Alert>
+        </Grid>) : null}
         <Grid item xs={12} sm={8}></Grid>
         <Grid item xs={12} sm={2}>
           <Button
