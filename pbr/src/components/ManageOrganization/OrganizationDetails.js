@@ -11,7 +11,8 @@ import EditIcon from '@mui/icons-material/Edit'
 
 export default function OrganizationDetails({
   organization,
-  setEditing
+  setEditing,
+  userRole
 }) {
   return (
     <Card>
@@ -19,17 +20,19 @@ export default function OrganizationDetails({
         <Grid item xs={12} sm={10}>
           <Typography gutterBottom variant="h4">Details</Typography>
         </Grid>
-        <Grid item xs={12} sm={2}>
-          <Button
-            sx={{ borderRadius: 10 }}
-            startIcon={<EditIcon />}
-            onClick={() => {
-              setEditing(true)
-            }}
-          >
-            Edit
-          </Button>
-        </Grid>
+        {userRole === 0 || userRole == 1 ? (
+          <Grid item xs={12} sm={2}>
+            <Button
+              sx={{ borderRadius: 10 }}
+              startIcon={<EditIcon />}
+              onClick={() => {
+                setEditing(true)
+              }}
+            >
+              Edit
+            </Button>
+          </Grid>
+        ) : null}
         <Grid item xs={12} sm={6}>
           <Typography variant="h6">Name</Typography>
           <Typography variant="body1">{organization.name}</Typography>
