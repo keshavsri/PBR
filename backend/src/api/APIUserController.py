@@ -203,7 +203,7 @@ def register():
 
 @userBlueprint.route('/users/<int:org_id>', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2, 3, 4])
 def get_users(access_allowed, current_user, org_id):
 
     """
