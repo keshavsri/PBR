@@ -24,8 +24,9 @@ export default function ManageUsers() {
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
   const [organizations, setOrganizations] = React.useState([]);
-  const [organization, setOrganization] = React.useState(1);
   const [openEditUsersModal, setOpenEditUsersModal] = React.useState(false);
+  const [organization, setOrganization] = React.useState(user.organization_id);
+
 
   const roleMap = {
     0: "Super Admin",
@@ -39,8 +40,11 @@ export default function ManageUsers() {
     getOrganizations();
     getUsers();
     getHeadCells();
-    console.log(rowList);
   }, []);
+
+  React.useEffect(() => {
+    getUsers();
+  }, [organization]);
 
   const getUsers = () => {
     let orgId = user.organization_id;
@@ -49,10 +53,8 @@ export default function ManageUsers() {
     }
     fetch(`/api/user/users/${orgId}`, { method: "GET", })
       .then((response) => {
-        console.log(response);
         return response.json();
       }).then((data) => {
-        console.log(data);
         assignRowHtml(data.rows);
         setRowList(data.rows);
       }).catch((error) => {
@@ -66,7 +68,6 @@ export default function ManageUsers() {
         .then((response) => {
           return response.json();
         }).then((data) => {
-          console.log(data);
           setOrganizations(data);
         }).catch((error) => {
           console.log(error);
@@ -74,15 +75,19 @@ export default function ManageUsers() {
     }
   };
 
-  const deleteUser = (deletedUser) => {
-    fetch(`/api/user/${deletedUser.id}`, { method: "DELETE", })
+  const deleteUser = (deletedUserId) => {
+
+    fetch(`/api/user/${deletedUserId}`, { method: "DELETE", })
       .then((response) => {
         return response.json();
       }).then((data) => {
         console.log(data);
       }).catch((error) => {
         console.log(error);
-      })
+      });
+      setOpenEditUsersModal(false);
+      getUsers();
+      setSelected([])
   }
 
   const editUser = (editedUser) => {
@@ -104,12 +109,16 @@ export default function ManageUsers() {
 
   const onDelete = () => {
     if (user.role === 0 || user.role === 1) {
-      selected.map((deletedUser) => {
-        deleteUser(deletedUser);
+      selected.map((deletedUserId) => {
+        deleteUser(deletedUserId);
       }, () => {
         getUsers();
       })
     }
+  }
+
+  const onChangeOrganization = (event) => {
+    setOrganization(event.target.value);
   }
 
   const onEdit = () => {
@@ -120,13 +129,11 @@ export default function ManageUsers() {
     rows.map((row, index) => { 
       console.log(row.id);
       console.log(user);
-      /**
       if (user.role === 0 || user.role === 1) {
         row.deletable = true;
       } else {
         row.deletable = false;
       }
-      */
       
       row.role_id = row.role;
       row.role = roleMap[Number(row.role)];
@@ -200,26 +207,26 @@ export default function ManageUsers() {
     setHeadCellList(headCells);
   };
 
-  const organizationDropdown = () => {
+  const OrganizationDropdown = () => {
     return (
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={6} >
         <FormControl fullWidth>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={organization}
+            onChange={onChangeOrganization}
             label="Organization"
           >
             {organizations.map((org) => {
-              console.log(organizations);
               return (
-                <MenuItem value={org.id}>{org.name}</MenuItem>
+                <MenuItem key={org.id} value={org.id}>{org.name}</MenuItem>
               )
             })}
           </Select>
           <InputLabel id="demo-simple-select-label">Organization</InputLabel>
         </FormControl>
-      </Grid>
+      </Grid >
     )
   }
 
@@ -240,13 +247,17 @@ export default function ManageUsers() {
           headCells={headCellList}
           rows={rowList}
           onDelete={onDelete}
-          toolbarButtons={() => {
-            return (
-              <>
-                {renderToolbar()}
-              </>
-            )
-          }}
+          toolbarButtons={
+            <>
+            {
+              user.role === 0 &&
+              <OrganizationDropdown/>
+            }
+              
+            </>
+
+          }
+
           onEdit={onEdit}
           selected={selected}
           setSelected={setSelected}

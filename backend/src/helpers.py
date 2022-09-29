@@ -657,7 +657,7 @@ def get_users(org_id: int, current_user) -> List[dict]:
     :return: A list of dictionaries containing the samples formatted by pydantic.
     """
 
-    users = UserORM.query.filter_by(organization_id=org_id)
+    users = UserORM.query.filter_by(organization_id=org_id, is_deleted=False)
     ret = {
         "rows": [],
         "types": []
