@@ -44,6 +44,7 @@ class User(db.Model):
     phone_number: str = db.Column(db.String(20))
     role: Roles = db.Column(db.Enum(Roles))
     notes: str = db.Column(db.String(500))
+    is_deleted: bool = db.Column(db.Boolean, server_default="0")
 
     # References to Foreign Objects
     organization_id = db.Column(db.Integer, db.ForeignKey('Organization.id'))
