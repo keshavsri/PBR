@@ -1,182 +1,151 @@
 import * as React from "react";
 
-import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
+import EditOrganization from "./EditOrganization";
+import OrganizationDetails from "./OrganizationDetails";
+import AdminContact from "./AdminContact";
+import Toolbar from "./Toolbar";
+import OrganizationCode from "./OrganizationCode";
+import AddOrganization from "./AddOrganization";
 
-import SampleIcon from "@mui/icons-material/Science";
-// Might need to change
-import EnhancedTable from "../DataViewTable/EnhancedTable";
-import EditIcon from "@mui/icons-material/Edit";
+import {
+  Box,
+  Typography,
+  Grid,
+  Card
+} from '@mui/material';
 
-import { makeStyles } from "@mui/styles";
-
-const useStyles = makeStyles({});
-
-// const getSomethingAPICall = () => {
-//   fetch(`/api/sample`, {method: "GET",})
-//     .then((response) => {
-//       return response.json();
-//     }).then((data) => {
-//       console.log(data);
-//       setRowList(data.row);
-//       setHeadCellList(data.types);
-//     })
-//     addApiColumnNamesToHeadCells();
-//     console.log(headCells)
-//     denestMachineData(rows)
-//     assignRowHtml()
-//     console.log(rows)
-// console.log(headCells)
-// };
+import useAuth from "../../services/useAuth";
 
 export default function OrganizationView() {
-  const [rowList, setRowList] = React.useState([]);
-  const [headCellList, setHeadCellList] = React.useState([]);
-  const [selected, setSelected] = React.useState([]);
-
-  const assignRowHtml = (rows) => {
-    rows.map((row, index) => {
-      return (row.buttons = (
-        <>
-          <IconButton aria-label="edit" size="small">
-            <EditIcon />
-          </IconButton>
-        </>
-      ));
-    });
-  };
-
-  const getData = () => {
-    let apiRows = [
-      {
-        deletable: true,
-        id: 1,
-        name: "NCSU",
-        street_address: "123 Main St.",
-        city: "Raleigh",
-        state: "NC",
-        zip: "27607",
-        maincontact: {
-          id: "",
-          organization: "",
-          email: "",
-          name: "Rosio Crespo",
-          phone: "",
-          notes: "",
-        },
-        org_signup_code: "123456",
-        notes: "N/A",
-      },
-      {
-        deletable: true,
-        id: 2,
-        name: "UNC",
-        street_address: "456 Main St.",
-        city: "Chapel Hill",
-        state: "NC",
-        zip: "27607",
-        maincontact: {
-          id: "",
-          organization: "",
-          email: "",
-          name: "Other Name",
-          phone: "",
-          notes: "",
-        },
-        org_signup_code: "654321",
-        notes: "N/A",
-      },
-    ];
-    denestMachineData(apiRows);
-    assignRowHtml(apiRows);
-    setRowList(apiRows);
-  };
-
-  const getHeadCells = () => {
-    const headCells = [
-      {
-        id: "buttons",
-      },
-      {
-        id: "name",
-        numeric: false,
-        disablePadding: true,
-        label: "Name",
-      },
-      {
-        id: "street_address",
-        numeric: false,
-        disablePadding: true,
-        label: "Street Address",
-      },
-      {
-        id: "city",
-        numeric: false,
-        disablePadding: true,
-        label: "City",
-      },
-      {
-        id: "state",
-        numeric: false,
-        disablePadding: true,
-        label: "State",
-      },
-      {
-        id: "zip",
-        numeric: false,
-        disablePadding: true,
-        label: "Zip",
-      },
-      {
-        id: "maincontact.name",
-        numeric: false,
-        disablePadding: true,
-        label: "Main Contact",
-      },
-      {
-        id: "org_signup_code",
-        numeric: false,
-        disablePadding: true,
-        label: "Org Signup Code",
-      },
-      {
-        id: "notes",
-        numeric: false,
-        disablePadding: true,
-        label: "Notes",
-      },
-    ];
-
-    setHeadCellList(headCells);
-  };
-
-
-  const denestMachineData = (rows) => {
-    rows.map((row, index) => {
-      Object.entries(row.maincontact).forEach(([key, value]) => {
-        let temp = "maincontact." + key;
-        row[temp] = value;
-      });
-    });
-  };
-  const onDelete = () => {
-    console.log("DELETE TEST")
-
-    // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
-    // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
-    // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
-  }
-  // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
+  const {checkResponseAuth, user} =  useAuth();
+  const [organization, setOrganization] = React.useState({id: null});
+  const [organizations, setOrganizations] = React.useState([]);
+  const [adminContact, setAdminContact] = React.useState(null);
+  const [openAddOrganizationModal, setOpenAddOrganizationModal] = React.useState(false);
+  const [editing, setEditing] = React.useState(false);
 
   React.useEffect(() => {
-    getData();
-    getHeadCells();
-    console.log(rowList);
-  }, []);
+    if (user.role == 0) {
+      getOrganizations();
+    } else {
+      getOrganization();
+      getAdminContact(user.organization_id);
+    }
+  }, [])
+
+  const getAdminContact = async (orgId) => {
+    await fetch(`/api/user/admin/${orgId}`, { method: "GET" })
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        if (!data.first_name) {
+          setAdminContact(null)
+        } else{
+          setAdminContact(data);
+        }
+      });
+  }
+
+  const getOrganization = async () => {
+    await fetch(`/api/organization/${user.organization_id}`, { method: "GET" })
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        setOrganization(data);
+      });
+  }
+
+  const getOrganizations = async () => {
+    await fetch(`/api/organization`, { method: "GET" })
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        setOrganizations(data);
+      });
+  }
+
+  const renderToolbar = () => {
+    if (user.role === 0) {
+      return (
+        <Toolbar
+          organization={organization}
+          setOrganization={setOrganization}
+          organizations={organizations}
+          getAdminContact={getAdminContact}
+          setOpenAddOrganizationModal = {setOpenAddOrganizationModal}
+        />)
+    } else {
+      return (organization &&
+        <Card>
+          <Grid container spacing={1} sx={{p: 2, width: '100%'}}>
+            <Grid item xs={12} sm={12}>
+              <Typography variant="h4">{organization.name}</Typography>
+            </Grid>
+          </Grid>
+        </Card>
+      )
+    }
+  }
 
   return (
     <>
-      <Paper>
-      </Paper>
+      <Box>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={12}>
+            {renderToolbar()}
+          </Grid>
+          {organization.id ? (
+          <>
+          <Grid item xs={12} sm={6}>
+            {editing ? (
+              <EditOrganization
+                organization={organization}
+                setOrganization={setOrganization}
+                setOrganizations={setOrganizations}
+                setEditing={setEditing}
+              /> ) : (
+              <OrganizationDetails
+                organization={organization}
+                setEditing={setEditing}
+                userRole={user.role}
+              />
+            )}
+          </Grid>
+          <Grid container item xs={12} sm={6} spacing={2}>
+            <Grid item xs={12} sm={12}>
+              <OrganizationCode
+                organizationCode={organization.organization_code}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <AdminContact
+                adminContact={adminContact}
+              />
+            </Grid>          
+          </Grid>
+          </>
+          ) : null}
+        </Grid>
+
+        <Grid container spacing={2}>
+        <Grid item xs={12} sm={12}>
+            <AddOrganization
+              getOrganizations={getOrganizations}
+              openAddOrganizationModal={openAddOrganizationModal}
+              setOpenAddOrganizationModal={setOpenAddOrganizationModal}
+              setOrganization={setOrganization}
+              getAdminContact={getAdminContact}
+            />
+          </Grid>
+        </Grid>
+        
+      </Box>
     </>
   );
 }

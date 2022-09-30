@@ -6,7 +6,7 @@ import MainLayout from "./layouts/MainLayout";
 import LoginBackdrop from "./layouts/LoginLayout";
 import Error404 from "./layouts/404Error";
 import DataView from "./components/DataView";
-import OrganizationView from "./components/OrganizationView";
+import ManageOrganization from "./components/ManageOrganization/ManageOrganization";
 import LoggingView from "./components/LoggingView";
 import LoginCard from "./components/login/LoginCard";
 import RegisterCard from "./components/login/RegisterCard";
@@ -99,7 +99,7 @@ const routes = [
     element: (
       <RequireAuth>
         <MainLayout>
-          <OrganizationView />
+          <ManageOrganization />
         </MainLayout>
       </RequireAuth>
     ),
