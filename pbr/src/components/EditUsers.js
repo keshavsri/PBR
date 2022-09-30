@@ -8,7 +8,8 @@ import {
   Card,
   Alert,
   Modal,
-  MenuItem
+  MenuItem,
+  Select
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import useAuth from "../services/useAuth";
@@ -42,23 +43,25 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function EditUsers({
-  roleMap,
-  currentUser,
-  user,
-  editUser,
-  openEditUsersModal,
-  setOpenEditUsersModal
-}) {
+export default function EditUsers(props) {
+  const {
+    roleMap,
+    currentUser,
+    user,
+    editUser,
+    openEditUsersModal,
+    setOpenEditUsersModal
+  } = props;
 
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
   useTheme();
 
   const [userDetails, setUserDetails] = React.useState(user);
-
+  console.log(userDetails);
   console.log("Editing user")
-  console.log(userDetails)
+  console.log(currentUser);
+  console.log(currentUser.role);
 
   const [errorToggle, setErrorToggle] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
@@ -168,7 +171,7 @@ export default function EditUsers({
 
           { currentUser.role === 3 ||
             currentUser.role === 4 ||
-            currentUser.role <= user.role ? null : (
+            Object.keys(roleMap).find(key => roleMap[key] === user.role) <= currentUser.role ? null : (
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth

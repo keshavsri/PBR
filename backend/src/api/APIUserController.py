@@ -109,6 +109,7 @@ def me(current_user):
       "lastname": current_user.last_name,
       "role": current_user.role,
       "organization_id": current_user.organization_id,
+      "id": current_user.id
     }
     return jsonify(ret_user), 200
   else:

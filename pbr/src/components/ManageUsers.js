@@ -127,10 +127,27 @@ export default function ManageUsers() {
         row.deletable = false;
       }
       */
-      row.deletable = true;
+      
+      row.role_id = row.role;
       row.role = roleMap[Number(row.role)];
+      row.deletable = isDeletable(row);
+      
     });
   };
+
+  const isDeletable = (row) => {
+    console.log(user.id, row.id);
+    console.log(user.id === row.id);
+    if (user.role < row.role_id && user.role != 3) {
+      return true;
+    } else if (user.id === row.id) {
+      return true;
+    }
+      else {
+      return false;
+    }
+  }
+
 
   const getHeadCells = () => {
     const headCells = [
