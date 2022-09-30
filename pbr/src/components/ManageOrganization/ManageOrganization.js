@@ -18,7 +18,7 @@ import useAuth from "../../services/useAuth";
 
 export default function OrganizationView() {
   const {checkResponseAuth, user} =  useAuth();
-  const [organization, setOrganization] = React.useState(null);
+  const [organization, setOrganization] = React.useState({id: null});
   const [organizations, setOrganizations] = React.useState([]);
   const [adminContact, setAdminContact] = React.useState(null);
   const [openAddOrganizationModal, setOpenAddOrganizationModal] = React.useState(false);
@@ -100,7 +100,7 @@ export default function OrganizationView() {
           <Grid item xs={12} sm={12}>
             {renderToolbar()}
           </Grid>
-          {organization ? (
+          {organization.id ? (
           <>
           <Grid item xs={12} sm={6}>
             {editing ? (
@@ -141,6 +141,7 @@ export default function OrganizationView() {
               setOpenAddOrganizationModal={setOpenAddOrganizationModal}
               setOrganization={setOrganization}
               getAdminContact={getAdminContact}
+              organizations={organizations}
             />
           </Grid>
         </Grid>

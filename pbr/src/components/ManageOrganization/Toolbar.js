@@ -19,8 +19,8 @@ export default function Toolbar({
   setOpenAddOrganizationModal
 }) {
   const organizationSelected = event => {
-    setOrganization(event.target.value)
-    getAdminContact(event.target.value.id)
+    setOrganization(organizations.find(org => org.id == event.target.value))
+    getAdminContact(event.target.value)
   }
 
   function OrganizationDropdown(props) {
@@ -30,13 +30,13 @@ export default function Toolbar({
         <Select
           labelId="label-select-organization"
           id="select-organizations"
-          value={organization}
+          value={organization.id}
           label="Organization"
           onChange={organizationSelected}
         >
           {organizations.map((org) => {
             return (
-              <MenuItem value={org}>{org.name}</MenuItem>
+              <MenuItem value={org.id}>{org.name}</MenuItem>
             )
           })}
         </Select>

@@ -50,9 +50,7 @@ const useStyles = makeStyles(theme => ({
 export default function AddOrganization({
     getOrganizations,
     openAddOrganizationModal,
-    setOpenAddOrganizationModal,
-    setOrganization,
-    getAdminContact
+    setOpenAddOrganizationModal
   }) {
 
     const classes = useStyles();
@@ -128,40 +126,28 @@ export default function AddOrganization({
       
       // API Call for POST Organization
 
-      
       await fetch(`/api/organization/`, {
-          method: "POST",
-          body: JSON.stringify(payload),
-          headers: {
-              "Content-Type": "application/json",
-          },
-          })
-          .then(checkResponseAuth)
-          .then((response) => {
-              console.log(response);
-              if (!response.ok) {
-                console.log("Unable to create Organization");
-                setErrorToggle(true)
-                setErrorMessage("Unable to create organization.")
-          return
-              } else {
-              getOrganizations();
-              return response.json();
-              }
-          });
-
-          //setOrganization and orgAdmin to the newly created organization
-          /*
-            setOrganization(event.target.value)
-            console.log(event.target.value.id)
-            getAdminContact(event.target.value.id)
-          */
-
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        })
+        .then(checkResponseAuth)
+        .then((response) => {
+          console.log(response);
+          if (!response.ok) {
+            setErrorToggle(true)
+            setErrorMessage("Unable to create organization.")
+            return
+          } else {
+            getOrganizations();
             setOpenAddOrganizationModal(false);
+            return response.json();
+          }
+        });
 
     };
-
-    console.log("Add Organization's open modal value is:" + openAddOrganizationModal);
 
     return (
 
