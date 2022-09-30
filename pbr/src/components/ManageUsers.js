@@ -2,7 +2,7 @@ import React from "react";
 import OrganizationIcon from "@mui/icons-material/Apartment";
 import CustomDialog from "./CustomDialog";
 import OrgCodeContent from "./DataViewOrganization/OrgCodeContent";
-import {EditUserForm} from "./EditUsers"
+import EditUsers from "./EditUsers";
 
 import { Paper, Button, Tooltip, IconButton, Chip, Box } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -16,24 +16,16 @@ import NextIcon from "@mui/icons-material/ArrowForwardIos";
 import BackIcon from "@mui/icons-material/ArrowBackIosNew";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import useAuth from "../services/useAuth";
-
-// Might need to change
-import DataViewAddSample from "./DataViewSample/AddSample";
 import EnhancedTable from "./DataViewTable/EnhancedTable";
-import BulkIcon from "@mui/icons-material/UploadFile";
-import ReportIcon from "@mui/icons-material/Assessment";
-import EditIcon from "@mui/icons-material/Edit";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
 
 export default function ManageUsers() {
-  const [openModal, setOpenModal] = React.useState(false);
   const { checkResponseAuth, user } = useAuth();
   const [rowList, setRowList] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
   const [organizations, setOrganizations] = React.useState([]);
   const [organization, setOrganization] = React.useState(1);
-  const [editForm, setEditForm] = React.useState([false])
+  const [openEditUsersModal, setOpenEditUsersModal] = React.useState(false);
 
   const roleMap = {
     0: "Super Admin",
@@ -42,13 +34,6 @@ export default function ManageUsers() {
     3: "Data Collector",
     4: "Guest"
   }
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
 
   React.useEffect(() => {
     getOrganizations();
@@ -101,7 +86,7 @@ export default function ManageUsers() {
   }
 
   const editUser = (editedUser) => {
-    fetch(`/api/user/users/${editedUser.id}`,
+    fetch(`/api/user/users/${selected[0]}`,
           { method: "PUT",
             body: JSON.stringify(editedUser),
             headers: {"Content-Type" : "application/json"}})
@@ -111,9 +96,10 @@ export default function ManageUsers() {
         console.log(data);
       }).catch((error) => {
         console.log(error);
-      })
-      setEditForm(false);
-      console.log(editForm)
+      });
+      setOpenEditUsersModal(false);
+      getUsers();
+      setSelected([])
   }
 
   const onDelete = () => {
@@ -127,19 +113,21 @@ export default function ManageUsers() {
   }
 
   const onEdit = () => {
-    setEditForm(true);
-    renderEditForm()
+    setOpenEditUsersModal(true);
   }
 
   const assignRowHtml = (rows) => {
-    rows.map((row, index) => {
+    rows.map((row, index) => { 
       console.log(row.id);
       console.log(user);
+      /**
       if (user.role === 0 || user.role === 1) {
         row.deletable = true;
       } else {
         row.deletable = false;
       }
+      */
+      row.deletable = true;
       row.role = roleMap[Number(row.role)];
     });
   };
@@ -199,20 +187,17 @@ export default function ManageUsers() {
     return (
       <Grid item xs={12} sm={6}>
         <FormControl fullWidth>
-
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={organization}
             label="Organization"
-
           >
             {organizations.map((org) => {
               console.log(organizations);
               return (
                 <MenuItem value={org.id}>{org.name}</MenuItem>
               )
-
             })}
           </Select>
           <InputLabel id="demo-simple-select-label">Organization</InputLabel>
@@ -228,16 +213,6 @@ export default function ManageUsers() {
           organizationDropdown()
         }
       </>
-    );
-  }
-
-  const renderEditForm = () => {
-    return (
-      <EditUserForm
-        user={rowList.find(x => x.id === selected[0])}
-        editUser={editUser}
-        setEditForm={setEditForm}
-      />
     );
   }
 
@@ -259,6 +234,22 @@ export default function ManageUsers() {
           selected={selected}
           setSelected={setSelected}
         ></EnhancedTable>
+
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={12}>
+            { openEditUsersModal ? (
+              <EditUsers
+              roleMap = {roleMap}
+              currentUser = {user}
+              user = {rowList.find(user => user.id === selected[0])}
+              editUser={editUser}
+              openEditUsersModal={openEditUsersModal}
+              setOpenEditUsersModal={setOpenEditUsersModal}
+            />) : null
+            }
+          </Grid>
+        </Grid>
+
       </Paper>
     </>
   );

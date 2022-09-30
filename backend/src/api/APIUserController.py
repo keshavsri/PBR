@@ -203,7 +203,7 @@ def register():
 
 @userBlueprint.route('/users/<int:org_id>', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2, 3, 4])
 def get_users(access_allowed, current_user, org_id):
 
     """
@@ -268,7 +268,7 @@ def deleteUser(access_allowed, current_user, user_id):
 
 @userBlueprint.route('/users/<int:user_id>', methods=['PUT'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2, 3, 4])
 def update_user(access_allowed, current_user, user_id):
 
     """
@@ -282,37 +282,75 @@ def update_user(access_allowed, current_user, user_id):
     """
     if access_allowed:
 
-        updated_user = request.json
-        print("hi..................................", flush=True)
-        print(updated_user, flush=True)
-        user = Models.User.query.filter_by(id=updated_user.get("id")).first()
+        # Get json dict representing new user object
+        edited_user = request.json
+        # Get existing user object with the same id as edited_user
+        user = Models.User.query.filter_by(id=user_id).first()
+        print(type(user), flush=True)
 
         if user is None:
-            return jsonify({'message': 'User does not exist'}), 404
+            return jsonify({'message': 'User does not exist'}), 407
         else:
 
-            if current_user.role == Roles.Supervisor:
-                if user.role == Roles.Admin: ## Cannot change an admins info
-                    updated_user = user ## Override new user info with prexisting info
-                    updated_user = updated_user.dict()
+            # Superadmin cannot edit their own role
+            if current_user.role == Roles.Super_Admin:
+              if user.role == Roles.Super_Admin:
+                edited_user["role"] = user.role
 
-            if current_user.role == Roles.Data_Collector:
-                if user.id != current_user.id: ## Cannot change anyone else's info
-                    updated_user = user ## Override new user info with prexisting info
-                    updated_user = updated_user.dict()
+            # Admins cannot edit superadmin
+            # Admins cannot edit another admin
+            # Admins cannot edit their own role
+            elif current_user.role == Roles.Admin:
+              if user.role == Roles.Super_Admin:
+                edited_user = user
+              elif user.role == Roles.Admin and current_user.id != user.id:
+                edited_user = user
+              elif user.role == Roles.Admin and current_user.id == user.id:
+                edited_user["role"] = user.role
 
-            if user.id == current_user.id: ## Cannot change your own role
-                updated_user["role"] = user.role ## Override new role with prexisting role
+            # Supervisors cannot edit superadmin or admins
+            # Supervisors cannot edit another supervisor
+            # Supervisors cannot edit their own role
+            elif current_user.role == Roles.Supervisor:
+              if user.role == Roles.Super_Admin or user.role == Roles.Admin:
+                edited_user = user
+              elif user.role == Roles.Supervisor and current_user.id != user.id:
+                edited_user = user
+              elif user.role == Roles.Supervisor and current_user.id == user.id:
+                edited_user["role"] = user.role
 
-            updated_user['id'] = user.id
-            updated_user['password'] = user.password
-            updated_user.pop("deletable")
+            # Data collectors and Guests cannot edit anyone else
+            # Data collectors and Guests cannot edit their own role
+            elif current_user.role == Roles.Data_Collector:
+              if current_user.id != user.id:
+                edited_user = user
+              else:
+                edited_user["role"] = user.role
 
-            Models.User.query.filter_by(id=updated_user.get("id")).update(updated_user)
+            # Guests cannot edit anyone else
+            # Guests cannot edit their own role
+            elif current_user.role == Roles.Guest:
+              if current_user.id != user.id:
+                edited_user = user
+              else:
+                edited_user["role"] = user.role
+
+            # These fields cannot be edited
+            edited_user.update(
+              {
+                'id' : user.id,
+                'password' : user.password,
+                'organization_id' : user.organization_id#,
+                #'is_deleted' : user.is_deleted
+              }
+            )
+
+            # SQLAlchemy update and log action
+            Models.User.query.filter_by(id=edited_user.get("id")).update(edited_user)
             Models.db.session.commit()
-            edited_user = Models.User.query.get(updated_user.get("id"))
-            Models.createLog(current_user, LogActions.EDIT_USER, 'Edited user: ' + str(updated_user.get("id")))
+            Models.createLog(current_user, LogActions.EDIT_USER, 'Edited user: ' + str(edited_user.get("id")))
 
-            return Schemas.User.from_orm(Models.User.query.filter_by(id=updated_user.get("id")).first()).dict(), 200
+            # Return updated user object, retreived via db query (confirmation)
+            return Schemas.User.from_orm(Models.User.query.filter_by(id=edited_user.get("id")).first()).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
