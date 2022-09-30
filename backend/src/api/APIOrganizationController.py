@@ -60,7 +60,7 @@ def get_organization(access_allowed, current_user, item_id):
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
         # if item id exists then it will return the organization with the id
-        if current_user.organization_id == item_id:
+        if current_user.organization_id == item_id or current_user.role == Roles.Super_Admin:
             responseJSON = src.helpers.get_organization_by_id(item_id)
         # otherwise it will return all the organizations in the database
         if responseJSON is None:
