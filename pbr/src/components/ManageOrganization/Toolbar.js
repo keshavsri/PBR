@@ -15,7 +15,8 @@ export default function Toolbar({
   organization,
   setOrganization,
   organizations,
-  getAdminContact
+  getAdminContact,
+  setOpenAddOrganizationModal
 }) {
   const organizationSelected = event => {
     setOrganization(event.target.value)
@@ -43,6 +44,10 @@ export default function Toolbar({
     )
   }
 
+  const handleOpenAddOrganizationModal = () => {
+    setOpenAddOrganizationModal(true);
+  };
+
   return (
     <Card>
       <Grid container spacing={1} sx={{p: 2, width: '100%'}}>
@@ -53,7 +58,7 @@ export default function Toolbar({
           <Button variant="contained">Delete Organization</Button>
         </Grid>
         <Grid item xs={12} sm={3}>
-          <Button variant="contained">Create New Organization</Button>
+          <Button variant="contained" onClick={handleOpenAddOrganizationModal}>Create New Organization</Button>
         </Grid>
         {organization ? null : (
         <Grid item>

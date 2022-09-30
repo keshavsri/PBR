@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from typing import List
 from itsdangerous import json
+from random import randint
 
 from src.Models import db
 from src.Models import Flock as FlockORM
@@ -196,6 +197,18 @@ def create_organization(org_dict: dict):
             setattr(org, name, value)
         elif value is not None and name == 'notes':
             org.notes = value
+
+    organizations = OrganizationORM.query.all()
+    orgCodes = []
+    for organization in organizations:
+        orgCodes.append(Organization.from_orm(organization).dict().get("organization_code"))
+
+    organization_code = randint(100000, 999999)
+    while organization_code in orgCodes:
+        organization_code = randint(100000, 999999)
+
+    org.organization_code = organization_code
+
     db.session.add(org)
     db.session.commit()
     db.session.refresh(org)

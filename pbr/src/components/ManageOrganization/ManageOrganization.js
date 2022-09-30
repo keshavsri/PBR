@@ -5,6 +5,7 @@ import OrganizationDetails from "./OrganizationDetails";
 import AdminContact from "./AdminContact";
 import Toolbar from "./Toolbar";
 import OrganizationCode from "./OrganizationCode";
+import AddOrganization from "./AddOrganization";
 
 import {
   Box,
@@ -20,6 +21,7 @@ export default function OrganizationView() {
   const [organization, setOrganization] = React.useState(null);
   const [organizations, setOrganizations] = React.useState([]);
   const [adminContact, setAdminContact] = React.useState(null);
+  const [openAddOrganizationModal, setOpenAddOrganizationModal] = React.useState(false);
   const [editing, setEditing] = React.useState(false);
 
   React.useEffect(() => {
@@ -76,6 +78,7 @@ export default function OrganizationView() {
           setOrganization={setOrganization}
           organizations={organizations}
           getAdminContact={getAdminContact}
+          setOpenAddOrganizationModal = {setOpenAddOrganizationModal}
         />)
     } else {
       return (organization &&
@@ -129,6 +132,19 @@ export default function OrganizationView() {
           </>
           ) : null}
         </Grid>
+
+        <Grid container spacing={2}>
+        <Grid item xs={12} sm={12}>
+            <AddOrganization
+              getOrganizations={getOrganizations}
+              openAddOrganizationModal={openAddOrganizationModal}
+              setOpenAddOrganizationModal={setOpenAddOrganizationModal}
+              setOrganization={setOrganization}
+              getAdminContact={getAdminContact}
+            />
+          </Grid>
+        </Grid>
+        
       </Box>
     </>
   );

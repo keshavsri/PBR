@@ -1,130 +1,116 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
-import { styled } from "@mui/material/styles";
+import {states} from '../../models/enums'
+
 
 import {
   Typography,
   Grid,
-  Box,
-  FormControl,
-  InputLabel,
-  Select,
-  Divider,
-  OutlinedInput,
-  Accordion,
-  Autocomplete,
-  AccordionSummary,
-  Tooltip,
-  Stack,
-  AccordionDetails,
   TextField,
-  InputAdornment,
   Button,
-  Checkbox,
-  FormHelperText,
-  MenuItem,
-  IconButton,
+  Card,
+  Alert,
+  Modal,
+  MenuItem
 } from "@mui/material";
-import DateTimePicker from "@mui/lab/DateTimePicker";
 import { makeStyles } from "@mui/styles";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
-  organizationRoles
-} from "../../models/enums";
-import { tooltipClasses } from "@mui/material/Tooltip";
-import { createFilterOptions } from "@mui/material/Autocomplete";
 import useAuth from "../../services/useAuth";
-import useDataView from "../../services/useDataView";
 
-const filter = createFilterOptions();
 
-const Input = styled("input")({
-  display: "none",
-});
+function getModalStyle() {
+  const top = 55;
+  const left = 50;
+  return {
+      top: `${top}%`,
+      left: `${left}%`,
+      
+      transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 
-const useStyles = makeStyles({
-  root: {
-    "& .Mui-disabled": {
-      backgroundColor: "#efefef",
-    },
-    "& .MuiTextField-root": {
-      width: "100%",
-    },
-    "& .MuiAccordion-root": {
-      backgroundColor: "rgba(0, 0, 0, 0.03)",
-
-      "& .MuiFormControl-root": {
-        backgroundColor: "#ffffff",
-      },
-      "& .MuiDivider-vertical": {
-        height: "50px",
-        margin: "0 15px",
-      },
-      "& .MuiInputLabel-root": {
-        color: "grey !IMPORTANT",
-      },
-      "& .MuiInputAdornment-root .MuiTypography-root": {
-        color: "grey !IMPORTANT",
-      },
-    },
-    "& .MuiFormHelperText-root": {
-      marginLeft: "0px",
-    },
+const useStyles = makeStyles(theme => ({
+  modal: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
   },
-  autoFilled: {
-    "& .MuiInputBase-root": {
-      backgroundColor: "rgb(37, 185, 0, 0.1) !IMPORTANT",
-    },
+  paper: {
+      position: 'absolute',
+      height: 500,
+      width: 1000,
+      backgroundColor: theme.palette.background.paper,
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
   },
-  headerWithButton: {
-    marginBottom: "20px",
-    "& .MuiTypography-h3": {
-      marginBottom: "0px !IMPORTANT",
-      flexGrow: 1,
-    },
-    "& .MuiTypography-h4": {
-      marginBottom: "0px !IMPORTANT",
-      flexGrow: 1,
-    },
-  },
-  accordion: {
-    minHeight: "48px",
-  },
-});
-
-const [organizationDetails, setOrganizationDetails] = React.useState({
-  name: "",
-  street: "",
-  city: "",
-  state: "",
-  zip: "",
-  notes: ""
-});
-
-const handleOrganizationDetailsChange = (prop) => (event) => {
-  console.log("Handling Organization Details Change");
-
-  setOrganizationDetails({
-    ...organizationDetails,
-    [prop]: event.target.value,
-  });
-  
-  console.log(organizationDetails);
-};
+}));
 
 
 // Start of Add Organization Functionality
 
-export default function DataViewAddOrganization({
-    setOrganizations
+export default function AddOrganization({
+    getOrganizations,
+    openAddOrganizationModal,
+    setOpenAddOrganizationModal,
+    setOrganization,
+    getAdminContact
   }) {
+
     const classes = useStyles();
+    const [modalStyle] = React.useState(getModalStyle);
     useTheme();
-    const {
-    } = useDataView();
     const { checkResponseAuth } = useAuth();
 
+    const [organizationDetails, setOrganizationDetails] = React.useState({
+      name: "",
+      street_address: "",
+      city: "",
+      state: "",
+      zip: "",
+      notes: ""
+    });
+
+    const [errorToggle, setErrorToggle] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState("");
+    const requiredFields = ["name", "street_address", "city", "state", "zip"]
+
+    const handleOrganizationDetailsChange = (prop) => (event) => {
+      console.log("Handling Organization Details Change");
+    
+      setOrganizationDetails({
+        ...organizationDetails,
+        [prop]: event.target.value,
+      });
+      
+      console.log(organizationDetails);
+    };
+
+    const clearOrganizationDetails = () => {
+      setOrganizationDetails({
+        name: "",
+        street_address: "",
+        city: "",
+        state: "",
+        zip: "",
+        notes: ""
+      })
+    };
+
+
     let onSubmit = async () => {
+
+      let error = false;
+
+      requiredFields.forEach(field => {
+        if(organizationDetails[field] === "") {
+          error = true;
+          setErrorToggle(true)
+          setErrorMessage("Required fields * cannot be empty.")
+        }
+      })
+      if(error) {
+        return;
+      }
+
       console.log(`Creating new Organization`);
 
       let payload = {
@@ -132,7 +118,7 @@ export default function DataViewAddOrganization({
         // Organization Parameters
 
         name: organizationDetails.name,
-        street: organizationDetails.street,
+        street_address: organizationDetails.street_address,
         city: organizationDetails.city,
         state: organizationDetails.state,
         zip: organizationDetails.zip,
@@ -154,191 +140,158 @@ export default function DataViewAddOrganization({
           .then((response) => {
               console.log(response);
               if (!response.ok) {
-              setError({
-                  title: `${response.status} - ${response.statusText}`,
-                  description: `There was an error while creating the organization. Try again.`,
-              });
+                console.log("Unable to create Organization");
+                setErrorToggle(true)
+                setErrorMessage("Unable to create organization.")
+          return
               } else {
-              getOrganizationData();
+              getOrganizations();
               return response.json();
               }
           });
+
+          //setOrganization and orgAdmin to the newly created organization
+          /*
+            setOrganization(event.target.value)
+            console.log(event.target.value.id)
+            getAdminContact(event.target.value.id)
+          */
+
+            setOpenAddOrganizationModal(false);
+
     };
 
-    const getOrganizationData = async () => {
-      await fetch(`/api/organization/`, { method: "GET" })
-        .then((response) => {
-          return response.json();
-        })
-        .then(checkResponseAuth)
-        .then((data) => {
-          console.log(data);
-          setOrganizations(data);
-        });
-    };
+    console.log("Add Organization's open modal value is:" + openAddOrganizationModal);
 
     return (
-        <Box className={classes.root}>
-          <Box
-              className={classes.headerWithButton}
-              sx={{
-              display: "flex",
-              alignItems: "center",
-              }}
-          >
-            <Typography variant="h3">Add Organization</Typography>
 
-            {/* Name Field */}
-            <Box sx={{ flexGrow: 1 }}>
-              <FormControl
-                required
-                sx={{ width: "100%", mb: 2 }}
-                error={
-                  organizationDetails.name === ""
-                    ? true
-                    : false
-                }
-              >
-                  <TextField
-                    error={
-                      organizationDetails.name === ""
-                        ? true
-                        : false
-                    }
-                    label="Organization Name *"
-                    value={organizationDetails.name}
-                    type="text"
-                    onChange={handleOrganizationDetailsChange("name")}
-                  />
-                  {organizationDetails.name === "" (
-                      <FormHelperText>
-                        {"Organization name field is required."}
-                      </FormHelperText>
-                    )}
-              </FormControl>
-            </Box>
+      <Modal
+        aria-labelledby="Add Organization Modal"
+        aria-describedby="Modal used for adding an organization to the application"
+        open={openAddOrganizationModal}
+        onClose={() => {
+          setOpenAddOrganizationModal(false);
+        }}
+      >
+        <div style={modalStyle} className={classes.paper}>
+          <Card>
+          <Grid container spacing={2} sx={{padding: '15px'}}>
 
-            {/* Street Field */}
-            <Box sx={{ flexGrow: 1 }}>
-              <FormControl
-                required
-                sx={{ width: "100%", mb: 2 }}
-                error={
-                  organizationDetails.street === ""
-                    ? true
-                    : false
-                }
-              >
-                  <TextField
-                    error={
-                      organizationDetails.street === ""
-                        ? true
-                        : false
-                    }
-                    label="Street *"
-                    value={organizationDetails.street}
-                    type="text"
-                    onChange={handleOrganizationDetailsChange("street")}
-                  />
-                  {organizationDetails.street === "" (
-                      <FormHelperText>
-                        {"Street field is required."}
-                      </FormHelperText>
-                    )}
-              </FormControl>
-            </Box>
-              
-              {/* City Field */}
-              <Box sx={{ flexGrow: 1 }}>
-              <FormControl
-                required
-                sx={{ width: "100%", mb: 2 }}
-                error={
-                  organizationDetails.city === ""
-                    ? true
-                    : false
-                }
-              >
-                  <TextField
-                    error={
-                      organizationDetails.city === ""
-                        ? true
-                        : false
-                    }
-                    label="City *"
-                    value={organizationDetails.city}
-                    type="text"
-                    onChange={handleOrganizationDetailsChange("city")}
-                  />
-                  {organizationDetails.city === "" (
-                      <FormHelperText>
-                        {"City field is required."}
-                      </FormHelperText>
-                    )}
-              </FormControl>
-            </Box>
 
-            {/* State Field */}
-            <Box sx={{ flexGrow: 1 }}>
-              <FormControl
-                required
-                sx={{ width: "100%", mb: 2 }}
-                error={
-                  organizationDetails.state === ""
-                    ? true
-                    : false
-                }
-              >
-                  <TextField
-                    error={
-                      organizationDetails.state === ""
-                        ? true
-                        : false
-                    }
-                    label="State *"
-                    value={organizationDetails.stetae}
-                    type="text"
-                    onChange={handleOrganizationDetailsChange("state")}
-                  />
-                  {organizationDetails.state === "" (
-                      <FormHelperText>
-                        {"State field is required."}
-                      </FormHelperText>
-                    )}
-              </FormControl>
-            </Box>
+            <Grid item xs={12} sm={12}>
+              <Typography gutterBottom variant="h4">Add Organization</Typography>
+            </Grid>
 
-            {/* Zip Field */}
-            <Box sx={{ flexGrow: 1 }}>
-              <FormControl
-                required
-                sx={{ width: "100%", mb: 2 }}
-                error={
-                  organizationDetails.zip === ""
-                    ? true
-                    : false
-                }
-              >
-                  <TextField
-                    error={
-                      organizationDetails.zip === ""
-                        ? true
-                        : false
-                    }
-                    label="Zip *"
-                    value={organizationDetails.zip}
-                    type="text"
-                    onChange={handleOrganizationDetailsChange("zip")}
-                  />
-                  {organizationDetails.zip === "" (
-                      <FormHelperText>
-                        {"Zip field is required."}
-                      </FormHelperText>
-                    )}
-              </FormControl>
-            </Box>
 
-          </Box>
-        </Box>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                label="Name"
+                value={organizationDetails.name}
+                onChange={handleOrganizationDetailsChange("name")}
+                error = {organizationDetails.name === "" ? true : false}
+              />
+            </Grid>
+
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                required
+                fullWidth
+                label="Street"
+                value={organizationDetails.street_address}
+                onChange={handleOrganizationDetailsChange("street_address")}
+                error = {organizationDetails.street_address === "" ? true : false}
+              />
+            </Grid>
+
+
+            <Grid item xs={12} sm={4}>
+              <TextField
+                required
+                fullWidth
+                label="City"
+                value={organizationDetails.city}
+                onChange={handleOrganizationDetailsChange("city")}
+                error = {organizationDetails.city === "" ? true : false}
+              />
+            </Grid>
+
+
+            <Grid item xs={12} sm={4}>
+              <TextField
+                required
+                fullWidth
+                select
+                label="State"
+                value={organizationDetails.state}
+                onChange={handleOrganizationDetailsChange('state')}
+              >
+                {Object.values(states).map((value) => {
+                  return <MenuItem value={value}>{value}</MenuItem>
+                })}
+              </TextField>
+            </Grid>
+
+
+            <Grid item xs={12} sm={4}>
+              <TextField
+                required
+                fullWidth
+                label="Zip"
+                value={organizationDetails.zip}
+                onChange={handleOrganizationDetailsChange("zip")}
+                error = {organizationDetails.zip === "" ? true : false}
+              />
+            </Grid>
+
+
+            <Grid item xs={12} sm={12}>
+              <TextField
+                fullWidth
+                label="Notes"
+                value={organizationDetails.notes}
+                onChange={handleOrganizationDetailsChange("notes")}
+              />
+            </Grid>
+
+            {errorToggle ? 
+            (<Grid item xs={12} sm={12}>
+              <Alert severity="error" color="error">
+                {errorMessage}
+              </Alert>
+            </Grid>) : null}
+
+            <Grid item xs={12} sm={8}></Grid>
+
+            <Grid item xs={12} sm={2}>
+              <Button
+                onClick={() => {
+                  setOpenAddOrganizationModal(false);
+                  setErrorToggle(false);
+                  clearOrganizationDetails();
+                }}
+              >
+                Cancel
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm={2}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  onSubmit();
+                }}
+              >
+                Submit
+              </Button>
+            </Grid>
+
+          </Grid>
+          </Card>
+        </div>
+      </Modal>
+
+        
     )
 }
