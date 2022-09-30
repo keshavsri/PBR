@@ -142,6 +142,8 @@ export default function AddOrganization({
             successfulPost = true;
             getOrganizations();
             setOpenAddOrganizationModal(false);
+            clearOrganizationDetails();
+            setErrorToggle(false);
             return response.json();
           }
         })
