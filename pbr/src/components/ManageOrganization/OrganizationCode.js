@@ -7,10 +7,11 @@ import {
 } from '@mui/material';
 import {Refresh} from '@mui/icons-material'
 
-export default function OrganizationCode(
+export default function OrganizationCode({
   organizationCode
-) {
+}) {
   let expirationDate = new Date(2022, 8, 30, 5, 0, 0, 0);
+
   return (
     <Card>
       <Grid container rowSpacing={1} columnSpacing={1} sx={{padding: '15px'}}>
@@ -19,7 +20,7 @@ export default function OrganizationCode(
         </Grid>
         <Grid container item columnSpacing={3}>
           <Grid item>
-            <Typography variant="h4">123456</Typography>
+            <Typography variant="h4">{organizationCode}</Typography>
           </Grid>
           <Grid item sx={{mt: '10px'}}>
             <Refresh/>

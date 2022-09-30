@@ -2,6 +2,9 @@ import React from "react";
 import { useTheme } from "@mui/material/styles";
 import { styled } from "@mui/material/styles";
 
+import {states} from '../../models/enums'
+
+
 import {
   Typography,
   Grid,
@@ -9,7 +12,8 @@ import {
   Button,
   Card,
   Alert,
-  Modal
+  Modal,
+  MenuItem
 } from "@mui/material";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import { makeStyles } from "@mui/styles";
@@ -217,11 +221,15 @@ export default function AddOrganization({
               <TextField
                 required
                 fullWidth
+                select
                 label="State"
                 value={organizationDetails.state}
-                onChange={handleOrganizationDetailsChange("state")}
-                error = {organizationDetails.state === "" ? true : false}
-              />
+                onChange={handleOrganizationDetailsChange('state')}
+              >
+                {Object.values(states).map((value) => {
+                  return <MenuItem value={value}>{value}</MenuItem>
+                })}
+              </TextField>
             </Grid>
 
 

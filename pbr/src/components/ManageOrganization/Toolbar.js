@@ -20,7 +20,6 @@ export default function Toolbar({
 }) {
   const organizationSelected = event => {
     setOrganization(event.target.value)
-    console.log(event.target.value.id)
     getAdminContact(event.target.value.id)
   }
 

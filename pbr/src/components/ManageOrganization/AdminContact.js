@@ -18,6 +18,7 @@ import {
 export default function AdminContact({
   adminContact
 }) {
+
   if (adminContact) {
     return (
       <Card>
