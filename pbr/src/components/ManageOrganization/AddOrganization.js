@@ -50,7 +50,9 @@ const useStyles = makeStyles(theme => ({
 export default function AddOrganization({
     getOrganizations,
     openAddOrganizationModal,
-    setOpenAddOrganizationModal
+    setOpenAddOrganizationModal,
+    setOrganization,
+    getAdminContact
   }) {
 
     const classes = useStyles();
@@ -71,15 +73,11 @@ export default function AddOrganization({
     const [errorMessage, setErrorMessage] = React.useState("");
     const requiredFields = ["name", "street_address", "city", "state", "zip"]
 
-    const handleOrganizationDetailsChange = (prop) => (event) => {
-      console.log("Handling Organization Details Change");
-    
+    const handleOrganizationDetailsChange = (prop) => (event) => {    
       setOrganizationDetails({
         ...organizationDetails,
         [prop]: event.target.value,
       });
-      
-      console.log(organizationDetails);
     };
 
     const clearOrganizationDetails = () => {
@@ -145,6 +143,10 @@ export default function AddOrganization({
             setOpenAddOrganizationModal(false);
             return response.json();
           }
+        })
+        .then((data) => {
+          setOrganization(data);
+          getAdminContact(data.id);
         });
 
     };
