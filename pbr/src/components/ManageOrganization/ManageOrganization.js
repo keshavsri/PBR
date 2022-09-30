@@ -27,6 +27,7 @@ export default function OrganizationView() {
   //const [organizationEdit, setOrganizationEdit] = React.useState(null);
   const [editing, setEditing] = React.useState(false);
   const [adminContact, setAdminContact] = React.useState(null);
+  const [openAddOrganizationModal, setOpenAddOrganizationModal] = React.useState(false);
 
   React.useEffect(() => {
     if (user.role == 0) {
@@ -78,6 +79,7 @@ export default function OrganizationView() {
           setOrganization={setOrganization}
           organizations={organizations}
           getAdminContact={getAdminContact}
+          setOpenAddOrganizationModal = {setOpenAddOrganizationModal}
         />)
     } else {
       return (organization &&
@@ -134,7 +136,11 @@ export default function OrganizationView() {
 
         <Grid container spacing={2}>
         <Grid item xs={12} sm={12}>
-            <AddOrganization/>
+            <AddOrganization
+              getOrganizations={getOrganizations}
+              openAddOrganizationModal={openAddOrganizationModal}
+              setOpenAddOrganizationModal={setOpenAddOrganizationModal}
+            />
           </Grid>
         </Grid>
         
