@@ -123,7 +123,7 @@ export default function AddOrganization({
       };
       
       // API Call for POST Organization
-
+      let successfulPost = false
       await fetch(`/api/organization/`, {
         method: "POST",
         body: JSON.stringify(payload),
@@ -139,14 +139,17 @@ export default function AddOrganization({
             setErrorMessage("Unable to create organization.")
             return
           } else {
+            successfulPost = true;
             getOrganizations();
             setOpenAddOrganizationModal(false);
             return response.json();
           }
         })
         .then((data) => {
-          setOrganization(data);
-          getAdminContact(data.id);
+          if (successfulPost) {
+            setOrganization(data);
+            getAdminContact(data.id);
+          }
         });
 
     };
