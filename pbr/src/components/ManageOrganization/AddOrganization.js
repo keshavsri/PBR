@@ -56,7 +56,9 @@ const useStyles = makeStyles(theme => ({
 export default function AddOrganization({
     getOrganizations,
     openAddOrganizationModal,
-    setOpenAddOrganizationModal
+    setOpenAddOrganizationModal,
+    setOrganization,
+    getAdminContact
   }) {
 
     const classes = useStyles();
