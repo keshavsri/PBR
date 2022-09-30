@@ -1,10 +1,11 @@
 import React from "react";
 import OrganizationIcon from "@mui/icons-material/Apartment";
 import CustomDialog from "./CustomDialog";
+
 import OrgCodeContent from "./DataViewOrganization/OrgCodeContent";
 
 import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
-
+import OrgCodeContent from './DataViewOrganization/OrgCodeContent';
 import SampleIcon from "@mui/icons-material/Science";
 import NextIcon from "@mui/icons-material/ArrowForwardIos";
 import BackIcon from "@mui/icons-material/ArrowBackIosNew";

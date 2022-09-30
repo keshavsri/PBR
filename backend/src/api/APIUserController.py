@@ -92,7 +92,7 @@ def token_required(f):
     return  f(current_user, *args, **kwargs)
   return decorated
 
-@userBlueprint.route('/<int:item_id>', methods=['GET', 'PUT', 'DELETE', 'POST'])
+@userBlueprint.route('/<int:item_id>', methods=['GET', 'PUT', 'POST'])
 @userBlueprint.route('/', methods=['GET', 'POST'])
 def route_setting_all(item_id=None):
   return Models.User.fs_get_delete_put_post(item_id)
@@ -255,11 +255,11 @@ def deleteUser(access_allowed, current_user, user_id):
         if user is None:
             return jsonify({'message': 'User does not exist'}), 404
         elif user.organization_id != current_user.organization_id and user.role != Roles.Super_Admin:
-            return jsonify({'message': 'Cannot delete in another organization'}), 403
+            return jsonify({'message': 'Cannot delete user in another organization'}), 403
         elif user.id == current_user.id:
             return jsonify({'message': 'Cannot delete the current user'}), 403
         else:
-            Models.db.session.delete(user)
+            user.is_deleted = True
             Models.db.session.commit()
             Models.createLog(current_user, LogActions.DELETE_SOURCE, f'Deleted user: ${user.first_name} ${user.last_name} in organization: ${Models.Organization.query.get(user.organization_id).name}')
             return jsonify({'message': 'User deleted'}), 200
