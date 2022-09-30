@@ -1,7 +1,5 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
-import { styled } from "@mui/material/styles";
-
 import {states} from '../../models/enums'
 
 
@@ -15,16 +13,8 @@ import {
   Modal,
   MenuItem
 } from "@mui/material";
-import DateTimePicker from "@mui/lab/DateTimePicker";
 import { makeStyles } from "@mui/styles";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
-  organizationRoles
-} from "../../models/enums";
-import { tooltipClasses } from "@mui/material/Tooltip";
-import { createFilterOptions } from "@mui/material/Autocomplete";
 import useAuth from "../../services/useAuth";
-import useDataView from "../../services/useDataView";
 
 
 function getModalStyle() {
@@ -46,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
       position: 'absolute',
-      height: 550,
+      height: 500,
       width: 1000,
       backgroundColor: theme.palette.background.paper,
       boxShadow: theme.shadows[5],
@@ -93,6 +83,18 @@ export default function AddOrganization({
       
       console.log(organizationDetails);
     };
+
+    const clearOrganizationDetails = () => {
+      setOrganizationDetails({
+        name: "",
+        street_address: "",
+        city: "",
+        state: "",
+        zip: "",
+        notes: ""
+      })
+    };
+
 
     let onSubmit = async () => {
 
@@ -205,7 +207,7 @@ export default function AddOrganization({
             </Grid>
 
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
               <TextField
                 required
                 fullWidth
@@ -217,7 +219,7 @@ export default function AddOrganization({
             </Grid>
 
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
               <TextField
                 required
                 fullWidth
@@ -233,7 +235,7 @@ export default function AddOrganization({
             </Grid>
 
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={4}>
               <TextField
                 required
                 fullWidth
@@ -267,6 +269,8 @@ export default function AddOrganization({
               <Button
                 onClick={() => {
                   setOpenAddOrganizationModal(false);
+                  setErrorToggle(false);
+                  clearOrganizationDetails();
                 }}
               >
                 Cancel
