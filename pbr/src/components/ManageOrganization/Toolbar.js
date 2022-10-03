@@ -36,7 +36,7 @@ export default function Toolbar({
         >
           {organizations.map((org) => {
             return (
-              <MenuItem value={org.id}>{org.name}</MenuItem>
+              <MenuItem key={org.id} value={org.id}>{org.name}</MenuItem>
             )
           })}
         </Select>

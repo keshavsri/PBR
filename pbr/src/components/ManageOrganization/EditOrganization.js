@@ -31,17 +31,18 @@ export default function EditOrganization({
   }
 
   let onSubmit = async() => {
-    let error = false;
+    let emptyField = false;
     requiredFields.forEach(field => {
       if(organizationEdit[field] === "") {
-        error = true;
+        emptyField = true;
         setErrorToggle(true)
         setErrorMessage("Required fields * cannot be empty.")
       }
     })
-    if(error) {
+    if(emptyField) {
       return;
     }
+    let successfulPut = true;
     await fetch(`/api/organization/${organization.id}`, {
       method: "PUT",
       body: JSON.stringify(organizationEdit),
@@ -51,27 +52,31 @@ export default function EditOrganization({
     })
       .then((response) => {
         if (!response.ok) {
+          successfulPut = false;
           setErrorToggle(true)
           setErrorMessage("Error updating organization.")
           return
         }
       })
-    await fetch(`/api/organization`, { method: "GET" })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setOrganizations(data);
-      });
-    await fetch(`/api/organization/${organization.id}`, { method: "GET" })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setOrganizationEdit(data);
-        setOrganization(data);
-      });
-    setEditing(false);
+    if (successfulPut) {
+      await fetch(`/api/organization`, { method: "GET" })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          setOrganizations(data);
+        });
+      await fetch(`/api/organization/${organization.id}`, { method: "GET" })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          setOrganizationEdit(data);
+          setOrganization(data);
+        });
+      setEditing(false);
+    }
+
       
   }
 
@@ -121,7 +126,7 @@ export default function EditOrganization({
             onChange={handleEditOrganizationChange('state')}
           >
             {Object.values(states).map((value) => {
-              return <MenuItem value={value}>{value}</MenuItem>
+              return <MenuItem key={value} value={value}>{value}</MenuItem>
             })}
           </TextField>
         </Grid>
