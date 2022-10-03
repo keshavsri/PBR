@@ -1,6 +1,8 @@
 import React from "react";
 import OrganizationIcon from "@mui/icons-material/Apartment";
 import CustomDialog from "./CustomDialog";
+import OrgCodeContent from "./ManageOrganizations/OrgCodeContent";
+import {EditUserForm} from "./EditUsers"
 
 import { Paper, Button, Tooltip, IconButton, Chip, Box } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -14,22 +16,15 @@ import NextIcon from "@mui/icons-material/ArrowForwardIos";
 import BackIcon from "@mui/icons-material/ArrowBackIosNew";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import useAuth from "../services/useAuth";
-
-// Might need to change
-import DataViewAddSample from "./DataViewSample/AddSample";
 import EnhancedTable from "./DataViewTable/EnhancedTable";
-import BulkIcon from "@mui/icons-material/UploadFile";
-import ReportIcon from "@mui/icons-material/Assessment";
-import EditIcon from "@mui/icons-material/Edit";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
 
 export default function ManageUsers() {
-  const [openModal, setOpenModal] = React.useState(false);
   const { checkResponseAuth, user } = useAuth();
   const [rowList, setRowList] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
   const [organizations, setOrganizations] = React.useState([]);
+  const [openEditUsersModal, setOpenEditUsersModal] = React.useState(false);
   const [organization, setOrganization] = React.useState(user.organization_id);
 
 
@@ -40,13 +35,6 @@ export default function ManageUsers() {
     3: "Data Collector",
     4: "Guest"
   }
-
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
 
   React.useEffect(() => {
     getOrganizations();
@@ -88,7 +76,6 @@ export default function ManageUsers() {
   };
 
   const deleteUser = (deletedUserId) => {
-
     fetch(`/api/user/${deletedUserId}`, { method: "DELETE", })
       .then((response) => {
         return response.json();
@@ -98,7 +85,22 @@ export default function ManageUsers() {
       })
   }
 
-
+  const editUser = (editedUser) => {
+    fetch(`/api/user/users/${selected[0]}`,
+          { method: "PUT",
+            body: JSON.stringify(editedUser),
+            headers: {"Content-Type" : "application/json"}})
+      .then((response) => {
+        return response.json();
+      }).then((data) => {
+        console.log(data);
+      }).catch((error) => {
+        console.log(error);
+      });
+      setOpenEditUsersModal(false);
+      getUsers();
+      setSelected([])
+  }
 
   const onDelete = () => {
     if (user.role === 0 || user.role === 1) {
@@ -109,34 +111,38 @@ export default function ManageUsers() {
       })
     }
   }
-
+  
   const onChangeOrganization = (event) => {
     setOrganization(event.target.value);
   }
 
-
-
+  const onEdit = () => {
+    setOpenEditUsersModal(true);
+  }
+ 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => { 
-      row.buttons = (
-        <>
-          <IconButton aria-label="edit" size="small">
-            <EditIcon />
-          </IconButton>
-        </>
-      );
-
       console.log(row.id);
-      console.log(user.role);
-      if (user.role === 0 || user.role === 1) {
-        row.deletable = true;
-      } else {
-        row.deletable = false;
-      }
+      console.log(user.role);  
+      row.role_id = row.role;
       row.role = roleMap[Number(row.role)];
-
+      row.deletable = isDeletable(row);
+      
     });
   };
+
+  const isDeletable = (row) => {
+    console.log(user.id, row.id);
+    console.log(user.id === row.id);
+    if (user.role < row.role_id && user.role != 3) {
+      return true;
+    } else if (user.id === row.id) {
+      return true;
+    }
+      else {
+      return false;
+    }
+  }
 
   const getHeadCells = () => {
     const headCells = [
@@ -186,7 +192,6 @@ export default function ManageUsers() {
         label: "Notes",
       },
     ];
-
     setHeadCellList(headCells);
   };
 
@@ -213,7 +218,6 @@ export default function ManageUsers() {
     )
   }
 
-
   return (
     <>
       <Paper>
@@ -222,18 +226,34 @@ export default function ManageUsers() {
           rows={rowList}
           onDelete={onDelete}
           toolbarButtons={
-              <>
-              {
-                user.role === 0 &&
-                <OrganizationDropdown/>
-              }
-                
-              </>
-
+            <>
+            {
+              user.role === 0 &&
+              <OrganizationDropdown/>
+            }     
+            </>
           }
+
+          onEdit={onEdit}
           selected={selected}
           setSelected={setSelected}
         ></EnhancedTable>
+
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={12}>
+            { openEditUsersModal ? (
+              <EditUsers
+              roleMap = {roleMap}
+              currentUser = {user}
+              user = {rowList.find(user => user.id === selected[0])}
+              editUser={editUser}
+              openEditUsersModal={openEditUsersModal}
+              setOpenEditUsersModal={setOpenEditUsersModal}
+            />) : null
+            }
+          </Grid>
+        </Grid>
+
       </Paper>
     </>
   );

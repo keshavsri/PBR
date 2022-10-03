@@ -9,7 +9,7 @@ import jwt
 import json
 from src.auth_token import Auth_Token
 from functools import wraps
-from src import Models, helpers
+from src import Models, helpers, Schemas
 import src.helpers
 from src.enums import Roles, LogActions
 from src.Models import User as UserORM
@@ -109,6 +109,7 @@ def me(current_user):
       "lastname": current_user.last_name,
       "role": current_user.role,
       "organization_id": current_user.organization_id,
+      "id": current_user.id
     }
     return jsonify(ret_user), 200
   else:
@@ -267,6 +268,97 @@ def deleteUser(access_allowed, current_user, user_id):
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
+
+@userBlueprint.route('/users/<int:user_id>', methods=['PUT'])
+@token_required
+@allowed_roles([0, 1, 2, 3, 4])
+def update_user(access_allowed, current_user, user_id):
+
+    """
+    This function will edit a users information.
+
+    :param access_allowed: This is the access_allowed variable that is passed in from the token_required function.
+    :param current_user: This is the current_user variable that is passed in from the token_required function.
+    :param item_id: This is the id of the user to be edited.
+
+    :return: This function will return the edited user object as a dictionary.
+    """
+    if access_allowed:
+
+        # Get json dict representing new user object
+        edited_user = request.json
+        # Get existing user object with the same id as edited_user
+        user = Models.User.query.filter_by(id=user_id).first()
+        print(type(user), flush=True)
+
+        if user is None:
+            return jsonify({'message': 'User does not exist'}), 407
+        else:
+
+            # Superadmin cannot edit their own role
+            if current_user.role == Roles.Super_Admin:
+              if user.role == Roles.Super_Admin:
+                edited_user["role"] = user.role
+
+            # Admins cannot edit superadmin
+            # Admins cannot edit another admin
+            # Admins cannot edit their own role
+            elif current_user.role == Roles.Admin:
+              if user.role == Roles.Super_Admin:
+                edited_user = user
+              elif user.role == Roles.Admin and current_user.id != user.id:
+                edited_user = user
+              elif user.role == Roles.Admin and current_user.id == user.id:
+                edited_user["role"] = user.role
+
+            # Supervisors cannot edit superadmin or admins
+            # Supervisors cannot edit another supervisor
+            # Supervisors cannot edit their own role
+            elif current_user.role == Roles.Supervisor:
+              if user.role == Roles.Super_Admin or user.role == Roles.Admin:
+                edited_user = user
+              elif user.role == Roles.Supervisor and current_user.id != user.id:
+                edited_user = user
+              elif user.role == Roles.Supervisor and current_user.id == user.id:
+                edited_user["role"] = user.role
+
+            # Data collectors and Guests cannot edit anyone else
+            # Data collectors and Guests cannot edit their own role
+            elif current_user.role == Roles.Data_Collector:
+              if current_user.id != user.id:
+                edited_user = user
+              else:
+                edited_user["role"] = user.role
+
+            # Guests cannot edit anyone else
+            # Guests cannot edit their own role
+            elif current_user.role == Roles.Guest:
+              if current_user.id != user.id:
+                edited_user = user
+              else:
+                edited_user["role"] = user.role
+
+            # These fields cannot be edited
+            edited_user.update(
+              {
+                'id' : user.id,
+                'password' : user.password,
+                'organization_id' : user.organization_id#,
+                #'is_deleted' : user.is_deleted
+              }
+            )
+
+            # SQLAlchemy update and log action
+            Models.User.query.filter_by(id=edited_user.get("id")).update(edited_user)
+            Models.db.session.commit()
+            Models.createLog(current_user, LogActions.EDIT_USER, 'Edited user: ' + str(edited_user.get("id")))
+
+            # Return updated user object, retreived via db query (confirmation)
+            return Schemas.User.from_orm(Models.User.query.filter_by(id=edited_user.get("id")).first()).dict(), 200
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+
+
 @userBlueprint.route('/admin/<int:org_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
@@ -302,3 +394,93 @@ def get_admin_organization(access_allowed, current_user, org_id):
             return responseJSON, 200
     else:
         return jsonify({'message': 'Role not allowed' + str(access_allowed)}), 403
+
+
+@userBlueprint.route('/users/<int:user_id>', methods=['PUT'])
+@token_required
+@allowed_roles([0, 1, 2, 3, 4])
+def update_user(access_allowed, current_user, user_id):
+
+    """
+    This function will edit a users information.
+
+    :param access_allowed: This is the access_allowed variable that is passed in from the token_required function.
+    :param current_user: This is the current_user variable that is passed in from the token_required function.
+    :param item_id: This is the id of the user to be edited.
+
+    :return: This function will return the edited user object as a dictionary.
+    """
+    if access_allowed:
+
+        # Get json dict representing new user object
+        edited_user = request.json
+        # Get existing user object with the same id as edited_user
+        user = Models.User.query.filter_by(id=user_id).first()
+        print(type(user), flush=True)
+
+        if user is None:
+            return jsonify({'message': 'User does not exist'}), 407
+        else:
+
+            # Superadmin cannot edit their own role
+            if current_user.role == Roles.Super_Admin:
+              if user.role == Roles.Super_Admin:
+                edited_user["role"] = user.role
+
+            # Admins cannot edit superadmin
+            # Admins cannot edit another admin
+            # Admins cannot edit their own role
+            elif current_user.role == Roles.Admin:
+              if user.role == Roles.Super_Admin:
+                edited_user = user
+              elif user.role == Roles.Admin and current_user.id != user.id:
+                edited_user = user
+              elif user.role == Roles.Admin and current_user.id == user.id:
+                edited_user["role"] = user.role
+
+            # Supervisors cannot edit superadmin or admins
+            # Supervisors cannot edit another supervisor
+            # Supervisors cannot edit their own role
+            elif current_user.role == Roles.Supervisor:
+              if user.role == Roles.Super_Admin or user.role == Roles.Admin:
+                edited_user = user
+              elif user.role == Roles.Supervisor and current_user.id != user.id:
+                edited_user = user
+              elif user.role == Roles.Supervisor and current_user.id == user.id:
+                edited_user["role"] = user.role
+
+            # Data collectors and Guests cannot edit anyone else
+            # Data collectors and Guests cannot edit their own role
+            elif current_user.role == Roles.Data_Collector:
+              if current_user.id != user.id:
+                edited_user = user
+              else:
+                edited_user["role"] = user.role
+
+            # Guests cannot edit anyone else
+            # Guests cannot edit their own role
+            elif current_user.role == Roles.Guest:
+              if current_user.id != user.id:
+                edited_user = user
+              else:
+                edited_user["role"] = user.role
+
+            # These fields cannot be edited
+            edited_user.update(
+              {
+                'id' : user.id,
+                'password' : user.password,
+                'organization_id' : user.organization_id#,
+                #'is_deleted' : user.is_deleted
+              }
+            )
+
+            # SQLAlchemy update and log action
+            Models.User.query.filter_by(id=edited_user.get("id")).update(edited_user)
+            Models.db.session.commit()
+            Models.createLog(current_user, LogActions.EDIT_USER, 'Edited user: ' + str(edited_user.get("id")))
+
+            # Return updated user object, retreived via db query (confirmation)
+            return Schemas.User.from_orm(Models.User.query.filter_by(id=edited_user.get("id")).first()).dict(), 200
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
