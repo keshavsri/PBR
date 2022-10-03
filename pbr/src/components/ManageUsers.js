@@ -76,18 +76,13 @@ export default function ManageUsers() {
   };
 
   const deleteUser = (deletedUserId) => {
-
     fetch(`/api/user/${deletedUserId}`, { method: "DELETE", })
       .then((response) => {
         return response.json();
       }).then((data) => {
-        console.log(data);
       }).catch((error) => {
         console.log(error);
-      });
-      setOpenEditUsersModal(false);
-      getUsers();
-      setSelected([])
+      })
   }
 
   const editUser = (editedUser) => {
@@ -117,31 +112,25 @@ export default function ManageUsers() {
     }
   }
 
-  const onChangeOrganization = (event) => {
-    setOrganization(event.target.value);
-  }
-
   const onEdit = () => {
     setOpenEditUsersModal(true);
   }
 
+  const onChangeOrganization = (event) => {
+    setOrganization(event.target.value);
+  }
+ 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => { 
       console.log(row.id);
-      console.log(user);
-      if (user.role === 0 || user.role === 1) {
-        row.deletable = true;
-      } else {
-        row.deletable = false;
-      }
-      
+      console.log(user.role);  
       row.role_id = row.role;
       row.role = roleMap[Number(row.role)];
       row.deletable = isDeletable(row);
       
     });
   };
-
+      
   const isDeletable = (row) => {
     console.log(user.id, row.id);
     console.log(user.id === row.id);
@@ -154,7 +143,6 @@ export default function ManageUsers() {
       return false;
     }
   }
-
 
   const getHeadCells = () => {
     const headCells = [
@@ -222,6 +210,7 @@ export default function ManageUsers() {
               return (
                 <MenuItem key={org.id} value={org.id}>{org.name}</MenuItem>
               )
+
             })}
           </Select>
           <InputLabel id="demo-simple-select-label">Organization</InputLabel>
