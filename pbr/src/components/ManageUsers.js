@@ -111,13 +111,13 @@ export default function ManageUsers() {
       })
     }
   }
+  
+  const onChangeOrganization = (event) => {
+    setOrganization(event.target.value);
+  }
 
   const onEdit = () => {
     setOpenEditUsersModal(true);
-  }
-
-  const onChangeOrganization = (event) => {
-    setOrganization(event.target.value);
   }
  
   const assignRowHtml = (rows) => {
@@ -130,7 +130,7 @@ export default function ManageUsers() {
       
     });
   };
-      
+
   const isDeletable = (row) => {
     console.log(user.id, row.id);
     console.log(user.id === row.id);
@@ -210,23 +210,12 @@ export default function ManageUsers() {
               return (
                 <MenuItem key={org.id} value={org.id}>{org.name}</MenuItem>
               )
-
             })}
           </Select>
           <InputLabel id="demo-simple-select-label">Organization</InputLabel>
         </FormControl>
       </Grid >
     )
-  }
-
-  const renderToolbar = () => {
-    return (
-      <>
-        {user.role === 0 &&
-          organizationDropdown()
-        }
-      </>
-    );
   }
 
   return (
@@ -241,10 +230,8 @@ export default function ManageUsers() {
             {
               user.role === 0 &&
               <OrganizationDropdown/>
-            }
-              
+            }     
             </>
-
           }
 
           onEdit={onEdit}
