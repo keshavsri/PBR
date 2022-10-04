@@ -163,6 +163,41 @@ def test_request_me():
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
 
+def test_get_users():
+    # Request
+    # GET http://127.0.0.1:3005/api/user/users/<int:org_id>
+
+    try:
+        response = requests.get(
+            url="http://127.0.0.1:3005/api/user/users/1",
+            headers={
+                "Cookie": "pbr_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFiaGlydWRAbmNzdS5lZHUiLCJpZCI6MSwicm9sZSI6MCwiaWF0IjoxNjUwMTgyMjk2LCJuYmYiOjE2NTAxODIyOTYsImV4cCI6MTY1MDE4NTg5Nn0.bqJ8igRVPDZNeQVZE7JDnsDk6e6rScIDrhqRc8V_1iM",
+            },
+        )
+        assert response.status_code == 200
+        print('Response HTTP Response Body: {content}'.format(
+            content=response.content))
+    except requests.exceptions.RequestException:
+        print('HTTP Request failed')
+
+def test_delete_user():
+    # Request
+    # DELETE http://127.0.0.1:3005/api/user/<int:id>
+
+    try:
+        response = requests.delete(
+            url="http://127.0.0.1:3005/api/user/2",
+            headers={
+                "Cookie": "pbr_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFiaGlydWRAbmNzdS5lZHUiLCJpZCI6MSwicm9sZSI6MCwiaWF0IjoxNjUwMTgyMjk2LCJuYmYiOjE2NTAxODIyOTYsImV4cCI6MTY1MDE4NTg5Nn0.bqJ8igRVPDZNeQVZE7JDnsDk6e6rScIDrhqRc8V_1iM",
+            },
+        )
+        print(response, flush=True)
+        assert response.status_code == 404
+        print('Response HTTP Response Body: {content}'.format(
+            content=response.content))
+    except requests.exceptions.RequestException:
+        print('HTTP Request failed')
+
 
 def test_request_log():
     # Request
