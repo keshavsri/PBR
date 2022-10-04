@@ -26,7 +26,6 @@ export default function ManageUsers() {
   const [openEditUsersModal, setOpenEditUsersModal] = React.useState(false);
   const [organization, setOrganization] = React.useState(user.organization_id);
 
-
   const roleMap = {
     0: "Super Admin",
     1: "Admin",
@@ -35,22 +34,23 @@ export default function ManageUsers() {
     4: "Guest"
   }
 
-  React.useEffect(() => {
-    getOrganizations();
-    getUsers();
+  React.useEffect(async () => {
+    await getOrganizations();
+    await getUsers();
     getHeadCells();
   }, []);
 
-  React.useEffect(() => {
-    getUsers();
+  React.useEffect(async () => {
+    await getUsers();
   }, [organization]);
 
-  const getUsers = () => {
+
+  const getUsers = async () => {
     let orgId = user.organization_id;
     if (user.role === 0) {
       orgId = organization;
     }
-    fetch(`/api/user/users/${orgId}`, { method: "GET", })
+    await fetch(`/api/user/users/${orgId}`, { method: "GET", })
       .then((response) => {
         return response.json();
       }).then((data) => {
@@ -61,9 +61,9 @@ export default function ManageUsers() {
       })
   };
 
-  const getOrganizations = () => {
+  const getOrganizations = async () => {
     if (user.role === 0) {
-      fetch(`/api/organization`, { method: "GET", })
+      await fetch(`/api/organization`, { method: "GET", })
         .then((response) => {
           return response.json();
         }).then((data) => {
@@ -74,40 +74,43 @@ export default function ManageUsers() {
     }
   };
 
-  const deleteUser = (deletedUserId) => {
-    fetch(`/api/user/${deletedUserId}`, { method: "DELETE", })
+  const deleteUser = async (deletedUserId) => {
+    await fetch(`/api/user/${deletedUserId}`, { method: "DELETE", })
       .then((response) => {
         return response.json();
       }).then((data) => {
       }).catch((error) => {
         console.log(error);
       })
+      await getUsers();
   }
 
-  const editUser = (editedUser) => {
-    fetch(`/api/user/users/${selected[0]}`,
+  const editUser = async (editedUser) => {
+    await fetch(`/api/user/users/${selected[0]}`,
           { method: "PUT",
             body: JSON.stringify(editedUser),
             headers: {"Content-Type" : "application/json"}})
       .then((response) => {
         return response.json();
       }).then((data) => {
-        console.log(data);
+        setOpenEditUsersModal(false);
+        getUsers();
+        setSelected([]);
       }).catch((error) => {
         console.log(error);
       });
-      setOpenEditUsersModal(false);
-      getUsers();
-      setSelected([])
+      
   }
 
-  const onDelete = () => {
+  const onDelete = async () => {
     if (user.role === 0 || user.role === 1) {
       selected.map((deletedUserId) => {
         deleteUser(deletedUserId);
-      }, () => {
-        getUsers();
-      })
+        
+      });
+      setSelected([]);
+      
+      
     }
   }
   
