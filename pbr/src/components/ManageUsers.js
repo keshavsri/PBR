@@ -1,8 +1,7 @@
 import React from "react";
 import OrganizationIcon from "@mui/icons-material/Apartment";
 import CustomDialog from "./CustomDialog";
-import OrgCodeContent from "./ManageOrganizations/OrgCodeContent";
-import {EditUserForm} from "./EditUsers"
+import EditUsers from "./EditUsers"
 
 import { Paper, Button, Tooltip, IconButton, Chip, Box } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';

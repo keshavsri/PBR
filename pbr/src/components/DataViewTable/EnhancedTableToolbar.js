@@ -84,7 +84,7 @@ export default function EnhancedTableToolbar(props) {
           </IconButton>
         </Tooltip>
       ) : (
-        toolbarButtons
+        <></>
       )}
     </Toolbar>
   );
