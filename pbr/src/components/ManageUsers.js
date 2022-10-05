@@ -1,6 +1,7 @@
 import React from "react";
 import OrganizationIcon from "@mui/icons-material/Apartment";
 import CustomDialog from "./CustomDialog";
+import EditUsers from "./EditUsers"
 
 import { Paper, Button, Tooltip, IconButton, Chip, Box } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -14,24 +15,16 @@ import NextIcon from "@mui/icons-material/ArrowForwardIos";
 import BackIcon from "@mui/icons-material/ArrowBackIosNew";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import useAuth from "../services/useAuth";
-
-// Might need to change
-import DataViewAddSample from "./DataViewSample/AddSample";
 import EnhancedTable from "./DataViewTable/EnhancedTable";
-import BulkIcon from "@mui/icons-material/UploadFile";
-import ReportIcon from "@mui/icons-material/Assessment";
-import EditIcon from "@mui/icons-material/Edit";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
 
 export default function ManageUsers() {
-  const [openModal, setOpenModal] = React.useState(false);
   const { checkResponseAuth, user } = useAuth();
   const [rowList, setRowList] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
   const [organizations, setOrganizations] = React.useState([]);
-  const [organization, setOrganization] = React.useState(1);
-
+  const [openEditUsersModal, setOpenEditUsersModal] = React.useState(false);
+  const [organization, setOrganization] = React.useState(user.organization_id);
 
   const roleMap = {
     0: "Super Admin",
@@ -41,45 +34,40 @@ export default function ManageUsers() {
     4: "Guest"
   }
 
-  const handleOpenModal = () => {
-    setOpenModal(true);
-  };
-  const handleCloseModal = () => {
-    setOpenModal(false);
-  };
-
-  React.useEffect(() => {
-    getOrganizations();
-    getUsers();
+  React.useEffect(async () => {
+    await getOrganizations();
+    await getUsers();
     getHeadCells();
-    console.log(rowList);
   }, []);
 
-  const getUsers = () => {
+  React.useEffect(async () => {
+    await getUsers();
+  }, [organization]);
+
+
+  const getUsers = async () => {
     let orgId = user.organization_id;
     if (user.role === 0) {
       orgId = organization;
     }
-    fetch(`/api/user/users/${orgId}`, { method: "GET", })
+    await fetch(`/api/user/users/${orgId}`, { method: "GET", })
       .then((response) => {
-        console.log(response);
         return response.json();
       }).then((data) => {
-        console.log(data);
         assignRowHtml(data.rows);
         setRowList(data.rows);
+        console.log(rowList);
       }).catch((error) => {
         console.log(error);
       })
   };
 
-  const getOrganizations = () => {
+  const getOrganizations = async () => {
     if (user.role === 0) {
-      fetch(`/api/organization`, { method: "GET", })
+      await fetch(`/api/organization`, { method: "GET", })
         .then((response) => {
           return response.json();
         }).then((data) => {
-          console.log(data);
           setOrganizations(data);
         }).catch((error) => {
           console.log(error);
@@ -87,83 +75,72 @@ export default function ManageUsers() {
     }
   };
 
-  const deleteUser = (deletedUser) => {
-
-    fetch(`/api/user/${deletedUser.id}`, { method: "DELETE", })
+  const deleteUser = async (deletedUserId) => {
+    await fetch(`/api/user/${deletedUserId}`, { method: "DELETE", })
       .then((response) => {
         return response.json();
       }).then((data) => {
-        console.log(data);
       }).catch((error) => {
         console.log(error);
       })
+      await getUsers();
   }
 
-
-
-  const onDelete = () => {
-    if (user.role === 0 || user.role === 1) {
-      selected.map((deletedUser) => {
-        deleteUser(deletedUser);
-      }, () => {
+  const editUser = async (editedUser) => {
+    await fetch(`/api/user/users/${selected[0]}`,
+          { method: "PUT",
+            body: JSON.stringify(editedUser),
+            headers: {"Content-Type" : "application/json"}})
+      .then((response) => {
+        return response.json();
+      }).then((data) => {
+        setOpenEditUsersModal(false);
         getUsers();
-      })
+        setSelected([]);
+      }).catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const onDelete = async () => {
+    if (user.role === 0 || user.role === 1) {
+      selected.map((deletedUserId) => {
+        deleteUser(deletedUserId);
+      });
+      setSelected([]);
     }
   }
 
+  const onChangeOrganization = (event) => {
+    setOrganization(event.target.value);
+  }
 
+  const onEdit = () => {
+    setOpenEditUsersModal(true);
+  }
 
   const assignRowHtml = (rows) => {
-    rows.map((row, index) => {
-      row.buttons = (
-        <>
-          <IconButton aria-label="edit" size="small">
-            <EditIcon />
-          </IconButton>
-        </>
-      );
-
+    rows.map((row, index) => { 
       console.log(row.id);
-      console.log(user);
-      if (user.role === 0 || user.role === 1) {
-        row.deletable = true;
-      } else {
-        row.deletable = false;
-      }
+      console.log(user.role);  
+      row.role_id = row.role;
       row.role = roleMap[Number(row.role)];
-
+      row.deletable = isDeletable(row);
     });
   };
 
-  const getData = () => {
-    let apiRows = [
-      {
-        deletable: true,
-        id: 1,
-        organization: "NCSU",
-        email: "rcrespo@ncsu.edu",
-        first_name: "Rosio",
-        last_name: "Crespo",
-        phone: "9191234567",
-        role: "Super Admin",
-        notes: "N/A",
-      },
-      {
-        deletable: false,
-        id: 2,
-        organization: "UNC",
-        email: "jwalker@unc.edu",
-        first_name: "John",
-        last_name: "Walker",
-        phone: "1234567890",
-        role: "Data Collector",
-        notes: "N/A",
-      },
-    ];
-    // denestMachineData(apiRows);
-    assignRowHtml(apiRows);
-    setRowList(apiRows);
-  };
+  const isDeletable = (row) => {
+    console.log(user.id, row.id);
+    console.log(user.id === row.id);
+    if (user.role < row.role_id && user.role != 3) {
+      return true;
+    } else if (user.id === row.id) {
+      return true;
+    }
+      else {
+      return false;
+    }
+  }
 
   const getHeadCells = () => {
     const headCells = [
@@ -213,50 +190,31 @@ export default function ManageUsers() {
         label: "Notes",
       },
     ];
-
     setHeadCellList(headCells);
   };
 
-  const organizationDropdown = () => {
+  const OrganizationDropdown = () => {
     return (
-      <Grid item xs={12} sm={6}>
+      <Grid item xs={12} sm={6} >
         <FormControl fullWidth>
-
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             value={organization}
+            onChange={onChangeOrganization}
             label="Organization"
-
           >
             {organizations.map((org) => {
-              console.log(organizations);
               return (
-                <MenuItem value={org.id}>{org.name}</MenuItem>
+                <MenuItem key={org.id} value={org.id}>{org.name}</MenuItem>
               )
-
             })}
           </Select>
           <InputLabel id="demo-simple-select-label">Organization</InputLabel>
         </FormControl>
-      </Grid>
+      </Grid >
     )
-
   }
-
-  const renderToolbar = () => {
-    return (
-      <>
-        {user.role === 0 &&
-          organizationDropdown()
-        }
-      </>
-
-    );
-
-
-  }
-
 
   return (
     <>
@@ -265,19 +223,35 @@ export default function ManageUsers() {
           headCells={headCellList}
           rows={rowList}
           onDelete={onDelete}
-          toolbarButtons={() => {
-            return (
-              <>
-                {renderToolbar()}
-              </>
-            )
+          toolbarButtons={
+            <>
+            {
+              user.role === 0 &&
+              <OrganizationDropdown/>
+            }
+            </>
           }
 
-
-          }
+          onEdit={onEdit}
           selected={selected}
           setSelected={setSelected}
         ></EnhancedTable>
+
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={12}>
+            { openEditUsersModal ? (
+              <EditUsers
+              roleMap = {roleMap}
+              currentUser = {user}
+              user = {rowList.find(user => user.id === selected[0])}
+              editUser={editUser}
+              openEditUsersModal={openEditUsersModal}
+              setOpenEditUsersModal={setOpenEditUsersModal}
+            />) : null
+            }
+          </Grid>
+        </Grid>
+
       </Paper>
     </>
   );

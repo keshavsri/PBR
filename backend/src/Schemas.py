@@ -1,4 +1,5 @@
 from datetime import datetime
+from xmlrpc.client import Boolean
 
 from pydantic import BaseModel, constr
 from src.enums import States, Species, ProductionTypes, BirdGenders, AgeUnits, ValidationTypes, SampleTypes, Roles, LogActions
@@ -302,6 +303,7 @@ class User(BaseModel):
     role: Roles
     notes: Optional[constr(max_length=500)]
     organization_id: int
+    is_deleted: bool
 
     class Config:
         orm_mode = True

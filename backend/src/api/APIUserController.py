@@ -9,7 +9,7 @@ import jwt
 import json
 from src.auth_token import Auth_Token
 from functools import wraps
-from src import Models, helpers
+from src import Models, helpers, Schemas
 import src.helpers
 from src.enums import Roles, LogActions
 from src.Models import User as UserORM
@@ -94,7 +94,7 @@ def token_required(f):
     return  f(current_user, *args, **kwargs)
   return decorated
 
-@userBlueprint.route('/<int:item_id>', methods=['GET', 'PUT', 'DELETE', 'POST'])
+@userBlueprint.route('/<int:item_id>', methods=['GET', 'PUT', 'POST'])
 @userBlueprint.route('/', methods=['GET', 'POST'])
 def route_setting_all(item_id=None):
   return Models.User.fs_get_delete_put_post(item_id)
@@ -109,6 +109,7 @@ def me(current_user):
       "lastname": current_user.last_name,
       "role": current_user.role,
       "organization_id": current_user.organization_id,
+      "id": current_user.id
     }
     return jsonify(ret_user), 200
   else:
@@ -146,6 +147,8 @@ def login():
         "lastname": dbUser.last_name,
         "role": dbUser.role,
         "organization_id": dbUser.organization_id,
+        "id": dbUser.id
+
       }
       response = make_response(jsonify(ret_user), 200)
       response.set_cookie(key="pbr_token", value=Auth_Token.create_token(dbUser), expires=datetime.now(tz=timezone.utc) + timedelta(days=1), secure=True, httponly = True, samesite="Strict")
@@ -205,7 +208,7 @@ def register():
 
 @userBlueprint.route('/users/<int:org_id>', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2, 3, 4])
 def get_users(access_allowed, current_user, org_id):
 
     """
@@ -254,18 +257,19 @@ def deleteUser(access_allowed, current_user, user_id):
     if access_allowed:
         user = Models.User.query.get(user_id)
         if user is None:
-            return jsonify({'message': 'Source does not exist'}), 404
+            return jsonify({'message': 'User does not exist'}), 404
         elif user.organization_id != current_user.organization_id and user.role != Roles.Super_Admin:
-            return jsonify({'message': 'Cannot delete in another organization'}), 403
+            return jsonify({'message': 'Cannot delete user in another organization'}), 403
         elif user.id == current_user.id:
             return jsonify({'message': 'Cannot delete the current user'}), 403
         else:
-            Models.db.session.delete(user)
+            user.is_deleted = True
             Models.db.session.commit()
             Models.createLog(current_user, LogActions.DELETE_SOURCE, f'Deleted user: ${user.first_name} ${user.last_name} in organization: ${Models.Organization.query.get(user.organization_id).name}')
             return jsonify({'message': 'User deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
+
 
 @userBlueprint.route('/admin/<int:org_id>', methods=['GET'])
 @token_required
@@ -302,3 +306,59 @@ def get_admin_organization(access_allowed, current_user, org_id):
             return responseJSON, 200
     else:
         return jsonify({'message': 'Role not allowed' + str(access_allowed)}), 403
+
+
+@userBlueprint.route('/users/<int:user_id>', methods=['PUT'])
+@token_required
+@allowed_roles([0, 1, 2, 3, 4])
+def update_user(access_allowed, current_user, user_id):
+
+    """
+    This function will edit a users information.
+
+    :param access_allowed: This is the access_allowed variable that is passed in from the token_required function.
+    :param current_user: This is the current_user variable that is passed in from the token_required function.
+    :param item_id: This is the id of the user to be edited.
+
+    :return: This function will return the edited user object as a dictionary.
+    """
+    if access_allowed:
+
+        # Get json dict representing new user object
+        edited_user = request.json
+        # Get existing user object with the same id as edited_user
+        existing_user = Models.User.query.filter_by(id=user_id).first()
+
+        if existing_user is None:
+            return jsonify({'message': 'User does not exist'}), 407
+        else:
+            # If editing self, prevent editing of role
+            # If editing others, prevent editing of higher privileged users
+            # Special case is data collectors, who cannot edit less privileged users
+            if current_user.id == existing_user.id:
+                edited_user["role"] = existing_user.role
+            else:
+              if current_user.role >= existing_user.role or current_user.role == Roles.Data_Collector:
+                return jsonify({'message': 'Role not allowed'}), 403
+
+            # These fields cannot be edited
+            # Should maybe allow password change on self edit
+            edited_user.update(
+              {
+                'id' : existing_user.id,
+                'password' : existing_user.password,
+                'organization_id' : existing_user.organization_id,
+                'is_deleted' : existing_user.is_deleted
+              }
+            )
+
+            # SQLAlchemy update and log action
+            Models.User.query.filter_by(id=edited_user.get("id")).update(edited_user)
+            Models.db.session.commit()
+            Models.createLog(current_user, LogActions.EDIT_USER, 'Edited user: ' + str(edited_user.get("id")))
+
+            # Return updated user object, retreived via db query (confirmation)
+            return Schemas.User.from_orm(Models.User.query.filter_by(id=edited_user.get("id")).first()).dict(), 200
+    else:
+        print("PROBLEM>>>>>>>>>>>>>>>>>>>>>", flush=True)
+        return jsonify({'message': 'Role not allowed'}), 403
