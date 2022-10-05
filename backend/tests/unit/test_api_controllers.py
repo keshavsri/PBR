@@ -191,7 +191,35 @@ def test_delete_user():
                 "Cookie": "pbr_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFiaGlydWRAbmNzdS5lZHUiLCJpZCI6MSwicm9sZSI6MCwiaWF0IjoxNjUwMTgyMjk2LCJuYmYiOjE2NTAxODIyOTYsImV4cCI6MTY1MDE4NTg5Nn0.bqJ8igRVPDZNeQVZE7JDnsDk6e6rScIDrhqRc8V_1iM",
             },
         )
-        print(response, flush=True)
+        assert response.status_code == 404
+        print('Response HTTP Response Body: {content}'.format(
+            content=response.content))
+    except requests.exceptions.RequestException:
+        print('HTTP Request failed')
+
+
+def test_edit_user():
+    # Request
+    # PUT http://127.0.0.1:3005/api/user/<int:id>
+
+    try:
+        response = requests.put(
+            url="http://127.0.0.1:3005/api/user/1",
+            headers={
+                "Cookie": "pbr_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFiaGlydWRAbmNzdS5lZHUiLCJpZCI6MSwicm9sZSI6MCwiaWF0IjoxNjUwMTgyMjk2LCJuYmYiOjE2NTAxODIyOTYsImV4cCI6MTY1MDE4NTg5Nn0.bqJ8igRVPDZNeQVZE7JDnsDk6e6rScIDrhqRc8V_1iM",
+            },
+            data=json.dumps({
+                "email": "pbrsuperadmin@ncsu.edu",
+                "password": "$2b$12$n4vH817FKCm7qyiId8VPJO95guywu9BcDOdy3frhHag4lf/XSAV1S",
+                "first_name": "Super Admin",
+                "last_name": "PBR",
+                "phone_number": "",
+                "role": "Super_Admin",
+                "notes": "",
+                "organization_id": 1,
+                "is_deleted": False
+            })
+        )
         assert response.status_code == 404
         print('Response HTTP Response Body: {content}'.format(
             content=response.content))
