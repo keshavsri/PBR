@@ -147,6 +147,8 @@ def login():
         "lastname": dbUser.last_name,
         "role": dbUser.role,
         "organization_id": dbUser.organization_id,
+        "id": dbUser.id
+
       }
       response = make_response(jsonify(ret_user), 200)
       response.set_cookie(key="pbr_token", value=Auth_Token.create_token(dbUser), expires=datetime.now(tz=timezone.utc) + timedelta(days=1), secure=True, httponly = True, samesite="Strict")
