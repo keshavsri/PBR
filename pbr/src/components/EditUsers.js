@@ -53,6 +53,20 @@ export default function EditUsers(props) {
     setOpenEditUsersModal
   } = props;
 
+  const filteredOrganizationRoles = Object.fromEntries(
+                                      Object.entries(
+                                        organizationRoles
+                                      ).filter(([key, value]) => 
+                                                Object.values(
+                                                  Object.fromEntries(
+                                                    Object.entries(
+                                                      roleMap
+                                                    ).filter(([key]) =>
+                                                              key > currentUser.role)
+                                                  )
+                                                ).includes(value))
+                                    );
+
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
   useTheme();
@@ -180,8 +194,8 @@ export default function EditUsers(props) {
               value={userDetails.role}
               onChange={handleUserDetailsChange('role')}
             >
-              {Object.values(organizationRoles).map((value, idx) => {
-                return <MenuItem value={idx}>{value}</MenuItem>
+              {Object.values(filteredOrganizationRoles).map((value, idx) => {
+                return <MenuItem value={idx + currentUser.role + 1}>{value}</MenuItem>
               })}
             </TextField>
           </Grid>

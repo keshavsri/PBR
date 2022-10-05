@@ -56,6 +56,7 @@ export default function ManageUsers() {
       }).then((data) => {
         assignRowHtml(data.rows);
         setRowList(data.rows);
+        console.log(rowList);
       }).catch((error) => {
         console.log(error);
       })
@@ -99,21 +100,17 @@ export default function ManageUsers() {
       }).catch((error) => {
         console.log(error);
       });
-      
   }
 
   const onDelete = async () => {
     if (user.role === 0 || user.role === 1) {
       selected.map((deletedUserId) => {
         deleteUser(deletedUserId);
-        
       });
       setSelected([]);
-      
-      
     }
   }
-  
+
   const onChangeOrganization = (event) => {
     setOrganization(event.target.value);
   }
@@ -121,7 +118,7 @@ export default function ManageUsers() {
   const onEdit = () => {
     setOpenEditUsersModal(true);
   }
- 
+
   const assignRowHtml = (rows) => {
     rows.map((row, index) => { 
       console.log(row.id);
@@ -129,7 +126,6 @@ export default function ManageUsers() {
       row.role_id = row.role;
       row.role = roleMap[Number(row.role)];
       row.deletable = isDeletable(row);
-      
     });
   };
 
@@ -232,7 +228,7 @@ export default function ManageUsers() {
             {
               user.role === 0 &&
               <OrganizationDropdown/>
-            }     
+            }
             </>
           }
 

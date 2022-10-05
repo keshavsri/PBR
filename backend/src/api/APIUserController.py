@@ -327,63 +327,28 @@ def update_user(access_allowed, current_user, user_id):
         # Get json dict representing new user object
         edited_user = request.json
         # Get existing user object with the same id as edited_user
-        user = Models.User.query.filter_by(id=user_id).first()
-        print(type(user), flush=True)
+        existing_user = Models.User.query.filter_by(id=user_id).first()
 
-        if user is None:
+        if existing_user is None:
             return jsonify({'message': 'User does not exist'}), 407
         else:
-
-            # Superadmin cannot edit their own role
-            if current_user.role == Roles.Super_Admin:
-              if user.role == Roles.Super_Admin:
-                edited_user["role"] = user.role
-
-            # Admins cannot edit superadmin
-            # Admins cannot edit another admin
-            # Admins cannot edit their own role
-            elif current_user.role == Roles.Admin:
-              if user.role == Roles.Super_Admin:
-                edited_user = user
-              elif user.role == Roles.Admin and current_user.id != user.id:
-                edited_user = user
-              elif user.role == Roles.Admin and current_user.id == user.id:
-                edited_user["role"] = user.role
-
-            # Supervisors cannot edit superadmin or admins
-            # Supervisors cannot edit another supervisor
-            # Supervisors cannot edit their own role
-            elif current_user.role == Roles.Supervisor:
-              if user.role == Roles.Super_Admin or user.role == Roles.Admin:
-                edited_user = user
-              elif user.role == Roles.Supervisor and current_user.id != user.id:
-                edited_user = user
-              elif user.role == Roles.Supervisor and current_user.id == user.id:
-                edited_user["role"] = user.role
-
-            # Data collectors and Guests cannot edit anyone else
-            # Data collectors and Guests cannot edit their own role
-            elif current_user.role == Roles.Data_Collector:
-              if current_user.id != user.id:
-                edited_user = user
-              else:
-                edited_user["role"] = user.role
-
-            # Guests cannot edit anyone else
-            # Guests cannot edit their own role
-            elif current_user.role == Roles.Guest:
-              if current_user.id != user.id:
-                edited_user = user
-              else:
-                edited_user["role"] = user.role
+            # If editing self, prevent editing of role
+            # If editing others, prevent editing of higher privileged users
+            # Special case is data collectors, who cannot edit less privileged users
+            if current_user.id == existing_user.id:
+                edited_user["role"] = existing_user.role
+            else:
+              if current_user.role >= existing_user.role or current_user.role == Roles.Data_Collector:
+                return jsonify({'message': 'Role not allowed'}), 403
 
             # These fields cannot be edited
+            # Should maybe allow password change on self edit
             edited_user.update(
               {
-                'id' : user.id,
-                'password' : user.password,
-                'organization_id' : user.organization_id#,
-                #'is_deleted' : user.is_deleted
+                'id' : existing_user.id,
+                'password' : existing_user.password,
+                'organization_id' : existing_user.organization_id,
+                'is_deleted' : existing_user.is_deleted
               }
             )
 
@@ -395,4 +360,5 @@ def update_user(access_allowed, current_user, user_id):
             # Return updated user object, retreived via db query (confirmation)
             return Schemas.User.from_orm(Models.User.query.filter_by(id=edited_user.get("id")).first()).dict(), 200
     else:
+        print("PROBLEM>>>>>>>>>>>>>>>>>>>>>", flush=True)
         return jsonify({'message': 'Role not allowed'}), 403
