@@ -172,7 +172,7 @@ export default function ManageUsers() {
         label: "Email",
       },
       {
-        id: "phone",
+        id: "phone_number",
         numeric: false,
         disablePadding: true,
         label: "Phone",

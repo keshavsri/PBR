@@ -330,7 +330,7 @@ def update_user(access_allowed, current_user, user_id):
         existing_user = Models.User.query.filter_by(id=user_id).first()
 
         if existing_user is None:
-            return jsonify({'message': 'User does not exist'}), 407
+            return jsonify({'message': 'User does not exist'}), 404
         else:
             # If editing self, prevent editing of role
             # If editing others, prevent editing of higher privileged users
