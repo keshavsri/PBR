@@ -67,6 +67,12 @@ export default function EnhancedTableToolbar(props) {
         ></Typography>
       )}
 
+      {numSelected === 0 ? (
+        toolbarButtons
+      ) : (
+        <></>
+      )}
+
       {numSelected === 1 ? (
         <Tooltip title="Edit">
           <IconButton sx={{ ml: 1 }} onClick={onEdit}>
@@ -74,7 +80,7 @@ export default function EnhancedTableToolbar(props) {
           </IconButton>
         </Tooltip>
       ) : (
-        toolbarButtons
+        <></>
       )}
 
       {numSelected > 0 ? (

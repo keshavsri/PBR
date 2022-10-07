@@ -159,12 +159,14 @@ export default function ManageUsers() {
         disablePadding: true,
         label: "Last Name",
       },
+      /**
       {
         id: "organization",
         numeric: false,
         disablePadding: true,
         label: "Organization",
       },
+      */
       {
         id: "email",
         numeric: false,
