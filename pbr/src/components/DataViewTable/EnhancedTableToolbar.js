@@ -32,11 +32,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function EnhancedTableToolbar(props) {
-  const { numSelected, toolbarButtons, onDelete, onEdit, onSubmit} = props;
+  const { numSelected, toolbarButtons, onDelete, onEdit, onSubmit, savedFlag} = props;
   let classes = useStyles();
 
   
-
   return (
     <Toolbar
       className={classes.root}
@@ -82,7 +81,7 @@ export default function EnhancedTableToolbar(props) {
         <></>
       )}
 
-      {numSelected > 0 ? (
+      {(numSelected > 0 && savedFlag == true) ? (
         <Tooltip title="Submit">
           <IconButton sx={{ ml: 1 }} onClick={onSubmit}>
             <ArrowUpwardIcon />
@@ -92,7 +91,7 @@ export default function EnhancedTableToolbar(props) {
         <></>
       )}
 
-      {numSelected > 0 ? (
+      {numSelected > 0  ? (
         <Tooltip title="Delete">
           <IconButton sx={{ ml: 1 }} onClick={onDelete}>
             <DeleteIcon />

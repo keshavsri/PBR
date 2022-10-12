@@ -18,6 +18,28 @@ export default function DataView() {
   const [rowList, setRowList] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
+  const [selectedSamples, setSelectedSamples] = React.useState([]);
+  // const [savedFlag, setSavedFlag] = React.useState(true);
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  
+ 
+
+  
+  
+
+  
   
 
 
@@ -56,6 +78,12 @@ export default function DataView() {
     });
   };
 
+
+  // const handleSelectPending = async () => {
+
+  //  
+
+  // };
   const getData = async () => {
     await fetch(`/api/sample/`, { method: "GET" })
       .then((response) => {
@@ -196,10 +224,10 @@ export default function DataView() {
   };
 
 
+  
   const onSubmit = async () => {
-    console.log("SUBMIT TEST");
+    // handleSelectPending();
     let path = `/api/sample/datapoint/submit/`;
-    console.log(selected[0]);
     selected.map(async (id, index) => {
       let temp = path + id;
       await fetch(temp, { method: "PUT" })
@@ -214,8 +242,6 @@ export default function DataView() {
   };
 
   const onDelete = async () => {
-
-
     let path = `/api/sample/datapoint/`;
     selected.map(async (id, index) => {
       let temp = path + id;
@@ -249,7 +275,10 @@ export default function DataView() {
           selected={selected}
           setSelected={setSelected}
           onDelete={onDelete}
+          // savedFlag={savedFlag}
           onSubmit={onSubmit}
+          
+
         ></EnhancedTable>
       </Paper>
       <DataViewFilterModal
