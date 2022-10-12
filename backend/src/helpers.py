@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from typing import List
+from src.enums import ValidationTypes
 from itsdangerous import json
 from random import randint
 
@@ -424,6 +425,7 @@ def create_sample(sample_dict: dict, current_user):
         if name != 'measurement_values':
             setattr(sample, name, value)
     setattr(sample, "entered_by_id", current_user.id)
+    setattr(sample, "validation_status", ValidationTypes.Saved)
 
     # Get OrgSourceFlockSample ID
     flock = Flock.from_orm(FlockORM.query.filter_by(name=sample_dict["flockDetails"]['name']).first())
