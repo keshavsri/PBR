@@ -229,6 +229,8 @@ def create_sample(access_allowed, current_user):
         return jsonify({'message': 'Role not allowed'}), 403
 
 
+
+
 # Retrieves all available samples for a given user, or organization if provided
 @sampleBlueprint.route('/', methods=['GET'])
 @sampleBlueprint.route('/organization/<int:given_org_id>', methods=['GET'])
@@ -280,7 +282,6 @@ def get_samples(access_allowed, current_user, given_org_id=None):
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
-
 # Deletes specified sample #
 @sampleBlueprint.route('/datapoint/<int:item_id>', methods=['DELETE'])
 @token_required
@@ -307,6 +308,32 @@ def delete_sample(access_allowed, current_user, item_id):
         return jsonify({'message': 'Role not allowed'}), 403
 
 
+# Submit Pending Samples #
+@sampleBlueprint.route('/datapoint/submit/<int:item_id>', methods=['PUT'])
+@token_required
+@allowed_roles([0, 1, 2, 3])
+def submit_sample(access_allowed, current_user, item_id):
+    """
+    Edits existing sample.
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the sample to edit.
+    :return: The edited sample.
+    """
+    if access_allowed:
+        if Models.Sample.query.get(item_id) is None:
+            return jsonify({'message': 'Sample cannot be found.'}), 404
+        else:
+            Models.Sample.query.filter_by(id=item_id).update(
+                {'validation_status': ValidationTypes.Pending})
+            Models.db.session.commit()
+            edited_sample = Models.Sample.query.get(item_id)
+            Models.createLog(current_user, LogActions.EDIT_SAMPLE, 'Edited sample: ' + str(edited_sample.id))
+            return Schemas.Sample.from_orm(edited_sample).dict(), 200
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+
+
 # Edits existing sample #
 @sampleBlueprint.route('/datapoint/<int:item_id>', methods=['PUT'])
 @token_required
@@ -327,7 +354,8 @@ def edit_datapoint(access_allowed, current_user, item_id):
             Models.Sample.query.filter_by(id=item_id).update(request.json)
             Models.db.session.commit()
             edited_sample = Models.Sample.query.get(item_id)
-            Models.createLog(current_user, LogActions.EDIT_SAMPLE, 'Edited sample: ' + str(edited_sample.id))
+            Models.createLog(current_user, LogActions.EDIT_SAMPLE,
+                             'Edited sample: ' + str(edited_sample.id))
             return Schemas.Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

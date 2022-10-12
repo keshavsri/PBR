@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { makeStyles } from "@mui/styles";
 import {
   Toolbar,
@@ -31,8 +32,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function EnhancedTableToolbar(props) {
-  const { numSelected, toolbarButtons, onDelete, onEdit} = props;
+  const { numSelected, toolbarButtons, onDelete, onEdit, onSubmit} = props;
   let classes = useStyles();
+
+  
 
   return (
     <Toolbar
@@ -67,16 +70,22 @@ export default function EnhancedTableToolbar(props) {
         ></Typography>
       )}
 
-      {numSelected === 0 ? (
-        toolbarButtons
-      ) : (
-        <></>
-      )}
+      {numSelected === 0 ? toolbarButtons : <></>}
 
       {numSelected === 1 ? (
         <Tooltip title="Edit">
           <IconButton sx={{ ml: 1 }} onClick={onEdit}>
             <EditIcon />
+          </IconButton>
+        </Tooltip>
+      ) : (
+        <></>
+      )}
+
+      {numSelected > 0 ? (
+        <Tooltip title="Submit">
+          <IconButton sx={{ ml: 1 }} onClick={onSubmit}>
+            <ArrowUpwardIcon />
           </IconButton>
         </Tooltip>
       ) : (

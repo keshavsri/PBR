@@ -88,6 +88,7 @@ export default function EnhancedTable(props) {
     selected,
     setSelected,
     onDelete,
+    onSubmit,
     onEdit
   } = props;
 
@@ -186,6 +187,7 @@ export default function EnhancedTable(props) {
           toolbarButtons={toolbarButtons}
           onEdit={onEdit}
           onDelete={onDelete}
+          onSubmit={onSubmit}
         />
         <TableContainer>
           <Table

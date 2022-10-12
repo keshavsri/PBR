@@ -18,8 +18,12 @@ export default function DataView() {
   const [rowList, setRowList] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
+  
+
 
   const { checkResponseAuth } = useAuth();
+
+  
 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
@@ -59,7 +63,6 @@ export default function DataView() {
       })
       .then(checkResponseAuth)
       .then((data) => {
-        console.log(data);
         denestMachineData(data.rows);
         assignRowHtml(data.rows);
         setRowList(data.rows);
@@ -139,11 +142,9 @@ export default function DataView() {
 
     addApiColumnNamesToHeadCells(types, headCells);
     setHeadCellList(headCells);
-    console.log(headCells);
   };
 
   const addApiColumnNamesToHeadCells = (headCellNamesFromAPI, headCells) => {
-    console.log(headCellNamesFromAPI);
     headCellNamesFromAPI.map((machine) => {
       machine.data.map((point, index) => {
         headCells.push(createHeadCell(point.type, machine.machineName, index));
@@ -194,14 +195,32 @@ export default function DataView() {
     });
   };
 
+
+  const onSubmit = async () => {
+    console.log("SUBMIT TEST");
+    let path = `/api/sample/datapoint/submit/`;
+    console.log(selected[0]);
+    selected.map(async (id, index) => {
+      let temp = path + id;
+      await fetch(temp, { method: "PUT" })
+        .then((response) => {
+          console.log(response.json());
+        })
+        .then(() => {
+          getData();
+        });
+    });
+    setSelected([]);
+  };
+
   const onDelete = async () => {
-    console.log("DELETE TEST");
+
+
     let path = `/api/sample/datapoint/`;
     selected.map(async (id, index) => {
       let temp = path + id;
       await fetch(temp, { method: "DELETE" })
         .then((response) => {
-          console.log(response.json());
           // return response.json();
         })
         .then(() => {
@@ -209,10 +228,12 @@ export default function DataView() {
         });
     });
     setSelected([]);
+    
     // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
     // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
     // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
   };
+
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
   React.useEffect(() => {
     getData();
@@ -228,6 +249,7 @@ export default function DataView() {
           selected={selected}
           setSelected={setSelected}
           onDelete={onDelete}
+          onSubmit={onSubmit}
         ></EnhancedTable>
       </Paper>
       <DataViewFilterModal
