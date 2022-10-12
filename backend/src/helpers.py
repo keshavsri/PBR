@@ -463,6 +463,7 @@ def get_samples_by_org(org_id: int) -> List[dict]:
     :return: A list of dictionaries containing the samples formatted by pydantic.
     """
     samples = get_sample_organization_joined(db.session)
+    
     machines = json.loads(get_machines_by_org(org_id))
     ret = {
         "rows": [],
@@ -481,7 +482,7 @@ def get_samples_by_org(org_id: int) -> List[dict]:
             machJson["data"].append({"type":meas})
         ret["types"].append(machJson)
     for sample in samples:
-        if not sample.deleted:
+        if not sample.deleted and sample.validation_status != ValidationTypes.Saved:
             sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
             sample.timestamp_added = str(sample.timestamp_added)
             ret["rows"].append(Sample.from_orm(sample).dict())
@@ -565,7 +566,7 @@ def get_all_samples() -> List[dict]:
             machJson["data"].append({"type":meas})
         ret["types"].append(machJson)
     for sample in samples:
-        if not sample.deleted:
+        if not sample.deleted and sample.validation_status != ValidationTypes.Saved:
             sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
             sample.timestamp_added = str(sample.timestamp_added)
             ret["rows"].append(Sample.from_orm(sample).dict())
