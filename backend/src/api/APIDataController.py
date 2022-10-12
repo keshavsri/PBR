@@ -275,11 +275,11 @@ def get_samples(access_allowed, current_user, given_org_id=None):
         else:
             if current_user.role == Roles.Super_Admin:
                 # Super Admins can see all samples from all orgs
-                response_json = helpers.get_all_samples()
+                response_json = helpers.get_all_samples(current_user.id)
             elif current_user.role == Roles.Supervisor or current_user.role == Roles.Admin:
                 # If Supervisor or Greater, return all samples of that org
                 response_json = helpers.get_samples_by_org(
-                    current_user_organization)
+                    current_user_organization, current_user.id)
             else:
                 # Otherwise, they can only see samples that are assigned to them.
                 response_json = helpers.get_samples_by_user(current_user.id)
