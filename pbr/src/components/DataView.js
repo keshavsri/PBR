@@ -16,6 +16,9 @@ const useStyles = makeStyles({});
 
 export default function DataView() {
   const [rowList, setRowList] = React.useState([]);
+  const [pendingRowList, setPendingRowList] = React.useState([]);
+  const [fullRowList, setFullRowList] = React.useState([]);
+  const [showOnlyPendingSamples, setShowOnlyPendingSamples] = React.useState(false);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
 
@@ -50,6 +53,25 @@ export default function DataView() {
       // TEMPORARY
       row.deletable = true;
     });
+  };
+
+  const turnPendingFilterOff = async () => {
+    setShowOnlyPendingSamples(false);
+    setRowList(fullRowList);
+    setPendingRowList([]);
+    //getData();
+  };
+
+  const filterPendingSamples = async () => {
+    
+    rowList.map((row) => {
+      if (row.validation_status == "Pending") {
+        pendingRowList.push(row)
+      }
+    });
+    setFullRowList(rowList);
+    setRowList(pendingRowList);
+    setShowOnlyPendingSamples(true);
   };
 
   const getData = async () => {
@@ -224,7 +246,7 @@ export default function DataView() {
         <EnhancedTable
           headCells={headCellList}
           rows={rowList}
-          toolbarButtons={<DVTableToolbar />}
+          toolbarButtons={<DVTableToolbar filterPendingSamples={filterPendingSamples} showOnlyPendingSamples={showOnlyPendingSamples} turnPendingFilterOff={turnPendingFilterOff} />}
           selected={selected}
           setSelected={setSelected}
           onDelete={onDelete}
