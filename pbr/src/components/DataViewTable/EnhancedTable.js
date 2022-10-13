@@ -88,9 +88,10 @@ export default function EnhancedTable(props) {
     toolbarButtons,
     selected,
     setSelected,
+    setSelectedSamples,
     onDelete,
     onSubmit,
-    
+    selectedSamples,
     onEdit
   } = props;
 
@@ -134,6 +135,8 @@ export default function EnhancedTable(props) {
         }
        
       }
+
+      setSelectedSamples(rows);
       return;
     }
     setSavedFlag(true);
@@ -182,6 +185,8 @@ export default function EnhancedTable(props) {
           setSavedFlag(false);
           break;
       }
+
+      setSelectedSamples(selectedSamples);
     }
   }
   };

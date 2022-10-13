@@ -1,6 +1,8 @@
 import * as React from "react";
 
 import { Paper, Chip } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import AcceptOrRejectModal from "./AcceptOrRejectModal";
 
 import DataViewSampleModal from "./DataViewSample/SampleModal";
 import DataViewFilterModal from "./FilterModal";
@@ -19,33 +21,14 @@ export default function DataView() {
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
   const [selectedSamples, setSelectedSamples] = React.useState([]);
-  // const [savedFlag, setSavedFlag] = React.useState(true);
 
-  
-  
+  const [AcceptRejectModalVisibility, setAcceptRejectModalVisibility] =
+    React.useState(false);
 
-
-
-
-
-
-
-
-
-  
-  
- 
-
-  
-  
-
-  
-  
-
+  const openAcceptRejectModal = () => setAcceptRejectModalVisibility(true);
+  const closeAcceptRejectModal = () => setAcceptRejectModalVisibility(false);
 
   const { checkResponseAuth } = useAuth();
-
-  
 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
@@ -78,10 +61,9 @@ export default function DataView() {
     });
   };
 
-
   // const handleSelectPending = async () => {
 
-  //  
+  //
 
   // };
   const getData = async () => {
@@ -223,10 +205,11 @@ export default function DataView() {
     });
   };
 
+  const onSubmit = () => {
+    openAcceptRejectModal();
+  };
 
-  
-  const onSubmit = async () => {
-    // handleSelectPending();
+  const savedToPending = async () => {
     let path = `/api/sample/datapoint/submit/`;
     selected.map(async (id, index) => {
       let temp = path + id;
@@ -254,7 +237,7 @@ export default function DataView() {
         });
     });
     setSelected([]);
-    
+
     // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
     // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
     // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
@@ -274,12 +257,27 @@ export default function DataView() {
           toolbarButtons={<DVTableToolbar />}
           selected={selected}
           setSelected={setSelected}
+          setSelectedSamples={setSelectedSamples}
           onDelete={onDelete}
           // savedFlag={savedFlag}
           onSubmit={onSubmit}
           
-
         ></EnhancedTable>
+
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={12}>
+            {AcceptRejectModalVisibility ? (
+              <AcceptOrRejectModal
+                selected={selected}
+                savedToPending={savedToPending}
+                rows={rowList}
+                selectedSamples={selectedSamples}
+                AcceptRejectModalVisibility={AcceptRejectModalVisibility}
+                setAcceptRejectModalVisibility={setAcceptRejectModalVisibility}
+              />
+            ) : null}
+          </Grid>
+        </Grid>
       </Paper>
       <DataViewFilterModal
         setRowList={setRowList}

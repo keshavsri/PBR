@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function EditUsers(props) {
+export default function EditUsers(props) {  
   const {
     roleMap,
     currentUser,
