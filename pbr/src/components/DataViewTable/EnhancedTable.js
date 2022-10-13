@@ -88,7 +88,9 @@ export default function EnhancedTable(props) {
     selected,
     setSelected,
     onDelete,
-    onEdit
+    onEdit,
+    isSample,
+    setOpenReviewSampleModal
   } = props;
 
   const [order, setOrder] = React.useState("");
@@ -186,6 +188,8 @@ export default function EnhancedTable(props) {
           toolbarButtons={toolbarButtons}
           onEdit={onEdit}
           onDelete={onDelete}
+          isSample={isSample}
+          setOpenReviewSampleModal={setOpenReviewSampleModal}
         />
         <TableContainer>
           <Table

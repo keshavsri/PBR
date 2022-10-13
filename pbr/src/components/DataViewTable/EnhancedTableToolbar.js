@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from '@mui/icons-material/Edit';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 import { makeStyles } from "@mui/styles";
 import {
   Toolbar,
@@ -31,8 +32,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function EnhancedTableToolbar(props) {
-  const { numSelected, toolbarButtons, onDelete, onEdit} = props;
+  const { numSelected, toolbarButtons, onDelete, onEdit, isSample, setOpenReviewSampleModal} = props;
   let classes = useStyles();
+
+  const handleOpenReviewSampleModal = () => {
+    setOpenReviewSampleModal(true);
+  };
 
   return (
     <Toolbar
@@ -82,6 +87,7 @@ export default function EnhancedTableToolbar(props) {
       ) : (
         <></>
       )}
+  
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
@@ -92,6 +98,33 @@ export default function EnhancedTableToolbar(props) {
       ) : (
         <></>
       )}
+
+      {numSelected == 1 && isSample ? (
+        <Tooltip title="Review Sample">
+        <Button
+          variant="contained"
+          onClick={handleOpenReviewSampleModal}
+          startIcon={<AssessmentIcon />}
+          sx={{ ml: 1 }}
+        >
+          Review Sample
+        </Button>
+      </Tooltip>
+      ) : null}
+
+      {numSelected > 1 && isSample ? (
+        <Tooltip title="Review Samples">
+        <Button
+          variant="contained"
+          //onClick={handleOpenReviewSampleModal}
+          startIcon={<AssessmentIcon />}
+          sx={{ ml: 1 }}
+        >
+          Review Samples
+        </Button>
+      </Tooltip>
+      ) : null}
+
     </Toolbar>
   );
 }

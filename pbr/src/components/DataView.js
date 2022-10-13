@@ -11,6 +11,7 @@ import EnhancedTable from "./DataViewTable/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { DataViewProvider } from "../services/useDataView";
 import useAuth from "../services/useAuth";
+import ReviewSampleModal from "./DataViewSample/ReviewSampleModal";
 
 const useStyles = makeStyles({});
 
@@ -21,6 +22,9 @@ export default function DataView() {
   const [showOnlyPendingSamples, setShowOnlyPendingSamples] = React.useState(false);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
+  const [isSample] = React.useState(true);
+  const [openReviewSampleModal, setOpenReviewSampleModal] = React.useState(false);
+
 
   const { checkResponseAuth } = useAuth();
 
@@ -238,9 +242,11 @@ export default function DataView() {
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
   React.useEffect(() => {
     getData();
+    //setSelected([]);
   }, []);
 
   return (
+    
     <DataViewProvider>
       <Paper>
         <EnhancedTable
@@ -250,6 +256,8 @@ export default function DataView() {
           selected={selected}
           setSelected={setSelected}
           onDelete={onDelete}
+          isSample={isSample}
+          setOpenReviewSampleModal={setOpenReviewSampleModal}
         ></EnhancedTable>
       </Paper>
       <DataViewFilterModal
@@ -259,6 +267,10 @@ export default function DataView() {
         rows={rowList}
       />
       <DataViewSampleModal getData={getData} />
+      <ReviewSampleModal 
+        openReviewSampleModal={openReviewSampleModal}
+        setOpenReviewSampleModal={setOpenReviewSampleModal}
+      />
     </DataViewProvider>
   );
 }
