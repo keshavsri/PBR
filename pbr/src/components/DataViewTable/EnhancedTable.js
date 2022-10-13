@@ -144,7 +144,9 @@ export default function EnhancedTable(props) {
   };
 
   const handleClick = (event, name) => {
+    
     setSavedFlag(true);
+
     const selectedIndex = selected.indexOf(name);
     
     let newSelected = [];

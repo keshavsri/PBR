@@ -65,27 +65,56 @@ const style = {
 };
  
 
-export default function AcceptOrRejectModal(props) {
-
-   const classes = useStyles();
-   const [modalStyle] = React.useState(getModalStyle);
-   useTheme();
+export default function SavedToPendingModal(props) {
+  
+  const classes = useStyles();
+  const [modalStyle] = React.useState(getModalStyle);
+  useTheme();
 
   const {
     selectedSamples,
-    savedToPending,
+    submitAll,
+    submitOne,
     SavedToPendingVisibility,
     setSavedToPendingVisibility,
   } = props;
 
-const onSubmit = async () => {
-  await savedToPending();
-  setSavedToPendingVisibility(false);
-};
+  const onSubmitAll = async () => {
+    await submitAll();
+    setSavedToPendingVisibility(false);
+  };
 
+  const onSubmitOne = async () => {
+    await submitOne();
+  };
 
-console.log("from the modal here are the selected samples", selectedSamples);
+  const listSelectedSamples = selectedSamples.map((sample) => (
+    <Accordion>
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
+        <Typography>{sample.id}</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Typography></Typography>
 
+        <Grid item xs={12} sm={2}>
+          <Button
+            variant="contained"
+            onClick={() => {
+              onSubmitOne(sample.id);
+            }}
+          >
+            Submit
+          </Button>
+        </Grid>
+      </AccordionDetails>
+    </Accordion>
+  ));
+
+  console.log("from the modal here are the selected samples", selectedSamples);
 
   return (
     <Modal
@@ -99,94 +128,12 @@ console.log("from the modal here are the selected samples", selectedSamples);
           <Grid container spacing={2} sx={{ padding: "15px" }}>
             <Grid item xs={12} sm={12}>
               <Typography gutterBottom variant="h4">
-                Accept or Reject the selected sample
+                Submit Samples For Review.
               </Typography>
             </Grid>
 
             <Grid item xs={12} sm={12}>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>Selected sample 1</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Suspendisse malesuada lacus ex, sit amet blandit leo
-                    lobortis eget.
-                  </Typography>
-
-                  <Grid item xs={12} sm={2}>
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        onSubmit();
-                      }}
-                    >
-                      Submit
-                    </Button>
-                  </Grid>
-                </AccordionDetails>
-              </Accordion>
-
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>Sample eselected 2</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Suspendisse malesuada lacus ex, sit amet blandit leo
-                    lobortis eget.
-                  </Typography>
-
-                  <Grid item xs={12} sm={2}>
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        onSubmit();
-                      }}
-                    >
-                      Submit
-                    </Button>
-                  </Grid>
-                </AccordionDetails>
-              </Accordion>
-
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                >
-                  <Typography>Selected sample 3</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Suspendisse malesuada lacus ex, sit amet blandit leo
-                    lobortis eget.
-                  </Typography>
-
-                  <Grid item xs={12} sm={2}>
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        onSubmit();
-                      }}
-                    >
-                      Submit
-                    </Button>
-                  </Grid>
-                </AccordionDetails>
-              </Accordion>
+              {listSelectedSamples}
             </Grid>
 
             <Grid item xs={12} sm={2}>
@@ -198,15 +145,22 @@ console.log("from the modal here are the selected samples", selectedSamples);
                 Cancel
               </Button>
             </Grid>
+
+            <Grid item xs={12} sm={2}>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  onSubmitAll();
+                }}
+              >
+                Submit All
+              </Button>
+            </Grid>
           </Grid>
         </Card>
       </div>
     </Modal>
   );
-
-
-
-
 }
 
 

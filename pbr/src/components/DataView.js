@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Paper, Chip } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import AcceptOrRejectModal from "./SavedToPendingModal";
+import SavedToPendingModal from "./SavedToPendingModal";
 
 import DataViewSampleModal from "./DataViewSample/SampleModal";
 import DataViewFilterModal from "./FilterModal";
@@ -228,7 +228,28 @@ export default function DataView() {
     openSavedToPendingVisibility();
   };
 
-  const savedToPending = async () => {
+
+
+
+const submitOne = async (id) => {
+    let path = `/api/sample/datapoint/submit/`;
+    
+      let temp = path + id;
+      await fetch(temp, { method: "PUT" })
+        .then((response) => {
+          console.log(response.json());
+        })
+        .then(() => {
+          getData();
+        });
+
+    setSelected([]);
+};
+
+  
+
+
+  const submitAll = async () => {
     let path = `/api/sample/datapoint/submit/`;
     selected.map(async (id, index) => {
       let temp = path + id;
@@ -284,16 +305,16 @@ export default function DataView() {
           setSelected={setSelected}
           setSelectedSamples={setSelectedSamples}
           onDelete={onDelete}
-          // savedFlag={savedFlag}
           onSubmit={onSubmit}
         ></EnhancedTable>
 
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12}>
             {SavedToPendingVisibility ? (
-              <AcceptOrRejectModal
+              <SavedToPendingModal
                 selected={selected}
-                savedToPending={savedToPending}
+                submitAll={submitAll}
+                submitOne={submitOne}
                 rows={rowList}
                 selectedSamples={selectedSamples}
                 SavedToPendingVisibility={SavedToPendingVisibility}
