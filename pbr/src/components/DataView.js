@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Paper, Chip } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import AcceptOrRejectModal from "./AcceptOrRejectModal";
+import AcceptOrRejectModal from "./SavedToPendingModal";
 
 import DataViewSampleModal from "./DataViewSample/SampleModal";
 import DataViewFilterModal from "./FilterModal";
@@ -25,11 +25,12 @@ export default function DataView() {
   const [selected, setSelected] = React.useState([]);
   const [selectedSamples, setSelectedSamples] = React.useState([]);
 
-  const [AcceptRejectModalVisibility, setAcceptRejectModalVisibility] =
+  const [SavedToPendingVisibility, setSavedToPendingVisibility] =
     React.useState(false);
 
-  const openAcceptRejectModal = () => setAcceptRejectModalVisibility(true);
-  const closeAcceptRejectModal = () => setAcceptRejectModalVisibility(false);
+  const openSavedToPendingVisibility = () => setSavedToPendingVisibility(true);
+  const closeSavedToPendingVisibility = () =>
+    setSavedToPendingVisibility(false);
 
   const { checkResponseAuth } = useAuth();
 
@@ -224,7 +225,7 @@ export default function DataView() {
   };
 
   const onSubmit = () => {
-    openAcceptRejectModal();
+    openSavedToPendingVisibility();
   };
 
   const savedToPending = async () => {
@@ -272,26 +273,31 @@ export default function DataView() {
         <EnhancedTable
           headCells={headCellList}
           rows={rowList}
-          toolbarButtons={<DVTableToolbar filterPendingSamples={filterPendingSamples} showOnlyPendingSamples={showOnlyPendingSamples} turnPendingFilterOff={turnPendingFilterOff} />}
+          toolbarButtons={
+            <DVTableToolbar
+              filterPendingSamples={filterPendingSamples}
+              showOnlyPendingSamples={showOnlyPendingSamples}
+              turnPendingFilterOff={turnPendingFilterOff}
+            />
+          }
           selected={selected}
           setSelected={setSelected}
           setSelectedSamples={setSelectedSamples}
           onDelete={onDelete}
           // savedFlag={savedFlag}
           onSubmit={onSubmit}
-          
         ></EnhancedTable>
 
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12}>
-            {AcceptRejectModalVisibility ? (
+            {SavedToPendingVisibility ? (
               <AcceptOrRejectModal
                 selected={selected}
                 savedToPending={savedToPending}
                 rows={rowList}
                 selectedSamples={selectedSamples}
-                AcceptRejectModalVisibility={AcceptRejectModalVisibility}
-                setAcceptRejectModalVisibility={setAcceptRejectModalVisibility}
+                SavedToPendingVisibility={SavedToPendingVisibility}
+                setSavedToPendingVisibility={setSavedToPendingVisibility}
               />
             ) : null}
           </Grid>

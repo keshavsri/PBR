@@ -72,16 +72,15 @@ export default function AcceptOrRejectModal(props) {
    useTheme();
 
   const {
-    
     selectedSamples,
     savedToPending,
-    AcceptRejectModalVisibility,
-    setAcceptRejectModalVisibility
+    SavedToPendingVisibility,
+    setSavedToPendingVisibility,
   } = props;
 
 const onSubmit = async () => {
   await savedToPending();
-  setAcceptRejectModalVisibility(false);
+  setSavedToPendingVisibility(false);
 };
 
 
@@ -90,8 +89,8 @@ console.log("from the modal here are the selected samples", selectedSamples);
 
   return (
     <Modal
-      open={AcceptRejectModalVisibility}
-      onClose={() => setAcceptRejectModalVisibility(false)}
+      open={SavedToPendingVisibility}
+      onClose={() => setSavedToPendingVisibility(false)}
       aria-labelledby="Accept or Reject Modal"
       aria-describedby="Modal Used to accept or reject a  Pending sample"
     >
@@ -158,7 +157,34 @@ console.log("from the modal here are the selected samples", selectedSamples);
                       Submit
                     </Button>
                   </Grid>
-                  
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography>Selected sample 3</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Suspendisse malesuada lacus ex, sit amet blandit leo
+                    lobortis eget.
+                  </Typography>
+
+                  <Grid item xs={12} sm={2}>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        onSubmit();
+                      }}
+                    >
+                      Submit
+                    </Button>
+                  </Grid>
                 </AccordionDetails>
               </Accordion>
             </Grid>
@@ -166,7 +192,7 @@ console.log("from the modal here are the selected samples", selectedSamples);
             <Grid item xs={12} sm={2}>
               <Button
                 onClick={() => {
-                  setAcceptRejectModalVisibility(false);
+                  setSavedToPendingVisibility(false);
                 }}
               >
                 Cancel
