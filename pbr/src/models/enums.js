@@ -37,9 +37,10 @@ export const speciesTypes = Object.freeze({
 
 // Stores the choices for a bird sample type
 export const validationStates = Object.freeze({
+  SAVED: "Saved",
   PENDING: "Pending",
   REJECTED: "Rejected",
-  VALIDATED: "Validated",
+  ACCEPTED: "Accepted",
 });
 
 // Stores the roles for users in the application
