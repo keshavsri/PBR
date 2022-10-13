@@ -133,7 +133,7 @@ def _parse_vetscan_vs2(content_lines):
                         data = ""
                         for j in range(1, len(row_contents) - 1):
                             data = data + row_contents[j] + " "
-                        new_meas = {"key": row_contents[0].strip(), "value": data.strip(), "units": row_contents[len(row_contents)-1].strip()}
+                            new_meas = {"key": row_contents[0].strip(), "value": data.strip(), "units": row_contents[len(row_contents)-1].strip()}
                     else:
                         # For all other measurements
                         new_meas = {"key": row_contents[0].strip(), "value": row_contents[1].strip(), "units": row_contents[len(row_contents)-1].strip()}
@@ -158,9 +158,12 @@ def _parse_vetscan_vs2(content_lines):
                 row_contents = re.sub(" +", " ", row).strip().split()
                 print("Extra: ", row_contents)
                 new_meas = [
-                    {"key": row_contents[0].strip(), "value": row_contents[1].strip()},
-                    {"key": row_contents[2].strip(), "value": row_contents[3].strip()},
-                    {"key": row_contents[4].strip(), "value": row_contents[5].strip()}
+                    {"key": row_contents[0].strip(
+                    ), "value": row_contents[1].strip()},
+                    {"key": row_contents[2].strip(
+                    ), "value": row_contents[3].strip()},
+                    {"key": row_contents[4].strip(
+                    ), "value": row_contents[5].strip()}
                 ]
                 print("NEW:", new_meas)
                 ret_dict["measurements"].extend(new_meas)
@@ -201,29 +204,33 @@ def create_sample(access_allowed, current_user):
         # Validate Payload
 
         # Check if flock exists.
-        current_flock = src.helpers.get_flock_by_name(payload['flockDetails']['name'])
+        current_flock = src.helpers.get_flock_by_name(
+            payload['flockDetails']['name'])
         # If flock doesn't exist, make it.
         if current_flock:
             print("Flock already exists")
             # If so, see if things were edited.
             src.helpers.update_flock(payload['flockDetails'])
-            Models.createLog(current_user, LogActions.EDIT_FLOCK, 'Updated Flock: ' + current_flock["name"])
+            Models.createLog(current_user, LogActions.EDIT_FLOCK,
+                             'Updated Flock: ' + current_flock["name"])
         else:
             print("Brand new flock. Add it.")
             # If flock doesn't exist, make it.
-            
+
             new_flock = src.helpers.create_flock(payload['flockDetails'])
-            
+
             print(new_flock)
             # stages and then commits the new Flock to the database
-            Models.createLog(current_user, LogActions.ADD_FLOCK, 'Created new Flock: ' + new_flock.name)
+            Models.createLog(current_user, LogActions.ADD_FLOCK,
+                             'Created new Flock: ' + new_flock.name)
 
         payload["validation_status"] = ValidationTypes.Pending
         new_sample = src.helpers.create_sample(payload, current_user)
         if not new_sample:
             return jsonify({'message': 'Invalid Request'}), 400
 
-        Models.createLog(current_user, LogActions.ADD_SAMPLE, 'Created new sample: ' + str(new_sample.id))
+        Models.createLog(current_user, LogActions.ADD_SAMPLE,
+                         'Created new sample: ' + str(new_sample.id))
         return Schemas.Sample.from_orm(new_sample).dict(), 201
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -246,7 +253,7 @@ def get_samples(access_allowed, current_user, given_org_id=None):
         # response json is created here and gets returned at the end of the block for GET requests.
         response_json = None
         current_user_organization = current_user.organization_id
-        
+
         if given_org_id:
             if current_user_organization == given_org_id:
                 if current_user.role >= Roles.Supervisor:
@@ -263,10 +270,11 @@ def get_samples(access_allowed, current_user, given_org_id=None):
         else:
             if current_user.role == Roles.Super_Admin:
                 # Super Admins can see all samples from all orgs
-                response_json = helpers.get_all_samples()
-            elif current_user.role >= Roles.Supervisor:
+                response_json = helpers.get_all_samples(current_user.id)
+            elif current_user.role == Roles.Supervisor or current_user.role == Roles.Admin:
                 # If Supervisor or Greater, return all samples of that org
-                response_json = helpers.get_samples_by_org(current_user_organization)
+                response_json = helpers.get_samples_by_org(
+                    current_user_organization, current_user.id)
             else:
                 # Otherwise, they can only see samples that are assigned to them.
                 response_json = helpers.get_samples_by_user(current_user.id)
@@ -280,8 +288,9 @@ def get_samples(access_allowed, current_user, given_org_id=None):
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
-
 # Deletes specified sample #
+
+
 @sampleBlueprint.route('/datapoint/<int:item_id>', methods=['DELETE'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
@@ -299,10 +308,38 @@ def delete_sample(access_allowed, current_user, item_id):
         else:
             deleted_sample = Models.Sample.query.get(item_id)
             # Models.db.session.delete(Models.Sample.query.get(item_id))
-            Models.Sample.query.filter_by(id=item_id).update({'deleted' : True})
+            Models.Sample.query.filter_by(id=item_id).update({'deleted': True})
             Models.db.session.commit()
-            Models.createLog(current_user, LogActions.DELETE_SAMPLE, 'Deleted sample: ' + str(deleted_sample.id))
+            Models.createLog(current_user, LogActions.DELETE_SAMPLE,
+                             'Deleted sample: ' + str(deleted_sample.id))
             return Schemas.Sample.from_orm(deleted_sample).dict(), 200
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+
+
+# Submit Pending Samples #
+@sampleBlueprint.route('/datapoint/submit/<int:item_id>', methods=['PUT'])
+@token_required
+@allowed_roles([0, 1, 2, 3])
+def submit_sample(access_allowed, current_user, item_id):
+    """
+    Edits existing sample.
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the sample to edit.
+    :return: The edited sample.
+    """
+    if access_allowed:
+        if Models.Sample.query.get(item_id) is None:
+            return jsonify({'message': 'Sample cannot be found.'}), 404
+        else:
+            Models.Sample.query.filter_by(id=item_id).update(
+                {'validation_status': ValidationTypes.Pending})
+            Models.db.session.commit()
+            edited_sample = Models.Sample.query.get(item_id)
+            Models.createLog(current_user, LogActions.EDIT_SAMPLE,
+                             'Edited sample: ' + str(edited_sample.id))
+            return Schemas.Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -327,7 +364,8 @@ def edit_datapoint(access_allowed, current_user, item_id):
             Models.Sample.query.filter_by(id=item_id).update(request.json)
             Models.db.session.commit()
             edited_sample = Models.Sample.query.get(item_id)
-            Models.createLog(current_user, LogActions.EDIT_SAMPLE, 'Edited sample: ' + str(edited_sample.id))
+            Models.createLog(current_user, LogActions.EDIT_SAMPLE,
+                             'Edited sample: ' + str(edited_sample.id))
             return Schemas.Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -346,7 +384,8 @@ def create_batch_data(access_allowed, current_user, batch_data):
     if access_allowed:
         Models.db.session.add(batch_data)
         Models.db.session.commit()
-        Models.createLog(current_user, LogActions.ADD_BATCH, 'Created batch data: ' + batch_data.id)
+        Models.createLog(current_user, LogActions.ADD_BATCH,
+                         'Created batch data: ' + batch_data.id)
         return jsonify(Models.Batch.query.get(request.json.get('id'))),
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -405,7 +444,8 @@ def edit_batch(access_allowed, current_user, item_id):
             Models.Batch.query.filter_by(id=item_id).update(request.json)
             Models.db.session.commit()
             edited_batch = Models.Batch.query.get(item_id)
-            Models.createLog(current_user, LogActions.EDIT_BATCH, 'Edited batch: ' + edited_batch.id)
+            Models.createLog(current_user, LogActions.EDIT_BATCH,
+                             'Edited batch: ' + edited_batch.id)
             return jsonify(edited_batch), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -426,7 +466,8 @@ def delete_batch(access_allowed, current_user, item_id):
             deleted_batch = Models.Batch.query.get(item_id)
             Models.db.session.delete(Models.Batch.query.get(item_id))
             Models.db.session.commit()
-            Models.createLog(current_user, LogActions.DELETE_SAMPLE, 'Deleted batch: ' + deleted_batch.id)
+            Models.createLog(current_user, LogActions.DELETE_SAMPLE,
+                             'Deleted batch: ' + deleted_batch.id)
             return jsonify({'message': 'Batch has been deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

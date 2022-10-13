@@ -19,7 +19,7 @@ export default function Error() {
   useTheme();
 
   let message =
-    "Your Sample Entry was Submitted Successfully and is Pending Validation from a Supervisor.";
+    "Your Sample Entry was Saved Successfully";
 
   return (
     <>
