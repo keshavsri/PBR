@@ -243,7 +243,7 @@ class Sample(db.Model):
     flock_age_unit: AgeUnits = db.Column(db.Enum(AgeUnits))
     flagged: bool = db.Column(db.Boolean)
     deleted: bool = db.Column(db.Boolean, server_default="0")
-    validation_status: ValidationTypes = db.Column(db.Enum(ValidationTypes), server_default=ValidationTypes.Pending)
+    validation_status: ValidationTypes = db.Column(db.Enum(ValidationTypes))
     sample_type: SampleTypes = db.Column(db.Enum(SampleTypes))
 
     measurement_values: List['MeasurementValue'] = db.relationship('MeasurementValue', backref='Sample')

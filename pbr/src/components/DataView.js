@@ -1,6 +1,8 @@
 import * as React from "react";
 
 import { Paper, Chip } from "@mui/material";
+import Grid from "@mui/material/Grid";
+import AcceptOrRejectModal from "./SavedToPendingModal";
 
 import DataViewSampleModal from "./DataViewSample/SampleModal";
 import DataViewFilterModal from "./FilterModal";
@@ -22,9 +24,20 @@ export default function DataView() {
   const [showOnlyPendingSamples, setShowOnlyPendingSamples] = React.useState(false);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
+<<<<<<< HEAD
   const [isSample] = React.useState(true);
   const [openReviewSampleModal, setOpenReviewSampleModal] = React.useState(false);
 
+=======
+  const [selectedSamples, setSelectedSamples] = React.useState([]);
+
+  const [SavedToPendingVisibility, setSavedToPendingVisibility] =
+    React.useState(false);
+
+  const openSavedToPendingVisibility = () => setSavedToPendingVisibility(true);
+  const closeSavedToPendingVisibility = () =>
+    setSavedToPendingVisibility(false);
+>>>>>>> UC8_Sample_Validation
 
   const { checkResponseAuth } = useAuth();
 
@@ -59,6 +72,7 @@ export default function DataView() {
     });
   };
 
+
   const turnPendingFilterOff = async () => {
     setShowOnlyPendingSamples(false);
     setRowList(fullRowList);
@@ -85,7 +99,6 @@ export default function DataView() {
       })
       .then(checkResponseAuth)
       .then((data) => {
-        console.log(data);
         denestMachineData(data.rows);
         assignRowHtml(data.rows);
         setRowList(data.rows);
@@ -165,11 +178,9 @@ export default function DataView() {
 
     addApiColumnNamesToHeadCells(types, headCells);
     setHeadCellList(headCells);
-    console.log(headCells);
   };
 
   const addApiColumnNamesToHeadCells = (headCellNamesFromAPI, headCells) => {
-    console.log(headCellNamesFromAPI);
     headCellNamesFromAPI.map((machine) => {
       machine.data.map((point, index) => {
         headCells.push(createHeadCell(point.type, machine.machineName, index));
@@ -220,14 +231,31 @@ export default function DataView() {
     });
   };
 
+  const onSubmit = () => {
+    openSavedToPendingVisibility();
+  };
+
+  const savedToPending = async () => {
+    let path = `/api/sample/datapoint/submit/`;
+    selected.map(async (id, index) => {
+      let temp = path + id;
+      await fetch(temp, { method: "PUT" })
+        .then((response) => {
+          console.log(response.json());
+        })
+        .then(() => {
+          getData();
+        });
+    });
+    setSelected([]);
+  };
+
   const onDelete = async () => {
-    console.log("DELETE TEST");
     let path = `/api/sample/datapoint/`;
     selected.map(async (id, index) => {
       let temp = path + id;
       await fetch(temp, { method: "DELETE" })
         .then((response) => {
-          console.log(response.json());
           // return response.json();
         })
         .then(() => {
@@ -235,10 +263,12 @@ export default function DataView() {
         });
     });
     setSelected([]);
+
     // API CALL TO PASS THE "SELECTED" STATE VARIABLE TO DELETE
     // SHOULD BE A LIST OF DELETABLE OBJECTS W/ ID'S
     // NEED TO IMPLEMENT THIS FUNCTION FOR EVERY TABLE
   };
+
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
   React.useEffect(() => {
     getData();
@@ -252,13 +282,40 @@ export default function DataView() {
         <EnhancedTable
           headCells={headCellList}
           rows={rowList}
-          toolbarButtons={<DVTableToolbar filterPendingSamples={filterPendingSamples} showOnlyPendingSamples={showOnlyPendingSamples} turnPendingFilterOff={turnPendingFilterOff} />}
+          toolbarButtons={
+            <DVTableToolbar
+              filterPendingSamples={filterPendingSamples}
+              showOnlyPendingSamples={showOnlyPendingSamples}
+              turnPendingFilterOff={turnPendingFilterOff}
+            />
+          }
           selected={selected}
           setSelected={setSelected}
+          setSelectedSamples={setSelectedSamples}
           onDelete={onDelete}
+<<<<<<< HEAD
           isSample={isSample}
           setOpenReviewSampleModal={setOpenReviewSampleModal}
+=======
+          // savedFlag={savedFlag}
+          onSubmit={onSubmit}
+>>>>>>> UC8_Sample_Validation
         ></EnhancedTable>
+
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={12}>
+            {SavedToPendingVisibility ? (
+              <AcceptOrRejectModal
+                selected={selected}
+                savedToPending={savedToPending}
+                rows={rowList}
+                selectedSamples={selectedSamples}
+                SavedToPendingVisibility={SavedToPendingVisibility}
+                setSavedToPendingVisibility={setSavedToPendingVisibility}
+              />
+            ) : null}
+          </Grid>
+        </Grid>
       </Paper>
       <DataViewFilterModal
         setRowList={setRowList}
