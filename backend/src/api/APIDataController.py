@@ -90,8 +90,7 @@ def _parse_vetscan_vs2(content_lines):
     ret_dict = {
         "name": content_lines[0],
         "info": [
-            {"key": "Timestamp of Test", "value": re.sub(
-                " +", " ", content_lines[2])},
+            {"key": "Timestamp of Test", "value": re.sub(" +", " ", content_lines[2])},
         ],
         "measurements": []
     }
@@ -134,12 +133,10 @@ def _parse_vetscan_vs2(content_lines):
                         data = ""
                         for j in range(1, len(row_contents) - 1):
                             data = data + row_contents[j] + " "
-                        new_meas = {"key": row_contents[0].strip(), "value": data.strip(
-                        ), "units": row_contents[len(row_contents)-1].strip()}
+                            new_meas = {"key": row_contents[0].strip(), "value": data.strip(), "units": row_contents[len(row_contents)-1].strip()}
                     else:
                         # For all other measurements
-                        new_meas = {"key": row_contents[0].strip(), "value": row_contents[1].strip(
-                        ), "units": row_contents[len(row_contents)-1].strip()}
+                        new_meas = {"key": row_contents[0].strip(), "value": row_contents[1].strip(), "units": row_contents[len(row_contents)-1].strip()}
                     print("NEW:", new_meas)
                     ret_dict["measurements"].append(new_meas)
         else:
@@ -147,16 +144,14 @@ def _parse_vetscan_vs2(content_lines):
             if re.search(r"^QC +[A-Za-z0-9]+ *", row):
                 row_contents = re.sub(" +", " ", row).strip().split()
                 print("QC: ", row_contents)
-                new_meas = {"key": row_contents[0].strip(
-                ), "value": row_contents[1].strip()}
+                new_meas = {"key": row_contents[0].strip(), "value": row_contents[1].strip()}
                 print("NEW:", new_meas)
                 ret_dict["measurements"].append(new_meas)
             # If row is RQC Row
             if re.search(r"^RQC: [0-9]+ *", row):
                 row_contents = re.sub(" +", " ", row).strip().split(":")
                 print("RQC: ", row_contents)
-                new_meas = {"key": row_contents[0].strip(
-                ), "value": row_contents[1].strip()}
+                new_meas = {"key": row_contents[0].strip(), "value": row_contents[1].strip()}
                 print("NEW:", new_meas)
                 ret_dict["measurements"].append(new_meas)
             if re.search(r"^HEM *[0-9+-]+ +LIP *[0-9+-]+ +ICT *[0-9+-]+ *", row):
