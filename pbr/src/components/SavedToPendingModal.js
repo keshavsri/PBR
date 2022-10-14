@@ -104,13 +104,15 @@ const IstatORVescan = (sample) => {
           Istat Data:
         </Typography>
       );
-    } else {
+    } 
+    else if (sample.measurement_values.length === 17){
       return (
         <Typography gutterBottom variant="body1">
           VetScan Data:
         </Typography>
       );
     }
+
   };
 
 
@@ -223,7 +225,11 @@ const IstatORVescan = (sample) => {
               {" "}
               Machine Data{" "}
             </Typography>
-            {IstatORVescan(sample)}
+            {(sample.measurement_values.length === 13 ||
+            sample.measurement_values.length == 17) ? IstatORVescan(sample) : 
+            <Typography gutterBottom variant="body1">
+              No data is associated with the sample
+              </Typography> }
             <br />
           </Grid>
 
