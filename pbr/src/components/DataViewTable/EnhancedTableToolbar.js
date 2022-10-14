@@ -6,6 +6,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import { makeStyles } from "@mui/styles";
+import useAuth from "../../services/useAuth";
+
 import {
   Toolbar,
   IconButton,
@@ -33,8 +35,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function EnhancedTableToolbar(props) {
-  const { numSelected, toolbarButtons, onDelete, onEdit, onSubmit, savedFlag, isSample, setOpenReviewSampleModal} = props;
+  const { numSelected, toolbarButtons, onDelete, onEdit, onSubmit, savedFlag, pendingFlag, isSample, setOpenReviewSampleModal} = props;
   let classes = useStyles();
+
+  const {user} = useAuth();
 
   const handleOpenReviewSampleModal = () => {
     setOpenReviewSampleModal(true);
@@ -105,7 +109,7 @@ export default function EnhancedTableToolbar(props) {
         <></>
       )}
 
-      {numSelected == 1 && isSample ? (
+      {numSelected == 1 && isSample && user.role < 3 && pendingFlag ? (
         <Tooltip title="Review Sample">
         <Button
           variant="contained"
@@ -118,11 +122,11 @@ export default function EnhancedTableToolbar(props) {
       </Tooltip>
       ) : null}
 
-      {numSelected > 1 && isSample ? (
+      {numSelected > 1 && isSample && user.role < 3&& pendingFlag ? (
         <Tooltip title="Review Samples">
         <Button
           variant="contained"
-          //onClick={handleOpenReviewSampleModal}
+          onClick={handleOpenReviewSampleModal}
           startIcon={<AssessmentIcon />}
           sx={{ ml: 1 }}
         >

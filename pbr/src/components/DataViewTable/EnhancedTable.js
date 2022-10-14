@@ -89,9 +89,9 @@ export default function EnhancedTable(props) {
     selected,
     setSelected,
     setSelectedSamples,
+    setPendingSamples,
     onDelete,
     onSubmit,
-    selectedSamples,
     onEdit,
     isSample,
     setOpenReviewSampleModal
@@ -105,6 +105,8 @@ export default function EnhancedTable(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [loading, setLoading] = React.useState(false);
   const [savedFlag, setSavedFlag] = React.useState(true);
+  const [pendingFlag, setPendingFlag] = React.useState(true);
+
   // let rowComponents = generateRows();
 
   // function generateRows() {
@@ -125,10 +127,12 @@ export default function EnhancedTable(props) {
 
   const handleSelectAllClick = (event) => {
     setSavedFlag(true);
+    setPendingFlag(true);
     if (event.target.checked) {
       let newSelecteds = rows.filter((n) => n.deletable).map((n) => n.id);
       
       setSelected(newSelecteds);
+      setPendingFlag(newSelecteds);
 
       for (let i = 0; i < rows.length; i++) {
         if (rows[i].validation_status != "Saved") {
@@ -138,19 +142,34 @@ export default function EnhancedTable(props) {
        
       }
 
+      for (let i = 0; i < rows.length; i++) {
+        if (rows[i].validation_status != "Pending") {
+          setPendingFlag(false);
+          break;
+        }
+       
+      }
+
+      if (pendingFlag) {
+        setPendingSamples(rows);
+      }
       setSelectedSamples(rows);
+
       return;
     }
     setSavedFlag(true);
+    setPendingFlag(true);
     setSelected([]);
   };
 
   const handleClick = (event, name) => {
     setSavedFlag(true);
+    setPendingFlag(true);
     const selectedIndex = selected.indexOf(name);
     
     let newSelected = [];
     let selectedSamples = [];
+    let pendingSamples = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
@@ -174,6 +193,7 @@ export default function EnhancedTable(props) {
           if (newSelected[j] === rows[i].id) {
             if (selectedSamples.indexOf(rows[i]) === -1) {
               selectedSamples.push(rows[i]);
+              pendingSamples.push(rows[i]);
             }
           }
         }
@@ -181,16 +201,29 @@ export default function EnhancedTable(props) {
 
       console.log("Selected samples: ", selectedSamples);
 
-       if (selectedSamples.length > 0) {
-      for (let i = 0; i < selectedSamples.length; i++) {
-        if (selectedSamples[i].validation_status != "Saved") {
-          setSavedFlag(false);
+    if (selectedSamples.length > 0) {
+        for (let i = 0; i < selectedSamples.length; i++) {
+          if (selectedSamples[i].validation_status != "Saved") {
+            setSavedFlag(false);
+            break;
+        }
+
+        setSelectedSamples(selectedSamples);
+      }
+    }
+
+    if (pendingSamples.length > 0) {
+      for (let i = 0; i < pendingSamples.length; i++) {
+        if (pendingSamples[i].validation_status != "Pending") {
+          setPendingFlag(false);
           break;
       }
 
-      setSelectedSamples(selectedSamples);
+      setPendingSamples(pendingSamples);
+      }
     }
-  }
+
+  
   };
 
  
@@ -236,6 +269,7 @@ export default function EnhancedTable(props) {
           toolbarButtons={toolbarButtons}
           onEdit={onEdit}
           savedFlag={savedFlag}
+          pendingFlag={pendingFlag}
           onDelete={onDelete}
           onSubmit={onSubmit}
           isSample={isSample}

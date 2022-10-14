@@ -343,6 +343,58 @@ def submit_sample(access_allowed, current_user, item_id):
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
+# Accept Sample
+@sampleBlueprint.route('/datapoint/accept/<int:item_id>', methods=['PUT'])
+@token_required
+@allowed_roles([0, 1, 2])
+def accept_sample(access_allowed, current_user, item_id):
+    """
+    Accepts existing sample.
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the sample to edit.
+    :return: The accepted sample.
+    """
+    if access_allowed:
+        if Models.Sample.query.get(item_id) is None:
+            return jsonify({'message': 'Sample cannot be found.'}), 404
+        else:
+            Models.Sample.query.filter_by(id=item_id).update(
+                {'validation_status': ValidationTypes.Accepted})
+            Models.db.session.commit()
+            edited_sample = Models.Sample.query.get(item_id)
+            Models.createLog(current_user, LogActions.PENDING_TO_VALID,
+                             'Accepted sample: ' + str(edited_sample.id))
+            return Schemas.Sample.from_orm(edited_sample).dict(), 200
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+
+# Reject Sample
+@sampleBlueprint.route('/datapoint/reject/<int:item_id>', methods=['PUT'])
+@token_required
+@allowed_roles([0, 1, 2])
+def reject_sample(access_allowed, current_user, item_id):
+    """
+    Rejects existing sample.
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the sample to edit.
+    :return: The rejected sample.
+    """
+    if access_allowed:
+        if Models.Sample.query.get(item_id) is None:
+            return jsonify({'message': 'Sample cannot be found.'}), 404
+        else:
+            Models.Sample.query.filter_by(id=item_id).update(
+                {'validation_status': ValidationTypes.Rejected})
+            Models.db.session.commit()
+            edited_sample = Models.Sample.query.get(item_id)
+            Models.createLog(current_user, LogActions.PENDING_TO_REJECT,
+                             'Reject sample: ' + str(edited_sample.id))
+            return Schemas.Sample.from_orm(edited_sample).dict(), 200
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+
 
 # Edits existing sample #
 @sampleBlueprint.route('/datapoint/<int:item_id>', methods=['PUT'])

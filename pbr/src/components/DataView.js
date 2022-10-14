@@ -24,12 +24,12 @@ export default function DataView() {
   const [showOnlyPendingSamples, setShowOnlyPendingSamples] = React.useState(false);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
-<<<<<<< HEAD
   const [isSample] = React.useState(true);
   const [openReviewSampleModal, setOpenReviewSampleModal] = React.useState(false);
 
-=======
   const [selectedSamples, setSelectedSamples] = React.useState([]);
+  const [pendingSamples, setPendingSamples] = React.useState([]);
+
 
   const [SavedToPendingVisibility, setSavedToPendingVisibility] =
     React.useState(false);
@@ -37,7 +37,6 @@ export default function DataView() {
   const openSavedToPendingVisibility = () => setSavedToPendingVisibility(true);
   const closeSavedToPendingVisibility = () =>
     setSavedToPendingVisibility(false);
->>>>>>> UC8_Sample_Validation
 
   const { checkResponseAuth } = useAuth();
 
@@ -250,6 +249,37 @@ export default function DataView() {
     setSelected([]);
   };
 
+  const acceptSample = async (id) => {
+    console.log("Accepting Sample")
+    let path = `/api/sample/datapoint/accept/`;
+
+      let temp = path + id;
+      await fetch(temp, { method: "PUT" })
+        .then((response) => {
+          console.log(response.json());
+        })
+        .then(() => {
+          getData();
+        });
+
+        setSelected([]);
+  };
+
+const rejectSample = async (id) => {
+  let path = `/api/sample/datapoint/reject/`;
+
+    let temp = path + id;
+    await fetch(temp, { method: "PUT" })
+      .then((response) => {
+        console.log(response.json());
+      })
+      .then(() => {
+        getData();
+      });
+
+      setSelected([]);
+  };
+
   const onDelete = async () => {
     let path = `/api/sample/datapoint/`;
     selected.map(async (id, index) => {
@@ -292,14 +322,11 @@ export default function DataView() {
           selected={selected}
           setSelected={setSelected}
           setSelectedSamples={setSelectedSamples}
+          setPendingSamples={setPendingSamples}
           onDelete={onDelete}
-<<<<<<< HEAD
           isSample={isSample}
           setOpenReviewSampleModal={setOpenReviewSampleModal}
-=======
-          // savedFlag={savedFlag}
           onSubmit={onSubmit}
->>>>>>> UC8_Sample_Validation
         ></EnhancedTable>
 
         <Grid container spacing={2}>
@@ -327,6 +354,10 @@ export default function DataView() {
       <ReviewSampleModal 
         openReviewSampleModal={openReviewSampleModal}
         setOpenReviewSampleModal={setOpenReviewSampleModal}
+        pendingSamples={pendingSamples}
+        setPendingSamples={setPendingSamples}
+        acceptSample={acceptSample}
+        rejectSample={rejectSample}
       />
     </DataViewProvider>
   );
