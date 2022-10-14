@@ -163,6 +163,7 @@ export default function EnhancedTable(props) {
   };
 
   const handleClick = (event, name) => {
+    
     setSavedFlag(true);
     setPendingFlag(true);
     const selectedIndex = selected.indexOf(name);
@@ -186,7 +187,7 @@ export default function EnhancedTable(props) {
     
     setSelected(newSelected);
     
-    console.log("Selected index: ", newSelected);
+
 
       for (let i = 0; i < rows.length; i++) {
         for (let j = 0; j < newSelected.length; j++) {
@@ -199,7 +200,7 @@ export default function EnhancedTable(props) {
         }
       }
 
-      console.log("Selected samples: ", selectedSamples);
+      console.log("Selected samples From Enhanced Table: ", selectedSamples);
 
     if (selectedSamples.length > 0) {
         for (let i = 0; i < selectedSamples.length; i++) {
@@ -244,10 +245,8 @@ export default function EnhancedTable(props) {
   const findMachineDataPoint = (row, machineName, fieldName) => {
     for (var i = 0, iLen = row.machines.length; i < iLen; i++) {
       if (row.machines[i].machineName == machineName) {
-        // console.log(machineName);
         for (var j = 0, jLen = row.machines[i].data.length; j < jLen; j++) {
           if (row.machines[i].data[j].type.name == fieldName) {
-            // console.log(row.machines[i].data[j].value);
             return row.machines[i].data[j].value;
           }
         }
@@ -297,7 +296,6 @@ export default function EnhancedTable(props) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  // console.log(row);
                   let onClickFxn = (event, deletable, id) => {
                     if (deletable) {
                       handleClick(event, id);

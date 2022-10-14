@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
       position: 'absolute',
-      height: 500,
+      height: 800,
       width: 1000,
       backgroundColor: theme.palette.background.paper,
       boxShadow: theme.shadows[5],
@@ -249,12 +249,12 @@ export default function ReviewSampleModal({
                 variant="contained"
                 onClick={() => {
                   onAcceptSample(sample.id);
-                  removeFromPending(sample);
                   window.scroll({
                     top: 0, 
                     left: 0, 
                     behavior: 'smooth'
                   });
+                  removeFromPending(sample);
                 }}
               >
                 Accept
