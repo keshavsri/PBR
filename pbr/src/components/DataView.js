@@ -321,6 +321,7 @@ const submitOne = async (id) => {
                 submitOne={submitOne}
                 rows={rowList}
                 selectedSamples={selectedSamples}
+                setSelectedSamples={setSelectedSamples}
                 SavedToPendingVisibility={SavedToPendingVisibility}
                 setSavedToPendingVisibility={setSavedToPendingVisibility}
               />

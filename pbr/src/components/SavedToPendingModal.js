@@ -73,8 +73,20 @@ export default function SavedToPendingModal(props) {
     submitOne,
     SavedToPendingVisibility,
     setSavedToPendingVisibility,
+    setSelectedSamples,
   } = props;
 
+
+  
+
+const removeFromSelected = (sample) => {
+    let newSelected = selectedSamples.filter((s) => s !== sample);
+    setSelectedSamples(newSelected);
+    if (newSelected.length === 0) {
+      setSavedToPendingVisibility(false);
+    }
+
+};
   const onSubmitAll = async () => {
     await submitAll();
     setSavedToPendingVisibility(false);
@@ -85,7 +97,25 @@ export default function SavedToPendingModal(props) {
     listSamples();
   };
 
+const IstatORVescan = (sample) => {
+    if (sample.measurement_values.length === 13){
+      return (
+        <Typography gutterBottom variant="body1">
+          Istat Data:
+        </Typography>
+      );
+    } else {
+      return (
+        <Typography gutterBottom variant="body1">
+          VetScan Data:
+        </Typography>
+      );
+    }
+  };
+
+
   const fillMAchineData = (sample) => {
+    
     return sample.measurement_values.map((measurement) =>(
       <Grid item xs={12} sm={6}>
         <TextField label={measurement.measurement.measurementtype.abbreviation} value={measurement.value} disabled />
@@ -106,7 +136,7 @@ export default function SavedToPendingModal(props) {
         </AccordionSummary>
         <AccordionDetails>
           <Grid item xs={12} sm={12}>
-            <Typography gutterBottom variant="h6">
+            <Typography gutterBottom variant="h5">
               {" "}
               General{" "}
             </Typography>
@@ -114,13 +144,7 @@ export default function SavedToPendingModal(props) {
           <br />
 
           <Box sx={{ flexGrow: 1 }}>
-            <Grid
-              container
-              direction="row"
-              // justifyContent="center"
-              alignItems="center"
-              spacing={3}
-            >
+            <Grid container direction="row" alignItems="center" spacing={3}>
               <Grid item xs={6}>
                 <TextField
                   fullWidth
@@ -195,21 +219,22 @@ export default function SavedToPendingModal(props) {
           <br />
 
           <Grid item xs={12} sm={12}>
-            <Typography gutterBottom variant="h6">
+            <Typography gutterBottom variant="h5">
               {" "}
               Machine Data{" "}
             </Typography>
+            {IstatORVescan(sample)}
+            <br />
           </Grid>
 
           <Box sx={{ flexGrow: 1 }}>
             <Grid container direction="row" alignItems="center" spacing={3}>
-                  {fillMAchineData(sample)}
-
+              {fillMAchineData(sample)}
             </Grid>
           </Box>
 
           <Grid item xs={12} sm={12}>
-            <Typography gutterBottom variant="h6">
+            <Typography gutterBottom variant="h5">
               {" "}
               Comments{" "}
             </Typography>
@@ -231,6 +256,7 @@ export default function SavedToPendingModal(props) {
               variant="contained"
               onClick={() => {
                 onSubmitOne(sample.id);
+                removeFromSelected(sample);
               }}
             >
               Submit
