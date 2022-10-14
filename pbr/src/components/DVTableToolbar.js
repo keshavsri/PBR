@@ -9,6 +9,7 @@ import BulkIcon from "@mui/icons-material/UploadFile";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ReportIcon from "@mui/icons-material/Assessment";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import AssessmentIcon from '@mui/icons-material/Assessment';
 import SampleIcon from "@mui/icons-material/Science";
 import useDataView from "../services/useDataView";
 
@@ -17,7 +18,8 @@ const useStyles = makeStyles({});
 export default function DVTableToolbar({
     filterPendingSamples,
     showOnlyPendingSamples,
-    turnPendingFilterOff
+    turnPendingFilterOff,
+    selected
 }) {
   const {
     samplePayload,
@@ -43,12 +45,16 @@ export default function DVTableToolbar({
     openFilterModal, 
     setOpenFilterModal,
     handleOpenFilterModal,
-    handleCloseFilterModal  
+    handleCloseFilterModal,
   } = useDataView();
   const classes = useStyles();
 
 
   useTheme();
+
+  const selectedLength = async () => {
+    console.log(selected.length);
+  };
 
   return (
     <>

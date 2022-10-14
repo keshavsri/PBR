@@ -13,6 +13,7 @@ import EnhancedTable from "./DataViewTable/EnhancedTable";
 import { makeStyles } from "@mui/styles";
 import { DataViewProvider } from "../services/useDataView";
 import useAuth from "../services/useAuth";
+import ReviewSampleModal from "./DataViewSample/ReviewSampleModal";
 
 const useStyles = makeStyles({});
 
@@ -23,7 +24,12 @@ export default function DataView() {
   const [showOnlyPendingSamples, setShowOnlyPendingSamples] = React.useState(false);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
+  const [isSample] = React.useState(true);
+  const [openReviewSampleModal, setOpenReviewSampleModal] = React.useState(false);
+
   const [selectedSamples, setSelectedSamples] = React.useState([]);
+  const [pendingSamples, setPendingSamples] = React.useState([]);
+
 
   const [SavedToPendingVisibility, setSavedToPendingVisibility] =
     React.useState(false);
@@ -70,7 +76,6 @@ export default function DataView() {
     setShowOnlyPendingSamples(false);
     setRowList(fullRowList);
     setPendingRowList([]);
-    //getData();
   };
 
   const filterPendingSamples = async () => {
@@ -97,9 +102,6 @@ export default function DataView() {
         setRowList(data.rows);
         getHeadCells(data.types);
       });
-    // denestMachineData(apiRows);
-    // assignRowHtml(apiRows);
-    // setRowList(apiRows);
   };
 
   const getHeadCells = (types) => {
@@ -268,6 +270,36 @@ const submitOne = async (id) => {
     setSelected([]);
   };
 
+  const acceptSample = async (id) => {
+    let path = `/api/sample/datapoint/accept/`;
+
+      let temp = path + id;
+      await fetch(temp, { method: "PUT" })
+        .then((response) => {
+          console.log(response.json());
+        })
+        .then(() => {
+          getData();
+        });
+
+        setSelected([]);
+  };
+
+const rejectSample = async (id) => {
+  let path = `/api/sample/datapoint/reject/`;
+
+    let temp = path + id;
+    await fetch(temp, { method: "PUT" })
+      .then((response) => {
+        console.log(response.json());
+      })
+      .then(() => {
+        getData();
+      });
+
+      setSelected([]);
+  };
+
   const onDelete = async () => {
     let path = `/api/sample/datapoint/`;
     selected.map(async (id, index) => {
@@ -290,9 +322,11 @@ const submitOne = async (id) => {
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
   React.useEffect(() => {
     getData();
+    //setSelected([]);
   }, []);
 
   return (
+    
     <DataViewProvider>
       <Paper>
         <EnhancedTable
@@ -308,7 +342,10 @@ const submitOne = async (id) => {
           selected={selected}
           setSelected={setSelected}
           setSelectedSamples={setSelectedSamples}
+          setPendingSamples={setPendingSamples}
           onDelete={onDelete}
+          isSample={isSample}
+          setOpenReviewSampleModal={setOpenReviewSampleModal}
           onSubmit={onSubmit}
         ></EnhancedTable>
 
@@ -336,6 +373,15 @@ const submitOne = async (id) => {
         rows={rowList}
       />
       <DataViewSampleModal getData={getData} />
+      <ReviewSampleModal 
+        openReviewSampleModal={openReviewSampleModal}
+        setOpenReviewSampleModal={setOpenReviewSampleModal}
+        pendingSamples={pendingSamples}
+        setPendingSamples={setPendingSamples}
+        acceptSample={acceptSample}
+        rejectSample={rejectSample}
+        turnPendingFilterOff={turnPendingFilterOff}
+      />
     </DataViewProvider>
   );
 }

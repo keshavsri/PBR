@@ -1,6 +1,5 @@
-import React, { useRef } from 'react';
+import React from "react";
 import { useTheme } from "@mui/material/styles";
-
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -9,128 +8,105 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Typography,
   Grid,
-  TextField,
   Button,
-  Box,
   Card,
-  Alert,
   Modal,
-  MenuItem,
-  Select,
+  TextField,
+  Box
 } from "@mui/material";
-
 import { makeStyles } from "@mui/styles";
+
 
 function getModalStyle() {
   const top = 55;
   const left = 50;
   return {
-    top: `${top}%`,
-    left: `${left}%`,
-
-    transform: `translate(-${top}%, -${left}%)`,
+      top: `${top}%`,
+      left: `${left}%`,
+      
+      transform: `translate(-${top}%, -${left}%)`,
   };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
   },
   paper: {
-    position: "absolute",
-    height: 800,
-    width: 1000,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-    borderRadius: "1em",
-    overflowY: "auto",
+      position: 'absolute',
+      height: 800,
+      width: 1000,
+      backgroundColor: theme.palette.background.paper,
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(2, 4, 3),
+      borderRadius: "1em",
+      overflowY: "auto",
   },
 }));
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
-export default function SavedToPendingModal(props) {
-  const classes = useStyles();
-  const [modalStyle] = React.useState(getModalStyle);
-  //const myRef = React.createRef();
+
+export default function ReviewSampleModal({
+    openReviewSampleModal,
+    setOpenReviewSampleModal,
+    pendingSamples,
+    setPendingSamples,
+    acceptSample,
+    rejectSample,
+    turnPendingFilterOff
+  }) {
+
+    const classes = useStyles();
+    const [modalStyle] = React.useState(getModalStyle);
+    useTheme();
+
+    const removeFromPending = (sample) => {
+      let newSelected = pendingSamples.filter((s) => s !== sample);
+      setPendingSamples(newSelected);
+      if (newSelected.length === 0) {
+        setOpenReviewSampleModal(false);
+      }
   
-
-  useTheme();
-
-  const {
-    selectedSamples,
-    submitAll,
-    submitOne,
-    SavedToPendingVisibility,
-    setSavedToPendingVisibility,
-    setSelectedSamples,
-  } = props;
-
-
-  
-
-const removeFromSelected = (sample) => {
-    let newSelected = selectedSamples.filter((s) => s !== sample);
-    setSelectedSamples(newSelected);
-    if (newSelected.length === 0) {
-      setSavedToPendingVisibility(false);
-    }
-
-};
-  const onSubmitAll = async () => {
-    await submitAll();
-    setSavedToPendingVisibility(false);
   };
 
-  const onSubmitOne = async (id) => {
-    await submitOne(id);
-    listSamples();
-  };
-
-const IstatORVescan = (sample) => {
+  const IstatORVescan = (sample) => {
     if (sample.measurement_values.length === 13){
       return (
         <Typography gutterBottom variant="body1">
           Istat Data:
         </Typography>
       );
-    } 
-    else if (sample.measurement_values.length === 17){
+    } else if (sample.measurement_values.length === 17) {
       return (
         <Typography gutterBottom variant="body1">
           VetScan Data:
         </Typography>
       );
     }
-
   };
 
+    const onAcceptSample = async (id) => {
+      await acceptSample(id);
+    };
 
-  const fillMachineData = (sample) => {
-    
-    return sample.measurement_values.map((measurement) =>(
-      <Grid item xs={12} sm={6}>
-        <TextField label={measurement.measurement.measurementtype.abbreviation} value={measurement.value} disabled />
-      </Grid>
-    ));
+    const onRejectSample = async (id) => {
+      await rejectSample(id);
+    };
 
-  };
+    const fillMachineData = (sample) => {
+      console.log("filling machine data")
+      return sample.measurement_values.map((measurement) =>(
+        <Grid item xs={12} sm={6}>
+          <TextField label={measurement.measurement.measurementtype.abbreviation} value={measurement.value} disabled />
+        </Grid>
+      ));
+    };
 
-  const listSamples = () => {
-    return selectedSamples.map((sample) => (
+    const listPendingSamples = () => {
+      return pendingSamples.map((sample) => (
+       
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -146,10 +122,16 @@ const IstatORVescan = (sample) => {
               General{" "}
             </Typography>
           </Grid>
+
           <br />
 
           <Box sx={{ flexGrow: 1 }}>
-            <Grid container direction="row" alignItems="center" spacing={3}>
+            <Grid
+              container
+              direction="row"
+              alignItems="center"
+              spacing={3}
+            >
               <Grid item xs={6}>
                 <TextField
                   fullWidth
@@ -228,19 +210,23 @@ const IstatORVescan = (sample) => {
               {" "}
               Machine Data{" "}
             </Typography>
-            {(sample.measurement_values.length === 13 ||
+            { (sample.measurement_values.length === 13 ||
             sample.measurement_values.length == 17) ? IstatORVescan(sample) : 
-            <Typography gutterBottom variant="button">
-              No data is associated with the sample
-              </Typography> }
+              <Typography gutterBottom variant="button">
+                No data is associated with the sample
+              </Typography> 
+            }
             <br/><br/><br/>
           </Grid>
 
           <Box sx={{ flexGrow: 1 }}>
             <Grid container direction="row" alignItems="center" spacing={3}>
-              {fillMachineData(sample)}
+                {fillMachineData(sample)}
             </Grid>
           </Box>
+
+          <br/><br/>
+
 
           <Grid item xs={12} sm={12}>
             <Typography gutterBottom variant="h5">
@@ -258,76 +244,77 @@ const IstatORVescan = (sample) => {
             />
           </Grid>
 
-          <br />
-
-          <Grid item xs={12} sm={2}>
-            <Button
-              variant="contained"
-              onClick={() => {
-                onSubmitOne(sample.id);
-                //scrollModalToTop();
-                removeFromSelected(sample);
-              }}
-            >
-              Submit
-            </Button>
-          </Grid>
-        </AccordionDetails>
-      </Accordion>
-    ));
-  };
-
-  /* Scroll to the top of the modal -> Called after submit
-  const scrollModalToTop = () => {
-    // scrolls the validation message into view, and the block: 'nearest' ensures it scrolls the modal and not the window
-    myRef.current?.scrollIntoView({ block:'nearest' });
-  }
-  */
-
-  return (
-    <Modal
-      open={SavedToPendingVisibility}
-      onClose={() => setSavedToPendingVisibility(false)}
-      aria-labelledby="Accept or Reject Modal"
-      aria-describedby="Modal Used to accept or reject a  Pending sample"
-      //ref={myRef}
-    >
-      <div style={modalStyle} className={classes.paper}>
-        <Card>
-          <Grid container spacing={2} sx={{ padding: "15px" }}>
-            <Grid item xs={12} sm={12}>
-              <Typography gutterBottom variant="h4">
-                Submit Samples For Review.
-              </Typography>
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              {listSamples()}
-            </Grid>
-
-            <Grid item xs={12} sm={2}>
-              <Button 
-                onClick={() => {
-                  setSavedToPendingVisibility(false);
-                }}
-              >
-                Cancel
-              </Button>
-            </Grid>
-
+          <Grid container spacing={2} sx={{padding: '15px'}}>
             <Grid item xs={12} sm={2}>
               <Button
                 variant="contained"
                 onClick={() => {
-                  onSubmitAll();
+                  onAcceptSample(sample.id);
+                  turnPendingFilterOff();
+                  removeFromPending(sample);
                 }}
               >
-                Submit All
+                Accept
+              </Button>
+            </Grid>
+            <Grid item xs={12} sm={2} >
+              <Button 
+                variant="contained"
+                onClick={() => {
+                  onRejectSample(sample.id);
+                  turnPendingFilterOff();
+                  removeFromPending(sample);
+                }}
+              >
+                Reject
               </Button>
             </Grid>
           </Grid>
-        </Card>
-      </div>
-    </Modal>
-  );
+        </AccordionDetails>
+      </Accordion>
+      ));
+    };
+
+
+    return (
+
+      <Modal
+        aria-labelledby="Review Sample Modal"
+        aria-describedby="Modal used for reviewing a sample and accepting/rejecting it"
+        open={openReviewSampleModal}
+        onClose={() => {
+            setOpenReviewSampleModal(false);
+        }}
+      >
+        <div style={modalStyle} className={classes.paper}>
+          <Card>
+            <Grid container spacing={2} sx={{padding: '15px'}}>
+
+                <Grid item xs={12} sm={12}>
+                  <Typography gutterBottom variant="h4">Review Sample</Typography>
+                </Grid>
+
+
+              <Grid item xs={12} sm={12}>
+                {listPendingSamples()}
+              </Grid>
+
+
+              <Grid item xs={12} sm={2}>
+                <Button
+                    onClick={() => {
+                        setOpenReviewSampleModal(false);
+                    }}
+                >
+                    Close
+                </Button>
+              </Grid>
+
+            </Grid>
+          </Card>
+        </div>
+      </Modal>
+
+        
+    )
 }
