@@ -380,6 +380,7 @@ const rejectSample = async (id) => {
         setPendingSamples={setPendingSamples}
         acceptSample={acceptSample}
         rejectSample={rejectSample}
+        turnPendingFilterOff={turnPendingFilterOff}
       />
     </DataViewProvider>
   );

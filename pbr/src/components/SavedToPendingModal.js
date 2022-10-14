@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from 'react';
 import { useTheme } from "@mui/material/styles";
 
 import Accordion from "@mui/material/Accordion";
@@ -65,6 +65,9 @@ const style = {
 export default function SavedToPendingModal(props) {
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
+  //const myRef = React.createRef();
+  
+
   useTheme();
 
   const {
@@ -116,7 +119,7 @@ const IstatORVescan = (sample) => {
   };
 
 
-  const fillMAchineData = (sample) => {
+  const fillMachineData = (sample) => {
     
     return sample.measurement_values.map((measurement) =>(
       <Grid item xs={12} sm={6}>
@@ -150,7 +153,7 @@ const IstatORVescan = (sample) => {
               <Grid item xs={6}>
                 <TextField
                   fullWidth
-                  label="Orgaanization"
+                  label="Organization"
                   value={sample.organization.name}
                   disabled
                 />
@@ -235,7 +238,7 @@ const IstatORVescan = (sample) => {
 
           <Box sx={{ flexGrow: 1 }}>
             <Grid container direction="row" alignItems="center" spacing={3}>
-              {fillMAchineData(sample)}
+              {fillMachineData(sample)}
             </Grid>
           </Box>
 
@@ -262,11 +265,7 @@ const IstatORVescan = (sample) => {
               variant="contained"
               onClick={() => {
                 onSubmitOne(sample.id);
-                window.scroll({
-                  top: 0, 
-                  left: 0, 
-                  behavior: 'smooth'
-                });
+                //scrollModalToTop();
                 removeFromSelected(sample);
               }}
             >
@@ -278,7 +277,12 @@ const IstatORVescan = (sample) => {
     ));
   };
 
-  console.log("from the modal here are the selected samples", selectedSamples);
+  /* Scroll to the top of the modal -> Called after submit
+  const scrollModalToTop = () => {
+    // scrolls the validation message into view, and the block: 'nearest' ensures it scrolls the modal and not the window
+    myRef.current?.scrollIntoView({ block:'nearest' });
+  }
+  */
 
   return (
     <Modal
@@ -286,6 +290,7 @@ const IstatORVescan = (sample) => {
       onClose={() => setSavedToPendingVisibility(false)}
       aria-labelledby="Accept or Reject Modal"
       aria-describedby="Modal Used to accept or reject a  Pending sample"
+      //ref={myRef}
     >
       <div style={modalStyle} className={classes.paper}>
         <Card>
@@ -301,7 +306,7 @@ const IstatORVescan = (sample) => {
             </Grid>
 
             <Grid item xs={12} sm={2}>
-              <Button
+              <Button 
                 onClick={() => {
                   setSavedToPendingVisibility(false);
                 }}

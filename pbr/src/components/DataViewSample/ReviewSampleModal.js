@@ -54,7 +54,8 @@ export default function ReviewSampleModal({
     pendingSamples,
     setPendingSamples,
     acceptSample,
-    rejectSample
+    rejectSample,
+    turnPendingFilterOff
   }) {
 
     const classes = useStyles();
@@ -249,11 +250,7 @@ export default function ReviewSampleModal({
                 variant="contained"
                 onClick={() => {
                   onAcceptSample(sample.id);
-                  window.scroll({
-                    top: 0, 
-                    left: 0, 
-                    behavior: 'smooth'
-                  });
+                  turnPendingFilterOff();
                   removeFromPending(sample);
                 }}
               >
@@ -265,12 +262,8 @@ export default function ReviewSampleModal({
                 variant="contained"
                 onClick={() => {
                   onRejectSample(sample.id);
+                  turnPendingFilterOff();
                   removeFromPending(sample);
-                  window.scroll({
-                    top: 0, 
-                    left: 0, 
-                    behavior: 'smooth'
-                  });
                 }}
               >
                 Reject
