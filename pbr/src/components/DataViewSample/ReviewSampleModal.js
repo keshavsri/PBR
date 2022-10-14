@@ -212,11 +212,11 @@ export default function ReviewSampleModal({
             </Typography>
             { (sample.measurement_values.length === 13 ||
             sample.measurement_values.length == 17) ? IstatORVescan(sample) : 
-              <Typography gutterBottom variant="body1">
+              <Typography gutterBottom variant="button">
                 No data is associated with the sample
               </Typography> 
             }
-            <br /><br />
+            <br/><br/><br/>
           </Grid>
 
           <Box sx={{ flexGrow: 1 }}>
