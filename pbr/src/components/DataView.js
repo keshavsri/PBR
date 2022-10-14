@@ -232,6 +232,10 @@ export default function DataView() {
 
 
 const submitOne = async (id) => {
+
+
+
+  
     let path = `/api/sample/datapoint/submit/`;
     
       let temp = path + id;
@@ -246,7 +250,7 @@ const submitOne = async (id) => {
     setSelected([]);
 };
 
-  
+  console.log("Selected samples From Data View: ", selectedSamples);
 
 
   const submitAll = async () => {
