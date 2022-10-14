@@ -76,7 +76,6 @@ export default function DataView() {
     setShowOnlyPendingSamples(false);
     setRowList(fullRowList);
     setPendingRowList([]);
-    //getData();
   };
 
   const filterPendingSamples = async () => {
@@ -103,9 +102,6 @@ export default function DataView() {
         setRowList(data.rows);
         getHeadCells(data.types);
       });
-    // denestMachineData(apiRows);
-    // assignRowHtml(apiRows);
-    // setRowList(apiRows);
   };
 
   const getHeadCells = (types) => {
@@ -250,7 +246,6 @@ export default function DataView() {
   };
 
   const acceptSample = async (id) => {
-    console.log("Accepting Sample")
     let path = `/api/sample/datapoint/accept/`;
 
       let temp = path + id;

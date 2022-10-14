@@ -77,7 +77,7 @@ export default function ReviewSampleModal({
           Istat Data:
         </Typography>
       );
-    } else {
+    } else if (sample.measurement_values.length === 17) {
       return (
         <Typography gutterBottom variant="body1">
           VetScan Data:
@@ -209,13 +209,18 @@ export default function ReviewSampleModal({
               {" "}
               Machine Data{" "}
             </Typography>
-            {IstatORVescan(sample)}
-            <br />
+            { (sample.measurement_values.length === 13 ||
+            sample.measurement_values.length == 17) ? IstatORVescan(sample) : 
+              <Typography gutterBottom variant="body1">
+                No data is associated with the sample
+              </Typography> 
+            }
+            <br /><br />
           </Grid>
 
           <Box sx={{ flexGrow: 1 }}>
             <Grid container direction="row" alignItems="center" spacing={3}>
-                  {fillMachineData(sample)}
+                {fillMachineData(sample)}
             </Grid>
           </Box>
 
@@ -245,6 +250,11 @@ export default function ReviewSampleModal({
                 onClick={() => {
                   onAcceptSample(sample.id);
                   removeFromPending(sample);
+                  window.scroll({
+                    top: 0, 
+                    left: 0, 
+                    behavior: 'smooth'
+                  });
                 }}
               >
                 Accept
@@ -256,6 +266,11 @@ export default function ReviewSampleModal({
                 onClick={() => {
                   onRejectSample(sample.id);
                   removeFromPending(sample);
+                  window.scroll({
+                    top: 0, 
+                    left: 0, 
+                    behavior: 'smooth'
+                  });
                 }}
               >
                 Reject
