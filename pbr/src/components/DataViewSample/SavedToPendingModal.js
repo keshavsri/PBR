@@ -1,9 +1,9 @@
-import React, { useRef } from 'react';
+import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 
 import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import {
@@ -46,27 +46,22 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
     borderRadius: "1em",
-    overflowY: "auto",
+    "overflow-y": "auto",
   },
 }));
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+
 
 export default function SavedToPendingModal(props) {
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
-  //const myRef = React.createRef();
-  
+
+  const [expanded, setExpanded] = React.useState(false);
+  const [errorSubmission, setErrorSubmission] = React.useState(false);
+
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
   useTheme();
 
@@ -79,67 +74,90 @@ export default function SavedToPendingModal(props) {
     setSelectedSamples,
   } = props;
 
+  const validateSampleBeforeSubmission = (sample) => {
 
-  
+    if (sample.measurement_values.length === 13 || sample.measurement_values.length === 17) {
 
-const removeFromSelected = (sample) => {
+      return true;
+    }
+
+  };
+
+  const removeFromSelected = (sample) => {
     let newSelected = selectedSamples.filter((s) => s !== sample);
     setSelectedSamples(newSelected);
     if (newSelected.length === 0) {
       setSavedToPendingVisibility(false);
     }
-
-};
+  };
   const onSubmitAll = async () => {
     await submitAll();
     setSavedToPendingVisibility(false);
   };
 
-  const onSubmitOne = async (id) => {
-    await submitOne(id);
-    listSamples();
+  const onSubmitOne = async (sample) => {
+
+    if (validateSampleBeforeSubmission(sample)) {
+      await submitOne(sample.id);
+      removeFromSelected(sample);
+      listSamples();
+      setErrorSubmission(false);
+    }
+    else {
+      setErrorSubmission(true);
+    }
+
+    
+
   };
 
-const IstatORVescan = (sample) => {
-    if (sample.measurement_values.length === 13){
+  const IstatORVescan = (sample) => {
+    if (sample.measurement_values.length === 13) {
       return (
         <Typography gutterBottom variant="body1">
           Istat Data:
         </Typography>
       );
-    } 
-    else if (sample.measurement_values.length === 17){
+    } else if (sample.measurement_values.length === 17) {
       return (
         <Typography gutterBottom variant="body1">
           VetScan Data:
         </Typography>
       );
     }
-
   };
-
 
   const fillMachineData = (sample) => {
-    
-    return sample.measurement_values.map((measurement) =>(
+    return sample.measurement_values.map((measurement) => (
       <Grid item xs={12} sm={6}>
-        <TextField label={measurement.measurement.measurementtype.abbreviation} value={measurement.value} disabled />
+        <TextField
+          label={measurement.measurement.measurementtype.abbreviation}
+          value={measurement.value}
+          disabled
+        />
       </Grid>
     ));
-
   };
+
+ 
 
   const listSamples = () => {
     return selectedSamples.map((sample) => (
-      <Accordion>
+      <Accordion
+        expanded={expanded === sample.id}
+        onChange={handleChange(sample.id)}
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
+          aria-controls="panel2bh-content"
+          id="panel2bh-header"
         >
-          <Typography variant="button"> Sample ID: {sample.id}</Typography>
+          <Typography variant="button" sx={{ width: "33%", flexShrink: 0 }}>
+            {" "}
+            Sample ID: {sample.id}
+          </Typography>
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails style={{ "max-height": 450, "overflow-y": "auto" }}>
           <Grid item xs={12} sm={12}>
             <Typography gutterBottom variant="h5">
               {" "}
@@ -228,12 +246,21 @@ const IstatORVescan = (sample) => {
               {" "}
               Machine Data{" "}
             </Typography>
-            {(sample.measurement_values.length === 13 ||
-            sample.measurement_values.length == 17) ? IstatORVescan(sample) : 
-            <Typography gutterBottom variant="button">
-              No data is associated with the sample
-              </Typography> }
-            <br/><br/><br/>
+            {sample.measurement_values.length === 13 ||
+            sample.measurement_values.length == 17 ? (
+              IstatORVescan(sample)
+            ) : (
+              <Typography
+                gutterBottom
+                variant="button"
+                style={{ color: "red" }}
+              >
+                The Machine Data associated to the sample is incomplete.
+              </Typography>
+            )}
+            <br />
+            <br />
+            <br />
           </Grid>
 
           <Box sx={{ flexGrow: 1 }}>
@@ -264,9 +291,7 @@ const IstatORVescan = (sample) => {
             <Button
               variant="contained"
               onClick={() => {
-                onSubmitOne(sample.id);
-                //scrollModalToTop();
-                removeFromSelected(sample);
+                onSubmitOne(sample);
               }}
             >
               Submit
@@ -277,19 +302,13 @@ const IstatORVescan = (sample) => {
     ));
   };
 
-  /* Scroll to the top of the modal -> Called after submit
-  const scrollModalToTop = () => {
-    // scrolls the validation message into view, and the block: 'nearest' ensures it scrolls the modal and not the window
-    myRef.current?.scrollIntoView({ block:'nearest' });
-  }
-  */
 
   return (
     <Modal
       open={SavedToPendingVisibility}
       onClose={() => setSavedToPendingVisibility(false)}
-      aria-labelledby="Accept or Reject Modal"
-      aria-describedby="Modal Used to accept or reject a  Pending sample"
+      aria-labelledby="Saved to Pending Modal"
+      aria-describedby="Modal Used Save a Pending Sample"
       //ref={myRef}
     >
       <div style={modalStyle} className={classes.paper}>
@@ -304,29 +323,52 @@ const IstatORVescan = (sample) => {
             <Grid item xs={12} sm={12}>
               {listSamples()}
             </Grid>
-
-            <Grid item xs={12} sm={2}>
-              <Button 
-                onClick={() => {
-                  setSavedToPendingVisibility(false);
-                }}
-              >
-                Cancel
-              </Button>
-            </Grid>
-
-            <Grid item xs={12} sm={2}>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  onSubmitAll();
-                }}
-              >
-                Submit All
-              </Button>
-            </Grid>
           </Grid>
         </Card>
+
+        <Grid item xs={12} sm={2}>
+          <Button
+            variant="contained"
+            color="secondary"
+            style={{
+              position: "absolute",
+              bottom: 50,
+            }}
+            onClick={() => {
+              setSavedToPendingVisibility(false);
+            }}
+          >
+            Cancel
+          </Button>
+        </Grid>
+
+        <Grid item xs={12} sm={2}>
+          <Button
+            variant="contained"
+            style={{
+              position: "absolute",
+              bottom: 50,
+              left: 150,
+            }}
+            onClick={() => {
+              onSubmitAll();
+            }}
+          >
+            Submit All
+          </Button>
+        </Grid>
+
+        <Grid>
+          <br />
+          {errorSubmission ? (
+            <Typography gutterBottom variant="button" style={{ color: "red", position: "absolute",
+              bottom: 50,
+              left: 280,}}>
+              The Machine Data associated to the sample is incomplete.
+            </Typography>
+          ) : null}
+        </Grid>
+
       </div>
     </Modal>
   );

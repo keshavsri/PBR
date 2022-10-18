@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Paper, Chip } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import SavedToPendingModal from "./SavedToPendingModal";
+import SavedToPendingModal from "./DataViewSample/SavedToPendingModal";
 
 import DataViewSampleModal from "./DataViewSample/SampleModal";
 import DataViewFilterModal from "./FilterModal";
@@ -21,15 +21,16 @@ export default function DataView() {
   const [rowList, setRowList] = React.useState([]);
   const [pendingRowList, setPendingRowList] = React.useState([]);
   const [fullRowList, setFullRowList] = React.useState([]);
-  const [showOnlyPendingSamples, setShowOnlyPendingSamples] = React.useState(false);
+  const [showOnlyPendingSamples, setShowOnlyPendingSamples] =
+    React.useState(false);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
   const [isSample] = React.useState(true);
-  const [openReviewSampleModal, setOpenReviewSampleModal] = React.useState(false);
+  const [openReviewSampleModal, setOpenReviewSampleModal] =
+    React.useState(false);
 
   const [selectedSamples, setSelectedSamples] = React.useState([]);
   const [pendingSamples, setPendingSamples] = React.useState([]);
-
 
   const [SavedToPendingVisibility, setSavedToPendingVisibility] =
     React.useState(false);
@@ -71,7 +72,6 @@ export default function DataView() {
     });
   };
 
-
   const turnPendingFilterOff = async () => {
     setShowOnlyPendingSamples(false);
     setRowList(fullRowList);
@@ -79,10 +79,9 @@ export default function DataView() {
   };
 
   const filterPendingSamples = async () => {
-    
     rowList.map((row) => {
       if (row.validation_status == "Pending") {
-        pendingRowList.push(row)
+        pendingRowList.push(row);
       }
     });
     setFullRowList(rowList);
@@ -230,30 +229,22 @@ export default function DataView() {
     openSavedToPendingVisibility();
   };
 
-
-
-
-const submitOne = async (id) => {
-
-
-
-  
+  const submitOne = async (id) => {
     let path = `/api/sample/datapoint/submit/`;
-    
-      let temp = path + id;
-      await fetch(temp, { method: "PUT" })
-        .then((response) => {
-          console.log(response.json());
-        })
-        .then(() => {
-          getData();
-        });
+
+    let temp = path + id;
+    await fetch(temp, { method: "PUT" })
+      .then((response) => {
+        console.log(response.json());
+      })
+      .then(() => {
+        getData();
+      });
 
     setSelected([]);
-};
+  };
 
   console.log("Selected samples From Data View: ", selectedSamples);
-
 
   const submitAll = async () => {
     let path = `/api/sample/datapoint/submit/`;
@@ -273,20 +264,20 @@ const submitOne = async (id) => {
   const acceptSample = async (id) => {
     let path = `/api/sample/datapoint/accept/`;
 
-      let temp = path + id;
-      await fetch(temp, { method: "PUT" })
-        .then((response) => {
-          console.log(response.json());
-        })
-        .then(() => {
-          getData();
-        });
+    let temp = path + id;
+    await fetch(temp, { method: "PUT" })
+      .then((response) => {
+        console.log(response.json());
+      })
+      .then(() => {
+        getData();
+      });
 
-        setSelected([]);
+    setSelected([]);
   };
 
-const rejectSample = async (id) => {
-  let path = `/api/sample/datapoint/reject/`;
+  const rejectSample = async (id) => {
+    let path = `/api/sample/datapoint/reject/`;
 
     let temp = path + id;
     await fetch(temp, { method: "PUT" })
@@ -297,7 +288,7 @@ const rejectSample = async (id) => {
         getData();
       });
 
-      setSelected([]);
+    setSelected([]);
   };
 
   const onDelete = async () => {
@@ -326,7 +317,6 @@ const rejectSample = async (id) => {
   }, []);
 
   return (
-    
     <DataViewProvider>
       <Paper>
         <EnhancedTable
@@ -373,7 +363,7 @@ const rejectSample = async (id) => {
         rows={rowList}
       />
       <DataViewSampleModal getData={getData} />
-      <ReviewSampleModal 
+      <ReviewSampleModal
         openReviewSampleModal={openReviewSampleModal}
         setOpenReviewSampleModal={setOpenReviewSampleModal}
         pendingSamples={pendingSamples}

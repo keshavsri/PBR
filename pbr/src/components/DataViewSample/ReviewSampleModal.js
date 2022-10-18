@@ -61,6 +61,11 @@ export default function ReviewSampleModal({
     const classes = useStyles();
     const [modalStyle] = React.useState(getModalStyle);
     useTheme();
+      const [expanded, setExpanded] = React.useState(false);
+
+      const handleChange = (panel) => (event, isExpanded) => {
+        setExpanded(isExpanded ? panel : false);
+      };
 
     const removeFromPending = (sample) => {
       let newSelected = pendingSamples.filter((s) => s !== sample);
@@ -106,215 +111,220 @@ export default function ReviewSampleModal({
 
     const listPendingSamples = () => {
       return pendingSamples.map((sample) => (
-       
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
+        <Accordion
+          expanded={expanded === sample.id}
+          onChange={handleChange(sample.id)}
         >
-          <Typography variant="button"> Sample ID: {sample.id}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Grid item xs={12} sm={12}>
-            <Typography gutterBottom variant="h5">
-              {" "}
-              General{" "}
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel2bh-content"
+            id="panel2bh-header"
+          >
+            <Typography variant="button" sx={{ width: "33%", flexShrink: 0 }}>
+              Sample ID: {sample.id}
             </Typography>
-          </Grid>
-
-          <br />
-
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid
-              container
-              direction="row"
-              alignItems="center"
-              spacing={3}
-            >
-              <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  label="Organization"
-                  value={sample.organization.name}
-                  disabled
-                />
-              </Grid>
-
-              <Grid item xs>
-                <TextField label="Flock" value={sample.flock.name} disabled />
-              </Grid>
-
-              <Grid item xs>
-                <TextField
-                  label="Source"
-                  value={sample.organization.sources[0].name}
-                  disabled
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Species"
-                  value={sample.flock.species}
-                  disabled
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Production Type"
-                  value={sample.flock.production_type}
-                  disabled
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Strain"
-                  value={sample.flock.strain}
-                  disabled
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Gender"
-                  value={sample.flock.gender}
-                  disabled
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Age"
-                  value={sample.flock_age + " " + sample.flock_age_unit}
-                  disabled
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Sample Type"
-                  value={sample.sample_type}
-                  disabled
-                />
-              </Grid>
+          </AccordionSummary>
+          <AccordionDetails style={{ "max-height": 450, "overflow-y": "auto" }}>
+            <Grid item xs={12} sm={12}>
+              <Typography gutterBottom variant="h5">
+                {" "}
+                General{" "}
+              </Typography>
             </Grid>
-          </Box>
 
-          <br />
+            <br />
 
-          <Grid item xs={12} sm={12}>
-            <Typography gutterBottom variant="h5">
-              {" "}
-              Machine Data{" "}
-            </Typography>
-            { (sample.measurement_values.length === 13 ||
-            sample.measurement_values.length == 17) ? IstatORVescan(sample) : 
-              <Typography gutterBottom variant="button">
-                No data is associated with the sample
-              </Typography> 
-            }
-            <br/><br/><br/>
-          </Grid>
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container direction="row" alignItems="center" spacing={3}>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label="Organization"
+                    value={sample.organization.name}
+                    disabled
+                  />
+                </Grid>
 
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid container direction="row" alignItems="center" spacing={3}>
+                <Grid item xs>
+                  <TextField label="Flock" value={sample.flock.name} disabled />
+                </Grid>
+
+                <Grid item xs>
+                  <TextField
+                    label="Source"
+                    value={sample.organization.sources[0].name}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Species"
+                    value={sample.flock.species}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Production Type"
+                    value={sample.flock.production_type}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Strain"
+                    value={sample.flock.strain}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Gender"
+                    value={sample.flock.gender}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Age"
+                    value={sample.flock_age + " " + sample.flock_age_unit}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Sample Type"
+                    value={sample.sample_type}
+                    disabled
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+
+            <br />
+
+            <Grid item xs={12} sm={12}>
+              <Typography gutterBottom variant="h5">
+                {" "}
+                Machine Data{" "}
+              </Typography>
+              {sample.measurement_values.length === 13 ||
+              sample.measurement_values.length == 17 ? (
+                IstatORVescan(sample)
+              ) : (
+                <Typography gutterBottom variant="button">
+                  No data is associated with the sample
+                </Typography>
+              )}
+              <br />
+              <br />
+              <br />
+            </Grid>
+
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container direction="row" alignItems="center" spacing={3}>
                 {fillMachineData(sample)}
+              </Grid>
+            </Box>
+
+            <br />
+            <br />
+
+            <Grid item xs={12} sm={12}>
+              <Typography gutterBottom variant="h5">
+                {" "}
+                Comments{" "}
+              </Typography>
             </Grid>
-          </Box>
 
-          <br/><br/>
-
-
-          <Grid item xs={12} sm={12}>
-            <Typography gutterBottom variant="h5">
-              {" "}
-              Comments{" "}
-            </Typography>
-          </Grid>
-
-          <Grid item xs={12} sm={12}>
-            <TextField
-              fullWidth
-              label="Comments"
-              value={sample.comments}
-              disabled
-            />
-          </Grid>
-
-          <Grid container spacing={2} sx={{padding: '15px'}}>
-            <Grid item xs={12} sm={2}>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  onAcceptSample(sample.id);
-                  turnPendingFilterOff();
-                  removeFromPending(sample);
-                }}
-              >
-                Accept
-              </Button>
+            <Grid item xs={12} sm={12}>
+              <TextField
+                fullWidth
+                label="Comments"
+                value={sample.comments}
+                disabled
+              />
             </Grid>
-            <Grid item xs={12} sm={2} >
-              <Button 
-                variant="contained"
-                onClick={() => {
-                  onRejectSample(sample.id);
-                  turnPendingFilterOff();
-                  removeFromPending(sample);
-                }}
-              >
-                Reject
-              </Button>
+
+            <Grid container spacing={2} sx={{ padding: "15px" }}>
+              <Grid item xs={12} sm={2}>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    onAcceptSample(sample.id);
+                    turnPendingFilterOff();
+                    removeFromPending(sample);
+                  }}
+                >
+                  Accept
+                </Button>
+              </Grid>
+              <Grid item xs={12} sm={2}>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    onRejectSample(sample.id);
+                    turnPendingFilterOff();
+                    removeFromPending(sample);
+                  }}
+                >
+                  Reject
+                </Button>
+              </Grid>
             </Grid>
-          </Grid>
-        </AccordionDetails>
-      </Accordion>
+          </AccordionDetails>
+        </Accordion>
       ));
     };
 
 
     return (
-
       <Modal
         aria-labelledby="Review Sample Modal"
         aria-describedby="Modal used for reviewing a sample and accepting/rejecting it"
         open={openReviewSampleModal}
         onClose={() => {
-            setOpenReviewSampleModal(false);
+          setOpenReviewSampleModal(false);
         }}
       >
         <div style={modalStyle} className={classes.paper}>
           <Card>
-            <Grid container spacing={2} sx={{padding: '15px'}}>
-
-                <Grid item xs={12} sm={12}>
-                  <Typography gutterBottom variant="h4">Review Sample</Typography>
-                </Grid>
-
+            <Grid container spacing={2} sx={{ padding: "15px" }}>
+              <Grid item xs={12} sm={12}>
+                <Typography gutterBottom variant="h4">
+                  Review Sample
+                </Typography>
+              </Grid>
 
               <Grid item xs={12} sm={12}>
                 {listPendingSamples()}
               </Grid>
 
-
               <Grid item xs={12} sm={2}>
                 <Button
-                    onClick={() => {
-                        setOpenReviewSampleModal(false);
-                    }}
+                  variant="contained"
+                  color="secondary"
+                  style={{
+                    position: "absolute",
+                    bottom: 50,
+                    
+                  }}
+                  onClick={() => {
+                    setOpenReviewSampleModal(false);
+                  }}
                 >
-                    Close
+                  Close
                 </Button>
               </Grid>
-
             </Grid>
           </Card>
         </div>
       </Modal>
-
-        
-    )
+    );
 }
