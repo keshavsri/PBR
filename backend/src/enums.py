@@ -79,6 +79,7 @@ class AgeUnits(str, Enum):
 
 
 class ValidationTypes(str, Enum):
+    Saved = "Saved"
     Pending = "Pending"
     Accepted = "Accepted"
     Rejected = "Rejected"

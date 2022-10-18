@@ -16,6 +16,7 @@ import { tableCellClasses } from "@mui/material/TableCell";
 import EnhancedTableHead from "./EnhancedTableHead";
 import EnhancedTableToolbar from "./EnhancedTableToolbar";
 
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -87,9 +88,15 @@ export default function EnhancedTable(props) {
     toolbarButtons,
     selected,
     setSelected,
+    setSelectedSamples,
+    setPendingSamples,
     onDelete,
-    onEdit
+    onSubmit,
+    onEdit,
+    isSample,
+    setOpenReviewSampleModal
   } = props;
+
 
   const [order, setOrder] = React.useState("");
   const [orderBy, setOrderBy] = React.useState("");
@@ -97,6 +104,9 @@ export default function EnhancedTable(props) {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [loading, setLoading] = React.useState(false);
+  const [savedFlag, setSavedFlag] = React.useState(true);
+  const [pendingFlag, setPendingFlag] = React.useState(true);
+
   // let rowComponents = generateRows();
 
   // function generateRows() {
@@ -116,18 +126,51 @@ export default function EnhancedTable(props) {
   };
 
   const handleSelectAllClick = (event) => {
+    setSavedFlag(true);
+    setPendingFlag(true);
     if (event.target.checked) {
       let newSelecteds = rows.filter((n) => n.deletable).map((n) => n.id);
-      console.log(newSelecteds);
+      
       setSelected(newSelecteds);
+      setPendingFlag(newSelecteds);
+
+      for (let i = 0; i < rows.length; i++) {
+        if (rows[i].validation_status != "Saved") {
+          setSavedFlag(false);
+          break;
+        }
+       
+      }
+
+      for (let i = 0; i < rows.length; i++) {
+        if (rows[i].validation_status != "Pending") {
+          setPendingFlag(false);
+          break;
+        }
+       
+      }
+
+      if (pendingFlag) {
+        setPendingSamples(rows);
+      }
+      setSelectedSamples(rows);
+
       return;
     }
+    setSavedFlag(true);
+    setPendingFlag(true);
     setSelected([]);
   };
 
   const handleClick = (event, name) => {
+    
+    setSavedFlag(true);
+    setPendingFlag(true);
     const selectedIndex = selected.indexOf(name);
+    
     let newSelected = [];
+    let selectedSamples = [];
+    let pendingSamples = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
@@ -141,9 +184,50 @@ export default function EnhancedTable(props) {
         selected.slice(selectedIndex + 1)
       );
     }
-
+    
     setSelected(newSelected);
+    
+
+
+      for (let i = 0; i < rows.length; i++) {
+        for (let j = 0; j < newSelected.length; j++) {
+          if (newSelected[j] === rows[i].id) {
+            if (selectedSamples.indexOf(rows[i]) === -1) {
+              selectedSamples.push(rows[i]);
+              pendingSamples.push(rows[i]);
+            }
+          }
+        }
+      }
+
+      console.log("Selected samples From Enhanced Table: ", selectedSamples);
+
+    if (selectedSamples.length > 0) {
+        for (let i = 0; i < selectedSamples.length; i++) {
+          if (selectedSamples[i].validation_status != "Saved") {
+            setSavedFlag(false);
+            break;
+        }
+
+        setSelectedSamples(selectedSamples);
+      }
+    }
+
+    if (pendingSamples.length > 0) {
+      for (let i = 0; i < pendingSamples.length; i++) {
+        if (pendingSamples[i].validation_status != "Pending") {
+          setPendingFlag(false);
+          break;
+      }
+
+      setPendingSamples(pendingSamples);
+      }
+    }
+
+  
   };
+
+ 
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -161,10 +245,8 @@ export default function EnhancedTable(props) {
   const findMachineDataPoint = (row, machineName, fieldName) => {
     for (var i = 0, iLen = row.machines.length; i < iLen; i++) {
       if (row.machines[i].machineName == machineName) {
-        // console.log(machineName);
         for (var j = 0, jLen = row.machines[i].data.length; j < jLen; j++) {
           if (row.machines[i].data[j].type.name == fieldName) {
-            // console.log(row.machines[i].data[j].value);
             return row.machines[i].data[j].value;
           }
         }
@@ -185,7 +267,12 @@ export default function EnhancedTable(props) {
           numSelected={selected.length}
           toolbarButtons={toolbarButtons}
           onEdit={onEdit}
+          savedFlag={savedFlag}
+          pendingFlag={pendingFlag}
           onDelete={onDelete}
+          onSubmit={onSubmit}
+          isSample={isSample}
+          setOpenReviewSampleModal={setOpenReviewSampleModal}
         />
         <TableContainer>
           <Table
@@ -209,7 +296,6 @@ export default function EnhancedTable(props) {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  // console.log(row);
                   let onClickFxn = (event, deletable, id) => {
                     if (deletable) {
                       handleClick(event, id);

@@ -26,6 +26,7 @@ export default function ManageUsers() {
   const [openEditUsersModal, setOpenEditUsersModal] = React.useState(false);
   const [organization, setOrganization] = React.useState(user.organization_id);
 
+
   const roleMap = {
     0: "Super Admin",
     1: "Admin",
@@ -113,6 +114,7 @@ export default function ManageUsers() {
 
   const onChangeOrganization = (event) => {
     setOrganization(event.target.value);
+    setSelected([]);
   }
 
   const onEdit = () => {

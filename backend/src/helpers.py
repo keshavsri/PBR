@@ -1,5 +1,6 @@
 from datetime import date, datetime
 from typing import List
+from src.enums import ValidationTypes
 from itsdangerous import json
 from random import randint
 
@@ -424,6 +425,7 @@ def create_sample(sample_dict: dict, current_user):
         if name != 'measurement_values':
             setattr(sample, name, value)
     setattr(sample, "entered_by_id", current_user.id)
+    setattr(sample, "validation_status", ValidationTypes.Saved)
 
     # Get OrgSourceFlockSample ID
     flock = Flock.from_orm(FlockORM.query.filter_by(name=sample_dict["flockDetails"]['name']).first())
@@ -452,7 +454,7 @@ def create_sample(sample_dict: dict, current_user):
     return sample
 
 
-def get_samples_by_org(org_id: int) -> List[dict]:
+def get_samples_by_org(org_id: int, user_id: int) -> List[dict]:
     """
     The get_samples_by_org function accepts an integer id as input and returns a list of dictionaries containing
     the samples' information.
@@ -461,6 +463,7 @@ def get_samples_by_org(org_id: int) -> List[dict]:
     :return: A list of dictionaries containing the samples formatted by pydantic.
     """
     samples = get_sample_organization_joined(db.session)
+    
     machines = json.loads(get_machines_by_org(org_id))
     ret = {
         "rows": [],
@@ -479,11 +482,21 @@ def get_samples_by_org(org_id: int) -> List[dict]:
             machJson["data"].append({"type":meas})
         ret["types"].append(machJson)
     for sample in samples:
+        print("---------------------------------")
+        print(sample.entered_by_id, flush=True)
         if not sample.deleted:
-            sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
-            sample.timestamp_added = str(sample.timestamp_added)
-            ret["rows"].append(Sample.from_orm(sample).dict())
-    
+            if sample.entered_by_id == user_id:
+                sample.measurement_values = get_measurement_value_ORM_by_sample_id(
+                    sample.id)
+                sample.timestamp_added = str(sample.timestamp_added)
+                ret["rows"].append(Sample.from_orm(sample).dict())
+            else:
+                if sample.validation_status != ValidationTypes.Saved:
+                    sample.measurement_values = get_measurement_value_ORM_by_sample_id(
+                        sample.id)
+                    sample.timestamp_added = str(sample.timestamp_added)
+                    ret["rows"].append(Sample.from_orm(sample).dict())
+            
     return json.dumps(ret, default=str)
 
 def get_sample_by_id(id: int) -> dict:
@@ -538,7 +551,7 @@ def get_samples_by_user(user_id: int) -> List[dict]:
     return json.dumps(ret, default=str)
 
 
-def get_all_samples() -> List[dict]:
+def get_all_samples(user_id: int) -> List[dict]:
     """
     The get_all_samples function returns a list of dictionaries containing all the samples.
 
@@ -564,10 +577,17 @@ def get_all_samples() -> List[dict]:
         ret["types"].append(machJson)
     for sample in samples:
         if not sample.deleted:
-            sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
-            sample.timestamp_added = str(sample.timestamp_added)
-            ret["rows"].append(Sample.from_orm(sample).dict())
-    
+            if sample.entered_by_id == user_id:
+                sample.measurement_values = get_measurement_value_ORM_by_sample_id(
+                    sample.id)
+                sample.timestamp_added = str(sample.timestamp_added)
+                ret["rows"].append(Sample.from_orm(sample).dict())
+            else:
+                if sample.validation_status != ValidationTypes.Saved:
+                    sample.measurement_values = get_measurement_value_ORM_by_sample_id(
+                        sample.id)
+                    sample.timestamp_added = str(sample.timestamp_added)
+                    ret["rows"].append(Sample.from_orm(sample).dict())
     return json.dumps(ret, default=str)
 
 

@@ -455,7 +455,7 @@ export default function DataViewSampleModal({ getData }) {
           disabled={sampleType ? false : true}
           endIcon={<SubmitIcon />}
         >
-          Submit
+          Save
         </Button>
       </>
     );
