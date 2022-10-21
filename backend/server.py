@@ -1,6 +1,6 @@
 from src import app
-from src.Models import User, db
-import src.Models as Models
+from src.models import User, db
+import src.models as models
 import os
 from dotenv import load_dotenv, find_dotenv
 

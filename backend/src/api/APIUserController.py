@@ -1,5 +1,5 @@
 import code
-from src.Models import Organization
+from src.models import Organization
 from flask import request, Blueprint, jsonify, Response, make_response
 import bcrypt
 from datetime import datetime, timedelta, timezone
@@ -9,11 +9,11 @@ import jwt
 import json
 from src.auth_token import Auth_Token
 from functools import wraps
-from src import Models, helpers, Schemas
+from src import models, helpers, schemas
 import src.helpers
 from src.enums import Roles, LogActions
-from src.Models import User as UserORM
-from src.Schemas import User
+from src.models import User as UserORM
+from src.schemas import User
 
 userBlueprint = Blueprint('user', __name__)
 
@@ -40,7 +40,7 @@ def allowed_roles(roles):
         data = Auth_Token.decode_token(token)
         # GET AND RETURN CURRENT USER
 
-        current_user = Models.User.query.filter_by(id=data["id"]).first()
+        current_user = models.User.query.filter_by(id=data["id"]).first()
         
         for role in roles:
           if current_user.role == 0 or int(current_user.role) is role:
@@ -74,10 +74,10 @@ def token_required(f):
       # PULL OUT DATA FROM TOKEN
       data = Auth_Token.decode_token(token)
       # GET AND RETURN CURRENT USER
-      current_user = Models.User.query.filter_by(id=data["id"]).first()
+      current_user = models.User.query.filter_by(id=data["id"]).first()
     except jwt.ExpiredSignatureError as error:
       data = Auth_Token.decode_token(token, verify_expiration=False)
-      current_user = Models.User.query.filter_by(email=data["email"]).first()
+      current_user = models.User.query.filter_by(email=data["email"]).first()
       ret_user = {
         "email": current_user.email,
         "firstname": current_user.first_name,
@@ -97,7 +97,7 @@ def token_required(f):
 @userBlueprint.route('/<int:item_id>', methods=['GET', 'PUT', 'POST'])
 @userBlueprint.route('/', methods=['GET', 'POST'])
 def route_setting_all(item_id=None):
-  return Models.User.fs_get_delete_put_post(item_id)
+  return models.User.fs_get_delete_put_post(item_id)
 
 @userBlueprint.route('/me', methods=['GET'])
 @token_required
@@ -132,7 +132,7 @@ def login():
   if data["email"] and data["password"]:
     data["email"] = data["email"].lower()
     print(data["email"])
-    dbUser = Models.User.query.filter_by(email=data["email"]).first()
+    dbUser = models.User.query.filter_by(email=data["email"]).first()
 
     print(dbUser)
     if not dbUser:
@@ -181,27 +181,27 @@ def register():
 
   if not data["email"] or not data["firstname"] or not data["lastname"] or not data["password"] or not data["orgCode"]:
     print("MISSING FIELDS.")
-    Models.db.session.rollback()
+    models.db.session.rollback()
     return jsonify({"message": "Invalid Request!"}), 400
   
-  if Models.User.query.filter_by(email=data["email"]).first():
+  if models.User.query.filter_by(email=data["email"]).first():
     print("USER ALREADY EXISTS.")
-    Models.db.session.rollback()
+    models.db.session.rollback()
     return jsonify({"message":"User Already Exists with this Email"}), 422
 
   
-  user_org = Models.Organization.query.filter_by(organization_code=data["orgCode"]).first()
+  user_org = models.Organization.query.filter_by(organization_code=data["orgCode"]).first()
 
   if not user_org:
     print("INVALID ORGANIZATION ID.")
-    Models.db.session.rollback()
+    models.db.session.rollback()
     return jsonify({"message": "Invalid Organization ID"}), 422
     
   salt = bcrypt.gensalt()
   hashedPW = bcrypt.hashpw(data["password"].encode('utf8'), salt)
-  user = Models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Guest, organization_id=user_org.id )
-  Models.db.session.add(user)
-  Models.db.session.commit()
+  user = models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Guest, organization_id=user_org.id )
+  models.db.session.add(user)
+  models.db.session.commit()
   print("User was successfully added.")
   return jsonify({"message": 'Success'}), 200
 
@@ -255,7 +255,7 @@ def deleteUser(access_allowed, current_user, user_id):
     """
 
     if access_allowed:
-        user = Models.User.query.get(user_id)
+        user = models.User.query.get(user_id)
         if user is None:
             return jsonify({'message': 'User does not exist'}), 404
         elif user.organization_id != current_user.organization_id and user.role != Roles.Super_Admin:
@@ -264,8 +264,8 @@ def deleteUser(access_allowed, current_user, user_id):
             return jsonify({'message': 'Cannot delete the current user'}), 403
         else:
             user.is_deleted = True
-            Models.db.session.commit()
-            Models.createLog(current_user, LogActions.DELETE_SOURCE, f'Deleted user: ${user.first_name} ${user.last_name} in organization: ${Models.Organization.query.get(user.organization_id).name}')
+            models.db.session.commit()
+            models.createLog(current_user, LogActions.DELETE_SOURCE, f'Deleted user: ${user.first_name} ${user.last_name} in organization: ${models.Organization.query.get(user.organization_id).name}')
             return jsonify({'message': 'User deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -327,7 +327,7 @@ def update_user(access_allowed, current_user, user_id):
         # Get json dict representing new user object
         edited_user = request.json
         # Get existing user object with the same id as edited_user
-        existing_user = Models.User.query.filter_by(id=user_id).first()
+        existing_user = models.User.query.filter_by(id=user_id).first()
 
         if existing_user is None:
             return jsonify({'message': 'User does not exist'}), 404
@@ -353,12 +353,12 @@ def update_user(access_allowed, current_user, user_id):
             )
 
             # SQLAlchemy update and log action
-            Models.User.query.filter_by(id=edited_user.get("id")).update(edited_user)
-            Models.db.session.commit()
-            Models.createLog(current_user, LogActions.EDIT_USER, 'Edited user: ' + str(edited_user.get("id")))
+            models.User.query.filter_by(id=edited_user.get("id")).update(edited_user)
+            models.db.session.commit()
+            models.createLog(current_user, LogActions.EDIT_USER, 'Edited user: ' + str(edited_user.get("id")))
 
             # Return updated user object, retreived via db query (confirmation)
-            return Schemas.User.from_orm(Models.User.query.filter_by(id=edited_user.get("id")).first()).dict(), 200
+            return schemas.User.from_orm(models.User.query.filter_by(id=edited_user.get("id")).first()).dict(), 200
     else:
         print("PROBLEM>>>>>>>>>>>>>>>>>>>>>", flush=True)
         return jsonify({'message': 'Role not allowed'}), 403

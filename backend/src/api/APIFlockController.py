@@ -2,7 +2,7 @@ import src.helpers
 from http import HTTPStatus
 from src.api.APIUserController import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
-from src import Models, Schemas
+from src import models, schemas
 from src.enums import Roles, LogActions
 
 flockBlueprint = Blueprint('flock', __name__)
@@ -92,17 +92,17 @@ def post_flock(access_allowed, current_user):
     """
     if access_allowed:
         # checks if the Flock already exists in the database
-        if Models.Flock.query.filter_by(name=request.json.get('name')).first() is None:
+        if models.Flock.query.filter_by(name=request.json.get('name')).first() is None:
             # builds the Flock from the request json
             new_flock = src.helpers.create_flock(request.json)
             # stages and then commits the new Flock to the database
-            Models.db.session.add(new_flock)
-            Models.db.session.commit()
-            Models.createLog(current_user, LogActions.ADD_FLOCK, 'Created new Flock: ' + new_flock.name)
-            return Schemas.Flock.from_orm(new_flock).dict(), 201
+            models.db.session.add(new_flock)
+            models.db.session.commit()
+            models.createLog(current_user, LogActions.ADD_FLOCK, 'Created new Flock: ' + new_flock.name)
+            return schemas.Flock.from_orm(new_flock).dict(), 201
         # if the Flock already exists then return a 409 conflict
         else:
-            return jsonify({'message': 'Flock already exists', "existing organization": Schemas.Flock.from_orm(Models.Flock.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
+            return jsonify({'message': 'Flock already exists', "existing organization": schemas.Flock.from_orm(models.Flock.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
     else:
         return jsonify({'message': 'Role not allowed'}), 403
     
@@ -124,15 +124,15 @@ def put_flock(access_allowed, current_user, item_id):
 
     if access_allowed:
         # check if the Flock exists in the database if it does then update the Flock
-        if Models.Flock.query.filter_by(organization=current_user.organization_id, id=item_id).first() is None:
+        if models.Flock.query.filter_by(organization=current_user.organization_id, id=item_id).first() is None:
             return jsonify({'message': 'Flock does not exist'}), 404
         else:
             if request.json.get('organization') is None and request.json.get('source') is None:
-                Models.Flock.query.filter_by(id=item_id).update(request.json)
-                Models.db.session.commit()
-                edited_flock = Models.Flock.query.get(item_id)
-                Models.createLog(current_user, LogActions.EDIT_FLOCK, 'Edited Flock: ' + edited_flock.name)
-                return Schemas.Flock.from_orm(edited_flock).dict(), 200
+                models.Flock.query.filter_by(id=item_id).update(request.json)
+                models.db.session.commit()
+                edited_flock = models.Flock.query.get(item_id)
+                models.createLog(current_user, LogActions.EDIT_FLOCK, 'Edited Flock: ' + edited_flock.name)
+                return schemas.Flock.from_orm(edited_flock).dict(), 200
             else:
                 return jsonify({'message': 'Cannot Edit Flock'}), 400
     else:
@@ -155,13 +155,13 @@ def delete_flock(access_allowed, current_user, item_id):
 
     if access_allowed:
         # check if the Flock exists in the database if it does then delete the Flock
-        if Models.Flock.query.filter_by(organization_id=current_user.organization_id, id=item_id).first() is None:
+        if models.Flock.query.filter_by(organization_id=current_user.organization_id, id=item_id).first() is None:
             return jsonify({'message': 'Flock does not exist'}), 404
         else:
-            deleted_flock = Models.Flock.query.get(item_id)
-            Models.db.session.delete(Models.Flock.query.filter_by(organization_id=current_user.organization_id, id=item_id).first())
-            Models.db.session.commit()
-            Models.createLog(current_user, LogActions.DELETE_FLOCK, 'Deleted Flock: ' + deleted_flock.name)
+            deleted_flock = models.Flock.query.get(item_id)
+            models.db.session.delete(models.Flock.query.filter_by(organization_id=current_user.organization_id, id=item_id).first())
+            models.db.session.commit()
+            models.createLog(current_user, LogActions.DELETE_FLOCK, 'Deleted Flock: ' + deleted_flock.name)
             return jsonify({'message': 'Flock deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

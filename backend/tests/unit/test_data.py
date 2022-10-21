@@ -5,7 +5,7 @@ import sys
 import bcrypt
 import pytest
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-from src import Models
+from src import models
 from src.enums import Roles
 from src.api import APIDataController
         
@@ -72,6 +72,6 @@ def test_get_batches_none():
         role = Roles.Admin,
     )
     data=temp
-    user = Models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
+    user = models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
     with pytest.raises(Exception):
         APIDataController.get_batches(True, user)

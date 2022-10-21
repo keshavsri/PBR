@@ -1,4 +1,4 @@
-from src.Models import *
+from src.models import *
 from src import app
 import sys
 import bcrypt

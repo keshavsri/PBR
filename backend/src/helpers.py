@@ -4,22 +4,22 @@ from src.enums import ValidationTypes
 from itsdangerous import json
 from random import randint
 
-from src.Models import db
-from src.Models import Flock as FlockORM
-from src.Models import User as UserORM
-from src.Models import Organization as OrganizationORM
-from src.Models import Source as SourceORM
-from src.Models import Sample as SampleORM
-from src.Models import Machine as MachineORM
-from src.Models import MachineType as MachineTypeORM
-from src.Models import Measurement as MeasurementORM
-from src.Models import get_sample_organization_joined
-from src.Models import OrganizationSource as OrganizationSourceORM
-from src.Models import OrganizationSource_Flock_Sample as OrganizationSource_Flock_SampleORM
-from src.Models import MeasurementType as MeasurementTypeORM
-from src.Models import MeasurementValue as MeasurementValueORM
-from src.Models import Log as LogORM
-from src.Schemas import Flock, Organization, Source, Sample, Machine, Machinetype, Measurement, MeasurementType, MeasurementValue, Log, User
+from src.models import db
+from src.models import Flock as FlockORM
+from src.models import User as UserORM
+from src.models import Organization as OrganizationORM
+from src.models import Source as SourceORM
+from src.models import Sample as SampleORM
+from src.models import Machine as MachineORM
+from src.models import MachineType as MachineTypeORM
+from src.models import Measurement as MeasurementORM
+from src.models import get_sample_organization_joined
+from src.models import OrganizationSource as OrganizationSourceORM
+from src.models import OrganizationSource_Flock_Sample as OrganizationSource_Flock_SampleORM
+from src.models import MeasurementType as MeasurementTypeORM
+from src.models import MeasurementValue as MeasurementValueORM
+from src.models import Log as LogORM
+from src.schemas import Flock, Organization, Source, Sample, Machine, Machinetype, Measurement, MeasurementType, MeasurementValue, Log, User
 
 def get_machines_by_org(org_id: int) -> List[dict]:
     """

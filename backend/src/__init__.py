@@ -32,5 +32,5 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 
 
-from src import Models
-Models.db.init_app(app)
+from src import models
+models.db.init_app(app)

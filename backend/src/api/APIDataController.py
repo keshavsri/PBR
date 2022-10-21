@@ -4,7 +4,7 @@ import re
 import src.helpers
 from src.enums import LogActions, ValidationTypes, Roles
 from src.api.APIUserController import token_required, allowed_roles
-from src import Models, helpers, Schemas
+from src import models, helpers, schemas
 
 sampleBlueprint = Blueprint('sample', __name__)
 batchBluePrint = Blueprint('batch', __name__)
@@ -211,7 +211,7 @@ def create_sample(access_allowed, current_user):
             print("Flock already exists")
             # If so, see if things were edited.
             src.helpers.update_flock(payload['flockDetails'])
-            Models.createLog(current_user, LogActions.EDIT_FLOCK,
+            models.createLog(current_user, LogActions.EDIT_FLOCK,
                              'Updated Flock: ' + current_flock["name"])
         else:
             print("Brand new flock. Add it.")
@@ -221,7 +221,7 @@ def create_sample(access_allowed, current_user):
 
             print(new_flock)
             # stages and then commits the new Flock to the database
-            Models.createLog(current_user, LogActions.ADD_FLOCK,
+            models.createLog(current_user, LogActions.ADD_FLOCK,
                              'Created new Flock: ' + new_flock.name)
 
         payload["validation_status"] = ValidationTypes.Pending
@@ -229,9 +229,9 @@ def create_sample(access_allowed, current_user):
         if not new_sample:
             return jsonify({'message': 'Invalid Request'}), 400
 
-        Models.createLog(current_user, LogActions.ADD_SAMPLE,
+        models.createLog(current_user, LogActions.ADD_SAMPLE,
                          'Created new sample: ' + str(new_sample.id))
-        return Schemas.Sample.from_orm(new_sample).dict(), 201
+        return schemas.Sample.from_orm(new_sample).dict(), 201
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -303,16 +303,16 @@ def delete_sample(access_allowed, current_user, item_id):
     :return: The deleted sample.
     """
     if access_allowed:
-        if Models.Sample.query.get(item_id) is None:
+        if models.Sample.query.get(item_id) is None:
             return jsonify({'message': 'Sample cannot be found.'}), 404
         else:
-            deleted_sample = Models.Sample.query.get(item_id)
-            # Models.db.session.delete(Models.Sample.query.get(item_id))
-            Models.Sample.query.filter_by(id=item_id).update({'deleted': True})
-            Models.db.session.commit()
-            Models.createLog(current_user, LogActions.DELETE_SAMPLE,
+            deleted_sample = models.Sample.query.get(item_id)
+            # models.db.session.delete(models.Sample.query.get(item_id))
+            models.Sample.query.filter_by(id=item_id).update({'deleted': True})
+            models.db.session.commit()
+            models.createLog(current_user, LogActions.DELETE_SAMPLE,
                              'Deleted sample: ' + str(deleted_sample.id))
-            return Schemas.Sample.from_orm(deleted_sample).dict(), 200
+            return schemas.Sample.from_orm(deleted_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -330,16 +330,16 @@ def submit_sample(access_allowed, current_user, item_id):
     :return: The edited sample.
     """
     if access_allowed:
-        if Models.Sample.query.get(item_id) is None:
+        if models.Sample.query.get(item_id) is None:
             return jsonify({'message': 'Sample cannot be found.'}), 404
         else:
-            Models.Sample.query.filter_by(id=item_id).update(
+            models.Sample.query.filter_by(id=item_id).update(
                 {'validation_status': ValidationTypes.Pending})
-            Models.db.session.commit()
-            edited_sample = Models.Sample.query.get(item_id)
-            Models.createLog(current_user, LogActions.EDIT_SAMPLE,
+            models.db.session.commit()
+            edited_sample = models.Sample.query.get(item_id)
+            models.createLog(current_user, LogActions.EDIT_SAMPLE,
                              'Edited sample: ' + str(edited_sample.id))
-            return Schemas.Sample.from_orm(edited_sample).dict(), 200
+            return schemas.Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -356,16 +356,16 @@ def accept_sample(access_allowed, current_user, item_id):
     :return: The accepted sample.
     """
     if access_allowed:
-        if Models.Sample.query.get(item_id) is None:
+        if models.Sample.query.get(item_id) is None:
             return jsonify({'message': 'Sample cannot be found.'}), 404
         else:
-            Models.Sample.query.filter_by(id=item_id).update(
+            models.Sample.query.filter_by(id=item_id).update(
                 {'validation_status': ValidationTypes.Accepted})
-            Models.db.session.commit()
-            edited_sample = Models.Sample.query.get(item_id)
-            Models.createLog(current_user, LogActions.PENDING_TO_VALID,
+            models.db.session.commit()
+            edited_sample = models.Sample.query.get(item_id)
+            models.createLog(current_user, LogActions.PENDING_TO_VALID,
                              'Accepted sample: ' + str(edited_sample.id))
-            return Schemas.Sample.from_orm(edited_sample).dict(), 200
+            return schemas.Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -382,16 +382,16 @@ def reject_sample(access_allowed, current_user, item_id):
     :return: The rejected sample.
     """
     if access_allowed:
-        if Models.Sample.query.get(item_id) is None:
+        if models.Sample.query.get(item_id) is None:
             return jsonify({'message': 'Sample cannot be found.'}), 404
         else:
-            Models.Sample.query.filter_by(id=item_id).update(
+            models.Sample.query.filter_by(id=item_id).update(
                 {'validation_status': ValidationTypes.Rejected})
-            Models.db.session.commit()
-            edited_sample = Models.Sample.query.get(item_id)
-            Models.createLog(current_user, LogActions.PENDING_TO_REJECT,
+            models.db.session.commit()
+            edited_sample = models.Sample.query.get(item_id)
+            models.createLog(current_user, LogActions.PENDING_TO_REJECT,
                              'Reject sample: ' + str(edited_sample.id))
-            return Schemas.Sample.from_orm(edited_sample).dict(), 200
+            return schemas.Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -410,15 +410,15 @@ def edit_datapoint(access_allowed, current_user, item_id):
     :return: The edited sample.
     """
     if access_allowed:
-        if Models.Sample.query.get(item_id) is None:
+        if models.Sample.query.get(item_id) is None:
             return jsonify({'message': 'Sample cannot be found.'}), 404
         else:
-            Models.Sample.query.filter_by(id=item_id).update(request.json)
-            Models.db.session.commit()
-            edited_sample = Models.Sample.query.get(item_id)
-            Models.createLog(current_user, LogActions.EDIT_SAMPLE,
+            models.Sample.query.filter_by(id=item_id).update(request.json)
+            models.db.session.commit()
+            edited_sample = models.Sample.query.get(item_id)
+            models.createLog(current_user, LogActions.EDIT_SAMPLE,
                              'Edited sample: ' + str(edited_sample.id))
-            return Schemas.Sample.from_orm(edited_sample).dict(), 200
+            return schemas.Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -434,11 +434,11 @@ def create_batch_data(access_allowed, current_user, batch_data):
     NOT IMPLEMENTED YET.
     """
     if access_allowed:
-        Models.db.session.add(batch_data)
-        Models.db.session.commit()
-        Models.createLog(current_user, LogActions.ADD_BATCH,
+        models.db.session.add(batch_data)
+        models.db.session.commit()
+        models.createLog(current_user, LogActions.ADD_BATCH,
                          'Created batch data: ' + batch_data.id)
-        return jsonify(Models.Batch.query.get(request.json.get('id'))),
+        return jsonify(models.Batch.query.get(request.json.get('id'))),
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -452,7 +452,7 @@ def get_batches(access_allowed, current_user):
     NOT IMPLEMENTED YET.
     """
     if access_allowed:
-        response_json = jsonify(Models.Batch.query.all())
+        response_json = jsonify(models.Batch.query.all())
         if response_json.json is None:
             response_json = jsonify({'message': 'Batches cannot be returned.'})
             return response_json, 404
@@ -471,7 +471,7 @@ def get_batch(access_allowed, current_user, item_id):
     NOT IMPLEMENTED YET.
     """
     if access_allowed:
-        response_json = jsonify(Models.Batch.query.get(item_id))
+        response_json = jsonify(models.Batch.query.get(item_id))
         if response_json.json is None:
             response_json = jsonify({'message': 'Batch cannot be found.'})
             return response_json, 404
@@ -490,13 +490,13 @@ def edit_batch(access_allowed, current_user, item_id):
     NOT IMPLEMENTED YET.
     """
     if access_allowed:
-        if Models.Batch.query.get(item_id) is None:
+        if models.Batch.query.get(item_id) is None:
             return jsonify({'message': 'Batch cannot be found.'}), 404
         else:
-            Models.Batch.query.filter_by(id=item_id).update(request.json)
-            Models.db.session.commit()
-            edited_batch = Models.Batch.query.get(item_id)
-            Models.createLog(current_user, LogActions.EDIT_BATCH,
+            models.Batch.query.filter_by(id=item_id).update(request.json)
+            models.db.session.commit()
+            edited_batch = models.Batch.query.get(item_id)
+            models.createLog(current_user, LogActions.EDIT_BATCH,
                              'Edited batch: ' + edited_batch.id)
             return jsonify(edited_batch), 200
     else:
@@ -512,13 +512,13 @@ def delete_batch(access_allowed, current_user, item_id):
     NOT IMPLEMENTED YET.
     """
     if access_allowed:
-        if Models.Batch.query.get(item_id) is None:
+        if models.Batch.query.get(item_id) is None:
             return jsonify({'message': 'Batch cannot be found.'}), 404
         else:
-            deleted_batch = Models.Batch.query.get(item_id)
-            Models.db.session.delete(Models.Batch.query.get(item_id))
-            Models.db.session.commit()
-            Models.createLog(current_user, LogActions.DELETE_SAMPLE,
+            deleted_batch = models.Batch.query.get(item_id)
+            models.db.session.delete(models.Batch.query.get(item_id))
+            models.db.session.commit()
+            models.createLog(current_user, LogActions.DELETE_SAMPLE,
                              'Deleted batch: ' + deleted_batch.id)
             return jsonify({'message': 'Batch has been deleted'}), 200
     else:

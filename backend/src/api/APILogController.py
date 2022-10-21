@@ -1,9 +1,9 @@
 from flask import Blueprint, jsonify, request
 from src.api.APIUserController import token_required
-from src import Models
+from src import models
 from src.enums import Roles, LogActions
 from src import helpers
-from src.Schemas import Log
+from src.schemas import Log
 
 logBlueprint = Blueprint('log', __name__)
 
@@ -27,7 +27,7 @@ def handleLog(current_user, item_id = None):
         current_Organization = current_user.organization_id
         # if item id exists then it will return the organization with the id
         if item_id:
-            log =  Models.Log.query.get(item_id)
+            log =  models.Log.query.get(item_id)
             if current_user.role == Roles.Super_Admin:
                 responseJSON = Log.from_orm(log).dict()
             elif log.organization == current_Organization:

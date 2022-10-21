@@ -1,162 +1,23 @@
-from datetime import datetime
-from xmlrpc.client import Boolean
-
 from pydantic import BaseModel, constr
-from src.enums import States, Species, ProductionTypes, BirdGenders, AgeUnits, ValidationTypes, SampleTypes, Roles, LogActions
-from typing import List, Optional
 
-
-# PYDANTIC MODELS
-
-
-
-# ------------------------------
-# Machinetype
-# ------------------------------
-class Machinetype(BaseModel):
-    """
-    Pydantic model for the Machinetype table set to orm_mode=True
-
-    Attributes:
-        id (int): The id of the machinetype, set as Optional to allow for creation of new machinetypes without an id
-        name (str): The name of the machinetype
-    """
-    id: Optional[int]
-    name: constr(max_length=120)
+class PydanticModel(BaseModel):
     class Config:
         orm_mode = True
 
-
-# ------------------------------
-# MeasurementType
-# ------------------------------
-class MeasurementType(BaseModel):
-    """
-    Pydantic model for the MeasurementType table set to orm_mode=True
-
-    Attributes:
-        id (int): The id of the measurementtype object, set as Optional to allow for creation of new measurementtypes without an id
-        name (str): The name of the measurementtype
-        abbreviation (str): The abbreviation of the measurementtype
-        units (str): The unit of the measurementtype
-        required (bool): Whether the measurementtype is required or not
-        general (bool): ???
-    """
-    id: Optional[int]
-    name: Optional[constr(max_length=120)]
-    abbreviation: Optional[constr(max_length=120)]
-    units: Optional[constr(max_length=120)]
-    required: bool
-    general: bool
-
-    class Config:
-        orm_mode = True
-
-
-# ------------------------------
-# Machine
-# ------------------------------
-class Machine(BaseModel):
-    """
-    Pydantic model for the Machine table set to orm_mode=True
-
-    Attributes:
-        id (int): The id of the machine object, set as Optional to allow for creation of new machines without an id
-        serial_number (str): The serial number of the machine
-
-        machinetype_id (int): The id of the machinetype of the machine
-        machinetype (Machinetype): The machinetype of the machine, set as Optional to allow for creation of new machines without an enitre machinetype
-        organization_id (int): The id of the organization of the machine
-        measurements (List[Measurement]): The measurements of the machine, set as Optional to allow for creation of new machines without measurements
-    """
-    id: Optional[int]
-    serial_number: constr(max_length=120)
-    # References to Foreign Objects
-    machinetype_id: int
-    machinetype: Optional[Machinetype]
+class User(PydanticModel):
+    id: int
+    email: constr(max_length=120)
+    password: constr(max_length=120)
+    first_name: constr(max_length=120)
+    last_name: constr(max_length=120)
+    phone_number: Optional[constr(max_length=120)]
+    role: Roles
+    notes: Optional[constr(max_length=500)]
     organization_id: int
-    measurements: "Optional[List[Measurement]]"
-
-    class Config:
-        orm_mode = True
-# ------------------------------
-# Measurement
-# ------------------------------
-class Measurement(BaseModel):
-    """
-    Pydantic model for the Measurement table set to orm_mode=True
-
-    Attributes:
-        id (int): The id of the measurement object, set as Optional to allow for creation of new measurements without an id
-        machine_id (int): The id of the machine of the measurement, set as Optional to allow for creation of new measurements without a machine
-        measurement_type_id (int): The id of the measurementtype of the measurement, set as Optional to allow for creation of new measurements without a measurementtype
-        measurement_type (MeasurementType): The measurementtype of the measurement, set as Optional to allow for creation of new measurements without an enitre measurementtype
-
-        A machine attribute was omitted as it caused an infinitely recursive loop
-    """
-    id: Optional[int]
-    machine_id: Optional[int]
-    measurementtype_id: Optional[int]
-    measurementtype: Optional[MeasurementType]
-    class Config:
-        orm_mode = True
-
-# ------------------------------
-# MeasurementValue
-# ------------------------------
-class MeasurementValue(BaseModel):
-    """
-    Pydantic model for the MeasurementValue table set to orm_mode=True
-
-    Attributes:
-        id (int): The id of the measurementvalue object, set as Optional to allow for creation of new measurementvalues without an id
-        measurement_id (int): The id of the measurement of the measurementvalue, set as Optional to allow for creation of new measurementvalues without a measurement
-        measurement (Measurement): The measurement of the measurementvalue, set as Optional to allow for creation of new measurementvalues without an enitre measurement
-        sample_id (int): The id of the sample of the measurementvalue
-        value (float): The value of the measurementvalue
-        timestamp_added (datetime): The timestamp of when the measurementvalue was added, set as Optional as that is set by the database
-    """
-    id: Optional[int]
-    measurement_id: int
-    measurement: Optional[Measurement]
-    sample_id: Optional[int]
-    value: str
-    timestamp_added: Optional[datetime]
-    class Config:
-        orm_mode = True
-
-# ------------------------------
-# Source
-# ------------------------------
-
-# Pydantic defines models with typed fields.
-class Source(BaseModel):
-    """
-    Pydantic model for the Source table set to orm_mode=True
-
-    Attributes:
-        id (int): The id of the source object, set as Optional to allow for creation of new sources without an id
-        name (str): The name of the source
-        street_address (str): The street address of the source
-        city (str): The city of the source
-        state (States): The state of the source
-        zip (str): The zip code of the source
-    """
-    name: constr(max_length=120)
-    street_address: constr(max_length=120)
-    city: constr(max_length=120)
-    state: States
-    zip: constr(regex=r'^[0-9]{5}(?:-[0-9]{4})?$')
-    id: Optional[int] = None
-    class Config:
-        orm_mode = True
+    is_deleted: bool
 
 
-# ------------------------------
-# Organization
-# ------------------------------
-
-class Organization(BaseModel):
+class Organization(PydanticModel):
     """
     Pydantic model for the Organization table set to orm_mode=True
 
@@ -172,6 +33,7 @@ class Organization(BaseModel):
 
         sources (List[Source]): The sources of the organization, set as Optional to allow for creation of new organizations without sources
     """
+    id: Optional[int]
     name: constr(max_length=120)
     street_address: constr(max_length=120)
     city: constr(max_length=120)
@@ -179,17 +41,32 @@ class Organization(BaseModel):
     zip: constr(regex=r'^[0-9]{5}(?:-[0-9]{4})?$')
     notes: Optional[constr(max_length=500)]
     organization_code: Optional[constr(regex=r'^[a-zA-Z0-9]{6}?$')]
-# This is the view of an item we want to return to a user
-    id: Optional[int] # For the DB representation we have additional fields
-    sources: Optional[List[Source]]
-    class Config:
-        orm_mode = True
+    code_last_updated: datetime
+    is_deleted: bool
 
-# ------------------------------
-# Flock
-# ------------------------------
+# Pydantic defines models with typed fields.
+class Source(PydanticModel):
+    """
+    Pydantic model for the Source table set to orm_mode=True
 
-class Flock(BaseModel):
+    Attributes:
+        id (int): The id of the source object, set as Optional to allow for creation of new sources without an id
+        name (str): The name of the source
+        street_address (str): The street address of the source
+        city (str): The city of the source
+        state (States): The state of the source
+        zip (str): The zip code of the source
+    """
+    id: Optional[int]
+    name: constr(max_length=120)
+    street_address: constr(max_length=120)
+    city: constr(max_length=120)
+    state: States
+    zip: constr(regex=r'^[0-9]{5}(?:-[0-9]{4})?$')
+    organization_id: int
+
+
+class Flock(PydanticModel):
     """
     Pydantic model for the Flock table set to orm_mode=True
 
@@ -206,26 +83,17 @@ class Flock(BaseModel):
         birthdate (str): The birthdate of the flock
         timestamp_added (datetime): The timestamp the flock was added, set as Optional to allow for creation of new flocks without a timestamp as it is set by the DB
     """
+    id: Optional[int]
     name: str
     strain: str
     species: Species
     production_type: ProductionTypes
     gender: BirdGenders
-    id: Optional[int]
-    organization_id: int
     source_id: int
     birthday: Optional[datetime]
-    timestamp_added: Optional[datetime]
-    class Config:
-        orm_mode = True
 
-Machine.update_forward_refs()
 
-# ------------------------------
-# Sample
-# ------------------------------
-
-class Sample(BaseModel):
+class Sample(PydanticModel):
     """
     Pydantic model for the Sample table set to orm_mode=True
 
@@ -244,67 +112,70 @@ class Sample(BaseModel):
         organization (Organization): The organization the sample is from, set as Optional to allow for creation of new samples without an organization
 
     """
-    flock_age: int
-    flock_age_unit: AgeUnits
-    flock: Optional[Flock]
-    flagged: bool
-    comments: Optional[str]
     id: Optional[int]
-    measurement_values: Optional[List[MeasurementValue]]
+    flock_age: Optional[int]
+    flock_age_unit: Optional[AgeUnits]
+    flock: Optional[Flock]
+    comments: Optional[str]
+    measurements: Optional[List[Measurement]]
     validation_status: Optional[ValidationTypes]
-    sample_type: SampleTypes
-    entered_by_id: Optional[int]
+    sample_type: Optional[SampleTypes]
     timestamp_added: Optional[datetime]
-    organization: Optional[Organization]
-    class Config:
-        orm_mode = True
 
-# ------------------------------
-# Logs
-# ------------------------------
-class Log(BaseModel):
-    """
-    Pydantic model for the Log table set to orm_mode=True
 
-    Attributes:
-        id (int): The id of the log object
-        role (Roles): The role of the user who made the log
-        user_id (int): The id of the user who made the log
-        action (LogActions): The action that was taken
-        logContent (LogContent): The content of the log
-        logTime (datetime): The timestamp of the log
-        organization_id (int): The id of the organization the log is from
+class Batch(PydanticModel):
+    id: Optional[int]
+    name: str
 
-    Note:
-        None of the attributes are set as Optional as they are all required for a log to be created and cannot be null
-    """
-    id: int
+class Measurement(PydanticModel):
+    id: Optional[int]
+    value: Optional[float]
+    sample_id: int
+    analyte: Analyte
+
+class Analyte(PydanticModel):
+    id: Optional[int]
+    name: str
+    abbreviation: str
+    units: str
+    machine_type_id: int
+
+class Machine(PydanticModel):
+    id: Optional[int]
+    serial_number: str
+    machine_type_id: int
+    organization_id: int
+
+class MachineType(PydanticModel):
+    id: Optional[int]
+    name: str
+
+class Cartridge(PydanticModel):
+    id: Optional[int]
+    rotor_lot_number: str
+    cartridge_type_id: int
+    organization_id: int
+
+class CartridgeType(PydanticModel):
+    id: Optional[int]
+    name: str
+    machine_type_id: int
+    analytes: List[Analyte]
+
+class HealthyRange(PydanticModel):
+    id: Optional[int]
+    lower_bound: float
+    upper_bound: float
+    species: Species
+    gender: BirdGenders
+    age_group: AgeGroup
+    analyte: Analyte
+
+class Log(PydanticModel):
+    id: Optional[int]
     role: Roles
     action: LogActions
     logContent: constr(max_length=500)
     logTime: datetime
     user_id: int
-    organization_id: int
-    class Config:
-        orm_mode = True
-
-
-
-
-
-class User(BaseModel):
-
-    id: int
-    email: constr(max_length=120)
-    password: constr(max_length=120)
-    first_name: constr(max_length=120)
-    last_name: constr(max_length=120)
-    phone_number: Optional[constr(max_length=120)]
-    role: Roles
-    notes: Optional[constr(max_length=500)]
-    organization_id: int
-    is_deleted: bool
-
-    class Config:
-        orm_mode = True
-
+    user: User
