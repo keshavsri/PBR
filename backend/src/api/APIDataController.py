@@ -211,7 +211,7 @@ def create_sample(access_allowed, current_user):
             print("Flock already exists")
             # If so, see if things were edited.
             src.helpers.update_flock(payload['flockDetails'])
-            models.createLog(current_user, LogActions.EDIT_FLOCK,
+            models.create_log(current_user, LogActions.EDIT_FLOCK,
                              'Updated Flock: ' + current_flock["name"])
         else:
             print("Brand new flock. Add it.")
@@ -221,7 +221,7 @@ def create_sample(access_allowed, current_user):
 
             print(new_flock)
             # stages and then commits the new Flock to the database
-            models.createLog(current_user, LogActions.ADD_FLOCK,
+            models.create_log(current_user, LogActions.ADD_FLOCK,
                              'Created new Flock: ' + new_flock.name)
 
         payload["validation_status"] = ValidationTypes.Pending
@@ -229,7 +229,7 @@ def create_sample(access_allowed, current_user):
         if not new_sample:
             return jsonify({'message': 'Invalid Request'}), 400
 
-        models.createLog(current_user, LogActions.ADD_SAMPLE,
+        models.create_log(current_user, LogActions.ADD_SAMPLE,
                          'Created new sample: ' + str(new_sample.id))
         return schemas.Sample.from_orm(new_sample).dict(), 201
     else:
@@ -310,7 +310,7 @@ def delete_sample(access_allowed, current_user, item_id):
             # models.db.session.delete(models.Sample.query.get(item_id))
             models.Sample.query.filter_by(id=item_id).update({'deleted': True})
             models.db.session.commit()
-            models.createLog(current_user, LogActions.DELETE_SAMPLE,
+            models.create_log(current_user, LogActions.DELETE_SAMPLE,
                              'Deleted sample: ' + str(deleted_sample.id))
             return schemas.Sample.from_orm(deleted_sample).dict(), 200
     else:
@@ -337,7 +337,7 @@ def submit_sample(access_allowed, current_user, item_id):
                 {'validation_status': ValidationTypes.Pending})
             models.db.session.commit()
             edited_sample = models.Sample.query.get(item_id)
-            models.createLog(current_user, LogActions.EDIT_SAMPLE,
+            models.create_log(current_user, LogActions.EDIT_SAMPLE,
                              'Edited sample: ' + str(edited_sample.id))
             return schemas.Sample.from_orm(edited_sample).dict(), 200
     else:
@@ -363,7 +363,7 @@ def accept_sample(access_allowed, current_user, item_id):
                 {'validation_status': ValidationTypes.Accepted})
             models.db.session.commit()
             edited_sample = models.Sample.query.get(item_id)
-            models.createLog(current_user, LogActions.PENDING_TO_VALID,
+            models.create_log(current_user, LogActions.PENDING_TO_VALID,
                              'Accepted sample: ' + str(edited_sample.id))
             return schemas.Sample.from_orm(edited_sample).dict(), 200
     else:
@@ -389,7 +389,7 @@ def reject_sample(access_allowed, current_user, item_id):
                 {'validation_status': ValidationTypes.Rejected})
             models.db.session.commit()
             edited_sample = models.Sample.query.get(item_id)
-            models.createLog(current_user, LogActions.PENDING_TO_REJECT,
+            models.create_log(current_user, LogActions.PENDING_TO_REJECT,
                              'Reject sample: ' + str(edited_sample.id))
             return schemas.Sample.from_orm(edited_sample).dict(), 200
     else:
@@ -416,7 +416,7 @@ def edit_datapoint(access_allowed, current_user, item_id):
             models.Sample.query.filter_by(id=item_id).update(request.json)
             models.db.session.commit()
             edited_sample = models.Sample.query.get(item_id)
-            models.createLog(current_user, LogActions.EDIT_SAMPLE,
+            models.create_log(current_user, LogActions.EDIT_SAMPLE,
                              'Edited sample: ' + str(edited_sample.id))
             return schemas.Sample.from_orm(edited_sample).dict(), 200
     else:
@@ -436,7 +436,7 @@ def create_batch_data(access_allowed, current_user, batch_data):
     if access_allowed:
         models.db.session.add(batch_data)
         models.db.session.commit()
-        models.createLog(current_user, LogActions.ADD_BATCH,
+        models.create_log(current_user, LogActions.ADD_BATCH,
                          'Created batch data: ' + batch_data.id)
         return jsonify(models.Batch.query.get(request.json.get('id'))),
     else:
@@ -496,7 +496,7 @@ def edit_batch(access_allowed, current_user, item_id):
             models.Batch.query.filter_by(id=item_id).update(request.json)
             models.db.session.commit()
             edited_batch = models.Batch.query.get(item_id)
-            models.createLog(current_user, LogActions.EDIT_BATCH,
+            models.create_log(current_user, LogActions.EDIT_BATCH,
                              'Edited batch: ' + edited_batch.id)
             return jsonify(edited_batch), 200
     else:
@@ -518,7 +518,7 @@ def delete_batch(access_allowed, current_user, item_id):
             deleted_batch = models.Batch.query.get(item_id)
             models.db.session.delete(models.Batch.query.get(item_id))
             models.db.session.commit()
-            models.createLog(current_user, LogActions.DELETE_SAMPLE,
+            models.create_log(current_user, LogActions.DELETE_SAMPLE,
                              'Deleted batch: ' + deleted_batch.id)
             return jsonify({'message': 'Batch has been deleted'}), 200
     else:

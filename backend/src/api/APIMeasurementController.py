@@ -84,7 +84,7 @@ def create_measurement_type(access_allowed, current_user):
             # stages and then commits the new Measurement Type to the database
             models.db.session.add(new_measurement_type)
             models.db.session.commit()
-            models.createLog(current_user, LogActions.ADD_MEASUREMENTTYPE, 'Created new Measurement Type: ' + new_measurement_type.name)
+            models.create_log(current_user, LogActions.ADD_MEASUREMENTTYPE, 'Created new Measurement Type: ' + new_measurement_type.name)
             return schemas.MeasurementType.from_orm(new_measurement_type).dict(), 201
         # if the Measurement Type already exists then return a 409 conflict
         else:
@@ -128,7 +128,7 @@ def update_measurement_type(access_allowed, current_user, item_id):
             models.MeasurementType.query.filter_by(id=item_id).update(request.json)
             models.db.session.commit()
             edited_measurement_type = models.MeasurementType.query.get(item_id)
-            models.createLog(current_user, LogActions.EDIT_MEASUREMENTTYPE, 'Edited Measurement Type: ' + edited_measurement_type.name)
+            models.create_log(current_user, LogActions.EDIT_MEASUREMENTTYPE, 'Edited Measurement Type: ' + edited_measurement_type.name)
             return schemas.MeasurementType.from_orm(edited_measurement_type).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -157,7 +157,7 @@ def delete_measurement_type(access_allowed, current_user, item_id):
             deleted = models.MeasurementType.query.filter_by(id=item_id).first()
             models.db.session.delete(deleted)
             models.db.session.commit()
-            models.createLog(current_user, LogActions.DELETE_MEASUREMENTTYPE, 'Deleted Measurement Type: ' + deleted.name)
+            models.create_log(current_user, LogActions.DELETE_MEASUREMENTTYPE, 'Deleted Measurement Type: ' + deleted.name)
             return jsonify({'message': 'Measurement Type deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -237,7 +237,7 @@ def create_measurement(access_allowed, current_user):
             # stages and then commits the new Measurement to the database
             models.db.session.add(new_measurement)
             models.db.session.commit()
-            models.createLog(current_user, LogActions.ADD_MEASUREMENT, 'Created new Measurement')
+            models.create_log(current_user, LogActions.ADD_MEASUREMENT, 'Created new Measurement')
             return schemas.Measurement.from_orm(new_measurement).dict(), 201
         # if the Measurement already exists then return a 409 conflict
         else:
@@ -269,7 +269,7 @@ def update_measurement(access_allowed, current_user, item_id):
             models.Measurement.query.filter_by(id=item_id).update(request.json)
             models.db.session.commit()
             edited_measurement = models.Measurement.query.get(item_id)
-            models.createLog(current_user, LogActions.EDIT_MEASUREMENT, 'Edited Measurement: ' + str(edited_measurement.id))
+            models.create_log(current_user, LogActions.EDIT_MEASUREMENT, 'Edited Measurement: ' + str(edited_measurement.id))
             return schemas.Measurement.from_orm(edited_measurement).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -298,7 +298,7 @@ def delete_measurement(access_allowed, current_user, item_id):
             deleted = models.Measurement.query.filter_by(id=item_id).first()
             models.db.session.delete(deleted)
             models.db.session.commit()
-            models.createLog(current_user, LogActions.DELETE_MEASUREMENT, 'Deleted Measurement: ' + str(deleted.id))
+            models.create_log(current_user, LogActions.DELETE_MEASUREMENT, 'Deleted Measurement: ' + str(deleted.id))
             return jsonify({'message': 'Measurement deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

@@ -103,7 +103,7 @@ def create_machine(access_allowed, current_user):
             # stages and then commits the new Machine to the database
             models.db.session.add(new_machine)
             models.db.session.commit()
-            models.createLog(current_user, LogActions.ADD_MACHINE, 'Created new Machine: ' + new_machine.serial_number)
+            models.create_log(current_user, LogActions.ADD_MACHINE, 'Created new Machine: ' + new_machine.serial_number)
             return schemas.Machine.from_orm(new_machine).dict(), 201
         # if the Machine already exists then return a 409 conflict
         else:
@@ -136,7 +136,7 @@ def edit_machine(access_allowed, current_user, item_id):
             models.Machine.query.filter_by(id=item_id).update(request.json)
             models.db.session.commit()
             edited_machine = models.Machine.query.get(item_id)
-            models.createLog(current_user, LogActions.EDIT_MACHINE, 'Edited Machine: ' + edited_machine.serial_number)
+            models.create_log(current_user, LogActions.EDIT_MACHINE, 'Edited Machine: ' + edited_machine.serial_number)
             return schemas.Machine.from_orm(edited_machine).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -164,7 +164,7 @@ def delete_machine(access_allowed, current_user, item_id):
             machine = models.Machine.query.get(item_id)
             models.db.session.delete(machine)
             models.db.session.commit()
-            models.createLog(current_user, LogActions.DELETE_MACHINE, 'Deleted Machine: ' + machine.serial_number)
+            models.create_log(current_user, LogActions.DELETE_MACHINE, 'Deleted Machine: ' + machine.serial_number)
             return jsonify({'message': 'Machine deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -246,7 +246,7 @@ def create_machine_type(access_allowed, current_user):
             # stages and then commits the new Machine to the database
             models.db.session.add(new_machine_type)
             models.db.session.commit()
-            models.createLog(current_user, LogActions.ADD_MACHINETYPE, 'Created new Machine: ' + new_machine_type.name)
+            models.create_log(current_user, LogActions.ADD_MACHINETYPE, 'Created new Machine: ' + new_machine_type.name)
             return schemas.Machinetype.from_orm(new_machine_type).dict(), 201
         # if the Machine already exists then return a 409 conflict
         else:
@@ -278,7 +278,7 @@ def edit_machine_type(access_allowed, current_user, item_id):
             models.MachineType.query.filter_by(id=item_id).update(request.json)
             models.db.session.commit()
             edited_machine = models.MachineType.query.get(item_id)
-            models.createLog(current_user, LogActions.EDIT_MACHINETYPE, 'Edited Machine: ' + edited_machine.name)
+            models.create_log(current_user, LogActions.EDIT_MACHINETYPE, 'Edited Machine: ' + edited_machine.name)
             return schemas.Machinetype.from_orm(edited_machine).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -306,7 +306,7 @@ def delete_machine_type(access_allowed, current_user, item_id):
             machine = models.MachineType.query.get(item_id)
             models.db.session.delete(machine)
             models.db.session.commit()
-            models.createLog(current_user, LogActions.DELETE_MACHINETYPE, 'Deleted Machine: ' + machine.name)
+            models.create_log(current_user, LogActions.DELETE_MACHINETYPE, 'Deleted Machine: ' + machine.name)
             return jsonify({'message': 'Machine deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

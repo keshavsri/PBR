@@ -92,7 +92,7 @@ def post_organization(access_allowed, current_user):
         if models.Organization.query.filter_by(name=request.json.get('name')).first() is None:
             # builds the organization from the request json
             newOrganization = src.helpers.create_organization(request.json)
-            models.createLog(current_user, LogActions.ADD_ORGANIZATION, 'Created new organization: ' + newOrganization.name)
+            models.create_log(current_user, LogActions.ADD_ORGANIZATION, 'Created new organization: ' + newOrganization.name)
             return schemas.Organization.from_orm(newOrganization).dict(), 201
         # if the organization already exists then return a 409 conflict
         else:
@@ -141,7 +141,7 @@ def put_organization(access_allowed, current_user, item_id):
                 models.db.session.commit()
             
             editedOrganization = models.Organization.query.get(item_id)
-            models.createLog(current_user, LogActions.EDIT_ORGANIZATION, 'Edited Organization: ' + editedOrganization.name)
+            models.create_log(current_user, LogActions.EDIT_ORGANIZATION, 'Edited Organization: ' + editedOrganization.name)
             return schemas.Organization.from_orm(models.Organization.query.get(item_id)).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -209,7 +209,7 @@ def deleteSource(access_allowed, current_user, item_id, source_id):
         else:
             models.db.session.delete(models.Source.query.get(source_id))
             models.db.session.commit()
-            models.createLog(current_user, LogActions.DELETE_SOURCE, 'Deleted source: ' + source.name + ' in organization: ' + models.Organization.query.get(item_id).name)
+            models.create_log(current_user, LogActions.DELETE_SOURCE, 'Deleted source: ' + source.name + ' in organization: ' + models.Organization.query.get(item_id).name)
             return jsonify({'message': 'Source deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

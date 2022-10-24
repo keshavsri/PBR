@@ -98,7 +98,7 @@ def post_flock(access_allowed, current_user):
             # stages and then commits the new Flock to the database
             models.db.session.add(new_flock)
             models.db.session.commit()
-            models.createLog(current_user, LogActions.ADD_FLOCK, 'Created new Flock: ' + new_flock.name)
+            models.create_log(current_user, LogActions.ADD_FLOCK, 'Created new Flock: ' + new_flock.name)
             return schemas.Flock.from_orm(new_flock).dict(), 201
         # if the Flock already exists then return a 409 conflict
         else:
@@ -131,7 +131,7 @@ def put_flock(access_allowed, current_user, item_id):
                 models.Flock.query.filter_by(id=item_id).update(request.json)
                 models.db.session.commit()
                 edited_flock = models.Flock.query.get(item_id)
-                models.createLog(current_user, LogActions.EDIT_FLOCK, 'Edited Flock: ' + edited_flock.name)
+                models.create_log(current_user, LogActions.EDIT_FLOCK, 'Edited Flock: ' + edited_flock.name)
                 return schemas.Flock.from_orm(edited_flock).dict(), 200
             else:
                 return jsonify({'message': 'Cannot Edit Flock'}), 400
@@ -161,7 +161,7 @@ def delete_flock(access_allowed, current_user, item_id):
             deleted_flock = models.Flock.query.get(item_id)
             models.db.session.delete(models.Flock.query.filter_by(organization_id=current_user.organization_id, id=item_id).first())
             models.db.session.commit()
-            models.createLog(current_user, LogActions.DELETE_FLOCK, 'Deleted Flock: ' + deleted_flock.name)
+            models.create_log(current_user, LogActions.DELETE_FLOCK, 'Deleted Flock: ' + deleted_flock.name)
             return jsonify({'message': 'Flock deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
