@@ -8,16 +8,14 @@ import PrevIcon from "@mui/icons-material/ArrowBackIos";
 import SubmitIcon from "@mui/icons-material/Publish";
 
 import AddSample from "./AddSample";
-import YourSample from "./YourSample";
 import CategorizeSample from "./CategorizeSample";
 import Success from "./Success";
 import Error from "./Error";
 
-import CustomDialog from "../CustomDialog";
+import CustomDialog from "../../CustomDialog";
 import { makeStyles } from "@mui/styles";
-import useAuth from "../../services/useAuth";
-import useDataView from "../../services/useDataView";
-import { DataArray } from "@mui/icons-material";
+import useAuth from "../../../services/useAuth";
+import useDataView from "../../../services/useDataView";
 
 const useStyles = makeStyles({});
 
@@ -537,12 +535,13 @@ export default function DataViewSampleModal({ getData }) {
                 // <AddSample />
               )}
 
-              {/* Your Sample Screen */}
-              {sampleModalScreen === 1 && <YourSample />}
+                  
+              {/* Your Sample Screen
+              {sampleModalScreen === 1 && <YourSample />} */}
 
               {/* Success Screen */}
-              {sampleModalScreen === 2 && <CategorizeSample />}
-              {sampleModalScreen === 3 && <Success />}
+              {sampleModalScreen === 1 && <CategorizeSample />}
+              {sampleModalScreen === 2 && <Success />}
             </>
           ) : (
             <>

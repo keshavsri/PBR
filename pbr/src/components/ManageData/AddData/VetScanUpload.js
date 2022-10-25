@@ -11,12 +11,10 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
 import ClearIcon from "@mui/icons-material/Backspace";
 
 import { makeStyles } from "@mui/styles";
 
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 const Input = styled("input")({

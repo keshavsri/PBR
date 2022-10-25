@@ -34,15 +34,14 @@ import {
   productionTypes,
   speciesTypes,
 } from "../../models/enums";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import FlagIcon from "@mui/icons-material/Flag";
 import OutlinedFlagIcon from "@mui/icons-material/OutlinedFlag";
 import { tooltipClasses } from "@mui/material/Tooltip";
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import VetScanUpload from "./VetScanUpload";
 import IStatUpload from "./IStatUpload";
-import useAuth from "../../services/useAuth";
-import useDataView from "../../services/useDataView";
+import useAuth from "../../../services/useAuth";
+import useDataView from "../../../services/useDataView";
 
 const filter = createFilterOptions();
 

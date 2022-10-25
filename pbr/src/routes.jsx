@@ -1,17 +1,16 @@
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { DataViewProvider } from "./services/useDataView";
 
 import MainLayout from "./layouts/MainLayout";
 import LoginBackdrop from "./layouts/LoginLayout";
 import Error404 from "./layouts/404Error";
-import DataView from "./components/DataView";
+import DataView from "./components/ManageData/ViewData/DataView";
 import ManageOrganization from "./components/ManageOrganization/ManageOrganization";
-import LoggingView from "./components/LoggingView";
-import LoginCard from "./components/login/LoginCard";
-import RegisterCard from "./components/login/RegisterCard";
-import RecoveryCard from "./components/login/RecoveryCard";
-import ManageUsers from "./components/ManageUsers";
+import LoggingView from "./components/ManageLogs/LoggingView";
+import LoginCard from "./components/HandleLogin/LoginCard";
+import RegisterCard from "./components/HandleLogin/RegisterCard";
+import RecoveryCard from "./components/HandleLogin/RecoveryCard";
+import ManageUsers from "./components/ManageUser/ManageUsers";
 import useAuth from "./services/useAuth";
 
 function RequireAuth({ children }) {
@@ -24,6 +23,7 @@ function RequireAuth({ children }) {
     <Navigate to="/login" replace state={{ path: location.pathname }} />
   );
 }
+
 function NonAuth({ children }) {
   const { user } = useAuth();
   const location = useLocation();

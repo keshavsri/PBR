@@ -189,7 +189,6 @@ def register():
     models.db.session.rollback()
     return jsonify({"message":"User Already Exists with this Email"}), 422
 
-  
   user_org = models.Organization.query.filter_by(organization_code=data["orgCode"]).first()
 
   if not user_org:

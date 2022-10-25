@@ -2,18 +2,18 @@ import * as React from "react";
 
 import { Paper, Chip } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import SavedToPendingModal from "./DataViewSample/SavedToPendingModal";
+import SavedToPendingModal from "../ValidateData/SavedToPendingModal";
 
-import DataViewSampleModal from "./DataViewSample/SampleModal";
+import DataViewSampleModal from "../AddData/SampleModal";
 import DataViewFilterModal from "./FilterModal";
 import DVTableToolbar from "./DVTableToolbar";
 
-import EnhancedTable from "./DataViewTable/EnhancedTable";
+import EnhancedTable from "../../EnhancedTable/EnhancedTable";
 
 import { makeStyles } from "@mui/styles";
-import { DataViewProvider } from "../services/useDataView";
-import useAuth from "../services/useAuth";
-import ReviewSampleModal from "./DataViewSample/ReviewSampleModal";
+import { DataViewProvider } from "../../../services/useDataView";
+import useAuth from "../../../services/useAuth";
+import ReviewSampleModal from "../ValidateData/ReviewSampleModal";
 
 const useStyles = makeStyles({});
 

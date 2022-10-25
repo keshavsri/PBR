@@ -3,8 +3,8 @@ import { useTheme } from "@mui/material/styles";
 
 import { Typography, Box } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import useDataView from "../../services/useDataView";
-import useAuth from "../../services/useAuth";
+import useDataView from "../../../services/useDataView";
+import useAuth from "../../../services/useAuth";
 
 const useStyles = makeStyles({
   successMsg: {

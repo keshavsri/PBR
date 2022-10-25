@@ -12,8 +12,7 @@ import {
   Select
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import useAuth from "../services/useAuth";
-import {organizationRoles} from '../models/enums'
+import {organizationRoles} from '../../models/enums'
 
 
 function getModalStyle() {
