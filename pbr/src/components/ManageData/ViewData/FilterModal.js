@@ -3,10 +3,10 @@ import * as React from "react";
 import { Button } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 
-import DataViewConsumer from "../services/useDataView";
+import DataViewConsumer from "../../../services/useDataView";
 import DataViewFilterContent from "./DVFilterContent";
 
-import CustomDialog from "./CustomDialog";
+import CustomDialog from "../../CustomDialog";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({});

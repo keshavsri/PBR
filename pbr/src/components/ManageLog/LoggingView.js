@@ -1,22 +1,14 @@
 import React from "react";
 import OrganizationIcon from "@mui/icons-material/Apartment";
-import CustomDialog from "./CustomDialog";
-import OrgCodeContent from "./ManageOrganization/OrgCodeContent";
+import CustomDialog from "../CustomDialog";
+import OrgCodeContent from "../ManageOrganization/OrgCodeContent";
 
 import { Paper, Button, Tooltip, IconButton, Chip } from "@mui/material";
 
 import SampleIcon from "@mui/icons-material/Science";
-import NextIcon from "@mui/icons-material/ArrowForwardIos";
-import BackIcon from "@mui/icons-material/ArrowBackIosNew";
-import FilterListIcon from "@mui/icons-material/FilterList";
 
-// Might need to change
-import DataViewAddSample from "./DataViewSample/AddSample";
-import EnhancedTable from "./DataViewTable/EnhancedTable";
-import BulkIcon from "@mui/icons-material/UploadFile";
-import ReportIcon from "@mui/icons-material/Assessment";
+import EnhancedTable from "../EnhancedTable/EnhancedTable";
 import EditIcon from "@mui/icons-material/Edit";
-import FactCheckIcon from "@mui/icons-material/FactCheck";
 
 export default function LoggingView() {
   const [openModal, setOpenModal] = React.useState(false);
