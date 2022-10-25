@@ -1,5 +1,5 @@
 from email.policy import default
-from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup
+from src.enums import Roles, States, AgeUnits, AgeGroup, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Optional
@@ -223,6 +223,7 @@ class Measurement(db.Model):
       sample_id: Sample that the measurement is a part of
     """
     __tablename__ = 'measurement_table'
+
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     value: float = db.Column(db.Float, nullable=True)
 

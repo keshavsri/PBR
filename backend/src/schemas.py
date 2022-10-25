@@ -1,8 +1,7 @@
 from pydantic import BaseModel, constr
-from typing import Optional, List
-from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup
+from src.enums import States, Species, ProductionTypes, BirdGenders, AgeUnits, AgeGroup, ValidationTypes, SampleTypes, Roles, LogActions
+from typing import List, Optional
 from datetime import datetime
-from src.models import *
 
 class PydanticModel(BaseModel):
     class Config:
@@ -97,6 +96,22 @@ class Flock(PydanticModel):
     source_id: int
     birthday: Optional[datetime]
 
+class Batch(PydanticModel):
+    id: Optional[int]
+    name: str
+
+class Analyte(PydanticModel):
+    id: Optional[int]
+    name: str
+    abbreviation: str
+    units: str
+    machine_type_id: int
+
+class Measurement(PydanticModel):
+    id: Optional[int]
+    value: Optional[float]
+    sample_id: int
+    analyte: Analyte
 
 class Sample(PydanticModel):
     """
@@ -126,24 +141,6 @@ class Sample(PydanticModel):
     validation_status: Optional[ValidationTypes]
     sample_type: Optional[SampleTypes]
     timestamp_added: Optional[datetime]
-
-
-class Batch(PydanticModel):
-    id: Optional[int]
-    name: str
-
-class Measurement(PydanticModel):
-    id: Optional[int]
-    value: Optional[float]
-    sample_id: int
-    analyte: Analyte
-
-class Analyte(PydanticModel):
-    id: Optional[int]
-    name: str
-    abbreviation: str
-    units: str
-    machine_type_id: int
 
 class Machine(PydanticModel):
     id: Optional[int]
