@@ -1,7 +1,7 @@
 import src.helpers
 from http import HTTPStatus
 import json
-from src.api.APIUserController import token_required, allowed_roles
+from src.api.user import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
 from src import Models, Schemas
 from src.enums import Species, BirdGenders, AgeGroup

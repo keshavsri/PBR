@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from src.api.APIUserController import token_required
+from src.api.user import token_required
 from src import models
 from src.enums import Roles, LogActions
 from src import helpers

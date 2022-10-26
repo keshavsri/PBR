@@ -3,7 +3,7 @@ from http import HTTPStatus
 import re
 import src.helpers
 from src.enums import LogActions, ValidationTypes, Roles
-from src.api.APIUserController import token_required, allowed_roles
+from src.api.user import token_required, allowed_roles
 from src import models, helpers, schemas
 
 batchBluePrint = Blueprint('batch', __name__)

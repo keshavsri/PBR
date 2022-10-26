@@ -1,6 +1,6 @@
 
 from threading import currentThread
-from src.api.APIUserController import token_required, allowed_roles
+from src.api.user import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
 from itsdangerous import json
 
