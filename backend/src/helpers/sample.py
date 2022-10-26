@@ -3,15 +3,12 @@ from src.enums import ValidationTypes
 from itsdangerous import json
 
 from src.models import db
-from src.models import Flock as FlockORM
 from src.models import User as UserORM
 from src.models import Sample as SampleORM
-from src.models import get_sample_organization_joined
-from src.models import OrganizationSource_Flock_Sample as OrganizationSource_Flock_SampleORM
+from src.models import Measurement as MeasurementORM
 from src.schemas import Flock, Organization, Source, Sample, Machine, Measurement, User
-from helpers.measurement import create_measurement
 
-def create_sample(sample_dict: dict, current_user):
+def create_sample(sample_dict: dict):
     """
     The create_sample function accepts a dictionary containing the sample's information and creates
     a new sample using the pydantic model to parse and the ORM model to store the information.
@@ -21,10 +18,10 @@ def create_sample(sample_dict: dict, current_user):
     """
     sample:SampleORM = SampleORM()
     for name, value in Sample.parse_obj(sample_dict):
-        if name != 'measurement_values':
+        if name != 'measurements':
             setattr(sample, name, value)
             
-    setattr(sample, "user_id", current_user.id)
+    setattr(sample, "user_id", 1)
     setattr(sample, "validation_status", ValidationTypes.Saved)
     
     db.session.add(sample)
@@ -34,6 +31,14 @@ def create_sample(sample_dict: dict, current_user):
     measurements = []
     for measurement in sample_dict["measurements"]:
         measurement["sample_id"] = sample.id
+
+        measurement:MeasurementORM = MeasurementORM()
+        for name, value in Measurement.parse_obj(measurement):
+            setattr(measurement, name, value)
+        db.session.add(measurement)
+        db.session.commit()
+        db.session.refresh(measurement)
+
         measurements.append(create_measurement(measurement))
     
     setattr(sample, "measurements", measurements)

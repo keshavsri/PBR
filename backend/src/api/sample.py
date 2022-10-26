@@ -3,11 +3,11 @@ from http import HTTPStatus
 import re
 from src.enums import LogActions, ValidationTypes, Roles
 from src.api.user import token_required, allowed_roles
-from src import models, schemas, app
-from helpers import sample, flock
-from models import Sample as SampleORM
-from models import Measurement as MeasurementORM
-from sqlalchemy import and_, create_engine, text
+from src import models, schemas
+from src.helpers import sample as sample_helper
+from src.models import Sample as SampleORM
+from src.models import Measurement as MeasurementORM
+from sqlalchemy import text
 
 sampleBlueprint = Blueprint('sample', __name__)
 
@@ -189,10 +189,8 @@ def _is_error_file(content_lines):
 
 
 # Creates a new sample #
-@sampleBlueprint.route('/sample', methods=['POST'])
-@token_required
-@allowed_roles([0, 1, 2, 3])
-def create_sample(access_allowed, current_user):
+@sampleBlueprint.route('/', methods=['POST'])
+def create_sample(current_user):
     """
     Creates a new sample, from a given sample json and returns the newly created sample.
     :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
@@ -200,18 +198,14 @@ def create_sample(access_allowed, current_user):
     :param request.json: The sample json to create the sample from.
     :return: The newly created sample.
     """
-    if access_allowed:
-        payload = request.json
+    payload = request.json
 
-        new_sample = sample.create_sample(payload, current_user)
-        if not new_sample:
-            return jsonify({'message': 'Invalid Request'}), 400
+    new_sample = sample_helper.create_sample(payload, current_user)
+    if not new_sample:
+        return jsonify({'message': 'Invalid Request'}), 400
 
-        models.create_log(current_user, LogActions.ADD_SAMPLE,
-                         'Created new sample: ' + str(new_sample.id))
-        return schemas.Sample.from_orm(new_sample).dict(), 201
-    else:
-        return jsonify({'message': 'Role not allowed'}), 403
+
+    return schemas.Sample.from_orm(new_sample).dict(), 201
 
 # Creates a new sample #
 @sampleBlueprint.route('/sample/<int:given_org_id>/<int:cartridge_id>', methods=['GET'])
@@ -231,36 +225,24 @@ def get_samples_by_cartridge_id_and_org(access_allowed, cartridge_type_id, given
 
     if access_allowed:
 
-        db_url = app.config['SQLALCHEMY_DATABASE_URI']
-        engine = create_engine(db_url, pool_size=5, pool_recycle=3600)
-        conn = engine.connect()
+        samples = []
 
-        sql_text = text(
+        with models.engine.connect() as connection:
+            result = connection.execute(text(
             """
             SELECT sample_table.id FROM sample_table sample, flock_table f, source_table source, organization_table o
             WHERE sample.flock_id = f.id 
             AND f.source_id = source.id 
             AND source.organization_id = :given_org_id 
             AND sample.cartridge_type_id = :cartridge_type_id;
-            """
-        )
-        result = conn.execute(sql_text, given_org_id = given_org_id, cartridge_type_id = cartridge_type_id)
-        conn.close()
+            """))
+            for row in result:
+                sample = SampleORM.query.get(row.id)
+                samples.append(sample)
 
         # Loop through results, use SampleORM to get sample by id of sample in results to get dictionary version of sample
                 
-        
-        samples = []
-        for row in result:
-            sample = SampleORM.query.get(row.id)
-            samples.append(sample)
-        
-            
-
-        #samples = SampleORM.query.filter_by(and_(cartridge_type_id=cartridge_type_id, """ Get Samples for given org""" )).all()
-        
         results = []
-
         for sample in samples:
             measurements = MeasurementORM.query.filter_by(sample_id=sample.id).all()
             sample.update({'measurements': measurements})
@@ -268,7 +250,6 @@ def get_samples_by_cartridge_id_and_org(access_allowed, cartridge_type_id, given
 
 
         if not results:
-            responseJSON = jsonify({'message': 'No records found'})
             return results, 404
         else:
             return results, 200
@@ -277,9 +258,7 @@ def get_samples_by_cartridge_id_and_org(access_allowed, cartridge_type_id, given
         return jsonify({'message': 'Role not allowed'}), 403
 
 @sampleBlueprint.route('/sample/<int:item_id>', methods=['PUT'])
-@token_required
-@allowed_roles([0, 1, 2, 3])
-def edit_sample(access_allowed, current_user, item_id):
+def edit_sample(item_id):
     """
     Edits existing sample.
     :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
@@ -288,21 +267,30 @@ def edit_sample(access_allowed, current_user, item_id):
     :param request.json: The updated sample as a json object.
     :return: The edited sample.
     """
-    if access_allowed:
-        if SampleORM.query.get(item_id) is None:
-            return jsonify({'message': 'Sample cannot be found.'}), 404
-        else:
-            SampleORM.query.filter_by(id=item_id).update(request.json)
-
-            # Update the list of measurements. Iterate through measurements of sample, find corresponding measurement (by id) in frontend objects, and update the objects
-
-            models.db.session.commit()
-
-            edited_sample = SampleORM.query.get(item_id)
-            models.createLog(current_user, LogActions.EDIT_SAMPLE, 'Edited sample: ' + str(edited_sample.id))
-            return schemas.Sample.from_orm(edited_sample).dict(), 200
+    if SampleORM.query.get(item_id) is None:
+        return jsonify({'message': 'Sample cannot be found.'}), 404
     else:
-        return jsonify({'message': 'Role not allowed'}), 403
+        sample_model:SampleORM = SampleORM()
+        for name, value in request.json:
+            #if name != 'measurements':
+            setattr(sample_model, name, value)
+
+        models.db.session.add(sample_model)
+        models.db.session.commit()
+        models.db.session.refresh(sample_model)
+
+        """
+        # Update the list of measurements. Iterate through measurements of sample, find corresponding measurement (by id) in frontend objects, and update the objects
+        measurements = []
+        for measurement in request.json["measurements"]:
+            measurements.append(measurement)
+
+        setattr(sample, "measurements", measurements)
+        """
+        edited_sample = SampleORM.query.get(item_id)
+        models.createLog(current_user, LogActions.EDIT_SAMPLE, 'Edited sample: ' + str(edited_sample.id))
+        return schemas.Sample.from_orm(edited_sample).dict(), 200
+
 
 @sampleBlueprint.route('/sample/<int:item_id>', methods=['DELETE'])
 @token_required

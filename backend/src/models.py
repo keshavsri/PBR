@@ -2,18 +2,15 @@ from email.policy import default
 from src.enums import Roles, States, AgeUnits, AgeGroup, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from typing import List, Optional
-from sqlalchemy.orm import (
-    joinedload
-)
-from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy import (
-    ForeignKeyConstraint,
-    UniqueConstraint
-)
+from sqlalchemy import create_engine
+from typing import List
+import os
+
 
 # SQLALCHEMY MODELS
 db = SQLAlchemy()
+
+engine = create_engine(os.environ.get("DATABASE_URL"))
 
 class User(db.Model):
 
