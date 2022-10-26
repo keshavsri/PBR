@@ -32,9 +32,7 @@ app.register_blueprint(flockBlueprint, url_prefix='/api/flock')
 app.register_blueprint(sampleBlueprint, url_prefix='/api/sample')
 app.register_blueprint(analyteBlueprint, url_prefix='/api/analyte')
 app.register_blueprint(machineBlueprint, url_prefix='/api/machine')
-app.register_blueprint(machineTypeBlueprint, url_prefix='/api/machinetype')
 app.register_blueprint(organizationBlueprint, url_prefix='/api/organization')
-app.register_blueprint(cartridgeTypeBlueprint, url_prefix='/api/organization')
 
 
 app.config['SECRET_KEY'] = os.environ.get("JWT_SECRET")
