@@ -13,8 +13,6 @@ from src.api.machine import machineBlueprint
 from src.api.organization import organizationBlueprint
 
 import os
-import click
-from flask.cli import with_appcontext
 from dotenv import load_dotenv, find_dotenv
 
 
