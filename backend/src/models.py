@@ -1,5 +1,5 @@
 from email.policy import default
-from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes
+from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Optional
@@ -222,7 +222,7 @@ class Measurement(db.Model):
       analyte_id: Analyte that the measurement is testing for
       sample_id: Sample that the measurement is a part of
     """
-    __tablename__ = 'measurement_table;
+    __tablename__ = 'measurement_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     value: float = db.Column(db.Float, nullable=True)
 
@@ -328,7 +328,7 @@ class Cartridge(db.Model):
 class CartridgeType(db.Model):
     __tablename__ = 'cartridge_type_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name: str = db.Column(db.String(120), unique=True, nullable=False)
+    name: str = db.Column(db.String(120))
 
     # References to Foreign Objects
     machine_type_id: int = db.Column(db.Integer, db.ForeignKey('machine_type_table.id'))
@@ -387,7 +387,7 @@ class Log(db.Model):
     action: LogActions = db.Column(db.Enum(LogActions))
     logContent: str = db.Column(db.String(500))
     logTime: str = db.Column(db.DateTime, server_default=db.func.now())
-    user_id = db.Column(db.Integer, db.ForeignKey('User.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user_table.id'))
     # References to Foreign Objects
     user = db.relationship('User')
 

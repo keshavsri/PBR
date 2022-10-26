@@ -1,8 +1,13 @@
 from pydantic import BaseModel, constr
+from typing import Optional, List
+from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup
+from datetime import datetime
+from src.models import *
 
 class PydanticModel(BaseModel):
     class Config:
         orm_mode = True
+        arbitrary_types_allowed = True
 
 class User(PydanticModel):
     id: int

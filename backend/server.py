@@ -1,9 +1,8 @@
 from src import app
-from src.models import User, db
-import src.models as models
 import os
 from dotenv import load_dotenv, find_dotenv
-
+from src.models import User, db
+import src.models as models
 
 load_dotenv(find_dotenv())
 
