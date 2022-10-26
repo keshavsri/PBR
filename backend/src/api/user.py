@@ -15,18 +15,21 @@ from src.enums import Roles, LogActions
 from src.models import User as UserORM
 from src.schemas import User
 
+
 userBlueprint = Blueprint('user', __name__)
 
+
 def allowed_roles(roles):
-  """ Accepts a list of roles and returns true to the decorated function if the user has one of those roles, false otherwise
-  
-      :param roles:List[int]: the list of roles that are allowed to access the route
-      :return: bool: true if the user has one of the roles, false otherwise      
+
   """
+  Accepts a list of roles and returns true to the decorated function if the user has one of those roles, false otherwise
+  :param roles:List[int]: the list of roles that are allowed to access the route
+  :return: bool: true if the user has one of the roles, false otherwise      
+  """
+
   def wrapper(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-
       token = None
       allowed = False
       # jwt is passed in the request header
@@ -39,9 +42,7 @@ def allowed_roles(roles):
         # PULL OUT DATA FROM TOKEN
         data = Auth_Token.decode_token(token)
         # GET AND RETURN CURRENT USER
-
         current_user = models.User.query.filter_by(id=data["id"]).first()
-        
         for role in roles:
           if current_user.role == 0 or int(current_user.role) is role:
             allowed = True
@@ -54,12 +55,14 @@ def allowed_roles(roles):
     return decorated
   return wrapper
 
+
 # decorator for verifying the JWT
 # Template from GeeksForGeeks: https://www.geeksforgeeks.org/using-jwt-for-user-authentication-in-flask/
 def token_required(f):
-  """ Decorator for authenticating the user via the JWT in the request header and returning the current user to the decorated function
 
-      :return: User: the current user as a SQLAlchemy model
+  """
+  Decorator for authenticating the user via the JWT in the request header and returning the current user to the decorated function
+  :return: User: the current user as a SQLAlchemy model
   """
   @wraps(f)
   def decorated(*args, **kwargs):
@@ -94,10 +97,12 @@ def token_required(f):
     return  f(current_user, *args, **kwargs)
   return decorated
 
+
 @userBlueprint.route('/<int:item_id>', methods=['GET', 'PUT', 'POST'])
 @userBlueprint.route('/', methods=['GET', 'POST'])
 def route_setting_all(item_id=None):
   return models.User.fs_get_delete_put_post(item_id)
+
 
 @userBlueprint.route('/me', methods=['GET'])
 @token_required
@@ -118,6 +123,7 @@ def me(current_user):
 
 @userBlueprint.route('/login', methods=['POST'])
 def login():
+
   """
   Logs the current user in, getting email and password from payload
   If user doesn't exist, if fields are missing/invalid, incorrect password, return 401 
@@ -126,21 +132,16 @@ def login():
   content_type = request.headers.get('Content-Type')
   if (content_type == 'application/json'):
       data = request.json
-
   print(data)
-
   if data["email"] and data["password"]:
     data["email"] = data["email"].lower()
     print(data["email"])
     dbUser = models.User.query.filter_by(email=data["email"]).first()
-
     print(dbUser)
     if not dbUser:
       print("USER DOES NOT EXIST.")
       return jsonify({"message": "Not Logged in"}), 401
-    
     if bcrypt.checkpw(data["password"].encode('utf8'), dbUser.password.encode('utf8')):
-
       ret_user = {
         "email": dbUser.email,
         "firstname": dbUser.first_name,
@@ -148,7 +149,6 @@ def login():
         "role": dbUser.role,
         "organization_id": dbUser.organization_id,
         "id": dbUser.id
-
       }
       response = make_response(jsonify(ret_user), 200)
       response.set_cookie(key="pbr_token", value=Auth_Token.create_token(dbUser), expires=datetime.now(tz=timezone.utc) + timedelta(days=1), secure=True, httponly = True, samesite="Strict")
@@ -157,9 +157,8 @@ def login():
     else:
       print("FAIL")
       return jsonify({"message": "Not Logged in"}), 401
-
   return jsonify({"message": "Not Logged in!"}), 401
-  
+
 
 @userBlueprint.route('/logout', methods=['POST'])
 # @token_required
@@ -172,6 +171,7 @@ def logout():
   response.set_cookie(key="pbr_token", value="", expires=datetime.now(tz=timezone.utc), secure=True, httponly = True, samesite="Strict")
   return response
 
+
 @userBlueprint.route('/register', methods=['POST'])
 def register():
   content_type = request.headers.get('Content-Type')
@@ -183,7 +183,7 @@ def register():
     print("MISSING FIELDS.")
     models.db.session.rollback()
     return jsonify({"message": "Invalid Request!"}), 400
-  
+
   if models.User.query.filter_by(email=data["email"]).first():
     print("USER ALREADY EXISTS.")
     models.db.session.rollback()
@@ -195,7 +195,7 @@ def register():
     print("INVALID ORGANIZATION ID.")
     models.db.session.rollback()
     return jsonify({"message": "Invalid Organization ID"}), 422
-    
+
   salt = bcrypt.gensalt()
   hashedPW = bcrypt.hashpw(data["password"].encode('utf8'), salt)
   user = models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Guest, organization_id=user_org.id )
@@ -274,6 +274,7 @@ def deleteUser(access_allowed, current_user, user_id):
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
 def get_admin_organization(access_allowed, current_user, org_id):
+
     """
     This function will return the admin user that is associated with the organization id that is passed in.
 
@@ -283,16 +284,14 @@ def get_admin_organization(access_allowed, current_user, org_id):
 
     :return: This function will return the admin with the org id either attached to the user or one that is passed in.
     """
-    print(org_id, flush=True)
+
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
         # if organization id exists then it will return the admin in the organization
-        if org_id and current_user.role == Roles.Super_Admin:
+        if org_id and current_user.role == Roles.Super_Admin or
+          current_user.organization_id == org_id:
             admin = UserORM.query.filter_by(organization_id=org_id, role=Roles.Admin).first()
-        elif current_user.organization_id == org_id:
-            admin = UserORM.query.filter_by(organization_id=org_id, role=Roles.Admin).first()
-            print(admin, flush=True)
         else:
             return jsonify({'message': 'Cannot get admin for organization user is not a part of'}), 403
         # otherwise it will return a 404
@@ -301,7 +300,6 @@ def get_admin_organization(access_allowed, current_user, org_id):
             return responseJSON, 404
         else:
             responseJSON = User.from_orm(admin).dict()
-            print(responseJSON, flush=True)
             return responseJSON, 200
     else:
         return jsonify({'message': 'Role not allowed' + str(access_allowed)}), 403
@@ -326,7 +324,7 @@ def update_user(access_allowed, current_user, user_id):
         # Get json dict representing new user object
         edited_user = request.json
         # Get existing user object with the same id as edited_user
-        existing_user = models.User.query.filter_by(id=user_id).first()
+        existing_user = models.User.query.get(user_id)
 
         if existing_user is None:
             return jsonify({'message': 'User does not exist'}), 404
@@ -352,12 +350,13 @@ def update_user(access_allowed, current_user, user_id):
             )
 
             # SQLAlchemy update and log action
-            models.User.query.filter_by(id=edited_user.get("id")).update(edited_user)
+            models.User.query.get(edited_user.get("id")).update(edited_user)
             models.db.session.commit()
             models.create_log(current_user, LogActions.EDIT_USER, 'Edited user: ' + str(edited_user.get("id")))
 
             # Return updated user object, retreived via db query (confirmation)
-            return schemas.User.from_orm(models.User.query.filter_by(id=edited_user.get("id")).first()).dict(), 200
+            return schemas.User.from_orm(
+              models.User.query.filter_by(id=edited_user.get("id")).first()
+            ).dict(), 200
     else:
-        print("PROBLEM>>>>>>>>>>>>>>>>>>>>>", flush=True)
         return jsonify({'message': 'Role not allowed'}), 403

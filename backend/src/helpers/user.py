@@ -1,6 +1,5 @@
 from typing import List
-from itsdangerous import json
-
+from Flask import jsonify
 from src.models import User as UserORM
 from src.schemas import User
 
@@ -20,4 +19,4 @@ def get_users(org_id: int, current_user) -> List[dict]:
     }
     for user in users:
         ret["rows"].append(User.from_orm(user).dict())
-    return json.dumps(ret)
+    return jsonify(ret)
