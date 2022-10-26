@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles";
 
 import { Typography, Box } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import useDataView from "../../services/useDataView";
+import useDataView from "../../../services/useDataView";
 
 const useStyles = makeStyles({});
 

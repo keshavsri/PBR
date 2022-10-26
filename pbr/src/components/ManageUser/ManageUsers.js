@@ -1,21 +1,14 @@
 import React from "react";
-import OrganizationIcon from "@mui/icons-material/Apartment";
-import CustomDialog from "./CustomDialog";
 import EditUsers from "./EditUsers"
 
 import { Paper, Button, Tooltip, IconButton, Chip, Box } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
-import SampleIcon from "@mui/icons-material/Science";
 import InputLabel from '@mui/material/InputLabel';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import NextIcon from "@mui/icons-material/ArrowForwardIos";
-import BackIcon from "@mui/icons-material/ArrowBackIosNew";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import useAuth from "../services/useAuth";
-import EnhancedTable from "./DataViewTable/EnhancedTable";
+import useAuth from "../../services/useAuth";
+import EnhancedTable from "../EnhancedTable/EnhancedTable";
 
 export default function ManageUsers() {
   const { checkResponseAuth, user } = useAuth();

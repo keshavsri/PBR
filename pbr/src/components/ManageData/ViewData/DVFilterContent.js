@@ -28,11 +28,11 @@ import {
   productionTypes,
   ageUnits,
   speciesTypes,
-} from "../models/enums";
+} from "../../../models/enums";
 import { createFilterOptions } from "@mui/material/Autocomplete";
 
-import useDataView from "../services/useDataView";
-import useAuth from "../services/useAuth";
+import useDataView from "../../../services/useDataView";
+import useAuth from "../../../services/useAuth";
 
 const filter = createFilterOptions();
 

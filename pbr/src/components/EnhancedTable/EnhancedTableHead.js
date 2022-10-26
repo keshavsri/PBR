@@ -1,5 +1,4 @@
 import * as React from "react";
-import { styled } from "@mui/material/styles";
 
 import PropTypes from "prop-types";
 import { visuallyHidden } from "@mui/utils";
@@ -14,7 +13,6 @@ import {
   Checkbox,
   Chip,
 } from "@mui/material";
-import { tableCellClasses } from "@mui/material/TableCell";
 
 const useStyles = makeStyles((theme) => ({
   root: {

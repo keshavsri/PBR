@@ -11,7 +11,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import GlobalStyles from "./layouts/GlobalStyles";
 import { mainTheme } from "./theme";
 
-import useAuth, { AuthProvider, AuthConsumer } from "./services/useAuth";
+import { AuthProvider, AuthConsumer } from "./services/useAuth";
 
 import { Box, CircularProgress, Grid } from "@mui/material";
 

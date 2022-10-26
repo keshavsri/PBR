@@ -28,10 +28,10 @@ import {
   IconButton,
 } from "@mui/material";
 
-import { sampleTypes } from "../../models/enums";
+import { sampleTypes } from "../../../models/enums";
 
 import { makeStyles } from "@mui/styles";
-import useDataView from "../../services/useDataView";
+import useDataView from "../../../services/useDataView";
 
 const useStyles = makeStyles({
   container: {
