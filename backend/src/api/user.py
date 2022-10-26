@@ -289,11 +289,10 @@ def get_admin_organization(access_allowed, current_user, org_id):
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
         # if organization id exists then it will return the admin in the organization
-        if org_id and current_user.role == Roles.Super_Admin or
-          current_user.organization_id == org_id:
+        if org_id and current_user.role == Roles.Super_Admin or current_user.organization_id == org_id:
             admin = UserORM.query.filter_by(organization_id=org_id, role=Roles.Admin).first()
         else:
-            return jsonify({'message': 'Cannot get admin for organization user is not a part of'}), 403
+            return jsonify({'message': 'Cannot get admin for another organization'}), 403
         # otherwise it will return a 404
         if admin is None:
             responseJSON = jsonify({'message': 'No records found'})

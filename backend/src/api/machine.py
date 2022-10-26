@@ -29,11 +29,8 @@ def get_machines(access_allowed, current_user, given_org_id=None):
             return jsonify({'message': 'Organization ID must be specified'}), 400
         elif current_user.organization_id == given_org_id:
             machines = models.Machine.query.filter_by(organization_id=given_org_id).all()
-            if machines is None:
-                return jsonify({'message': 'No records found'}), 404
-            else:
-                responseJSON = jsonify([models.Machine.from_orm(machine) for machine in machines])
-                return responseJSON, 200
+            responseJSON = jsonify([models.Machine.from_orm(m).dict() for m in machines])
+            return responseJSON, 200
         else:
             return jsonify({'message': 'Insufficient permissions'}), 401
     else:
@@ -61,9 +58,9 @@ def get_machine(access_allowed, current_user, item_id):
         else:
             machine = models.Machine.query.filter_by(id=item_id).first()
             if machine is None:
-                return jsonify({'message': 'No records found'}), 404
+                return jsonify({'message': 'Machine not found'}), 404
             else:
-                responseJSON = models.Machine.from_orm(machine)
+                responseJSON = models.Machine.from_orm(machine).dict()
                 return responseJSON, 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

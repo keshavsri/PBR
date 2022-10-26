@@ -5,7 +5,13 @@ from src import models, schemas
 from src.enums import Roles, LogActions
 
 
-machineTypeBlueprint = Blueprint('machinetype', __name__)
+machineTypeBlueprint = Blueprint('machine-type', __name__)
+
+@machineTypeBlueprint.route('/peepee', methods=['GET'])
+def test_poopoo():
+    machine_types = models.MachineType.query.all()
+    responseJSON = jsonify([models.MachineType.from_orm(mt).dict() for mt in machine_types])
+    return responseJSON, 200
 
 
 @machineTypeBlueprint.route('/', methods=['GET'])
@@ -24,11 +30,8 @@ def get_machine_types(access_allowed, current_user):
 
     if access_allowed:
         machine_types = models.MachineType.query.all()
-        if machine_types is None:
-            return jsonify({'message': 'No records found'}), 404
-        else:
-            responseJSON = [models.MachineType.from_orm(mt) for mt in machine_types]
-            return responseJSON, 200
+        responseJSON = jsonify([models.MachineType.from_orm(mt).dict() for mt in machine_types])
+        return responseJSON, 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -49,12 +52,11 @@ def get_machine_type(access_allowed, current_user, item_id):
     """
 
     if access_allowed:
-        # response json is created here and gets returned at the end of the block for GET requests.
         machine_type = models.MachineType.query.filter_by(id=id).first()
         if machine_type is None:
-            return jsonify({'message': 'No record found'}), 404
+            return jsonify({'message': 'Machine type not found'}), 404
         else:
-            responseJSON = models.MachineType.from_orm(machine_type)
+            responseJSON = models.MachineType.from_orm(machine_type).dict()
             return responseJSON, 200
     else:
         return jsonify({'message': 'Role not allowed' + str(access_allowed)}), 403
