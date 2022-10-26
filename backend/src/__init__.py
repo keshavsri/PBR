@@ -8,7 +8,6 @@ from src.api.user import userBlueprint
 from src.api.batch import batchBlueprint
 from src.api.flock import flockBlueprint
 from src.api.sample import sampleBlueprint
-from src.api.analyte import analyteBlueprint
 from src.api.machine import machineBlueprint
 from src.api.organization import organizationBlueprint
 
@@ -27,7 +26,6 @@ app.register_blueprint(userBlueprint, url_prefix='/api/user')
 app.register_blueprint(batchBlueprint, url_prefix='/api/batch')
 app.register_blueprint(flockBlueprint, url_prefix='/api/flock')
 app.register_blueprint(sampleBlueprint, url_prefix='/api/sample')
-app.register_blueprint(analyteBlueprint, url_prefix='/api/analyte')
 app.register_blueprint(machineBlueprint, url_prefix='/api/machine')
 app.register_blueprint(organizationBlueprint, url_prefix='/api/organization')
 
