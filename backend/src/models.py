@@ -3,17 +3,13 @@ from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, Log
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Optional
-from sqlalchemy.orm import (
-    joinedload
-)
 from sqlalchemy.ext.associationproxy import association_proxy
-from sqlalchemy import (
-    ForeignKeyConstraint,
-    UniqueConstraint
-)
+from sqlalchemy import create_engine
+import os
 
 # SQLALCHEMY MODELS
 db = SQLAlchemy()
+engine = create_engine(os.environ.get("DATABASE_URL"))
 
 class User(db.Model):
 
@@ -139,6 +135,7 @@ class Flock(db.Model):
         production_type: The type of flock it is.
         birthday: The birthdate calculated from the user input
         source_id: The source that the flock belongs to
+        is_deleted: boolean value for if the flock is deleted
     """
 
     __tablename__ = 'flock_table'
@@ -149,6 +146,7 @@ class Flock(db.Model):
     gender: BirdGenders = db.Column(db.Enum(BirdGenders))
     production_type: ProductionTypes = db.Column(db.Enum(ProductionTypes))
     birthday = db.Column(db.DateTime, nullable=True)
+    is_deleted: bool = db.Column(db.Boolean, server_default="0")
 
     # References to Foreign Objects
     source_id = db.Column(db.Integer, db.ForeignKey('source_table.id'))

@@ -1,9 +1,9 @@
 from src.api.user import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
 from src.enums import Roles, LogActions
-from src.models import Flock as FlockORM
+from src.models import Flock as FlockORM, Source as SourceORM
 from src.schemas import Flock
-from src.models import db
+from src.models import db, engine
 from src.helpers.log import create_log
 
 flockBlueprint = Blueprint('flock', __name__)
@@ -11,7 +11,7 @@ flockBlueprint = Blueprint('flock', __name__)
 @flockBlueprint.route('/organization/<int:org_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
-def get_flocks(access_allowed, current_user, org_id):
+def get_flocks_by_organization(access_allowed, current_user, org_id):
 
     """
     This function handles the GET request for all Flocks or flocks belonging to a specific organization.
@@ -19,27 +19,46 @@ def get_flocks(access_allowed, current_user, org_id):
     :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
     :param current_user: The user who is currently logged in. Check the decorator for more info.
     :param org_id: The organization id of the organization that the user wants to get the flocks of.
-    :return: A list of all Flocks or a list of all Flocks belonging to a specific organization depending on the request.
+    :return: A list of all Flocks belonging to a specific organization depending on the request.
     """
 
     if access_allowed:
-        current_organization = current_user.organization_id
         if current_user.role == Roles.Super_Admin or current_user.organization_id == org_id:
-<<<<<<< HEAD
-<<<<<<< HEAD
-            flocks_models = db.engine.execute("SELECT flock_table.* FROM flock_table, Source, Organization WHERE Flock.source_id = Source.id AND Source.organization_id = Organization.id;")
-=======
-            flocks_models = db.engine.execute("SELECT Flock.* FROM Flock, Source, Organization WHERE Flock.source_id = Source.id AND Source.organizaiton_id = Organization.id;")
->>>>>>> 514f489 (API endpoints for CartridgeType, Flock, and Log)
-=======
-            flocks_models = db.engine.execute("SELECT Flock.* FROM Flock, Source, Organization WHERE Flock.source_id = Source.id AND Source.organization_id = Organization.id;")
->>>>>>> 4440ab1 (Add newline at eof)
+            sql_text = db.text("SELECT f.* FROM flock_table f, source_table s, organization_table o WHERE f.source_id = s.id AND s.organization_id = :org_id;")
+            with engine.connect() as connection:
+                flocks_models = connection.execute(sql_text, {"org_id": org_id})
             flocks = [Flock.from_orm(flock).dict() for flock in flocks_models]
             return jsonify(flocks), 200
         else:
             return jsonify({'message': 'Insufficient Permissions'}), 401
     else:
         return jsonify({'message': 'Role not allowed'}), 403
+
+@flockBlueprint.route('/source/<int:source_id>', methods=['GET'])
+@token_required
+@allowed_roles([0, 1, 2, 3])
+def get_flocks_by_source(access_allowed, current_user, source_id):
+
+    """
+    This function handles the GET request for all Flocks or flocks belonging to a specific source.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param source_id: The source id of the source that the user wants to get the flocks of.
+    :return: A list of all Flocks belonging to a specific source depending on the request.
+    """
+
+    if access_allowed:
+        source = SourceORM.query.get(source_id)
+        if current_user.role == Roles.Super_Admin or current_user.organization_id == source.organization_id:
+            flocks_models = FlockORM.query.filter_by(source_id=source_id).all()
+            flocks = [Flock.from_orm(flock).dict() for flock in flocks_models]
+            return jsonify(flocks), 200
+        else:
+            return jsonify({'message': 'Insufficient Permissions'}), 401
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+
 
 
 @flockBlueprint.route('/<int:item_id>', methods=['GET'])
@@ -55,11 +74,17 @@ def get_flock(access_allowed, current_user, item_id):
     :return: A specific flock if it exists, a 404 not found otherwise.
     """
     if access_allowed:
-        flock_model = FlockORM.query.filter_by(id=item_id).first()
-        if flock_model is None:
-            return jsonify({'message': 'No record found'}), 404
-        flock = Flock.from_orm(flock_model).dict()
-        return jsonify(flock), 200
+        sql_text = db.text("SELECT s.organization_id FROM flock_table f, source_table s WHERE f.source_id = s.id;")
+        with engine.connect() as connection:
+            flock_organization_id = connection.execute(sql_text)
+        if current_user.role == Roles.Super_Admin or flock_organization_id == current_user.organization_id:
+            flock_model = FlockORM.query.get(item_id)
+            if flock_model is None:
+                return jsonify({'message': 'No record found'}), 404
+            flock = Flock.from_orm(flock_model).dict()
+            return jsonify(flock), 200
+        else:
+            return jsonify({'message': 'Insufficient Permissions'}), 401
     else:
         return jsonify({'message': 'Role not allowed' + str(access_allowed)}), 403
     
@@ -86,11 +111,11 @@ def post_flock(access_allowed, current_user):
             db.session.add(flock)
             db.session.commit()
             db.session.refresh(flock)
-            create_log(current_user, LogActions.ADD_FLOCK, 'Created new Flock: ' + new_flock.name)
-            return jsonify(schemas.Flock.from_orm(flock).dict()), 201
+            create_log(current_user, LogActions.ADD_FLOCK, 'Created new Flock: ' + flock.name)
+            return jsonify(Flock.from_orm(flock).dict()), 201
         # if the Flock already exists then return a 409 conflict
         else:
-            return jsonify({'message': 'Flock already exists', "existing organization": schemas.Flock.from_orm(models.Flock.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
+            return jsonify({'message': 'Flock already exists', "existing organization": Flock.from_orm(FlockORM.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
     else:
         return jsonify({'message': 'Role not allowed'}), 403
     
@@ -143,8 +168,8 @@ def delete_flock(access_allowed, current_user, item_id):
             return jsonify({'message': 'Flock does not exist'}), 404
         else:
             flock = FlockORM.query.get(item_id)
-            models.db.session.delete(flock)
-            models.db.session.commit()
+            setattr(flock, 'is_deleted', 1)
+            db.session.commit()
             create_log(current_user, LogActions.DELETE_FLOCK, 'Deleted Flock: ' + flock.name)
             return jsonify({'message': 'Flock deleted'}), 200
     else:

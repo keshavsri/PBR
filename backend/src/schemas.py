@@ -165,7 +165,7 @@ class CartridgeType(PydanticModel):
     id: Optional[int]
     name: str
     machine_type_id: int
-    analytes: List[Analyte]
+    #analytes: List[Analyte]
 
 class HealthyRange(PydanticModel):
     id: Optional[int]
