@@ -9,6 +9,7 @@ from src.models import Sample as SampleORM
 from src.models import get_sample_organization_joined
 from src.models import OrganizationSource_Flock_Sample as OrganizationSource_Flock_SampleORM
 from src.schemas import Flock, Organization, Source, Sample, Machine, Measurement, User
+from helpers.measurement import create_measurement
 
 def create_sample(sample_dict: dict, current_user):
     """
@@ -22,33 +23,21 @@ def create_sample(sample_dict: dict, current_user):
     for name, value in Sample.parse_obj(sample_dict):
         if name != 'measurement_values':
             setattr(sample, name, value)
-    setattr(sample, "entered_by_id", current_user.id)
+            
+    setattr(sample, "user_id", current_user.id)
     setattr(sample, "validation_status", ValidationTypes.Saved)
-
-    # Get OrgSourceFlockSample ID
-    flock = Flock.from_orm(FlockORM.query.filter_by(name=sample_dict["flockDetails"]['name']).first())
-    OrganizationSourceFlock = db.session.query(OrganizationSource_Flock_SampleORM).filter_by(
-        organization_id=flock.organization_id,
-        source_id=flock.source_id,
-        flock_id=flock.id
-    ).first()
-
-    if not OrganizationSourceFlock:
-        return None
-
-    setattr(sample, "organizationsource_flock_sample_id", OrganizationSourceFlock.id)
     
     db.session.add(sample)
     db.session.commit()
     db.session.refresh(sample)
     
-    values = []
-    for meas_value in sample_dict["measurement_values"]:
-        meas_value["sample_id"] = sample.id
-        values.append(create_measurement_value(meas_value))
+    measurements = []
+    for measurement in sample_dict["measurements"]:
+        measurement["sample_id"] = sample.id
+        measurements.append(create_measurement(measurement))
     
-    setattr(sample, "measurement_values", values)
-    db.session.commit()
+    setattr(sample, "measurements", measurements)
+
     return sample
 
 

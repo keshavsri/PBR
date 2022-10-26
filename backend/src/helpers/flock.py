@@ -81,11 +81,6 @@ def update_flock(flock_dict: dict):
     
     db.session.commit()
     db.session.refresh(flock)
-
-    osf = OrganizationSource_Flock_SampleORM.query.filter_by(flock_id=flock.id).first()
-    setattr(osf, "organization_id", flockSchema.organization_id)
-    setattr(osf, "source_id", flockSchema.source_id)
-    db.session.commit()
     
     return flock
 
@@ -105,7 +100,4 @@ def create_flock(flock_dict: dict):
     db.session.commit()
     db.session.refresh(flock)
 
-    orgSourceFlock = OrganizationSource_Flock_SampleORM(organization_id=flock.organization_id, source_id=flock.source_id, flock_id=flock.id)
-    db.session.add(orgSourceFlock)
-    db.session.commit()
     return flock

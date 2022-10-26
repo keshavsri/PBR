@@ -1,10 +1,13 @@
 from flask import request, Blueprint, jsonify
 from http import HTTPStatus
 import re
-import src.helpers
 from src.enums import LogActions, ValidationTypes, Roles
 from src.api.user import token_required, allowed_roles
-from src import models, helpers, schemas
+from src import models, schemas, app
+from helpers import sample, flock
+from models import Sample as SampleORM
+from models import Measurement as MeasurementORM
+from sqlalchemy import and_, create_engine, text
 
 sampleBlueprint = Blueprint('sample', __name__)
 
@@ -186,7 +189,7 @@ def _is_error_file(content_lines):
 
 
 # Creates a new sample #
-@sampleBlueprint.route('/', methods=['POST'])
+@sampleBlueprint.route('/sample', methods=['POST'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def create_sample(access_allowed, current_user):
@@ -199,32 +202,8 @@ def create_sample(access_allowed, current_user):
     """
     if access_allowed:
         payload = request.json
-        print(payload)
-        # Validate Payload
 
-        # Check if flock exists.
-        current_flock = src.helpers.get_flock_by_name(
-            payload['flockDetails']['name'])
-        # If flock doesn't exist, make it.
-        if current_flock:
-            print("Flock already exists")
-            # If so, see if things were edited.
-            src.helpers.update_flock(payload['flockDetails'])
-            models.create_log(current_user, LogActions.EDIT_FLOCK,
-                             'Updated Flock: ' + current_flock["name"])
-        else:
-            print("Brand new flock. Add it.")
-            # If flock doesn't exist, make it.
-
-            new_flock = src.helpers.create_flock(payload['flockDetails'])
-
-            print(new_flock)
-            # stages and then commits the new Flock to the database
-            models.create_log(current_user, LogActions.ADD_FLOCK,
-                             'Created new Flock: ' + new_flock.name)
-
-        payload["validation_status"] = ValidationTypes.Pending
-        new_sample = src.helpers.create_sample(payload, current_user)
+        new_sample = sample.create_sample(payload, current_user)
         if not new_sample:
             return jsonify({'message': 'Invalid Request'}), 400
 
@@ -234,63 +213,98 @@ def create_sample(access_allowed, current_user):
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
-
-# Retrieves all available samples for a given user, or organization if provided
-@sampleBlueprint.route('/', methods=['GET'])
-@sampleBlueprint.route('/organization/<int:given_org_id>', methods=['GET'])
+# Creates a new sample #
+@sampleBlueprint.route('/sample/<int:given_org_id>/<int:cartridge_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
-def get_samples(access_allowed, current_user, given_org_id=None):
+
+
+def get_samples_by_cartridge_id_and_org(access_allowed, cartridge_type_id, given_org_id):
+
     """
-    Retrieves all available samples for a given organization if provided.
-    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
-    :param current_user: The user who is currently logged in. Check the decorator for more info.
-    :param given_org_id: The organization id to get samples for, if provided, else all samples for the current user.
-    :return: The list of samples.
+    This function gets all samples for a specified cartridge type.
+    :param access_allowed: boolean, whether the user has access to the endpoint
+    :param current_user: the user object of the user making the request
+    :param cartridge_id: the id of the cartridge to retrieve samples of
+    :return: a json response containing all samples for the cartridge type
     """
+
     if access_allowed:
-        # response json is created here and gets returned at the end of the block for GET requests.
-        response_json = None
-        current_user_organization = current_user.organization_id
 
-        if given_org_id:
-            if current_user_organization == given_org_id:
-                if current_user.role >= Roles.Supervisor:
-                    # If Supervisor or Greater, return all samples of that org
-                    response_json = helpers.get_samples_by_org(given_org_id)
-                else:
-                    # Otherwise, they can only see samples that are assigned to them.
-                    response_json = helpers.get_samples_by_user(given_org_id)
-            elif current_user.role == Roles.Super_Admin:
-                # However, a Super Admin can return all samples from any org that they want
-                response_json = helpers.get_samples_by_org(given_org_id)
-            else:
-                return jsonify({'message': 'You can only access samples within your organization'}), 403
-        else:
-            if current_user.role == Roles.Super_Admin:
-                # Super Admins can see all samples from all orgs
-                response_json = helpers.get_all_samples(current_user.id)
-            elif current_user.role == Roles.Supervisor or current_user.role == Roles.Admin:
-                # If Supervisor or Greater, return all samples of that org
-                response_json = helpers.get_samples_by_org(
-                    current_user_organization, current_user.id)
-            else:
-                # Otherwise, they can only see samples that are assigned to them.
-                response_json = helpers.get_samples_by_user(current_user.id)
+        db_url = app.config['SQLALCHEMY_DATABASE_URI']
+        engine = create_engine(db_url, pool_size=5, pool_recycle=3600)
+        conn = engine.connect()
 
-        # if the response json is empty then return a 404 not found
-        if response_json is None:
-            response_json = jsonify({'message': 'No records found'})
-            return response_json, 404
+        sql_text = text(
+            """
+            SELECT sample_table.id FROM sample_table sample, flock_table f, source_table source, organization_table o
+            WHERE sample.flock_id = f.id 
+            AND f.source_id = source.id 
+            AND source.organization_id = :given_org_id 
+            AND sample.cartridge_type_id = :cartridge_type_id;
+            """
+        )
+        result = conn.execute(sql_text, given_org_id = given_org_id, cartridge_type_id = cartridge_type_id)
+        conn.close()
+
+        # Loop through results, use SampleORM to get sample by id of sample in results to get dictionary version of sample
+                
+        
+        samples = []
+        for row in result:
+            sample = SampleORM.query.get(row.id)
+            samples.append(sample)
+        
+            
+
+        #samples = SampleORM.query.filter_by(and_(cartridge_type_id=cartridge_type_id, """ Get Samples for given org""" )).all()
+        
+        results = []
+
+        for sample in samples:
+            measurements = MeasurementORM.query.filter_by(sample_id=sample.id).all()
+            sample.update({'measurements': measurements})
+            results.append(SampleORM.from_orm(sample).dict())
+
+
+        if not results:
+            responseJSON = jsonify({'message': 'No records found'})
+            return results, 404
         else:
-            return response_json, 200
+            return results, 200
+
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
-# Deletes specified sample #
+@sampleBlueprint.route('/sample/<int:item_id>', methods=['PUT'])
+@token_required
+@allowed_roles([0, 1, 2, 3])
+def edit_sample(access_allowed, current_user, item_id):
+    """
+    Edits existing sample.
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param item_id: The id of the sample to edit.
+    :param request.json: The updated sample as a json object.
+    :return: The edited sample.
+    """
+    if access_allowed:
+        if SampleORM.query.get(item_id) is None:
+            return jsonify({'message': 'Sample cannot be found.'}), 404
+        else:
+            SampleORM.query.filter_by(id=item_id).update(request.json)
 
+            # Update the list of measurements. Iterate through measurements of sample, find corresponding measurement (by id) in frontend objects, and update the objects
 
-@sampleBlueprint.route('/datapoint/<int:item_id>', methods=['DELETE'])
+            models.db.session.commit()
+
+            edited_sample = SampleORM.query.get(item_id)
+            models.createLog(current_user, LogActions.EDIT_SAMPLE, 'Edited sample: ' + str(edited_sample.id))
+            return schemas.Sample.from_orm(edited_sample).dict(), 200
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+
+@sampleBlueprint.route('/sample/<int:item_id>', methods=['DELETE'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def delete_sample(access_allowed, current_user, item_id):
@@ -306,8 +320,7 @@ def delete_sample(access_allowed, current_user, item_id):
             return jsonify({'message': 'Sample cannot be found.'}), 404
         else:
             deleted_sample = models.Sample.query.get(item_id)
-            # models.db.session.delete(models.Sample.query.get(item_id))
-            models.Sample.query.filter_by(id=item_id).update({'deleted': True})
+            models.Sample.query.filter_by(id=item_id).update({'is_deleted': True})
             models.db.session.commit()
             models.create_log(current_user, LogActions.DELETE_SAMPLE,
                              'Deleted sample: ' + str(deleted_sample.id))
@@ -317,7 +330,7 @@ def delete_sample(access_allowed, current_user, item_id):
 
 
 # Submit Pending Samples #
-@sampleBlueprint.route('/datapoint/submit/<int:item_id>', methods=['PUT'])
+@sampleBlueprint.route('/sample/submit/<int:item_id>', methods=['PUT'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def submit_sample(access_allowed, current_user, item_id):
@@ -343,7 +356,7 @@ def submit_sample(access_allowed, current_user, item_id):
         return jsonify({'message': 'Role not allowed'}), 403
 
 # Accept Sample
-@sampleBlueprint.route('/datapoint/accept/<int:item_id>', methods=['PUT'])
+@sampleBlueprint.route('/sample/accept/<int:item_id>', methods=['PUT'])
 @token_required
 @allowed_roles([0, 1, 2])
 def accept_sample(access_allowed, current_user, item_id):
@@ -369,7 +382,7 @@ def accept_sample(access_allowed, current_user, item_id):
         return jsonify({'message': 'Role not allowed'}), 403
 
 # Reject Sample
-@sampleBlueprint.route('/datapoint/reject/<int:item_id>', methods=['PUT'])
+@sampleBlueprint.route('/sample/reject/<int:item_id>', methods=['PUT'])
 @token_required
 @allowed_roles([0, 1, 2])
 def reject_sample(access_allowed, current_user, item_id):
@@ -395,28 +408,58 @@ def reject_sample(access_allowed, current_user, item_id):
         return jsonify({'message': 'Role not allowed'}), 403
 
 
-# Edits existing sample #
-@sampleBlueprint.route('/datapoint/<int:item_id>', methods=['PUT'])
+"""
+
+# Retrieves all available samples for a given user, or organization if provided
+@sampleBlueprint.route('/', methods=['GET'])
+@sampleBlueprint.route('/organization/<int:given_org_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
-def edit_datapoint(access_allowed, current_user, item_id):
-    """
-    Edits existing sample.
+def get_samples(access_allowed, current_user, given_org_id=None):
+    
+    Retrieves all available samples for a given organization if provided.
     :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
     :param current_user: The user who is currently logged in. Check the decorator for more info.
-    :param item_id: The id of the sample to edit.
-    :param request.json: The updated sample as a json object.
-    :return: The edited sample.
-    """
+    :param given_org_id: The organization id to get samples for, if provided, else all samples for the current user.
+    :return: The list of samples.
+    
     if access_allowed:
-        if models.Sample.query.get(item_id) is None:
-            return jsonify({'message': 'Sample cannot be found.'}), 404
+        # response json is created here and gets returned at the end of the block for GET requests.
+        response_json = None
+        current_user_organization = current_user.organization_id
+
+        if given_org_id:
+            if current_user_organization == given_org_id:
+                if current_user.role >= Roles.Supervisor:
+                    # If Supervisor or Greater, return all samples of that org
+                    response_json = sample.get_samples_by_org(given_org_id)
+                else:
+                    # Otherwise, they can only see samples that are assigned to them.
+                    response_json = sample.get_samples_by_user(given_org_id)
+            elif current_user.role == Roles.Super_Admin:
+                # However, a Super Admin can return all samples from any org that they want
+                response_json = sample.get_samples_by_org(given_org_id)
+            else:
+                return jsonify({'message': 'You can only access samples within your organization'}), 403
         else:
-            models.Sample.query.filter_by(id=item_id).update(request.json)
-            models.db.session.commit()
-            edited_sample = models.Sample.query.get(item_id)
-            models.create_log(current_user, LogActions.EDIT_SAMPLE,
-                             'Edited sample: ' + str(edited_sample.id))
-            return schemas.Sample.from_orm(edited_sample).dict(), 200
+            if current_user.role == Roles.Super_Admin:
+                # Super Admins can see all samples from all orgs
+                response_json = sample.get_all_samples(current_user.id)
+            elif current_user.role == Roles.Supervisor or current_user.role == Roles.Admin:
+                # If Supervisor or Greater, return all samples of that org
+                response_json = sample.get_samples_by_org(
+                    current_user_organization, current_user.id)
+            else:
+                # Otherwise, they can only see samples that are assigned to them.
+                response_json = sample.get_samples_by_user(current_user.id)
+
+        # if the response json is empty then return a 404 not found
+        if response_json is None:
+            response_json = jsonify({'message': 'No records found'})
+            return response_json, 404
+        else:
+            return response_json, 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
+
+"""
