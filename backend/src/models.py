@@ -15,6 +15,7 @@ from sqlalchemy import (
 # SQLALCHEMY MODELS
 db = SQLAlchemy()
 
+
 class User(db.Model):
 
     """ ORM model for the User table
@@ -37,7 +38,8 @@ class User(db.Model):
 
     __tablename__ = 'user_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    email: str = db.Column(db.String(120), index=True, unique=True, nullable=False)
+    email: str = db.Column(db.String(120), index=True,
+                           unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     first_name: str = db.Column(db.String(120), nullable=False)
     last_name: str = db.Column(db.String(120), nullable=False)
@@ -47,7 +49,8 @@ class User(db.Model):
     is_deleted: bool = db.Column(db.Boolean, server_default="0")
 
     # References to Foreign Objects
-    organization_id = db.Column(db.Integer, db.ForeignKey('organization_table.id'))
+    organization_id = db.Column(
+        db.Integer, db.ForeignKey('organization_table.id'))
 
 
 class Organization(db.Model):
@@ -87,12 +90,12 @@ class Organization(db.Model):
     code_last_updated: datetime = db.Column(db.DateTime)
     is_deleted: bool = db.Column(db.Boolean, server_default="0")
 
-      # Foreign References to this Object
-#     users = db.relationship('User')
-#     machines = db.relationship('Machine')
-#     logs = association_proxy('user_table', 'log_table')
-#     sources: List['Source'] = db.relationship('Source')
-#     flocks: List['Flock'] = association_proxy('source_table', 'flock_table')
+    # Foreign References to this Object
+    users = db.relationship('User')
+    machines = db.relationship('Machine')
+    logs = association_proxy('user_table', 'log_table')
+    sources: List['Source'] = db.relationship('Source')
+    flocks: List['Flock'] = association_proxy('source_table', 'flock_table')
 
 
 class Source(db.Model):
@@ -122,7 +125,9 @@ class Source(db.Model):
     is_deleted: bool = db.Column(db.Boolean, server_default="0")
 
     # References to Foreign Objects
-    organization_id: int = db.Column(db.Integer,  db.ForeignKey('organization_table.id'))
+    organization_id: int = db.Column(
+        db.Integer,  db.ForeignKey('organization_table.id'))
+
 
 class Flock(db.Model):
 
@@ -191,14 +196,19 @@ class Sample(db.Model):
 
     # References to Foreign Objects
     user_id: int = db.Column(db.Integer, db.ForeignKey('user_table.id'))
-    batch_id: int = db.Column(db.Integer, db.ForeignKey('batch_table.id'), nullable=True)
-    flock_id: int = db.Column(db.Integer, db.ForeignKey('flock_table.id'), nullable=True)
-    cartridge_id: int = db.Column(db.Integer, db.ForeignKey('cartridge_table.id'), nullable=True)
-    machine_id: int = db.Column(db.Integer, db.ForeignKey('machine_table.id'), nullable=True)
+    batch_id: int = db.Column(db.Integer, db.ForeignKey(
+        'batch_table.id'), nullable=True)
+    flock_id: int = db.Column(db.Integer, db.ForeignKey(
+        'flock_table.id'), nullable=True)
+    cartridge_id: int = db.Column(db.Integer, db.ForeignKey(
+        'cartridge_table.id'), nullable=True)
+    machine_id: int = db.Column(db.Integer, db.ForeignKey(
+        'machine_table.id'), nullable=True)
 
     # Foreign References to this Object
     measurements: List['Measurement'] = db.relationship('Measurement')
     flock = db.relationship('Flock')
+
 
 class Batch(db.Model):
     """ This table stores the batches.
@@ -233,6 +243,7 @@ class Measurement(db.Model):
     # Foreign References to this Object
     analayte = db.relationship('Analyte')
 
+
 """
     Join table for CartridgeType and Analyte.
     Analytes belong to a MachineType, however multiple CartridgeTypes can have the same analyte.
@@ -244,6 +255,7 @@ cartridge_types_analytes_table = db.Table(
     db.Column('cartridge_type_id', db.ForeignKey('cartridge_type_table.id')),
     db.Column('analyte_id', db.ForeignKey('analyte_table.id'))
 )
+
 
 class Analyte(db.Model):
 
@@ -263,7 +275,8 @@ class Analyte(db.Model):
     units: str = db.Column(db.String(12))
 
     # References to Foreign Objects
-    machine_type_id: int = db.Column(db.Integer, db.ForeignKey('machine_type_table.id'))
+    machine_type_id: int = db.Column(
+        db.Integer, db.ForeignKey('machine_type_table.id'))
 
 
 class Machine(db.Model):
@@ -287,8 +300,10 @@ class Machine(db.Model):
     serial_number: str = db.Column(db.String(120), unique=True)
 
     # References to Foreign Objects
-    machine_type_id: int = db.Column(db.Integer, db.ForeignKey('machine_type_table.id'))
-    organization_id: int = db.Column(db.Integer, db.ForeignKey('organization_table.id'))
+    machine_type_id: int = db.Column(
+        db.Integer, db.ForeignKey('machine_type_table.id'))
+    organization_id: int = db.Column(
+        db.Integer, db.ForeignKey('organization_table.id'))
 
 
 class MachineType(db.Model):
@@ -322,8 +337,11 @@ class Cartridge(db.Model):
     rotor_lot_number: str = db.Column(db.String(120))
 
     # References to Foreign Objects
-    cartridge_type_id: int = db.Column(db.Integer, db.ForeignKey('cartridge_type_table.id'))
-    organization_id: int = db.Column(db.Integer, db.ForeignKey('organization_table.id'))
+    cartridge_type_id: int = db.Column(
+        db.Integer, db.ForeignKey('cartridge_type_table.id'))
+    organization_id: int = db.Column(
+        db.Integer, db.ForeignKey('organization_table.id'))
+
 
 class CartridgeType(db.Model):
     __tablename__ = 'cartridge_type_table'
@@ -331,8 +349,10 @@ class CartridgeType(db.Model):
     name: str = db.Column(db.String(120))
 
     # References to Foreign Objects
-    machine_type_id: int = db.Column(db.Integer, db.ForeignKey('machine_type_table.id'))
-    analytes: List['Analyte'] = db.relationship('Analyte', secondary=cartridge_types_analytes_table)
+    machine_type_id: int = db.Column(
+        db.Integer, db.ForeignKey('machine_type_table.id'))
+    analytes: List['Analyte'] = db.relationship(
+        'Analyte', secondary=cartridge_types_analytes_table)
 
 
 class HealthyRange(db.Model):
@@ -362,7 +382,6 @@ class HealthyRange(db.Model):
     analyte_id: int = db.Column(db.Integer, db.ForeignKey('analyte_table.id'))
 
     analyte = db.relationship('Analyte')
-
 
 
 class Log(db.Model):

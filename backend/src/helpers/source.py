@@ -17,7 +17,7 @@ def create_source(source_dict: dict):
     :return: source:Source: A source sqlalchemy model.
     """
     source:SourceORM = SourceORM()
-    for name, value in Source.parse_obj(source_dict):
+    for name, value in SourceORM.parse_obj(source_dict):
         setattr(source, name, value)
     db.session.add(source)
     db.session.commit()
