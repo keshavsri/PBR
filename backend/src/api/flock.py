@@ -26,10 +26,14 @@ def get_flocks(access_allowed, current_user, org_id):
         current_organization = current_user.organization_id
         if current_user.role == Roles.Super_Admin or current_user.organization_id == org_id:
 <<<<<<< HEAD
+<<<<<<< HEAD
             flocks_models = db.engine.execute("SELECT flock_table.* FROM flock_table, Source, Organization WHERE Flock.source_id = Source.id AND Source.organization_id = Organization.id;")
 =======
             flocks_models = db.engine.execute("SELECT Flock.* FROM Flock, Source, Organization WHERE Flock.source_id = Source.id AND Source.organizaiton_id = Organization.id;")
 >>>>>>> 514f489 (API endpoints for CartridgeType, Flock, and Log)
+=======
+            flocks_models = db.engine.execute("SELECT Flock.* FROM Flock, Source, Organization WHERE Flock.source_id = Source.id AND Source.organization_id = Organization.id;")
+>>>>>>> 4440ab1 (Add newline at eof)
             flocks = [Flock.from_orm(flock).dict() for flock in flocks_models]
             return jsonify(flocks), 200
         else:
@@ -145,7 +149,3 @@ def delete_flock(access_allowed, current_user, item_id):
             return jsonify({'message': 'Flock deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
-<<<<<<< HEAD
-=======
-        
->>>>>>> 514f489 (API endpoints for CartridgeType, Flock, and Log)

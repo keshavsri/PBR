@@ -16,4 +16,3 @@ def create_log(current_user, action, logContent):
     log = Log(current_user.id, current_user.organization_id, current_user.role, action, logContent)
     db.session.add(log)
     db.session.commit()
-    
