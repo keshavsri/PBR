@@ -6,7 +6,7 @@ from src.enums import LogActions, ValidationTypes, Roles
 from src.api.user import token_required, allowed_roles
 from src import models, helpers, schemas
 
-batchBluePrint = Blueprint('batch', __name__)
+batchBlueprint = Blueprint('batch', __name__)
 
 # Batch Data API #
 # Create batch data #
