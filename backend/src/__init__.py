@@ -5,13 +5,12 @@ from src.api import apiBlueprint
 from src.api.log import logBlueprint
 from src.api.enum import enumBlueprint
 from src.api.user import userBlueprint
+from src.api.batch import batchBlueprint
 from src.api.flock import flockBlueprint
 from src.api.sample import sampleBlueprint
 from src.api.analyte import analyteBlueprint
 from src.api.machine import machineBlueprint
-from src.api.machine_type import machineTypeBlueprint
 from src.api.organization import organizationBlueprint
-from src.api.cartridge_type import cartridgeTypeBlueprint
 
 import os
 import click
