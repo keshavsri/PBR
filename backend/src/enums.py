@@ -197,8 +197,3 @@ class LogActions(IntEnum):
     ADD_FLOCK = 901
     EDIT_FLOCK = 903
     DELETE_FLOCK = 904
-
-
-class AgeGroup(IntEnum):
-    MOCK = 1
-    MOCK2 = 4
