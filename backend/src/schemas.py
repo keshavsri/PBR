@@ -47,7 +47,7 @@ class Organization(PydanticModel):
     notes: Optional[constr(max_length=500)]
     organization_code: Optional[constr(regex=r'^[a-zA-Z0-9]{6}?$')]
     code_last_updated: Optional[datetime]
-    is_deleted: bool
+    is_deleted: Optional[bool]
 
 # Pydantic defines models with typed fields.
 
