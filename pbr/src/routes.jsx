@@ -6,7 +6,7 @@ import LoginBackdrop from "./layouts/LoginLayout";
 import Error404 from "./layouts/404Error";
 import DataView from "./components/ManageData/ViewData/DataView";
 import ManageOrganization from "./components/ManageOrganization/ManageOrganization";
-import LoggingView from "./components/ManageLogs/LoggingView";
+import LoggingView from "./components/ManageLog/LoggingView";
 import LoginCard from "./components/HandleLogin/LoginCard";
 import RegisterCard from "./components/HandleLogin/RegisterCard";
 import RecoveryCard from "./components/HandleLogin/RecoveryCard";

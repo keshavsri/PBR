@@ -19,6 +19,9 @@ const useStyles = makeStyles({});
 
 export default function DataView() {
   const [rowList, setRowList] = React.useState([]);
+  const [analytes, setAnalytes] = React.useState([]);
+  const [currentCartridgeType, setCurrentCartridgeType] = React.useState({});
+  const [cartridgeTypes, setCartridgeTypes] = React.useState([]);
   const [pendingRowList, setPendingRowList] = React.useState([]);
   const [fullRowList, setFullRowList] = React.useState([]);
   const [showOnlyPendingSamples, setShowOnlyPendingSamples] =
@@ -103,6 +106,18 @@ export default function DataView() {
       });
   };
 
+  const getCartridgeTypes = async () => {
+    await fetch (`api/cartridgeTypes`)
+    .then((response) => {
+      return response.json();
+    })
+    .then(checkResponseAuth)
+    .then((data) => {
+      setCartridgeTypes(data);
+      setCurrentCartridgeType(data[0]);
+    });
+  }
+
   const getHeadCells = (types) => {
     const headCells = [
       {
@@ -170,7 +185,11 @@ export default function DataView() {
       },
     ];
 
-    addApiColumnNamesToHeadCells(types, headCells);
+    if (currentCartridgeType) {
+      currentCartridgeType.analytes.forEach((analyte, index) => {
+        headCells.push(createHeadCell(analyte, currentCartridgeType.name, index));
+      })
+    }
     setHeadCellList(headCells);
   };
 
@@ -311,10 +330,17 @@ export default function DataView() {
   };
 
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
-  React.useEffect(() => {
-    getData();
-    //setSelected([]);
+  React.useEffect(async () => {
+    await getCartridgeTypes();
+    await getData();
+    setSelected([]);
   }, []);
+
+  // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
+  React.useEffect(async () => {
+    setSelected([]);
+    await getData();
+  }, [currentCartridgeType]);
 
   return (
     <DataViewProvider>
@@ -327,6 +353,9 @@ export default function DataView() {
               filterPendingSamples={filterPendingSamples}
               showOnlyPendingSamples={showOnlyPendingSamples}
               turnPendingFilterOff={turnPendingFilterOff}
+              cartridgeTypes={cartridgeTypes}
+              currentCartridgeType={currentCartridgeType}
+              setCurrentCartridgeType={setCurrentCartridgeType}
             />
           }
           selected={selected}
@@ -337,7 +366,7 @@ export default function DataView() {
           isSample={isSample}
           setOpenReviewSampleModal={setOpenReviewSampleModal}
           onSubmit={onSubmit}
-        ></EnhancedTable>
+        />
 
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12}>
