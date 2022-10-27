@@ -229,7 +229,7 @@ class Measurement(db.Model):
     sample_id: int = db.Column(db.Integer, db.ForeignKey('sample_table.id'))
 
     # Foreign References to this Object
-    analayte = db.relationship('Analyte')
+    analyte = db.relationship('Analyte')
 
 """
     Join table for CartridgeType and Analyte.

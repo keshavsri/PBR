@@ -189,8 +189,10 @@ def _is_error_file(content_lines):
 
 
 # Creates a new sample #
-@sampleBlueprint.route('/', methods=['POST'])
-def create_sample(current_user):
+@sampleBlueprint.route('/sample', methods=['POST'])
+@token_required
+@allowed_roles([0, 1, 2, 3])
+def create_sample(access_allowed, current_user):
     """
     Creates a new sample, from a given sample json and returns the newly created sample.
     :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
@@ -198,17 +200,22 @@ def create_sample(current_user):
     :param request.json: The sample json to create the sample from.
     :return: The newly created sample.
     """
-    payload = request.json
+    if access_allowed:
+        payload = request.json
 
-    new_sample = sample_helper.create_sample(payload, current_user)
-    if not new_sample:
-        return jsonify({'message': 'Invalid Request'}), 400
+        new_sample = sample_helper.create_sample(payload, current_user)
+        if not new_sample:
+            return jsonify({'message': 'Invalid Request'}), 400
 
+        models.create_log(current_user, LogActions.ADD_SAMPLE,
+                         'Created new sample: ' + str(new_sample.id))
+        return schemas.Sample.from_orm(new_sample).dict(), 201
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
 
-    return schemas.Sample.from_orm(new_sample).dict(), 201
 
 # Creates a new sample #
-@sampleBlueprint.route('/sample/<int:given_org_id>/<int:cartridge_id>', methods=['GET'])
+@sampleBlueprint.route('/<int:given_org_id>/<int:cartridge_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
 
@@ -246,7 +253,7 @@ def get_samples_by_cartridge_id_and_org(access_allowed, cartridge_type_id, given
         for sample in samples:
             measurements = MeasurementORM.query.filter_by(sample_id=sample.id).all()
             sample.update({'measurements': measurements})
-            results.append(SampleORM.from_orm(sample).dict())
+            results.append(schemas.Sample.from_orm(sample).dict())
 
 
         if not results:
@@ -257,42 +264,46 @@ def get_samples_by_cartridge_id_and_org(access_allowed, cartridge_type_id, given
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
-@sampleBlueprint.route('/sample/<int:item_id>', methods=['PUT'])
+@sampleBlueprint.route('/<int:item_id>', methods=['PUT'])
 def edit_sample(item_id):
-    """
-    Edits existing sample.
-    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
-    :param current_user: The user who is currently logged in. Check the decorator for more info.
-    :param item_id: The id of the sample to edit.
-    :param request.json: The updated sample as a json object.
-    :return: The edited sample.
-    """
-    if SampleORM.query.get(item_id) is None:
+
+    old_sample = SampleORM.query.get(item_id)
+    if  old_sample is None:
         return jsonify({'message': 'Sample cannot be found.'}), 404
     else:
+
+        print("------------------------------------------------", flush=True)
+        print(request.json, flush=True)
+        
         sample_model:SampleORM = SampleORM()
-        for name, value in request.json:
-            #if name != 'measurements':
-            setattr(sample_model, name, value)
-
-        models.db.session.add(sample_model)
+        for name, value in schemas.Sample.parse_obj(request.json):
+            if name != 'measurements':
+                setattr(old_sample, name, value)
+        
+        request.json.pop('measurements')
+        SampleORM.query.filter_by(id=item_id).update(request.json)
+        #models.db.session.add(sample_model)
         models.db.session.commit()
-        models.db.session.refresh(sample_model)
+        #models.db.session.refresh(sample_model)
 
-        """
+        
         # Update the list of measurements. Iterate through measurements of sample, find corresponding measurement (by id) in frontend objects, and update the objects
+        """
         measurements = []
         for measurement in request.json["measurements"]:
-            measurements.append(measurement)
-
-        setattr(sample, "measurements", measurements)
+            measurement_model:MeasurementORM = MeasurementORM()
+            for name, value in schemas.Measurement.parse_obj(measurement):
+                setattr(measurement_model, name, value)
+            measurements.append(measurement_model)
+        
+        setattr(sample_model, "measurements", measurements)
         """
+
         edited_sample = SampleORM.query.get(item_id)
-        models.createLog(current_user, LogActions.EDIT_SAMPLE, 'Edited sample: ' + str(edited_sample.id))
         return schemas.Sample.from_orm(edited_sample).dict(), 200
 
 
-@sampleBlueprint.route('/sample/<int:item_id>', methods=['DELETE'])
+@sampleBlueprint.route('/<int:item_id>', methods=['DELETE'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def delete_sample(access_allowed, current_user, item_id):
@@ -318,7 +329,7 @@ def delete_sample(access_allowed, current_user, item_id):
 
 
 # Submit Pending Samples #
-@sampleBlueprint.route('/sample/submit/<int:item_id>', methods=['PUT'])
+@sampleBlueprint.route('/submit/<int:item_id>', methods=['PUT'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def submit_sample(access_allowed, current_user, item_id):
@@ -344,7 +355,7 @@ def submit_sample(access_allowed, current_user, item_id):
         return jsonify({'message': 'Role not allowed'}), 403
 
 # Accept Sample
-@sampleBlueprint.route('/sample/accept/<int:item_id>', methods=['PUT'])
+@sampleBlueprint.route('/accept/<int:item_id>', methods=['PUT'])
 @token_required
 @allowed_roles([0, 1, 2])
 def accept_sample(access_allowed, current_user, item_id):
@@ -370,7 +381,7 @@ def accept_sample(access_allowed, current_user, item_id):
         return jsonify({'message': 'Role not allowed'}), 403
 
 # Reject Sample
-@sampleBlueprint.route('/sample/reject/<int:item_id>', methods=['PUT'])
+@sampleBlueprint.route('/reject/<int:item_id>', methods=['PUT'])
 @token_required
 @allowed_roles([0, 1, 2])
 def reject_sample(access_allowed, current_user, item_id):

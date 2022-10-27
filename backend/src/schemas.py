@@ -111,7 +111,7 @@ class Measurement(PydanticModel):
     id: Optional[int]
     value: Optional[float]
     sample_id: int
-    analyte: Analyte
+    analyte_id: int
 
 class Sample(PydanticModel):
     """
@@ -122,14 +122,11 @@ class Sample(PydanticModel):
         flock_age (int): The age of the flock at the time of the sample
         flock_age_unit (AgeUnits): The unit of the flock age
         flock (Flock): The flock the sample is from, set as Optional to allow for creation of new samples without a flock
-        flagged (bool): Whether the sample is flagged for review or not
         comments (str): The comments on the sample, set as Optional to allow for creation of new samples without comments
-        measurement_values (List[MeasurementValue]): The values of the measurements of the sample, set as Optional to allow for creation of new samples without measurements
+        measurements (List[Measurement]): The values of the measurements of the sample, set as Optional to allow for creation of new samples without measurements
         timestamp_added (datetime): The timestamp the sample was added, set as Optional to allow for creation of new samples without a timestamp as it is set by the DB
         validation_status (ValidationStatus): The status of the sample, set as Optional to allow for creation of new samples without a validation status
         sample_type (SampleTypes): The type of the sample, set as Optional to allow for creation of new samples without a sample type
-        entered_by_id (int): The id of the user who entered the sample, set as Optional to allow for creation of new samples without an entered by id as it is set by the helper function
-        organization (Organization): The organization the sample is from, set as Optional to allow for creation of new samples without an organization
 
     """
     id: Optional[int]
