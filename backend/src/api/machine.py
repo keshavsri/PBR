@@ -92,17 +92,17 @@ def create_machine(access_allowed, current_user):
                 log.create_log(current_user, LogActions.ADD_MACHINE, 'Created new Machine: ' + new_machine.serial_number)
                 added_machine = models.Machine.query.filter_by(serial_number=new_machine.serial_number).first()
                 return jsonify(schemas.Machine.from_orm(added_machine).dict()), 201
-            else:
-                return jsonify(
-                            {
-                                'message': 'Machine already exists',
-                                "existing machine": schemas.Machine.from_orm(
-                                    models.Machine.query.filter_by(
-                                        serial_number=request.json.get('serial_number')
-                                    ).first()
-                                ).dict()
-                            }
-                        ), 409    else:
+        else:
+            return jsonify(
+                        {
+                            'message': 'Machine already exists',
+                            "existing machine": schemas.Machine.from_orm(
+                                models.Machine.query.filter_by(
+                                    serial_number=request.json.get('serial_number')
+                                ).first()
+                            ).dict()
+                        }
+                    ), 409 
         return jsonify({'message': 'Role not allowed'}), 403
 
 
