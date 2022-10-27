@@ -139,7 +139,7 @@ def put_flock(access_allowed, current_user, item_id):
         flock_model = FlockORM.query.get(item_id)
         if flock_model is None:
             return jsonify({'message': 'Flock does not exist'}), 404
-        flock_model.update(request.json)
+        FlockORM.query.filter_by(id=item_id).update(request.json)
         db.session.commit()
         edited_flock = FlockORM.query.get(item_id)
         create_log(current_user, LogActions.EDIT_FLOCK, 'Edited Flock: ' + edited_flock.name)
