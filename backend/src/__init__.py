@@ -12,6 +12,7 @@ from src.api.flock import flockBlueprint
 from src.api.sample import sampleBlueprint
 from src.api.machine import machineBlueprint
 from src.api.organization import organizationBlueprint
+from src.api.cartridge_type import cartridgeTypeBlueprint
 
 import os
 from dotenv import load_dotenv, find_dotenv
@@ -31,6 +32,8 @@ app.register_blueprint(sampleBlueprint, url_prefix='/api/sample')
 app.register_blueprint(machineBlueprint, url_prefix='/api/machine')
 app.register_blueprint(organizationBlueprint, url_prefix='/api/organization')
 app.register_blueprint(sourceBlueprint, url_prefix='/api/source')
+app.register_blueprint(cartridgeTypeBlueprint, url_prefix='/api/cartridge-type')
+
 
 
 app.config['SECRET_KEY'] = os.environ.get("JWT_SECRET")

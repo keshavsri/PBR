@@ -146,9 +146,9 @@ class Measurement(PydanticModel):
 
 class Analyte(PydanticModel):
     id: Optional[int]
-    name: str
+    name: Optional[str]
     abbreviation: str
-    units: str
+    units: Optional[str]
     machine_type_id: int
 
 
@@ -175,7 +175,7 @@ class CartridgeType(PydanticModel):
     id: Optional[int]
     name: str
     machine_type_id: int
-    analytes: List[Analyte]
+    analytes: Optional[List[Analyte]]
 
 
 class HealthyRange(PydanticModel):

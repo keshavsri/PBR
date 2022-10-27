@@ -10,8 +10,6 @@ batchBlueprint = Blueprint('batch', __name__)
 
 # Batch Data API #
 # Create batch data #
-
-
 @batchBlueprint.route('/datapoint/batch', methods=['POST'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
