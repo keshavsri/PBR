@@ -19,7 +19,7 @@ import useDataView from "../../../services/useDataView";
 
 const useStyles = makeStyles({});
 
-export default function DataViewSampleModal({ getData }) {
+export default function DataViewSampleModal({}) {
   const {
     sampleModalVisibility,
     sampleModalScreen,
@@ -154,7 +154,7 @@ export default function DataViewSampleModal({ getData }) {
           });
         } else {
           sampleNextAction();
-          getData();
+
           return response.json();
         }
       });
@@ -535,7 +535,6 @@ export default function DataViewSampleModal({ getData }) {
                 // <AddSample />
               )}
 
-                  
               {/* Your Sample Screen
               {sampleModalScreen === 1 && <YourSample />} */}
 

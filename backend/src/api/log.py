@@ -6,10 +6,11 @@ from src.schemas import Log
 
 logBlueprint = Blueprint('log', __name__)
 
+
 @logBlueprint.route('/organization/<int:org_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1])
-def get_logs_for_organization(current_user, org_id):
+def get_logs_for_organization(access_allowed, current_user, org_id):
     """
     This function handles the GET request for all Logs belonging to a specific organization.
 
@@ -30,10 +31,11 @@ def get_logs_for_organization(current_user, org_id):
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
+
 @logBlueprint.route('/user/<int:user_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1])
-def get_logs_for_user(current_user, user_id):
+def get_logs_for_user(access_allowed, current_user, user_id):
     """
     This function handles the GET request for all Logs belonging to a specific user.
 
@@ -53,4 +55,3 @@ def get_logs_for_user(current_user, user_id):
             return jsonify({'message': 'Insufficient Permissions'}), 401
     else:
         return jsonify({'message': 'Role not allowed'}), 403
-

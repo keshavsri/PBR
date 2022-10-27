@@ -13,10 +13,7 @@ import {
   Button,
   Box,
   Card,
-  Alert,
   Modal,
-  MenuItem,
-  Select,
 } from "@mui/material";
 
 import { makeStyles } from "@mui/styles";
@@ -50,8 +47,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-
 export default function SavedToPendingModal(props) {
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
@@ -75,12 +70,12 @@ export default function SavedToPendingModal(props) {
   } = props;
 
   const validateSampleBeforeSubmission = (sample) => {
-
-    if (sample.measurement_values.length === 13 || sample.measurement_values.length === 17) {
-
+    if (
+      sample.measurement_values.length === 13 ||
+      sample.measurement_values.length === 17
+    ) {
       return true;
     }
-
   };
 
   const removeFromSelected = (sample) => {
@@ -96,19 +91,14 @@ export default function SavedToPendingModal(props) {
   };
 
   const onSubmitOne = async (sample) => {
-
     if (validateSampleBeforeSubmission(sample)) {
       await submitOne(sample.id);
       removeFromSelected(sample);
       listSamples();
       setErrorSubmission(false);
-    }
-    else {
+    } else {
       setErrorSubmission(true);
     }
-
-    
-
   };
 
   const IstatORVescan = (sample) => {
@@ -138,8 +128,6 @@ export default function SavedToPendingModal(props) {
       </Grid>
     ));
   };
-
- 
 
   const listSamples = () => {
     return selectedSamples.map((sample) => (
@@ -302,7 +290,6 @@ export default function SavedToPendingModal(props) {
     ));
   };
 
-
   return (
     <Modal
       open={SavedToPendingVisibility}
@@ -361,14 +348,20 @@ export default function SavedToPendingModal(props) {
         <Grid>
           <br />
           {errorSubmission ? (
-            <Typography gutterBottom variant="button" style={{ color: "red", position: "absolute",
-              bottom: 50,
-              left: 280,}}>
+            <Typography
+              gutterBottom
+              variant="button"
+              style={{
+                color: "red",
+                position: "absolute",
+                bottom: 50,
+                left: 280,
+              }}
+            >
               The Machine Data associated to the sample is incomplete.
             </Typography>
           ) : null}
         </Grid>
-
       </div>
     </Modal>
   );
