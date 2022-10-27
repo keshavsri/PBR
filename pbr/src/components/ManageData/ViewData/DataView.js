@@ -107,7 +107,7 @@ export default function DataView() {
   };
 
   const getCartridgeTypes = async () => {
-    await fetch (`api/cartridgeTypes`)
+    await fetch (`api/cartridge-type`)
     .then((response) => {
       return response.json();
     })
