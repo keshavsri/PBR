@@ -3,7 +3,7 @@ from src.api.user import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
 from src import models, schemas
 from src.enums import Roles, LogActions
-
+from src.helpers import machine
 machineBlueprint = Blueprint('machine', __name__)
 
 @machineBlueprint.route('/', methods=['GET'])
@@ -29,17 +29,17 @@ def get_machines(access_allowed, current_user, given_org_id=None):
 
         if given_org_id:
             if current_user.role == Roles.Super_Admin:
-                responseJSON = src.helpers.get_machines_by_org(current_Organization)
+                responseJSON = src.helpers.machine.get_machines_by_org(current_Organization)
             elif current_user.organization_id == given_org_id:
-                responseJSON = src.helpers.get_machines_by_org(current_Organization)
+                responseJSON = src.helpers.machine.get_machines_by_org(current_Organization)
             else:
                 responseJSON = jsonify({'message': 'Insufficient Permissions'})
                 return responseJSON, 401
         else:
             if current_user.role == Roles.Super_Admin:
-                responseJSON = src.helpers.get_machines()
+                responseJSON = src.helpers.machine.get_machines()
             else:
-                responseJSON = src.helpers.get_machines_by_org(current_Organization)
+                responseJSON = src.helpers.machine.get_machines_by_org(current_Organization)
 
         # if the response json is empty then return a 404 not found
         if responseJSON is None:
@@ -74,7 +74,7 @@ def get_machine(access_allowed, current_user, item_id):
         if machine is None:
             return jsonify({'message': 'No record found'}), 404
         if current_user.role == Roles.Super_Admin or machine.organization == current_Organization:
-            responseJSON = src.helpers.get_machine_by_id(item_id)
+            responseJSON = src.helpers.machine.get_machine_by_id(item_id)
         else:
             return jsonify({'message': 'You cannot access this flock'}), 403
         return responseJSON, 200
@@ -99,7 +99,7 @@ def create_machine(access_allowed, current_user):
         # checks if the Machine already exists in the database
         if models.Machine.query.filter_by(serial_number=request.json.get('serial_number')).first() is None:
             # builds the Machine from the request json
-            new_machine = src.helpers.create_machine(request.json)
+            new_machine = src.helpers.machine.create_machine(request.json)
             # stages and then commits the new Machine to the database
             models.db.session.add(new_machine)
             models.db.session.commit()
@@ -187,7 +187,7 @@ def get_machine_types(access_allowed, current_user):
 
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
-        responseJSON = src.helpers.get_machine_types()
+        responseJSON = src.helpers.machine.get_machine_types()
         # if the response json is empty then return a 404 not found
         if responseJSON is None:
             responseJSON = jsonify({'message': 'No records found'})
