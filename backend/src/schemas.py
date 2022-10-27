@@ -4,10 +4,12 @@ from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, Log
 from datetime import datetime
 from src.models import *
 
+
 class PydanticModel(BaseModel):
     class Config:
         orm_mode = True
         arbitrary_types_allowed = True
+
 
 class User(PydanticModel):
     id: int
@@ -46,10 +48,12 @@ class Organization(PydanticModel):
     zip: constr(regex=r'^[0-9]{5}(?:-[0-9]{4})?$')
     notes: Optional[constr(max_length=500)]
     organization_code: Optional[constr(regex=r'^[a-zA-Z0-9]{6}?$')]
-    code_last_updated: datetime
+    code_last_updated: Optional[datetime]
     is_deleted: bool
 
 # Pydantic defines models with typed fields.
+
+
 class Source(PydanticModel):
     """
     Pydantic model for the Source table set to orm_mode=True
@@ -132,11 +136,13 @@ class Batch(PydanticModel):
     id: Optional[int]
     name: str
 
+
 class Measurement(PydanticModel):
     id: Optional[int]
     value: Optional[float]
     sample_id: int
     analyte: Analyte
+
 
 class Analyte(PydanticModel):
     id: Optional[int]
@@ -145,15 +151,18 @@ class Analyte(PydanticModel):
     units: str
     machine_type_id: int
 
+
 class Machine(PydanticModel):
     id: Optional[int]
     serial_number: str
     machine_type_id: int
     organization_id: int
 
+
 class MachineType(PydanticModel):
     id: Optional[int]
     name: str
+
 
 class Cartridge(PydanticModel):
     id: Optional[int]
@@ -161,11 +170,13 @@ class Cartridge(PydanticModel):
     cartridge_type_id: int
     organization_id: int
 
+
 class CartridgeType(PydanticModel):
     id: Optional[int]
     name: str
     machine_type_id: int
     analytes: List[Analyte]
+
 
 class HealthyRange(PydanticModel):
     id: Optional[int]
@@ -175,6 +186,7 @@ class HealthyRange(PydanticModel):
     gender: BirdGenders
     age_group: AgeGroup
     analyte: Analyte
+
 
 class Log(PydanticModel):
     id: Optional[int]
