@@ -14,7 +14,7 @@ class PydanticModel(BaseModel):
 class User(PydanticModel):
     id: int
     email: constr(max_length=120)
-    password: constr(max_length=120)
+    # password: constr(max_length=120)
     first_name: constr(max_length=120)
     last_name: constr(max_length=120)
     phone_number: Optional[constr(max_length=120)]
