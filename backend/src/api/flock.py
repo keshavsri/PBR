@@ -9,9 +9,7 @@ from src.helpers.log import create_log
 flockBlueprint = Blueprint('flock', __name__)
 
 @flockBlueprint.route('/organization/<int:org_id>', methods=['GET'])
-@token_required
-@allowed_roles([0, 1, 2, 3])
-def get_flocks_by_organization(access_allowed, current_user, org_id):
+def get_flocks_by_organization(org_id):
 
     """
     This function handles the GET request for all Flocks or flocks belonging to a specific organization.
@@ -22,9 +20,9 @@ def get_flocks_by_organization(access_allowed, current_user, org_id):
     :return: A list of all Flocks belonging to a specific organization depending on the request.
     """
 
-    if access_allowed:
-        if current_user.role == Roles.Super_Admin or current_user.organization_id == org_id:
-            sql_text = db.text("SELECT f.* FROM flock_table f, source_table s, organization_table o WHERE f.source_id = s.id AND s.organization_id = :org_id;")
+    if True:
+        if True:
+            sql_text = db.text("SELECT f.* FROM flock_table f JOIN source_table s ON f.source_id = s.id AND s.organization_id = :org_id;")
             with engine.connect() as connection:
                 flocks_models = connection.execute(sql_text, {"org_id": org_id})
             flocks = [Flock.from_orm(flock).dict() for flock in flocks_models]
