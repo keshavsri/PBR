@@ -37,7 +37,7 @@ import UsersIcon from "@mui/icons-material/Group";
 import OrganizationIcon from "@mui/icons-material/Apartment";
 
 import SettingsIcon from "@mui/icons-material/Settings";
-import LoginCard from "../components/login/LoginCard";
+import LoginCard from "../components/HandleLogin/LoginCard";
 import CustomDialog from "../components/CustomDialog";
 
 const drawerWidth = 250;
