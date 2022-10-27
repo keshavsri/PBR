@@ -171,6 +171,8 @@ class LogActions(IntEnum):
     
     # Report
     GENERATE_REPORT = 401
+    GENERATE_HEALTHY_RANGES = 411
+    REGENERATE_HEALTHY_RANGES = 412
     
     # Settings
     EDIT_ACCOUNT = 503
