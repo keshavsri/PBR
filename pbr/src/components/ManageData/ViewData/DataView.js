@@ -104,16 +104,16 @@ export default function DataView() {
   };
 
   const getCartridgeTypes = async () => {
-    await fetch (`api/cartridge-type`)
-    .then((response) => {
-      return response.json();
-    })
-    .then(checkResponseAuth)
-    .then((data) => {
-      setCartridgeTypes(data);
-      setCurrentCartridgeType(data[0]);
-    });
-  }
+    await fetch(`api/cartridge-type`)
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        setCartridgeTypes(data);
+        setCurrentCartridgeType(data[0]);
+      });
+  };
 
   const getHeadCells = (types) => {
     const headCells = [
@@ -182,7 +182,13 @@ export default function DataView() {
       },
     ];
 
-    addApiColumnNamesToHeadCells(types, headCells);
+    if (currentCartridgeType) {
+      currentCartridgeType.analytes.forEach((analyte, index) => {
+        headCells.push(
+          createHeadCell(analyte, currentCartridgeType.name, index)
+        );
+      });
+    }
     setHeadCellList(headCells);
   };
 
