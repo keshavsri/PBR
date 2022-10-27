@@ -117,7 +117,6 @@ class Source(db.Model):
 
     # The fields below are stored in the database, they are assigned both a python and a database type
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name: str = db.Column(db.String(120), unique=True)
     name: str = db.Column(db.String(120))
     street_address: str = db.Column(db.String(120))
     city: str = db.Column(db.String(120))
