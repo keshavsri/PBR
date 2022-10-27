@@ -1,6 +1,7 @@
 
 from os import access
 from threading import currentThread
+
 from src.schemas import Organization, Source
 from src.api.user import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
@@ -20,30 +21,35 @@ sourceBlueprint = Blueprint('source', __name__)
 @sourceBlueprint.route('/<int:item_id>', methods=['GET'])
 @token_required
 @allowed_roles([0])
-def get_source(item_id):
+def get_source(access_allowed, item_id):
 
-    source_model = SourceORM.query.get(item_id)
-    source = Source.from_orm(source_model).dict()
-    # otherwise it will return all the organizations in the database
-    if source is None:
-        responseJSON = jsonify({'message': 'No records found'})
-        return responseJSON, 404
+    if access_allowed:
+        source_model = SourceORM.query.get(item_id)
+        source = Source.from_orm(source_model).dict()
+        # otherwise it will return all the organizations in the database
+        if source is None:
+            responseJSON = jsonify({'message': 'No records found'})
+            return responseJSON, 404
+        else:
+            return jsonify(source), 200
     else:
-        return jsonify(source), 200
+        return jsonify({'message': 'Access denied'}), 403
 
 
 # return all sources in the database
 @sourceBlueprint.route('/', methods=['GET'])
 @token_required
 @allowed_roles([0])
-def get_sources():
+def get_sources(access_allowed):
 
-    print("getting sources from source.py")
-    organizations = SourceORM.query.all()
-    ret = []
-    for organization in organizations:
-        ret.append(Source.from_orm(organization).dict())
-    return json.dumps(ret), 200
+    if access_allowed:
+        sources = SourceORM.query.all()
+        ret = []
+        for source in sources:
+            ret.append(Source.from_orm(source).dict())
+        return json.dumps(ret), 200
+    else:
+        return jsonify({'message': 'Access denied'}), 403
 
 
 # return all the sources for a specific organization
@@ -66,21 +72,19 @@ def get_sources_by_organization(access_allowed, current_user, org_id):
 @sourceBlueprint.route('/', methods=['POST'])
 @token_required
 @allowed_roles([0, 1, 2])
-def create_source(access_allowed, current_user, org_id):
+def create_source(access_allowed, current_user):
+
+    # if access_allowed:
     if access_allowed:
-        if models.Source.query.filter_by(name=request.json.get('name')).first() is None:
-            if current_user.role == Roles.Super_Admin:
-                models.db.session.add(models.Source(name=request.json.get('name'), street_address=request.json.get(
-                    'street_address'), city=request.json.get('city'), state=request.json.get('state'), zip=request.json.get('zip'), organization_id=request.json.get('organization_id')))
+        # source name must different is posted for the same organization
+        if current_user.role == Roles.Super_Admin or current_user.organization_id == request.json['organization_id']:
+
+            if models.Source.query.filter_by(organization_id=request.json.get('organization_id'),name=request.json.get('name')).first() is None:
+                models.db.session.add(models.Source(name=request.json.get('name'), street_address=request.json.get('street_address'), city=request.json.get('city'), state=request.json.get('state'), zip=request.json.get('zip'), organization_id=request.json.get('organization_id')))
+                models.db.session.commit()
+                return jsonify({'message': 'Source created successfully'}), 201
             else:
-                models.db.session.add(models.Source(name=request.json.get('name'), street_address=request.json.get(
-                    'street_address'), city=request.json.get('city'), state=request.json.get('state'), zip=request.json.get('zip'), organization_id=current_user.organization_id))
-
-            models.db.session.commit()
-            return jsonify({'message': 'Source created successfully'}), 201
-
-        else:
-            return jsonify({'message': 'Source already exists'}), 400
+                return jsonify({'message': 'Source already exists with the same name in the organization'}), 400
     else:
         return jsonify({'message': 'Access denied'}), 403
 

@@ -11,6 +11,7 @@ from src.enums import Roles, LogActions
 import src.helpers.log as log_helper
 from src.models import Organization as OrganizationORM
 from random import randint
+from datetime import datetime
 
 
 # Flask blueprint for the organization routes, this is the blueprint that is registered in the app.py file with a prefix of /organization
@@ -60,14 +61,14 @@ def get_organization(access_allowed, current_user, item_id):
     if access_allowed:
         if current_user.organization_id == item_id or current_user.role == Roles.Super_Admin:
             org_model = OrganizationORM.query.get(item_id)
-            org = Organization.from_orm(org_model).dict()
+            if org_model is not None:
+                org = Organization.from_orm(org_model).dict()
 
     # otherwise it will return all the organizations in the database
         if org is None:
             responseJSON = jsonify({'message': 'No records found'})
             return responseJSON, 404
         else:
-
             return jsonify(org), 200
     else:
         return jsonify({'message': 'Access denied'}), 403
@@ -126,7 +127,7 @@ def post_organization(access_allowed, current_user):
         if models.Organization.query.filter_by(name=request.json.get('name')).first() is None:
             org: OrganizationORM = OrganizationORM()
             for name, value in Organization.parse_obj(request.json):
-                if name != 'notes' and name != 'sources':
+                if name != 'notes':
                     setattr(org, name, value)
                 elif value is not None and name == 'notes':
                     org.notes = value
@@ -142,15 +143,15 @@ def post_organization(access_allowed, current_user):
                 organization_code = randint(100000, 999999)
 
             org.organization_code = organization_code
+            org.code_last_updated = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
             models.db.session.add(org)
             models.db.session.commit()
             models.db.session.refresh(org)
+            # add log here after merging
             return schemas.Organization.from_orm(org).dict(), 201
         else:
             return jsonify({'message': 'Organization already exists', "existing organization": schemas.Organization.from_orm(models.Organization.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
 
     else:
         return jsonify({'message': 'Access denied'}), 403
-
-

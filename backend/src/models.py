@@ -91,11 +91,11 @@ class Organization(db.Model):
     is_deleted: bool = db.Column(db.Boolean, server_default="0")
 
     # Foreign References to this Object
-    users = db.relationship('User')
-    machines = db.relationship('Machine')
-    logs = association_proxy('user_table', 'log_table')
-    sources: List['Source'] = db.relationship('Source')
-    flocks: List['Flock'] = association_proxy('source_table', 'flock_table')
+#     users = db.relationship('User')
+#     machines = db.relationship('Machine')
+#     logs = association_proxy('user_table', 'log_table')
+#     sources: List['Source'] = db.relationship('Source')
+#     flocks: List['Flock'] = association_proxy('source_table', 'flock_table')
 
 
 class Source(db.Model):
@@ -118,6 +118,7 @@ class Source(db.Model):
     # The fields below are stored in the database, they are assigned both a python and a database type
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(120), unique=True)
+    name: str = db.Column(db.String(120))
     street_address: str = db.Column(db.String(120))
     city: str = db.Column(db.String(120))
     state: States = db.Column(db.Enum(States))
