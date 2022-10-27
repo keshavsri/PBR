@@ -107,16 +107,16 @@ export default function DataView() {
   };
 
   const getCartridgeTypes = async () => {
-    await fetch (`api/cartridge-type`)
-    .then((response) => {
-      return response.json();
-    })
-    .then(checkResponseAuth)
-    .then((data) => {
-      setCartridgeTypes(data);
-      setCurrentCartridgeType(data[0]);
-    });
-  }
+    await fetch(`api/cartridge-type`)
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        setCartridgeTypes(data);
+        setCurrentCartridgeType(data[0]);
+      });
+  };
 
   const getHeadCells = (types) => {
     const headCells = [
@@ -187,18 +187,12 @@ export default function DataView() {
 
     if (currentCartridgeType) {
       currentCartridgeType.analytes.forEach((analyte, index) => {
-        headCells.push(createHeadCell(analyte, currentCartridgeType.name, index));
-      })
+        headCells.push(
+          createHeadCell(analyte, currentCartridgeType.name, index)
+        );
+      });
     }
     setHeadCellList(headCells);
-  };
-
-  const addApiColumnNamesToHeadCells = (headCellNamesFromAPI, headCells) => {
-    headCellNamesFromAPI.map((machine) => {
-      machine.data.map((point, index) => {
-        headCells.push(createHeadCell(point.type, machine.machineName, index));
-      });
-    });
   };
 
   function createHeadCell(point, machineName, index) {
@@ -391,7 +385,7 @@ export default function DataView() {
         getData={getData}
         rows={rowList}
       />
-      <DataViewSampleModal getData={getData} />
+      <DataViewSampleModal />
       <ReviewSampleModal
         openReviewSampleModal={openReviewSampleModal}
         setOpenReviewSampleModal={setOpenReviewSampleModal}
