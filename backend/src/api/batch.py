@@ -22,7 +22,7 @@ def create_batch_data(access_allowed, current_user, batch_data):
         models.db.session.add(batch_data)
         models.db.session.commit()
         models.create_log(current_user, LogActions.ADD_BATCH,
-                         'Created batch data: ' + batch_data.id)
+                          'Created batch data: ' + batch_data.id)
         return jsonify(models.Batch.query.get(request.json.get('id'))),
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -82,7 +82,7 @@ def edit_batch(access_allowed, current_user, item_id):
             models.db.session.commit()
             edited_batch = models.Batch.query.get(item_id)
             models.create_log(current_user, LogActions.EDIT_BATCH,
-                             'Edited batch: ' + edited_batch.id)
+                              'Edited batch: ' + edited_batch.id)
             return jsonify(edited_batch), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -104,7 +104,7 @@ def delete_batch(access_allowed, current_user, item_id):
             models.db.session.delete(models.Batch.query.get(item_id))
             models.db.session.commit()
             models.create_log(current_user, LogActions.DELETE_SAMPLE,
-                             'Deleted batch: ' + deleted_batch.id)
+                              'Deleted batch: ' + deleted_batch.id)
             return jsonify({'message': 'Batch has been deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

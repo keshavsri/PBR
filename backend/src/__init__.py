@@ -1,3 +1,4 @@
+from src import models
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -6,6 +7,7 @@ from src.api.log import logBlueprint
 from src.api.enum import enumBlueprint
 from src.api.user import userBlueprint
 from src.api.batch import batchBlueprint
+from src.api.source import sourceBlueprint
 from src.api.flock import flockBlueprint
 from src.api.sample import sampleBlueprint
 from src.api.machine import machineBlueprint
@@ -29,8 +31,8 @@ app.register_blueprint(flockBlueprint, url_prefix='/api/flock')
 app.register_blueprint(sampleBlueprint, url_prefix='/api/sample')
 app.register_blueprint(machineBlueprint, url_prefix='/api/machine')
 app.register_blueprint(organizationBlueprint, url_prefix='/api/organization')
+app.register_blueprint(sourceBlueprint, url_prefix='/api/source')
 app.register_blueprint(cartridgeTypeBlueprint, url_prefix='/api/cartridge-type')
-
 
 
 
@@ -39,5 +41,4 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 
 
-from src import models
 models.db.init_app(app)
