@@ -15,10 +15,7 @@ from src.api.machine_type import machineTypeBlueprint
 from src.api.organization import organizationBlueprint
 from src.api.cartridge_type import cartridgeTypeBlueprint
 from src.api.healthy_range import healthyRangeBlueprint
-<<<<<<< HEAD
 from src.api.analyte import analyteBlueprint
-=======
->>>>>>> 22c10e6 (Started POST healthy_ranges)
 
 import os
 from dotenv import load_dotenv, find_dotenv
