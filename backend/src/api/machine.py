@@ -115,7 +115,7 @@ def create_machine(access_allowed, current_user):
                             ).dict()
                         }
                     ), 409 
-        return jsonify({'message': 'Role not allowed'}), 403
+    return jsonify({'message': 'Role not allowed'}), 403
 
 
 @machineBlueprint.route('/<int:item_id>', methods=['PUT'])
