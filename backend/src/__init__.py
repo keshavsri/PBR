@@ -15,7 +15,6 @@ from src.api.machine_type import machineTypeBlueprint
 from src.api.organization import organizationBlueprint
 from src.api.cartridge_type import cartridgeTypeBlueprint
 from src.api.healthy_range import healthyRangeBlueprint
-
 from src.api.analyte import analyteBlueprint
 
 import os
