@@ -4,7 +4,8 @@ from itsdangerous import json
 from src.models import db
 from src.models import Machine as MachineORM
 from src.models import MachineType as MachineTypeORM
-from src.schemas import Machine, Machinetype, Measurement, MeasurementType
+from src.schemas import Machine, MachineType, Measurement, Analyte
+from flask import jsonify
 
 def get_machines_by_org(org_id: int) -> List[dict]:
     """
@@ -19,59 +20,15 @@ def get_machines_by_org(org_id: int) -> List[dict]:
     pydanticMachines = []
     for machine in machines:
         pydanticMachines.append(Machine.from_orm(machine).dict())
-
-    formatted_machine_json = []
-    for machine in pydanticMachines:
-
-        formatted_machine = {
-            "name": machine['machinetype']["name"],
-            "id": machine["id"],
-            "info": [],
-            "measurements": []
-        }
-        for measurement in machine["measurements"]:
-            formatted_meas = {
-                "id": measurement['measurementtype']["id"],
-                "name": measurement['measurementtype']['name'],
-                "abbreviation": measurement['measurementtype']['abbreviation'],
-                "units": measurement['measurementtype']['units'],
-                "required": measurement['measurementtype']['required'],
-            }
-            if measurement['measurementtype']['general']:
-                formatted_machine["info"].append(formatted_meas)
-            else:
-                formatted_machine["measurements"].append(formatted_meas)
-        formatted_machine_json.append(formatted_machine)
-    return json.dumps(formatted_machine_json)
+    return jsonify(pydanticMachines)
 
 def get_machines() -> List[dict]:
     machines = MachineORM.query.filter_by().all()
     pydanticMachines = []
     for machine in machines:
         pydanticMachines.append(Machine.from_orm(machine).dict())
-        
-    formatted_machine_json = []
-    for machine in pydanticMachines:
-        formatted_machine = {
-            "name": machine['machinetype']["name"],
-            "id": machine["id"],
-            "info": [],
-            "measurements": []
-        }
-        for measurement in machine["measurements"]:
-            formatted_meas = {
-                "id": measurement['measurementtype']["id"],
-                "name": measurement['measurementtype']['name'],
-                "abbreviation": measurement['measurementtype']['abbreviation'],
-                "units": measurement['measurementtype']['units'],
-                "required": measurement['measurementtype']['required'],
-            }
-            if measurement['measurementtype']['general']:
-                formatted_machine["info"].append(formatted_meas)
-            else:
-                formatted_machine["measurements"].append(formatted_meas)
-        formatted_machine_json.append(formatted_machine)
-    return json.dumps(formatted_machine_json)
+
+    return jsonify(pydanticMachines)
 
 def get_machine_by_id(id: int) -> dict:
     """
@@ -115,7 +72,7 @@ def get_machine_types() -> List[dict]:
     machinetypes = MachineTypeORM.query.filter_by().all()
     ret = []
     for type in machinetypes:
-        ret.append(Machinetype.from_orm(type).dict())
+        ret.append(MachineType.from_orm(type).dict())
     return json.dumps(ret)
 
 def get_machine_type_by_id(id: int) -> dict:
@@ -127,7 +84,7 @@ def get_machine_type_by_id(id: int) -> dict:
     :return: A dictionary containing the machine type formatted by pydantic.
     """
     machinetype = MachineTypeORM.query.filter_by(id=id).first()
-    return Machinetype.from_orm(machinetype).dict()
+    return MachineType.from_orm(machinetype).dict()
 
 def create_machine_type(machinetype_dict: dict):
     """
@@ -138,7 +95,7 @@ def create_machine_type(machinetype_dict: dict):
     :return: machinetype:MachineType: A machine type sqlalchemy model.
     """
     machinetype:MachineTypeORM = MachineTypeORM()
-    for name, value in Machinetype.parse_obj(machinetype_dict):
+    for name, value in machinetype.parse_obj(machinetype_dict):
         setattr(machinetype, name, value)
     db.session.add(machinetype)
     db.session.commit()
