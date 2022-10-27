@@ -1,6 +1,6 @@
 from src.helpers.healthy_range import reference_interval
 from src.helpers.healthy_range import get_min_max_from_age_group
-from src.models import HealthyRange as HealthyRangeORM, Analyte as AnalyteORM, CartridgeType as CartridgeTypeORM, db, engine
+from src.models import HealthyRange as HealthyRangeORM, Analyte as AnalyteORM, db, engine
 from src.schemas import HealthyRange, Analyte
 from src.helpers import log
 from src.api.user import token_required, allowed_roles
