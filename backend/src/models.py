@@ -12,6 +12,7 @@ db = SQLAlchemy()
 engine = create_engine(os.environ.get("DATABASE_URL"))
 
 
+
 class User(db.Model):
 
     """ ORM model for the User table
