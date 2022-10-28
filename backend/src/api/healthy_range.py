@@ -18,6 +18,7 @@ from src.enums import Species, BirdGenders, AgeGroup, LogActions, HealthyRangeMe
 
 healthyRangeBlueprint = Blueprint('healthy-range', __name__)
 
+
 @healthyRangeBlueprint.route('/', methods=['POST'])
 @token_required
 @allowed_roles([0])
