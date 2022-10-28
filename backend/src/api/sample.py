@@ -204,8 +204,6 @@ def create_sample(access_allowed, current_user):
         payload = request.json
 
         new_sample = sample_helper.create_sample(payload, current_user)
-        if not new_sample:
-            return jsonify({'message': 'Invalid Request'}), 400
 
         models.create_log(current_user, LogActions.ADD_SAMPLE,
                          'Created new sample: ' + str(new_sample.id))

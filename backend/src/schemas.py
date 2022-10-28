@@ -111,7 +111,7 @@ class Measurement(PydanticModel):
     id: Optional[int]
     value: Optional[float]
     sample_id: int
-    analyte_id: int
+    analyte: Analyte
 
 class Sample(PydanticModel):
     """
