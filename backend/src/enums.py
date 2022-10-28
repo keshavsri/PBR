@@ -77,11 +77,13 @@ class AgeUnits(str, Enum):
     Months = "Months"
     Years = "Years"
 
+
 class AgeGroup(str, Enum):
-    Brooder = "Brooder (1-5 days)"
+    Brooder = "Brooder (1-5 days)"          # Can we adjust this to 1-6 days
     Growing = "Growing (1-12 weeks)"
     Prelay = "Pre-lay (12-20 weeks)"
     Lay = "Lay (20+ weeks)"
+
 
 class ValidationTypes(str, Enum):
     Saved = "Saved"
@@ -91,15 +93,16 @@ class ValidationTypes(str, Enum):
 
 
 class SampleTypes(str, Enum):
-    # Healthy
+    # Known Healthy
     Surveillance = "Surveillance"
-    # Unhealthy
+    # Unkown
     Diagnostic = "Diagnostic"
 
 
 class Species(str, Enum):
     Turkey = "Turkey"
     Chicken = "Chicken"
+
 
 class ChickenStrain(str, Enum):
     Ross_308 = "Ross 308"
@@ -118,6 +121,7 @@ class ChickenStrain(str, Enum):
     Silver = "Silver"
     Tradition = "Tradition"
     White = "White"
+
 
 class TurkeyStrain(str, Enum):
     Nicholas_Select = "Nicholas Select"
