@@ -4,7 +4,7 @@ import { Paper, Chip } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import SavedToPendingModal from "../ValidateData/SavedToPendingModal";
 
-import DataViewSampleModal from "../AddData/SampleModal";
+import DataViewSampleModal from "../AddData/NewSampleModal";
 import DataViewFilterModal from "./FilterModal";
 import DVTableToolbar from "./DVTableToolbar";
 
@@ -93,6 +93,7 @@ export default function DataView() {
   };
 
   const getData = async () => {
+    getHeadCells();
     await fetch(`/api/sample/`, { method: "GET" })
       .then((response) => {
         return response.json();
@@ -102,8 +103,9 @@ export default function DataView() {
         denestMachineData(data.rows);
         assignRowHtml(data.rows);
         setRowList(data.rows);
-        getHeadCells(data.types);
+
       });
+
   };
 
   const getCartridgeTypes = async () => {
@@ -118,7 +120,7 @@ export default function DataView() {
       });
   };
 
-  const getHeadCells = (types) => {
+  const getHeadCells = () => {
     const headCells = [
       {
         id: "id",
@@ -184,11 +186,13 @@ export default function DataView() {
         label: "Sample Type",
       },
     ];
-
+    console.log("Getting Head Cells");
     if (currentCartridgeType) {
+      console.log("Getting Head Cells");
+      console.log(currentCartridgeType)
       currentCartridgeType.analytes.forEach((analyte, index) => {
         headCells.push(
-          createHeadCell(analyte, currentCartridgeType.name, index)
+          createHeadCell(analyte, "", index)
         );
       });
     }

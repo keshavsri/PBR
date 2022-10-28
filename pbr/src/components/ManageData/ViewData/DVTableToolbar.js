@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
-import { Typography, Box, Button, Tooltip, IconButton, Select, MenuItem} from "@mui/material";
+import { Typography, InputLabel, Box, Button, Tooltip, IconButton, Select, MenuItem} from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDatabase } from "@fortawesome/free-solid-svg-icons";
 import { makeStyles } from "@mui/styles";
@@ -58,19 +58,27 @@ export default function DVTableToolbar({
 
   return (
     <>
-      <Select
-        labelId="label-select-organization"
-        id="select-organizations"
-        value={currentCartridgeType}
-        label="Organization"
-        onChange={(e)=> setCurrentCartridgeType(e.target.value)}
-      >
-        {cartridgeTypes.map((ct) => {
-          return (
-            <MenuItem key={ct.id} value={ct.id}>{ct.name}</MenuItem>
-          )
-        })}
-      </Select>
+      <>
+        <InputLabel id="label-select-flock">Cartridge Type</InputLabel>
+        <Select
+          labelId="label-select-organization"
+          id="select-organizations"
+          value={currentCartridgeType}
+          onChange={(e)=> {
+            console.log(e);
+            console.log(e.target);
+            console.log(e.target.value);
+            setCurrentCartridgeType(e.target.value);
+          }}
+        >
+          {cartridgeTypes.map((ct) => {
+            return (
+              <MenuItem key={ct.id} value={ct}>{ct.name}</MenuItem>
+            )
+          })}
+        </Select>
+      </>
+
       <Tooltip title="Generate Group Report">
         <IconButton sx={{ ml: -0.5 }}>
           <ReportIcon />
