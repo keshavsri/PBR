@@ -240,7 +240,7 @@ class Measurement(db.Model):
     sample_id: int = db.Column(db.Integer, db.ForeignKey('sample_table.id'))
 
     # Foreign References to this Object
-    analayte = db.relationship('Analyte')
+    analyte = db.relationship('Analyte')
 
 
 """
@@ -251,8 +251,8 @@ class Measurement(db.Model):
 cartridge_types_analytes_table = db.Table(
     'cartridge_types_analytes_table',
     db.Model.metadata,
-    db.Column('cartridge_type_id', db.ForeignKey('cartridge_type_table.id')),
-    db.Column('analyte_id', db.ForeignKey('analyte_table.id'))
+    db.Column('cartridge_type_id', db.ForeignKey('cartridge_type_table.id'), primary_key=True),
+    db.Column('analyte_id', db.ForeignKey('analyte_table.id'), primary_key=True)
 )
 
 
@@ -274,8 +274,7 @@ class Analyte(db.Model):
     units: str = db.Column(db.String(12))
 
     # References to Foreign Objects
-    machine_type_id: int = db.Column(
-        db.Integer, db.ForeignKey('machine_type_table.id'))
+    machine_type_id: int = db.Column(db.Integer, db.ForeignKey('machine_type_table.id'))
 
 
 class Machine(db.Model):
@@ -376,10 +375,12 @@ class HealthyRange(db.Model):
     species: Species = db.Column(db.Enum(Species))
     gender: BirdGenders = db.Column(db.Enum(BirdGenders))
     age_group: AgeGroup = db.Column(db.Enum(AgeGroup))
+    generated: datetime = db.Column(db.DateTime, server_default=db.func.now())
 
     # References to Foreign Objects
     analyte_id: int = db.Column(db.Integer, db.ForeignKey('analyte_table.id'))
 
+    # Foreign references to this object
     analyte = db.relationship('Analyte')
 
 
