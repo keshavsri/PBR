@@ -6,7 +6,7 @@ from src.models import db
 from src.models import User as UserORM
 from src.models import Sample as SampleORM
 from src.models import Measurement as MeasurementORM
-from src.schemas import Flock, Organization, Source, Sample, Machine, Measurement, User
+from src.schemas import Flock, Organization, Source, Sample as Sample_pydantic, Machine, Measurement, User
 
 def create_sample(sample_dict: dict, current_user):
     """
@@ -17,19 +17,25 @@ def create_sample(sample_dict: dict, current_user):
     :return: sample:Sample: A Sample sqlalchemy model.
     """
     sample:SampleORM = SampleORM()
-    for name, value in Sample.parse_obj(sample_dict):
+    for name, value in sample_dict.items():
         if name != 'measurements':
             setattr(sample, name, value)
             
     setattr(sample, "user_id", current_user.id)
     setattr(sample, "validation_status", ValidationTypes.Saved)
 
+    db.session.add(sample)
+    db.session.commit()
+    db.session.refresh(sample)
     
+    # Update the list of measurements.
+
     measurements = []
     for measurement in sample_dict["measurements"]:
         measurement_model:MeasurementORM = MeasurementORM()
-        for name, value in Measurement.parse_obj(measurement):
+        for name, value in measurement.items():
             setattr(measurement_model, name, value)
+            setattr(measurement_model, "sample_id", sample.id)
         measurements.append(measurement_model)
     
     setattr(sample, "measurements", measurements)

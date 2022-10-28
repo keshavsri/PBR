@@ -189,7 +189,7 @@ def _is_error_file(content_lines):
 
 
 # Creates a new sample #
-@sampleBlueprint.route('/sample', methods=['POST'])
+@sampleBlueprint.route('/', methods=['POST'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def create_sample(access_allowed, current_user):
@@ -212,6 +212,7 @@ def create_sample(access_allowed, current_user):
         return schemas.Sample.from_orm(new_sample).dict(), 201
     else:
         return jsonify({'message': 'Role not allowed'}), 403
+
 
 
 # Creates a new sample #
@@ -265,42 +266,39 @@ def get_samples_by_cartridge_id_and_org(access_allowed, cartridge_type_id, given
         return jsonify({'message': 'Role not allowed'}), 403
 
 @sampleBlueprint.route('/<int:item_id>', methods=['PUT'])
-def edit_sample(item_id):
+@token_required
+@allowed_roles([0, 1, 2, 3])
+def edit_sample(access_allowed, current_user, item_id):
+    if access_allowed:
+        old_sample = SampleORM.query.get(item_id)
+        if  SampleORM.query.get(item_id) is None:
+            return jsonify({'message': 'Sample cannot be found.'}), 404
+        else:
+            
+            for name, value in request.json.items():
+                if name != 'measurements':
+                    setattr(old_sample, name, value)
+            
+            measurement_dict = request.json.pop('measurements')
 
-    old_sample = SampleORM.query.get(item_id)
-    if  old_sample is None:
-        return jsonify({'message': 'Sample cannot be found.'}), 404
+            # Update the list of measurements.
+
+            measurements = []
+            for measurement in measurement_dict:
+                measurement_model:MeasurementORM = MeasurementORM()
+                for name, value in measurement.items():
+                    setattr(measurement_model, name, value)
+                measurements.append(measurement_model)
+
+            setattr(old_sample, "measurements", measurements)
+
+            models.db.session.commit()
+
+            edited_sample = SampleORM.query.get(item_id)
+            models.createLog(current_user, LogActions.EDIT_SAMPLE, 'Edited sample: ' + str(edited_sample.id))
+            return schemas.Sample.from_orm(edited_sample).dict(), 200
     else:
-
-        print("------------------------------------------------", flush=True)
-        print(request.json, flush=True)
-        
-        sample_model:SampleORM = SampleORM()
-        for name, value in schemas.Sample.parse_obj(request.json):
-            if name != 'measurements':
-                setattr(old_sample, name, value)
-        
-        request.json.pop('measurements')
-        SampleORM.query.filter_by(id=item_id).update(request.json)
-        #models.db.session.add(sample_model)
-        models.db.session.commit()
-        #models.db.session.refresh(sample_model)
-
-        
-        # Update the list of measurements. Iterate through measurements of sample, find corresponding measurement (by id) in frontend objects, and update the objects
-        """
-        measurements = []
-        for measurement in request.json["measurements"]:
-            measurement_model:MeasurementORM = MeasurementORM()
-            for name, value in schemas.Measurement.parse_obj(measurement):
-                setattr(measurement_model, name, value)
-            measurements.append(measurement_model)
-        
-        setattr(sample_model, "measurements", measurements)
-        """
-
-        edited_sample = SampleORM.query.get(item_id)
-        return schemas.Sample.from_orm(edited_sample).dict(), 200
+        return jsonify({'message': 'Role not allowed'}), 403
 
 
 @sampleBlueprint.route('/<int:item_id>', methods=['DELETE'])
