@@ -1,17 +1,26 @@
 from src.helpers.healthy_range import reference_interval
 from src.helpers.healthy_range import get_min_max_from_age_group
+<<<<<<< HEAD
 from src.models import HealthyRange as HealthyRangeORM, Analyte as AnalyteORM, db, engine
+=======
+from src.models import HealthyRange as HealthyRangeORM, Analyte as AnalyteORM, CartridgeType as CartridgeTypeORM, db, engine
+>>>>>>> e07cec7 (Finished post, partially completed get)
 from src.schemas import HealthyRange, Analyte
 from src.helpers import log
 from src.api.user import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
+<<<<<<< HEAD
 from src.enums import Species, BirdGenders, AgeGroup, LogActions, HealthyRangeMethod
+=======
+from src.enums import Species, BirdGenders, AgeGroup, LogActions
+>>>>>>> e07cec7 (Finished post, partially completed get)
 
 
 healthyRangeBlueprint = Blueprint('healthy-range', __name__)
 
 
 @healthyRangeBlueprint.route('/', methods=['POST'])
+<<<<<<< HEAD
 @token_required
 @allowed_roles([0])
 def post_healthy_ranges(access_allowed, current_user):
@@ -249,3 +258,152 @@ def get_healthy_ranges(access_allowed, current_user):
 
     else:
         return jsonify({'message': 'Role not allowed'}), 403
+=======
+# @token_required
+# @allowed_roles([0])
+# def post_healthy_ranges(access_allowed, current_user):
+def post_healthy_ranges():
+    # if access_allowed:
+    analytes = AnalyteORM.query.all()
+    for analyte in analytes:
+        for species in Species:
+            for gender in BirdGenders:
+                for age_group in AgeGroup:
+
+                    min_age, max_age = get_min_max_from_age_group(age_group)
+
+                    sql_text = db.text(
+                        """
+                        SELECT m.value
+                        FROM measurement_table m,
+                            sample_table s,
+                            flock_table f
+                        WHERE m.analyte_id = :analyte_id
+                            AND m.sample_id = s.id
+                            AND s.is_deleted = 0
+                            AND s.validation_status = "Accepted"
+                            AND s.sample_type = "Surveillance"
+                            AND s.flock_id = f.id
+                            AND f.species = :species
+                            AND f.gender = :gender
+                            AND CASE
+                                WHEN s.flock_age_unit = "Days"
+                                    THEN s.flock_age BETWEEN :min_age AND :max_age
+                                WHEN s.flock_age_unit = "Weeks"
+                                    THEN s.flock_age * 7 BETWEEN :min_age AND :max_age
+                                WHEN s.flock_age_unit = "Months"
+                                    THEN s.flock_age * 30 BETWEEN :min_age AND :max_age
+                                WHEN s.flock_age_unit = "Years"
+                                    THEN s.flock_age * 365 BETWEEN :min_age AND :max_age
+                                END;
+                        """
+                    )
+
+                    sql_args = {
+                        'analyte_id' : analyte.id, 
+                        'species' : species,
+                        'gender' : gender,
+                        'min_age' : min_age,
+                        'max_age' : max_age
+                    }
+
+                    reponse = None
+                    with engine.connect() as connection:
+                        reponse = connection.execute(sql_text, sql_args).all()
+                        if reponse is None or reponse == []:
+                            continue
+
+                    measurements = []
+                    for row in reponse:
+                        measurements.append(row[0])
+
+                    lower_bound, upper_bound = reference_interval(measurements)
+                    healthy_range = HealthyRangeORM(
+                        lower_bound=lower_bound,
+                        upper_bound=upper_bound,
+                        species=species,
+                        gender=gender,
+                        age_group=age_group,
+                        analyte_id=analyte.id,
+                    )
+
+                    db.session.add(healthy_range)
+                    db.session.commit()
+
+    # log.create_log(current_user, LogActions.GENERATE_HEALTHY_RANGES, 'Generated healthy ranges:')
+    return jsonify({'message': 'Generated new healthy ranges'}), 200
+    # else:
+    #     return jsonify({'message': 'Role not allowed'}), 403
+
+
+@healthyRangeBlueprint.route('/', methods=['GET'])
+# @token_required
+# @allowed_roles([0])
+# def get_healthy_ranges(access_allowed):
+def get_healthy_ranges():
+
+    # if access_allowed:
+    filters = {
+        'species' : request.json.get('species'),
+        'gender' : request.json.get('gender'),
+        'age_group' : request.json.get('age_group'),
+        'cartridge_type_id' : request.json.get('cartridge_type_id')
+    }
+
+    for val in filters.values():
+        if val is None:
+            return jsonify({'message': f'Filter value for {val} not provided'}), 400
+
+    analytes = AnalyteORM.query.all()
+    sql_text = db.text(
+        """
+        SELECT hr.*
+        FROM healthy_range_table hr,
+            cartridge_types_analytes_table cta
+        WHERE hr.species = :species
+            AND hr.gender = :gender
+            AND hr.age_group = :age_group
+            AND hr.analyte_id = cta.analyte_id
+            AND cta.cartridge_type_id = :cartridge_type_id;
+        """
+    )
+
+    sql_args = {
+        'species' : filters['species'],
+        'gender' : filters['gender'],
+        'age_group' : filters['age_group'],
+        'cartridge_type_id' : filters['cartridge_type_id']
+    }
+
+    print(".........................................", flush=True)
+
+    rows = []
+    with engine.connect() as connection:
+        rows = connection.execute(sql_text, sql_args).all()
+        if rows == []:
+            return jsonify({'message': 'Requested healthy reference range not found'}), 404
+
+    healthy_ranges = []
+    for row in rows:
+        healthy_ranges.append(
+            {
+                'id' : row[0],
+                'lower_bound' : row[1],
+                'upper_bound' : row[2],
+                'species' : row[3],
+                'gender' : row[4],
+                # 'age_group' : ,
+                'analyte' : Analyte.from_orm(AnalyteORM.query.get(row[7]))
+            }
+        )
+
+    print(healthy_ranges, flush=True)
+
+    response = [HealthyRange.from_orm(hr).dict() for hr in rows]
+
+    # Still need to filter by latest geneerated either in query text or sqlalchemy legacycursorresult
+    return jsonify(response), 200 
+
+    # else:
+    #     return jsonify({'message': 'Role not allowed'}), 403
+>>>>>>> e07cec7 (Finished post, partially completed get)

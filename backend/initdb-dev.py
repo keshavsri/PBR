@@ -449,9 +449,6 @@ else:
             db.session.add(c5)
             db.session.commit()
 
-            # Temporary for healthy range feature development
-
-
 
             # Link Measurement Types to Machines
             for i in range(1, 13):
