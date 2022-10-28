@@ -214,12 +214,10 @@ def create_sample(access_allowed, current_user):
 
 
 # Creates a new sample #
-@sampleBlueprint.route('/<int:given_org_id>/<int:cartridge_id>', methods=['GET'])
+@sampleBlueprint.route('/<int:given_org_id>/<int:cartridge_type_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
-
-
-def get_samples_by_cartridge_id_and_org(access_allowed, cartridge_type_id, given_org_id):
+def get_samples_by_cartridge_type_id_and_org(access_allowed):
 
     """
     This function gets all samples for a specified cartridge type.

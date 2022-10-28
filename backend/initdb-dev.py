@@ -279,7 +279,8 @@ else:
             mt18 = Analyte(
                 id=18,
                 abbreviation="pH",
-                machine_type_id=1
+                machine_type_id=1,
+                name="pH"
 
             )
             db.session.add(mt18)
@@ -288,7 +289,9 @@ else:
             mt19 = Analyte(
                 id=19,
                 abbreviation="PO2",
-                machine_type_id=1
+                machine_type_id=1,
+                units="mmol/L",
+                name="PO2"
 
             )
             db.session.add(mt19)
@@ -297,7 +300,8 @@ else:
                 id=20,
                 abbreviation="TCO2",
                 machine_type_id=1,
-                units="mmol/L"
+                units="mmol/L",
+                name="TCO2"
 
             )
             db.session.add(mt20)
@@ -306,7 +310,8 @@ else:
                 id=21,
                 abbreviation="HCO3",
                 machine_type_id=1,
-                units="mmol/L"
+                units="mmol/L",
+                name="HCO3"
 
             )
             db.session.add(mt21)
@@ -325,7 +330,8 @@ else:
                 id=23,
                 abbreviation="sO2",
                 machine_type_id=1,
-                units="%"
+                units="%",
+                name="sO2"
 
             )
             db.session.add(mt23)
@@ -383,7 +389,9 @@ else:
             mt29 = Analyte(
                 id=29,
                 abbreviation="PCO2",
-                machine_type_id=1
+                name="PCO2",
+                machine_type_id=1,
+                units="mmol/L"
 
             )
             db.session.add(mt29)

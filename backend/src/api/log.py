@@ -1,50 +1,55 @@
 from flask import Blueprint, jsonify, request
-from src.api.user import token_required
-from src import models
+from src.api.user import token_required, allowed_roles
+from src.models import Log as LogORM, User as UserORM
 from src.enums import Roles, LogActions
-from src import helpers
 from src.schemas import Log
 
 logBlueprint = Blueprint('log', __name__)
 
-@logBlueprint.route('/', methods=['GET'])
-@logBlueprint.route('/<int:item_id>', methods=['GET'])
+@logBlueprint.route('/organization/<int:org_id>', methods=['GET'])
 @token_required
-def handleLog(current_user, item_id = None):
-
+@allowed_roles([0, 1])
+def get_logs_for_organization(access_allowed, current_user, org_id):
     """
-    This function handles the GET request for the logs.
+    This function handles the GET request for all Logs belonging to a specific organization.
 
-    :param current_user: The user who made the request.
-    :param item_id: The id of the log to get.
-
-    :return: A JSON object containing the logs.
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param org_id: The organization id of the organization that the user wants to get the logs of.
+    :return: A list of all Logs belonging to a specific organization depending on the request.
     """
 
-    if request.method == 'GET':
-        # response json is created here and gets returned at the end of the block for GET requests.
-        responseJSON = None
-        current_Organization = current_user.organization_id
-        # if item id exists then it will return the organization with the id
-        if item_id:
-            log =  models.Log.query.get(item_id)
-            if current_user.role == Roles.Super_Admin:
-                responseJSON = Log.from_orm(log).dict()
-            elif log.organization == current_Organization:
-                responseJSON = Log.from_orm(log).dict()
-            else:
-                return jsonify({'message': 'You cannot access this log'}), 403
-            
-        # otherwise it will return all the organizations in the database
-        elif current_user.role == Roles.Super_Admin:
-            responseJSON = jsonify(helpers.get_logs())
+    if access_allowed:
+        if current_user.role == Roles.Super_Admin or current_user.organization_id == org_id:
+            log_models = LogORM.query.filter_by(organization_id=org_id)
+            logs = [Log.from_orm(log).dict() for log in log_models]
+            return jsonify(logs), 200
         else:
-            responseJSON = helpers.get_logs_by_org(current_Organization)
-        # if the response json is empty then return a 404 not found
-        if responseJSON is None:
-            responseJSON = jsonify({'message': 'No records found'})
-            return responseJSON, 404
-        else:
-            return responseJSON, 200
+            return jsonify({'message': 'Insufficient Permissions'}), 401
     else:
-        return jsonify({'error': 'Method not allowed'}), 405
+        return jsonify({'message': 'Role not allowed'}), 403
+
+@logBlueprint.route('/user/<int:user_id>', methods=['GET'])
+@token_required
+@allowed_roles([0, 1])
+def get_logs_for_user(access_allowed, current_user, user_id):
+    """
+    This function handles the GET request for all Logs belonging to a specific user.
+
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param org_id: The user id of the user that the user wants to get the logs of.
+    :return: A list of all Logs belonging to a specific user depending on the request.
+    """
+
+    if access_allowed:
+        user = UserORM.query.get(user_id)
+        if current_user.role == Roles.Super_Admin or current_user.organization_id == user.organization_id:
+            log_models = LogORM.query.filter_by(user_id=user_id)
+            logs = [Log.from_orm(log).dict() for log in log_models]
+            return jsonify(logs), 200
+        else:
+            return jsonify({'message': 'Insufficient Permissions'}), 401
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+
