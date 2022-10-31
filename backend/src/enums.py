@@ -79,10 +79,10 @@ class AgeUnits(str, Enum):
 
 
 class AgeGroup(str, Enum):
-    Brooder = "Brooder (1-5 days)"          # Can we adjust this to 1-6 days
-    Growing = "Growing (1-12 weeks)"
-    Prelay = "Pre-lay (12-20 weeks)"
-    Lay = "Lay (20+ weeks)"
+    Brooder = "Brooder"          # Can we adjust this to 1-6 days
+    Growing = "Growing"
+    Prelay = "Prelay"
+    Lay = "Lay"
 
 
 class ValidationTypes(str, Enum):

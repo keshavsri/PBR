@@ -6,12 +6,13 @@ import LoginBackdrop from "./layouts/LoginLayout";
 import Error404 from "./layouts/404Error";
 import DataView from "./components/ManageData/ViewData/DataView";
 import ManageOrganization from "./components/ManageOrganization/ManageOrganization";
-import LoggingView from "./components/ManageLogs/LoggingView";
+import LoggingView from "./components/ManageLog/LoggingView";
 import LoginCard from "./components/HandleLogin/LoginCard";
 import RegisterCard from "./components/HandleLogin/RegisterCard";
 import RecoveryCard from "./components/HandleLogin/RecoveryCard";
 import ManageUsers from "./components/ManageUser/ManageUsers";
 import useAuth from "./services/useAuth";
+import HealthyRanges from "./components/HealthyRanges/HealthyRanges";
 
 function RequireAuth({ children }) {
   const { user, recredentialize } = useAuth();
@@ -83,6 +84,16 @@ const routes = [
         <MainLayout />
       </RequireAuth>
     ),
+  },
+  {
+    path: "/healthy-ranges",
+    element: (
+      <RequireAuth>
+        <MainLayout>
+          <HealthyRanges />
+        </MainLayout>
+      </RequireAuth>
+    )
   },
   {
     path: "/manage-users",

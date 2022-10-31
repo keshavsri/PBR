@@ -1,5 +1,5 @@
 from pydantic import BaseModel, constr
-from typing import Optional, List
+from typing import Any, Optional, List
 from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup
 from datetime import datetime
 from src.models import *
@@ -184,7 +184,9 @@ class HealthyRange(PydanticModel):
     upper_bound: float
     species: Species
     gender: BirdGenders
-    #age_group: AgeGroup
+    age_group: AgeGroup
+    generated: datetime
+    current: bool
     analyte: Analyte
 
 

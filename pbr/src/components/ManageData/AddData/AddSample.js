@@ -28,12 +28,12 @@ import {
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import { makeStyles } from "@mui/styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
+/*import {
   genders,
   ageUnits,
   productionTypes,
   speciesTypes,
-} from "../../models/enums";
+} from "../../models/enums";*/
 import FlagIcon from "@mui/icons-material/Flag";
 import OutlinedFlagIcon from "@mui/icons-material/OutlinedFlag";
 import { tooltipClasses } from "@mui/material/Tooltip";
@@ -137,6 +137,11 @@ export default function DataViewAddSample({
   const [errorMessage, setErrorMessage] = React.useState("Error.");
   const [errorToggle, setErrorToggle] = React.useState(false);
   const [loadingFile, setLoadingFile] = React.useState(false);
+  const speciesTypes = {}
+  const genders = {}
+  const productionTypes = {}
+  const ageUnits = {}
+
 
   const handleFlagChange = () => {
     setGeneralDetails({

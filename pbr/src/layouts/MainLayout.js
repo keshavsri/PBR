@@ -31,13 +31,14 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDatabase } from "@fortawesome/free-solid-svg-icons";
-import ReportsIcon from "@mui/icons-material/Assessment";
+import ReportsIcon from "@mui/icons-material/Summarize"
+import HealthyRangesIcon from "@mui/icons-material/Assessment";
 
 import UsersIcon from "@mui/icons-material/Group";
 import OrganizationIcon from "@mui/icons-material/Apartment";
 
 import SettingsIcon from "@mui/icons-material/Settings";
-import LoginCard from "../components/login/LoginCard";
+import LoginCard from "../components/HandleLogin/LoginCard";
 import CustomDialog from "../components/CustomDialog";
 
 const drawerWidth = 250;
@@ -58,6 +59,11 @@ const pageData = [
       path: "/generate-reports",
       title: "Generate Reports",
       icon: <ReportsIcon />,
+    },
+    {
+      path: "/healthy-ranges",
+      title: "Healthy Ranges",
+      icon: <HealthyRangesIcon />
     },
   ],
   [
