@@ -174,7 +174,9 @@ class HealthyRange(PydanticModel):
     upper_bound: float
     species: Species
     gender: BirdGenders
-    #age_group: AgeGroup
+    age_group: AgeGroup
+    generated: datetime
+    current: bool
     analyte: Analyte
 
 

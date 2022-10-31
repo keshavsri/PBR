@@ -17,6 +17,8 @@ healthyRangeBlueprint = Blueprint('healthy-range', __name__)
 # def post_healthy_ranges(access_allowed, current_user):
 def post_healthy_ranges():
     # if access_allowed:
+    HealthyRangeORM.query.filter_by(current=True).update({'current': False})
+
     analytes = AnalyteORM.query.all()
     for analyte in analytes:
         for species in Species:
@@ -89,73 +91,76 @@ def post_healthy_ranges():
     #     return jsonify({'message': 'Role not allowed'}), 403
 
 
-@healthyRangeBlueprint.route('/', methods=['GET'])
-# @token_required
-# @allowed_roles([0])
-# def get_healthy_ranges(access_allowed):
-def get_healthy_ranges():
+@healthyRangeBlueprint.route('', methods=['GET'])
+@token_required
+@allowed_roles([0, 1, 2, 3, 4])
+def get_healthy_ranges(access_allowed, current_user):
 
-    # if access_allowed:
-    filters = {
-        'species' : request.json.get('species'),
-        'gender' : request.json.get('gender'),
-        'age_group' : request.json.get('age_group'),
-        'cartridge_type_id' : request.json.get('cartridge_type_id')
-    }
+    if access_allowed:
+        filters = {
+            'species' : request.args.get('species'),
+            'gender' : request.args.get('gender'),
+            'age_group' : request.args.get('age_group'),
+            'cartridge_type_id' : request.args.get('cartridge_type_id')
+        }
 
-    for val in filters.values():
-        if val is None:
-            return jsonify({'message': f'Filter value for {val} not provided'}), 400
+        for val in filters.values():
+            if val is None:
+                print("HEREEE", flush=True)
+                return jsonify({'message': f'Filter value for {val} not provided'}), 400
 
-    analytes = AnalyteORM.query.all()
-    sql_text = db.text(
-        """
-        SELECT hr.*
-        FROM healthy_range_table hr,
-            cartridge_types_analytes_table cta
-        WHERE hr.species = :species
-            AND hr.gender = :gender
-            AND hr.age_group = :age_group
-            AND hr.analyte_id = cta.analyte_id
-            AND cta.cartridge_type_id = :cartridge_type_id;
-        """
-    )
-
-    sql_args = {
-        'species' : filters['species'],
-        'gender' : filters['gender'],
-        'age_group' : filters['age_group'],
-        'cartridge_type_id' : filters['cartridge_type_id']
-    }
-
-    print(".........................................", flush=True)
-
-    rows = []
-    with engine.connect() as connection:
-        rows = connection.execute(sql_text, sql_args).all()
-        if rows == []:
-            return jsonify({'message': 'Requested healthy reference range not found'}), 404
-
-    healthy_ranges = []
-    for row in rows:
-        healthy_ranges.append(
-            {
-                'id' : row[0],
-                'lower_bound' : row[1],
-                'upper_bound' : row[2],
-                'species' : row[3],
-                'gender' : row[4],
-                # 'age_group' : ,
-                'analyte' : Analyte.from_orm(AnalyteORM.query.get(row[7]))
-            }
+        analytes = AnalyteORM.query.all()
+        sql_text = db.text(
+            """
+            SELECT hr.*
+            FROM healthy_range_table hr,
+                cartridge_types_analytes_table cta
+            WHERE hr.current = 1
+                AND hr.species = :species
+                AND hr.gender = :gender
+                AND hr.age_group = :age_group
+                AND hr.analyte_id = cta.analyte_id
+                AND cta.cartridge_type_id = :cartridge_type_id;
+            """
         )
 
-    print(healthy_ranges, flush=True)
+        sql_args = {
+            'species' : filters['species'],
+            'gender' : filters['gender'],
+            'age_group' : filters['age_group'],
+            'cartridge_type_id' : filters['cartridge_type_id']
+        }
 
-    response = [HealthyRange.from_orm(hr).dict() for hr in rows]
+        print(".........................................", flush=True)
 
-    # Still need to filter by latest geneerated either in query text or sqlalchemy legacycursorresult
-    return jsonify(response), 200 
+        rows = []
+        with engine.connect() as connection:
+            rows = connection.execute(sql_text, sql_args).all()
+            #if rows == []:
+            #   return jsonify({'message': 'Requested healthy reference range not found'}), 404
 
-    # else:
-    #     return jsonify({'message': 'Role not allowed'}), 403
+        healthy_ranges = []
+        for row in rows:
+            healthy_ranges.append(
+                HealthyRangeORM(
+                    id=row[0],
+                    lower_bound=row[1],
+                    upper_bound=row[2],
+                    species=row[3],
+                    gender=row[4],
+                    age_group=row[5],
+                    generated=row[6],
+                    current=row[7],
+                    analyte_id=row[8],
+                    analyte=Analyte.from_orm(AnalyteORM.query.get(row[8]))
+                )
+            )
+
+
+        response = [HealthyRange.from_orm(hr).dict() for hr in healthy_ranges]
+
+        # Still need to filter by latest geneerated either in query text or sqlalchemy legacycursorresult
+        return jsonify(response), 200 
+
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403

@@ -332,6 +332,7 @@ class HealthyRange(db.Model):
     gender: BirdGenders = db.Column(db.Enum(BirdGenders))
     age_group: AgeGroup = db.Column(db.Enum(AgeGroup))
     generated: datetime = db.Column(db.DateTime, server_default=db.func.now())
+    current: bool = db.Column(db.Boolean, server_default="1")
 
     # References to Foreign Objects
     analyte_id: int = db.Column(db.Integer, db.ForeignKey('analyte_table.id'))
