@@ -13,6 +13,9 @@ import {
   Typography,
   Card,
   Modal,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
   Autocomplete,
   FormControl,
 } from "@mui/material";
@@ -26,6 +29,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { sampleTypes } from "../../../models/enums";
 
 import NewAddSample from "./NewAddSample";
 
@@ -77,6 +81,7 @@ export default function DataViewSampleModal({ getData }) {
     sampleModalVisibility,
     sampleModalScreen,
     closeSampleModal,
+
     samplePrevAction,
     sampleNextAction,
     error,
@@ -89,6 +94,7 @@ export default function DataViewSampleModal({ getData }) {
     setSampleValidationErrors,
     setGeneralDetails,
     sampleType,
+    setSampleType,
     sampleLoading,
     setSampleLoading,
   } = useDataView();
@@ -133,6 +139,14 @@ export default function DataViewSampleModal({ getData }) {
         setFlocks(data);
         setFlock(data[0]);
       });
+  };
+
+  const handleSampleTypeChange = (event) => {
+    setSampleType(event.target.value);
+  };
+
+  const clearSampleType = () => {
+    setSampleType("");
   };
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -364,6 +378,34 @@ export default function DataViewSampleModal({ getData }) {
               <Typography> testing accordion </Typography>
               {sampleMeasurements()}
             </Grid>
+            <br></br>
+            <Grid className={classes.container}>
+              <Typography gutterBottom variant="button">
+                Categorize This Sample
+              </Typography>
+
+              <RadioGroup value={sampleType} onChange={handleSampleTypeChange}>
+                <FormControlLabel
+                  value={sampleTypes.SURVEILLANCE}
+                  label={`${sampleTypes.SURVEILLANCE} Sample (Healthy)`}
+                  control={<Radio />}
+                />
+                <FormControlLabel
+                  value={sampleTypes.DIAGNOSTIC}
+                  label={`${sampleTypes.DIAGNOSTIC} Sample (Sick)`}
+                  control={<Radio />}
+                />
+              </RadioGroup>
+              {sampleType != "" && (
+                <Button
+                  sx={{ mt: "0.5rem", ml: "-0.25rem" }}
+                  size="small"
+                  onClick={clearSampleType}
+                >
+                  Clear Selection
+                </Button>
+              )}
+            </Grid>
           </Card>
 
           <br></br>
@@ -372,10 +414,10 @@ export default function DataViewSampleModal({ getData }) {
             <Button
               variant="contained"
               color="secondary"
-              // style={{
-              //   position: "relative",
-              //   bottom: 50,
-              // }}
+              style={{
+                position: "static",
+                bottom: 50,
+              }}
               onClick={() => {
                 closeSampleModal();
               }}
@@ -384,14 +426,13 @@ export default function DataViewSampleModal({ getData }) {
             </Button>
           </Grid>
           <br></br>
-
           <Grid item xs={12} sm={2}>
             <Button
               variant="contained"
               style={{
-                position: "relative",
-                // bottom: 50,
-                // left: 150,
+                position: "static",
+                bottom: 50,
+                left: 150,
               }}
               onClick={() => {
                 onSubmit();
