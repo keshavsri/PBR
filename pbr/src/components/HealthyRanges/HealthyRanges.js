@@ -205,10 +205,7 @@ export default function HealthyRanges() {
       .then(checkResponseAuth)
       .then((data) => {
         setHealthyRanges(data);
-<<<<<<< HEAD
         setNoHealthyRanges(data.length === 0);
-=======
->>>>>>> 0020f09 (Fix bugs in GET endpoint, link frontend with APIs)
         console.log(data);
       });
   }
