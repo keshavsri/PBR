@@ -47,7 +47,9 @@ export default function HealthyRanges() {
   const [speciesEnum, setSpeciesEnum] = React.useState({});
   const [genderEnum, setGenderEnum] = React.useState({});
   const [ageGroupEnum, setAgeGroupEnum] = React.useState({});
+  const [roleEnum, setRoleEnum] = React.useState({});
   const [cartridgeTypeList, setCartridgeTypeList] = React.useState([]);
+
   const [healthyRanges, setHealthyRanges] = React.useState([]);
 
 
@@ -61,6 +63,7 @@ export default function HealthyRanges() {
     getSpecies();
     getGenders();
     getAgeGroups();
+    getRoles();
     getCartridgeTypes();
   }, [])
 
@@ -93,7 +96,6 @@ export default function HealthyRanges() {
       .then(checkResponseAuth)
       .then((data) => {
         setSpeciesEnum(data);
-        console.log(data);
       });
   }
 
@@ -109,8 +111,10 @@ export default function HealthyRanges() {
       })
       .then(checkResponseAuth)
       .then((data) => {
+        delete data.Mixed
+        delete data.Unknown
+        data["All"] = "All"
         setGenderEnum(data);
-        console.log(data);
       });
   }
 
@@ -128,10 +132,24 @@ export default function HealthyRanges() {
       .then(checkResponseAuth)
       .then((data) => {
         setAgeGroupEnum(data);
-        console.log(data);
       });
   }
 
+  const getRoles = async () => {
+    await fetch(`/api/enum/role/`, { 
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        setRoleEnum(data);
+      });
+  }
 
   const getCartridgeTypes = async () => {
     await fetch(`/api/cartridge-type/`, { 
@@ -146,7 +164,6 @@ export default function HealthyRanges() {
       .then(checkResponseAuth)
       .then((data) => {
         setCartridgeTypeList(data);
-        console.log(data);
       });
   }
 
@@ -178,14 +195,15 @@ export default function HealthyRanges() {
       <Grid container spacing={2} sx={{padding: '15px'}}>
         <Grid container item gutterbottom spacing={2} xs={12} sm={12}>
           <Grid item xs={12} sm={5}>
-            <Button
+            {user.role == roleEnum.Super_Admin ? 
+            (<Button
                 startIcon={<CalculateIcon />}
                 variant="contained"
                 onClick={generateHealthyRanges}
               >
                 Recalculate Healthy Ranges
-              </Button>
-            </Grid>
+            </Button>) : null}
+          </Grid>
         </Grid>
         <Grid container item spacing={2} xs={12} sm={12}>
           <Grid item xs={12} sm={3}>

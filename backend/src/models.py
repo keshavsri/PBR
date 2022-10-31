@@ -373,7 +373,7 @@ class HealthyRange(db.Model):
     lower_bound: float = db.Column(db.Float)
     upper_bound: float = db.Column(db.Float)
     species: Species = db.Column(db.Enum(Species))
-    gender: BirdGenders = db.Column(db.Enum(BirdGenders))
+    gender: BirdGenders = db.Column(db.Enum(BirdGenders), nullable=True)
     age_group: AgeGroup = db.Column(db.Enum(AgeGroup))
     generated: datetime = db.Column(db.DateTime, server_default=db.func.now())
     current: bool = db.Column(db.Boolean, server_default="1")
