@@ -85,7 +85,6 @@ class AgeGroup(str, Enum):
     Lay = "Lay"
 
 
-
 class ValidationTypes(str, Enum):
     Saved = "Saved"
     Pending = "Pending"
