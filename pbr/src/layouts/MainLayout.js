@@ -31,7 +31,8 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDatabase } from "@fortawesome/free-solid-svg-icons";
-import ReportsIcon from "@mui/icons-material/Assessment";
+import ReportsIcon from "@mui/icons-material/Summarize"
+import HealthyRangesIcon from "@mui/icons-material/Assessment";
 
 import UsersIcon from "@mui/icons-material/Group";
 import OrganizationIcon from "@mui/icons-material/Apartment";
@@ -58,6 +59,11 @@ const pageData = [
       path: "/generate-reports",
       title: "Generate Reports",
       icon: <ReportsIcon />,
+    },
+    {
+      path: "/healthy-ranges",
+      title: "Healthy Ranges",
+      icon: <HealthyRangesIcon />
     },
   ],
   [
