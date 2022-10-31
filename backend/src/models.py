@@ -178,9 +178,10 @@ class Sample(db.Model):
         is_deleted: boolean value for if the sample is deleted
         validation_status: validation status of the sample
         sample_type: type of the sample
+        rotor_lot_number: Rotor lot number of the cartridge used for this sample
         flock_id: Flock that the sample is testing
         machine_id: Machine that the sample is collected from
-        cartridge_id: Cartridge that is used for the sample
+        cartridge_type_id: Cartridge Type that is used for the sample
         measurements: list of measurement values for the sample
     """
 
@@ -194,6 +195,7 @@ class Sample(db.Model):
     is_deleted: bool = db.Column(db.Boolean, server_default="0")
     validation_status: ValidationTypes = db.Column(db.Enum(ValidationTypes))
     sample_type: SampleTypes = db.Column(db.Enum(SampleTypes), nullable=True)
+    rotor_lot_number: str = db.Column(db.String(120), nullable=True)
 
     # References to Foreign Objects
     user_id: int = db.Column(db.Integer, db.ForeignKey('user_table.id'))
@@ -201,8 +203,8 @@ class Sample(db.Model):
         'batch_table.id'), nullable=True)
     flock_id: int = db.Column(db.Integer, db.ForeignKey(
         'flock_table.id'), nullable=True)
-    cartridge_id: int = db.Column(db.Integer, db.ForeignKey(
-        'cartridge_table.id'), nullable=True)
+    cartridge_type_id: int = db.Column(db.Integer, db.ForeignKey(
+        'cartridge_type_table.id'), nullable=True)
     machine_id: int = db.Column(db.Integer, db.ForeignKey(
         'machine_table.id'), nullable=True)
 
@@ -320,29 +322,6 @@ class MachineType(db.Model):
     __tablename__ = 'machine_type_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(120), unique=True, nullable=False)
-
-
-class Cartridge(db.Model):
-
-    """
-    This table represents a Cartridge object used to measure a sample
-
-    Attributes:
-        id: Primary Key
-        rotor_lot_number: The rotor lot number of the cartridge
-        cartridge_type_id: CartridgeType
-        organization_id: Foreign Key to Organization
-    """
-
-    __tablename__ = 'cartridge_table'
-    id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    rotor_lot_number: str = db.Column(db.String(120))
-
-    # References to Foreign Objects
-    cartridge_type_id: int = db.Column(
-        db.Integer, db.ForeignKey('cartridge_type_table.id'))
-    organization_id: int = db.Column(
-        db.Integer, db.ForeignKey('organization_table.id'))
 
 
 class CartridgeType(db.Model):

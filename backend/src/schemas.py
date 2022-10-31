@@ -152,7 +152,7 @@ class Measurement(PydanticModel):
     id: Optional[int]
     value: Optional[float]
     sample_id: int
-    analyte: Analyte
+    analyte: Optional[Analyte]
 
 
 class Analyte(PydanticModel):
@@ -173,13 +173,6 @@ class Machine(PydanticModel):
 class MachineType(PydanticModel):
     id: Optional[int]
     name: str
-
-
-class Cartridge(PydanticModel):
-    id: Optional[int]
-    rotor_lot_number: str
-    cartridge_type_id: int
-    organization_id: int
 
 
 class CartridgeType(PydanticModel):
