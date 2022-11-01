@@ -88,11 +88,9 @@ export default function DataViewSampleModal({ getData }) {
     setError,
     restartSample,
     timestamp,
-    generalDetails,
     machineDetails,
     setSamplePayload,
     setSampleValidationErrors,
-    setGeneralDetails,
     sampleType,
     setSampleType,
     sampleLoading,
@@ -112,13 +110,24 @@ export default function DataViewSampleModal({ getData }) {
   const [organization, setOrganization] = React.useState({});
   const [expanded, setExpanded] = React.useState(true);
   const [errorSubmission, setErrorSubmission] = React.useState(false);
+  const [SampleDetails, setSampleDetails] = React.useState({
+    comments: "",
+    flock_age: null,
+    flock_age_unit: null,
+    sample_type: null,
+    batch_id: null,
+    flock_id: null,
+    cartridge_id: null,
+    machine_id: null,
+    measurements: [],
+    organizationID: null,
+  });
 
   const getOrganizations = async () => {
     const response = await fetch(`/api/organization/`, {
       method: "GET",
     }).then(checkResponseAuth);
     const data = await response.json();
-    console.log(data);
     setOrganizations(data);
     setOrganization(data[0]);
   };
@@ -132,13 +141,25 @@ export default function DataViewSampleModal({ getData }) {
         return response.json();
       })
       .then((data) => {
-        console.log("NEW FLOCKS:", data);
         data.forEach((flock) => {
+          console.log(flock);
           flock.label = flock.name;
         });
         setFlocks(data);
         setFlock(data[0]);
       });
+  };
+
+  const handleSampleDetailsChange = (prop) => (event) => {
+    console.log("GENERAL DETAILS CHANGE");
+    console.log(event.target.value);
+
+    setSampleDetails({
+      ...SampleDetails,
+      [prop]: event.target.value,
+    });
+
+    console.log(SampleDetails);
   };
 
   const handleSampleTypeChange = (event) => {
@@ -177,7 +198,10 @@ export default function DataViewSampleModal({ getData }) {
               cartridgeType.analytes.map((a) => {
                 return (
                   <>
-                    <TextField label={a.abbreviation} />
+                    <TextField
+                      label={a.abbreviation}
+                      value={SampleDetails.ageNumber}
+                    />
                   </>
                 );
               })}
@@ -230,7 +254,6 @@ export default function DataViewSampleModal({ getData }) {
         return response.json();
       })
       .then((data) => {
-        console.log("NEW Source:", data);
         setSource(data[0]);
         setSources(data);
       });
@@ -244,7 +267,6 @@ export default function DataViewSampleModal({ getData }) {
       .then(checkResponseAuth)
       .then((data) => {
         setCartridgeTypes(data);
-        console.log(data);
         setCartridgeType(data[0]);
       });
   };
@@ -277,7 +299,89 @@ export default function DataViewSampleModal({ getData }) {
     setFlock(value);
   }
 
-  const onSubmit = async () => {};
+  const resetSampleDetails = () => {
+    setSampleDetails({
+      comments: "",
+      flock_age: null,
+      flock_age_unit: null,
+      sample_type: null,
+      batch_id: null,
+      flock_id: null,
+      cartridge_id: null,
+      machine_id: null,
+      measurements: [],
+      organizationID: null,
+    });
+  };
+
+  let onSubmit = async () => {
+    // let measurementValues = [];
+    // for (let i = 0; i < machineDetails.length; i++) {
+    //   let currentMachine = machineDetails[i];
+    //   for (let j = 0; j < currentMachine.measurements.length; j++) {
+    //     let currentMeasurement = currentMachine.measurements[j];
+    //     if (currentMeasurement.value) {
+    //       measurementValues.push({
+    //         measurement_id: currentMeasurement.metadata.id,
+    //         value: currentMeasurement.value,
+    //       });
+    //     }
+    //   }
+    // }
+    let payload = {
+      comments: SampleDetails.comments,
+      flock_age: SampleDetails.flock_age,
+      flock_age_unit: SampleDetails.flock_age_unit,
+      sample_type: SampleDetails.sample_type,
+      batch_id: SampleDetails.batch_id,
+      flock_id: null,
+      cartridge_id: null,
+      machine_id: SampleDetails.machine_id,
+      measurements: [],
+      organizationID: SampleDetails.organizationID,
+    };
+    console.log("Submitting!", payload);
+    // setSampleLoading(true);
+    await fetch(`/api/sample/`, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        // setSampleLoading(false);
+
+        console.log(response);
+        if (!response.ok) {
+          setError({
+            title: `${response.status} - ${response.statusText}`,
+            description: `There was an error while uploading the sample. Try again.`,
+          });
+        } else {
+          closeSampleModal();
+          resetSampleDetails();
+
+          return response.json();
+        }
+      });
+  };
+
+  // const onSubmit = async () => {
+  //   console.log("SUBMITTING");
+
+  //   SampleDetails.organizationID = organization.id;
+  //   SampleDetails.flock_age = flock.age;
+  //   SampleDetails.flock_age_unit = flock.age_unit;
+  //   SampleDetails.sample_type = sampleType;
+  //   SampleDetails.flock_id = flock.id;
+  //   SampleDetails.cartridge_id = cartridgeType.id;
+  //   SampleDetails.machine_id = source.id;
+  //   SampleDetails.measurements = sampleMeasurements;
+
+  //   console.log(SampleDetails);
+  // };
 
   return (
     <>
@@ -297,15 +401,13 @@ export default function DataViewSampleModal({ getData }) {
               <Select
                 labelId="label-select-cartridge-type"
                 id="select-cartridge-types"
-                value={cartridgeType}
+                value={SampleDetails.cartridge_id}
                 label="Cartridge Type"
-                onChange={(e) => {
-                  setCartridgeType(e.target.value);
-                }}
+                onChange={handleSampleDetailsChange("cartridge_id")}
               >
                 {cartridgeTypes.map((ct) => {
                   return (
-                    <MenuItem key={ct.id} value={ct}>
+                    <MenuItem key={ct.id} value={ct.id}>
                       {ct.name}
                     </MenuItem>
                   );
@@ -342,15 +444,13 @@ export default function DataViewSampleModal({ getData }) {
                 <Select
                   labelId="label-select-organization"
                   id="select-organization"
-                  value={organization}
+                  value={SampleDetails.organizationID}
                   label="Source"
-                  onChange={(e) => {
-                    setOrganization(e.target.value);
-                  }}
+                  onChange={handleSampleDetailsChange("organizationID")}
                 >
                   {organizations.map((org) => {
                     return (
-                      <MenuItem key={org.id} value={org}>
+                      <MenuItem key={org.id} value={org.id}>
                         {org.name}
                       </MenuItem>
                     );
@@ -365,26 +465,26 @@ export default function DataViewSampleModal({ getData }) {
               id="combo-box-demo"
               options={flocks}
               sx={{ width: 300 }}
-              value={flock}
-              onChange={handleFlockChange}
+              value={SampleDetails.flock_id}
+              onChange={handleSampleDetailsChange("flock_id")}
               getOptionLabel={(option) => `${option.name}`}
               inputValue={flockInput}
-              defaultValue={flock}
+              // defaultValue={flock}
               onInputChange={handleFlockInputChange}
               renderInput={(params) => <TextField {...params} />}
             />
 
-            <Grid>
-              <Typography> testing accordion </Typography>
-              {sampleMeasurements()}
-            </Grid>
+            <Grid>{sampleMeasurements()}</Grid>
             <br></br>
             <Grid className={classes.container}>
               <Typography gutterBottom variant="button">
-                Categorize This Sample
+                Categorize This Sample:
               </Typography>
 
-              <RadioGroup value={sampleType} onChange={handleSampleTypeChange}>
+              <RadioGroup
+                value={SampleDetails.sample_type}
+                onChange={handleSampleDetailsChange("sample_type")}
+              >
                 <FormControlLabel
                   value={sampleTypes.SURVEILLANCE}
                   label={`${sampleTypes.SURVEILLANCE} Sample (Healthy)`}
@@ -396,7 +496,7 @@ export default function DataViewSampleModal({ getData }) {
                   control={<Radio />}
                 />
               </RadioGroup>
-              {sampleType != "" && (
+              {SampleDetails.sample_type != null && (
                 <Button
                   sx={{ mt: "0.5rem", ml: "-0.25rem" }}
                   size="small"
@@ -406,6 +506,21 @@ export default function DataViewSampleModal({ getData }) {
                 </Button>
               )}
             </Grid>
+            <br></br>
+            <Typography variant="button">Comments</Typography>
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextField
+                    multiline
+                    rows={4}
+                    fullWidth
+                    value={SampleDetails.comments}
+                    onChange={handleSampleDetailsChange("comments")}
+                  />
+                </Grid>
+              </Grid>
+            </Box>
           </Card>
 
           <br></br>
