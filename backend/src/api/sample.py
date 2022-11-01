@@ -66,7 +66,7 @@ def create_sample():
 @sampleBlueprint.route('/org_cartrige_type', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
-def get_samples_by_cartridge_type_id_and_org(access_allowed):
+def get_samples_by_cartridge_type_id_and_org(current_user, access_allowed):
 
     """
     This function gets all samples for a specified cartridge type.
@@ -80,14 +80,17 @@ def get_samples_by_cartridge_type_id_and_org(access_allowed):
         samples = []
 
         with models.engine.connect() as connection:
-            result = connection.execute(text(
-            """
-            SELECT sample.id FROM sample_table sample, flock_table f, source_table source, organization_table o
-            WHERE sample.flock_id = f.id 
-            AND f.source_id = source.id 
-            AND source.organization_id = :org_id 
-            AND sample.cartridge_type_id = :cartridge_type_id;
-            """), {"org_id": request.json["org_id"], "cartridge_type_id": request.json["cartridge_type_id"]})
+
+            sql_select_query = "sample_table sample, flock_table f, source_table source, organization_table o"
+            sql_where_query = "WHERE sample.flock_id = f.id AND f.source_id = source.id AND source.organization_id = :org_id AND sample.cartridge_type_id = :cartridge_type_id"
+
+            if current_user.role != 0:
+                sql_select_query += ", user_table u"
+                sql_where_query += "AND u.organization_id = :current_user_id"
+
+
+            sql_query = "SELECT sample.id FROM " + sql_select_query + sql_where_query
+            result = connection.execute(text(sql_query + ";"), {"org_id": request.json["org_id"], "cartridge_type_id": request.json["cartridge_type_id"], "current_user_id": current_user.organization_id})
 
             samples = [SampleORM.query.get(row.id) for row in result]
                 
