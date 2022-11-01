@@ -29,7 +29,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { sampleTypes } from "../../../models/enums";
+import { sampleTypes, ageUnits } from "../../../models/enums";
 
 import NewAddSample from "./NewAddSample";
 
@@ -473,6 +473,32 @@ export default function DataViewSampleModal({ getData }) {
               onInputChange={handleFlockInputChange}
               renderInput={(params) => <TextField {...params} />}
             />
+
+            <TextField
+              label="Age *"
+              value={SampleDetails.flock_age}
+              type="number"
+              onChange={handleSampleDetailsChange("flock_age")}
+            />
+
+            <Grid item xs={6}>
+              <FormControl sx={{ width: "100%" }} required>
+                <InputLabel>D/W/M/Y</InputLabel>
+                <Select
+                  value={SampleDetails.flock_age_unit}
+                  label="D/W/M/Y *"
+                  onChange={handleSampleDetailsChange("ageUnit")}
+                >
+                  {Object.values(ageUnits).map((unit, index) => {
+                    return (
+                      <MenuItem value={unit} key={index}>
+                        {unit}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </Grid>
 
             <Grid>{sampleMeasurements()}</Grid>
             <br></br>
