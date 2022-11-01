@@ -116,7 +116,8 @@ else:
                 id=1,
                 abbreviation="AST",
                 units="U/L",
-                machine_type_id=2
+                machine_type_id=2,
+                name="Aspartate Aminotransferase"
 
             )
             db.session.add(mt1)
@@ -126,7 +127,7 @@ else:
                 abbreviation="BA",
                 units="umol/L",
                 machine_type_id=2,
-                name="bile acid"
+                name="Bile Acid"
             )
             db.session.add(mt2)
 
@@ -135,7 +136,7 @@ else:
                 abbreviation="CK",
                 units="U/L",
                 machine_type_id=2,
-                name="creatinine kinase"
+                name="Creatinine Kinase"
             )
             db.session.add(mt3)
 
@@ -144,7 +145,7 @@ else:
                 abbreviation="UA",
                 units="mg/dL",
                 machine_type_id=2,
-                name="uric acid"
+                name="Uric Acid"
             )
             db.session.add(mt4)
 
@@ -161,7 +162,7 @@ else:
 
             mt6 = Analyte(
                 id=6,
-                name="phosphorus",
+                name="Phosphorus",
                 abbreviation="PHOS",
                 units="mg/dL",
                 machine_type_id=2

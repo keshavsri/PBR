@@ -15,9 +15,10 @@ from src.api.machine_type import machineTypeBlueprint
 from src.api.organization import organizationBlueprint
 from src.api.cartridge_type import cartridgeTypeBlueprint
 
+from src.api.analyte import analyteBlueprint
+
 import os
 from dotenv import load_dotenv, find_dotenv
-
 
 load_dotenv(find_dotenv())
 
@@ -31,6 +32,7 @@ app.register_blueprint(batchBlueprint, url_prefix='/api/batch')
 app.register_blueprint(flockBlueprint, url_prefix='/api/flock')
 app.register_blueprint(sampleBlueprint, url_prefix='/api/sample')
 app.register_blueprint(machineBlueprint, url_prefix='/api/machine')
+app.register_blueprint(analyteBlueprint, url_prefix='/api/analyte')
 app.register_blueprint(machineTypeBlueprint, url_prefix='/api/machine-type')
 app.register_blueprint(organizationBlueprint, url_prefix='/api/organization')
 app.register_blueprint(sourceBlueprint, url_prefix='/api/source')

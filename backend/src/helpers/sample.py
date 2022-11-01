@@ -1,16 +1,14 @@
 from typing import List
 from src.enums import ValidationTypes
-from itsdangerous import json
+import re
 
 from src.models import db
-from src.models import Flock as FlockORM
 from src.models import User as UserORM
 from src.models import Sample as SampleORM
-from src.models import get_sample_organization_joined
-from src.models import OrganizationSource_Flock_Sample as OrganizationSource_Flock_SampleORM
-from src.schemas import Flock, Organization, Source, Sample, Machine, Measurement, User
+from src.models import Measurement as MeasurementORM
+from src.schemas import Flock, Organization, Source, Sample as Sample_pydantic, Machine, Measurement, User
 
-def create_sample(sample_dict: dict, current_user):
+def create_sample(sample_dict: dict):
     """
     The create_sample function accepts a dictionary containing the sample's information and creates
     a new sample using the pydantic model to parse and the ORM model to store the information.
@@ -19,171 +17,168 @@ def create_sample(sample_dict: dict, current_user):
     :return: sample:Sample: A Sample sqlalchemy model.
     """
     sample:SampleORM = SampleORM()
-    for name, value in Sample.parse_obj(sample_dict):
-        if name != 'measurement_values':
+    for name, value in sample_dict.items():
+        if name != 'measurements' and name != "is_deleted":
             setattr(sample, name, value)
-    setattr(sample, "entered_by_id", current_user.id)
+            
+    setattr(sample, "user_id", 1)
     setattr(sample, "validation_status", ValidationTypes.Saved)
 
-    # Get OrgSourceFlockSample ID
-    flock = Flock.from_orm(FlockORM.query.filter_by(name=sample_dict["flockDetails"]['name']).first())
-    OrganizationSourceFlock = db.session.query(OrganizationSource_Flock_SampleORM).filter_by(
-        organization_id=flock.organization_id,
-        source_id=flock.source_id,
-        flock_id=flock.id
-    ).first()
-
-    if not OrganizationSourceFlock:
-        return None
-
-    setattr(sample, "organizationsource_flock_sample_id", OrganizationSourceFlock.id)
-    
     db.session.add(sample)
     db.session.commit()
     db.session.refresh(sample)
     
-    values = []
-    for meas_value in sample_dict["measurement_values"]:
-        meas_value["sample_id"] = sample.id
-        values.append(create_measurement_value(meas_value))
+    # Update the list of measurements.
+
+    measurements = []
+    for measurement in sample_dict["measurements"]:
+        measurement_model:MeasurementORM = MeasurementORM()
+        for name, value in measurement.items():
+            setattr(measurement_model, name, value)
+            setattr(measurement_model, "sample_id", sample.id)
+        measurements.append(measurement_model)
     
-    setattr(sample, "measurement_values", values)
+    setattr(sample, "measurements", measurements)
+
+    db.session.add(sample)
     db.session.commit()
+    db.session.refresh(sample)
+
     return sample
 
 
-def get_samples_by_org(org_id: int, user_id: int) -> List[dict]:
+# Method to check the filetype of a given filename
+def check_allowed_filetype(filename):
     """
-    The get_samples_by_org function accepts an integer id as input and returns a list of dictionaries containing
-    the samples' information.
-
-    :param org_id:int: Used to specify the id of the organization that we want to retrieve the samples from.
-    :return: A list of dictionaries containing the samples formatted by pydantic.
+    Checks if the filetype is allowed
+    :param filename: The filename to check
+    :return: True if the filetype is allowed, False otherwise
     """
-    samples = get_sample_organization_joined(db.session)
-    
-    machines = json.loads(get_machines_by_org(org_id))
-    ret = {
-        "rows": [],
-        "types": []
-    }
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-    for machine in machines:
-        machJson = {
-            "machineName": machine["name"],
-            "machineId": machine["id"],
-            "data": []
-        }
-        for info in machine["info"]:
-            machJson["data"].append({"type":info})
-        for meas in machine["measurements"]:   
-            machJson["data"].append({"type":meas})
-        ret["types"].append(machJson)
-    for sample in samples:
-        print("---------------------------------")
-        print(sample.entered_by_id, flush=True)
-        if not sample.deleted:
-            if sample.entered_by_id == user_id:
-                sample.measurement_values = get_measurement_value_ORM_by_sample_id(
-                    sample.id)
-                sample.timestamp_added = str(sample.timestamp_added)
-                ret["rows"].append(Sample.from_orm(sample).dict())
-            else:
-                if sample.validation_status != ValidationTypes.Saved:
-                    sample.measurement_values = get_measurement_value_ORM_by_sample_id(
-                        sample.id)
-                    sample.timestamp_added = str(sample.timestamp_added)
-                    ret["rows"].append(Sample.from_orm(sample).dict())
-            
-    return json.dumps(ret, default=str)
 
-def get_sample_by_id(id: int) -> dict:
+def parse_data_from_file(file):
     """
-    The get_sample_by_id function accepts an integer id as input and returns a dictionary containing the sample's
-    information.
-
-    :param id:int: Used to specify the id of the sample that we want to retrieve.
-    :return: A dictionary containing the sample formatted by pydantic.
+    Parses the data from a given machine output file and returns the data in a JSON format
+    :param file: The file to parse from the POST request
+    :return: JSON data of the parsed machine output file
     """
-    sample = SampleORM.query.filter_by(id=id).first()
-    if not sample.deleted:
-        sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
-        return Sample.from_orm(sample).dict()
+    if not check_allowed_filetype(file.filename):
+        raise Exception("Invalid file type")
+
+    # Read the file line-by-line, storing each line in the array below/
+    content_lines = []
+    for line in file:
+        line_content = line.decode('utf-8').strip()
+        content_lines.append(line_content)
+    if "vetscan vs2" in content_lines[0].lower():
+        print("This is VetScan VS2!")
+        machine_data = sample_helper._parse_vetscan_vs2(content_lines)
+        return machine_data
     else:
-        return None
+        raise Exception("Invalid Machine")
+    # remove end line characters
 
-def get_samples_by_user(user_id: int) -> List[dict]:
+def _parse_vetscan_vs2(content_lines):
     """
-    The get_sample_by_user function accepts an integer id as input and returns a list of dictionaries containing
-    the samples' information.
-
-    :param user_id:int: Used to specify the id of the user that we want to retrieve the samples from.
-    :return: A list of dictionaries containing the samples formatted by pydantic.
+    Parses the data from a given VetScan VS2 output file and returns the data in a JSON format
+    :param content_lines: The lines of the file to parse
+    :return: JSON data of the parsed machine output file
     """
-
-    samples = get_sample_organization_joined(db.session).filter_by(entered_by_id=user_id).all()
-    user = UserORM.query.filter_by(id=user_id).first()
-    machines = json.loads(get_machines_by_org(user.organization_id))
-    ret = {
-        "rows": [],
-        "types": []
+    ret_dict = {
+        "name": content_lines[0],
+        "info": [
+            {"key": "Timestamp of Test", "value": re.sub(" +", " ", content_lines[2])},
+        ],
+        "measurements": []
     }
+    is_error_file = False
 
-    for machine in machines:
-        machJson = {
-            "machineName": machine["name"],
-            "machineId": machine["id"],
-            "data": []
-        }
-        for info in machine["info"]:
-            machJson["data"].append({"type":info})
-        for meas in machine["measurements"]:   
-            machJson["data"].append({"type":meas})
-        ret["types"].append(machJson)
-    for sample in samples:
-        if not sample.deleted:
-            sample.measurement_values = get_measurement_value_ORM_by_sample_id(sample.id)
-            sample.timestamp_added = str(sample.timestamp_added)
-            ret["rows"].append(Sample.from_orm(sample).dict())
-    
-    return json.dumps(ret, default=str)
+    if is_error_file:
+        print("Error file")
 
-
-def get_all_samples(user_id: int) -> List[dict]:
-    """
-    The get_all_samples function returns a list of dictionaries containing all the samples.
-
-    :return: A list of dictionaries containing the samples formatted by pydantic.
-    """
-    samples = get_sample_organization_joined(db.session).all()
-    machines = json.loads(get_machines())
-    ret = {
-        "rows": [],
-        "types": []
-    }
-
-    for machine in machines:
-        machJson = {
-            "machineName": machine["name"],
-            "machineId": machine["id"],
-            "data": []
-        }
-        for info in machine["info"]:
-            machJson["data"].append({"type":info})
-        for meas in machine["measurements"]:   
-            machJson["data"].append({"type":meas})
-        ret["types"].append(machJson)
-    for sample in samples:
-        if not sample.deleted:
-            if sample.entered_by_id == user_id:
-                sample.measurement_values = get_measurement_value_ORM_by_sample_id(
-                    sample.id)
-                sample.timestamp_added = str(sample.timestamp_added)
-                ret["rows"].append(Sample.from_orm(sample).dict())
+    info_flag = True
+    measurement_flag = False
+    print("MEASUREMENTS-----------------------")
+    for row_idx in range(3, len(content_lines)):
+        row = content_lines[row_idx]
+        print("CHECKING:" + row)
+        # While pulling basic measurements,
+        if info_flag:
+            if re.search(r"^[.]+", row):
+                info_flag = False
+                measurement_flag = True
             else:
-                if sample.validation_status != ValidationTypes.Saved:
-                    sample.measurement_values = get_measurement_value_ORM_by_sample_id(
-                        sample.id)
-                    sample.timestamp_added = str(sample.timestamp_added)
-                    ret["rows"].append(Sample.from_orm(sample).dict())
-    return json.dumps(ret, default=str)
+                key = row.split(":")[0].strip()
+                value = row.split(":")[1].strip()
+                print("NEW:", {"key": key, "value": value})
+                ret_dict["info"].append({"key": key, "value": value})
+
+        # While pulling basic measurements,
+        elif measurement_flag:
+            # Are we at the end of the basic measurements?
+            if row.strip() == "":
+                print("EXTRA-----------------------")
+                measurement_flag = False
+            else:
+                if re.search(r"^[0-9]{2} ([0-9ABCDEF]{4}  ){1,4} *", row):
+                    is_error_file = True
+                else:
+                    row_contents = re.sub(" +", " ", row).split()
+                    print(row_contents)
+                    # For non-error files with issue measurements
+                    if len(row_contents) != 3 and not is_error_file:
+                        data = ""
+                        for j in range(1, len(row_contents) - 1):
+                            data = data + row_contents[j] + " "
+                            new_meas = {"key": row_contents[0].strip(), "value": data.strip(), "units": row_contents[len(row_contents)-1].strip()}
+                    else:
+                        # For all other measurements
+                        new_meas = {"key": row_contents[0].strip(), "value": row_contents[1].strip(), "units": row_contents[len(row_contents)-1].strip()}
+                    print("NEW:", new_meas)
+                    ret_dict["measurements"].append(new_meas)
+        else:
+            # You are finished with basic measurements. Switch to extra info.
+            if re.search(r"^QC +[A-Za-z0-9]+ *", row):
+                row_contents = re.sub(" +", " ", row).strip().split()
+                print("QC: ", row_contents)
+                new_meas = {"key": row_contents[0].strip(), "value": row_contents[1].strip()}
+                print("NEW:", new_meas)
+                ret_dict["measurements"].append(new_meas)
+            # If row is RQC Row
+            if re.search(r"^RQC: [0-9]+ *", row):
+                row_contents = re.sub(" +", " ", row).strip().split(":")
+                print("RQC: ", row_contents)
+                new_meas = {"key": row_contents[0].strip(), "value": row_contents[1].strip()}
+                print("NEW:", new_meas)
+                ret_dict["measurements"].append(new_meas)
+            if re.search(r"^HEM *[0-9+-]+ +LIP *[0-9+-]+ +ICT *[0-9+-]+ *", row):
+                row_contents = re.sub(" +", " ", row).strip().split()
+                print("Extra: ", row_contents)
+                new_meas = [
+                    {"key": row_contents[0].strip(
+                    ), "value": row_contents[1].strip()},
+                    {"key": row_contents[2].strip(
+                    ), "value": row_contents[3].strip()},
+                    {"key": row_contents[4].strip(
+                    ), "value": row_contents[5].strip()}
+                ]
+                print("NEW:", new_meas)
+                ret_dict["measurements"].extend(new_meas)
+
+    print(ret_dict)
+    return ret_dict
+
+
+def _is_error_file(content_lines):
+    """
+    Checks if the file is an error file.
+    :param content_lines:
+    :return: True if error file, False otherwise
+    """
+    is_error_file = False
+
+    temp = re.search(r"^[0-9]{2} ([0-9A-F]{1,4}[ ]*){1,4}", content_lines[8])
+    if temp:
+        is_error_file = True
+    return is_error_file
