@@ -1,6 +1,6 @@
 from flask import request, Blueprint, jsonify
 from http import HTTPStatus
-from src.enums import LogActions, ValidationTypes
+from src.enums import LogActions, ValidationTypes, Roles
 from src.api.user import token_required, allowed_roles
 from src import models, schemas
 from src.helpers import sample as sample_helper
@@ -86,7 +86,7 @@ def create_sample(current_user, access_allowed):
         models.db.session.refresh(sample)
 
         return schemas.Sample.from_orm(sample).dict(), 201
-        
+
     else:
         return jsonify({'message': 'Role not allowed'}), 403
     
@@ -94,43 +94,44 @@ def create_sample(current_user, access_allowed):
 
 @sampleBlueprint.route('/org_cartrige_type', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2, 3, 4])
-def get_samples_by_cartridge_type_id_and_org(current_user, access_allowed):
+def get_samples_by_cartridge_type_id_and_org(current_user):
 
     """
-    This function gets all samples for a specified cartridge type.
-    :param access_allowed: boolean, whether the user has access to the endpoint
+    This function gets all samples for a specified cartridge type and organization.
+    Allowed Roles check not needed for this since all users should be able to get samples
     :param current_user: the user object of the user making the request
-    :param cartridge_type_id: the id of the cartridge type to retrieve samples of
-    :return: a json response containing all samples for the cartridge type
+    :return: a json response containing all samples for the org and cartridge type
     """
 
-    if access_allowed:
-
+    # If user ins't superadmin, they should only be allowed to access samples in their org
+    if current_user.role != 0 and current_user.organization_id != request.args.get('organization_id'):
+        return jsonify({'message': 'Role not allowed'}), 403    
+		
+    else:
         samples = []
-
         with models.engine.connect() as connection:
 
             sql_select_query = "sample_table sample, flock_table f, source_table source, organization_table o"
-            sql_where_query = " WHERE sample.flock_id = f.id AND f.source_id = source.id AND source.organization_id = :org_id AND sample.cartridge_type_id = :cartridge_type_id "
+            sql_where_query = """
+        	WHERE sample.flock_id = f.id 
+        	AND f.source_id = source.id 
+        	AND source.organization_id = :organization_id 
+        	AND sample.cartridge_type_id = :cartridge_type_id
+        	AND CASE WHEN sample.validation_status = "Saved" THEN sample.user_id = :current_user_id
+            	END
+        	"""
             
             # If user is a data collector, they should only see their samples 
-            if current_user.role == 3:
+            if current_user.role == Roles.Data_Collector:
                 sql_where_query += "AND sample.user_id = :current_user_id"
-
-            # If user is admin or below, they should only see samples within their org
-            elif current_user.role != 0:
-                sql_select_query += ", user_table u"
-                sql_where_query += "AND u.organization_id = :current_user_org_id"
 
 
             sql_query = "SELECT sample.id FROM " + sql_select_query + sql_where_query
-            result = connection.execute(text(sql_query + ";"), {"org_id": request.json["org_id"], "cartridge_type_id": request.json["cartridge_type_id"], "current_user_id": current_user.id, "current_user_org_id": current_user.organization_id})
+            result = connection.execute(text(sql_query + ";"), {"org_id": request.args.get('organization_id'), "cartridge_type_id": request.args.get('cartridge_type_id'), "current_user_id": current_user.id})
 
             for row in result:
                 sample = SampleORM.query.get(row.id)
-                if sample.validation_status == "Saved" and sample.user_id == current_user.id:
-                    samples.append(sample)
+                samples.append(sample)
                 
         results = []
         for sample in samples:
@@ -144,8 +145,7 @@ def get_samples_by_cartridge_type_id_and_org(current_user, access_allowed):
         else:
             return jsonify(results), 200
             
-    else:
-        return jsonify({'message': 'Role not allowed'}), 403
+
 
 
 @sampleBlueprint.route('/<int:item_id>', methods=['PUT'])
