@@ -116,11 +116,7 @@ export default function DataViewSampleModal({ getData }) {
     flock_age_unit: null,
     sample_type: null,
     batch_id: null,
-    flock_id: null,
-    cartridge_id: null,
-    machine_id: null,
     measurements: [],
-    organizationID: null,
   });
 
   const getOrganizations = async () => {
@@ -275,7 +271,6 @@ export default function DataViewSampleModal({ getData }) {
     if (sampleModalVisibility) {
       await getOrganizations();
       await getCartridgeTypes();
-      // await getFlocks();
     }
   }, [sampleModalVisibility]);
 
@@ -305,43 +300,35 @@ export default function DataViewSampleModal({ getData }) {
       flock_age: null,
       flock_age_unit: null,
       sample_type: null,
-      batch_id: null,
-      flock_id: null,
-      cartridge_id: null,
-      machine_id: null,
       measurements: [],
-      organizationID: null,
     });
+
+    setOrganization(organizations[0]);
+    setSource(sources[0]);
+    setFlock(flocks[0]);
+    setCartridgeType(cartridgeTypes[0]);
   };
 
   let onSubmit = async () => {
-    // let measurementValues = [];
-    // for (let i = 0; i < machineDetails.length; i++) {
-    //   let currentMachine = machineDetails[i];
-    //   for (let j = 0; j < currentMachine.measurements.length; j++) {
-    //     let currentMeasurement = currentMachine.measurements[j];
-    //     if (currentMeasurement.value) {
-    //       measurementValues.push({
-    //         measurement_id: currentMeasurement.metadata.id,
-    //         value: currentMeasurement.value,
-    //       });
-    //     }
-    //   }
-    // }
     let payload = {
       comments: SampleDetails.comments,
       flock_age: SampleDetails.flock_age,
       flock_age_unit: SampleDetails.flock_age_unit,
       sample_type: SampleDetails.sample_type,
       batch_id: SampleDetails.batch_id,
-      flock_id: null,
-      cartridge_id: null,
+      flock_id: flock.id,
+      cartridge_id: cartridgeType.id,
       machine_id: SampleDetails.machine_id,
-      measurements: [],
-      organizationID: SampleDetails.organizationID,
+      measurements: [
+        {
+          analyte_id: 1,
+          value: 1,
+        },
+      ],
+      organization_id: organization.id,
     };
     console.log("Submitting!", payload);
-    // setSampleLoading(true);
+    setSampleLoading(true);
     await fetch(`/api/sample/`, {
       method: "POST",
       body: JSON.stringify(payload),
@@ -351,8 +338,7 @@ export default function DataViewSampleModal({ getData }) {
     })
       .then(checkResponseAuth)
       .then((response) => {
-        // setSampleLoading(false);
-
+        setSampleLoading(false);
         console.log(response);
         if (!response.ok) {
           setError({
@@ -367,21 +353,6 @@ export default function DataViewSampleModal({ getData }) {
         }
       });
   };
-
-  // const onSubmit = async () => {
-  //   console.log("SUBMITTING");
-
-  //   SampleDetails.organizationID = organization.id;
-  //   SampleDetails.flock_age = flock.age;
-  //   SampleDetails.flock_age_unit = flock.age_unit;
-  //   SampleDetails.sample_type = sampleType;
-  //   SampleDetails.flock_id = flock.id;
-  //   SampleDetails.cartridge_id = cartridgeType.id;
-  //   SampleDetails.machine_id = source.id;
-  //   SampleDetails.measurements = sampleMeasurements;
-
-  //   console.log(SampleDetails);
-  // };
 
   return (
     <>
@@ -401,13 +372,15 @@ export default function DataViewSampleModal({ getData }) {
               <Select
                 labelId="label-select-cartridge-type"
                 id="select-cartridge-types"
-                value={SampleDetails.cartridge_id}
+                value={cartridgeType}
                 label="Cartridge Type"
-                onChange={handleSampleDetailsChange("cartridge_id")}
+                onChange={(e) => {
+                  setCartridgeType(e.target.value);
+                }}
               >
                 {cartridgeTypes.map((ct) => {
                   return (
-                    <MenuItem key={ct.id} value={ct.id}>
+                    <MenuItem key={ct.id} value={ct}>
                       {ct.name}
                     </MenuItem>
                   );
@@ -444,13 +417,15 @@ export default function DataViewSampleModal({ getData }) {
                 <Select
                   labelId="label-select-organization"
                   id="select-organization"
-                  value={SampleDetails.organizationID}
+                  value={organization}
                   label="Source"
-                  onChange={handleSampleDetailsChange("organizationID")}
+                  onChange={(e) => {
+                    setOrganization(e.target.value);
+                  }}
                 >
                   {organizations.map((org) => {
                     return (
-                      <MenuItem key={org.id} value={org.id}>
+                      <MenuItem key={org.id} value={org}>
                         {org.name}
                       </MenuItem>
                     );
@@ -487,7 +462,7 @@ export default function DataViewSampleModal({ getData }) {
                 <Select
                   value={SampleDetails.flock_age_unit}
                   label="D/W/M/Y *"
-                  onChange={handleSampleDetailsChange("ageUnit")}
+                  onChange={handleSampleDetailsChange("flock_age_unit")}
                 >
                   {Object.values(ageUnits).map((unit, index) => {
                     return (
@@ -561,6 +536,7 @@ export default function DataViewSampleModal({ getData }) {
               }}
               onClick={() => {
                 closeSampleModal();
+                resetSampleDetails();
               }}
             >
               Cancel
