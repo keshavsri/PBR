@@ -366,114 +366,131 @@ export default function DataViewSampleModal({ getData }) {
         <div style={modalStyle} className={classes.paper}>
           <Card>
             <>
-              <InputLabel id="label-select-organization">
-                Cartridge Type
-              </InputLabel>
-              <Select
-                labelId="label-select-cartridge-type"
-                id="select-cartridge-types"
-                value={cartridgeType}
-                label="Cartridge Type"
-                onChange={(e) => {
-                  setCartridgeType(e.target.value);
-                }}
-              >
-                {cartridgeTypes.map((ct) => {
-                  return (
-                    <MenuItem key={ct.id} value={ct}>
-                      {ct.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
+              <Box sx={{ flexGrow: 1 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={8}>
+                    <InputLabel id="label-select-organization">
+                      Cartridge Type
+                    </InputLabel>
+                    <Select
+                      labelId="label-select-cartridge-type"
+                      id="select-cartridge-types"
+                      value={cartridgeType}
+                      label="Cartridge Type"
+                      onChange={(e) => {
+                        setCartridgeType(e.target.value);
+                      }}
+                    >
+                      {cartridgeTypes.map((ct) => {
+                        return (
+                          <MenuItem key={ct.id} value={ct}>
+                            {ct.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </Grid>
+                  <Grid item xs={4}>
+                    {user.role === 0 && (
+                      <>
+                        <InputLabel id="label-select-organization">
+                          Organization
+                        </InputLabel>
+                        <Select
+                          labelId="label-select-organization"
+                          id="select-organization"
+                          value={organization}
+                          label="Source"
+                          onChange={(e) => {
+                            setOrganization(e.target.value);
+                          }}
+                        >
+                          {organizations.map((org) => {
+                            return (
+                              <MenuItem key={org.id} value={org}>
+                                {org.name}
+                              </MenuItem>
+                            );
+                          })}
+                        </Select>
+                      </>
+                    )}
+                  </Grid>
+                  <Grid item xs={8}>
+                    <InputLabel id="label-select-organization">
+                      Source
+                    </InputLabel>
+                    <Select
+                      labelId="label-select-source"
+                      id="select-sources"
+                      value={source}
+                      label="Source"
+                      onChange={(e) => {
+                        setSource(e.target.value);
+                      }}
+                    >
+                      {sources.map((s) => {
+                        return (
+                          <MenuItem key={s.id} value={s}>
+                            {s.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </Grid>
+                  <Grid item xs={4}>
+                    <InputLabel id="label-select-flock">Flock</InputLabel>
+                    <Autocomplete
+                      disablePortal
+                      id="combo-box-demo"
+                      options={flocks}
+                      sx={{ width: 300 }}
+                      value={SampleDetails.flock_id}
+                      onChange={handleSampleDetailsChange("flock_id")}
+                      getOptionLabel={(option) => `${option.name}`}
+                      inputValue={flockInput}
+                      // defaultValue={flock}
+                      onInputChange={handleFlockInputChange}
+                      renderInput={(params) => <TextField {...params} />}
+                    />
+                  </Grid>
+                </Grid>
+              </Box>
             </>
 
-            <>
-              <InputLabel id="label-select-organization">Source</InputLabel>
-              <Select
-                labelId="label-select-source"
-                id="select-sources"
-                value={source}
-                label="Source"
-                onChange={(e) => {
-                  setSource(e.target.value);
-                }}
-              >
-                {sources.map((s) => {
-                  return (
-                    <MenuItem key={s.id} value={s}>
-                      {s.name}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </>
+            <></>
+            <br />
 
-            {user.role === 0 && (
-              <>
-                <InputLabel id="label-select-organization">
-                  Organization
-                </InputLabel>
-                <Select
-                  labelId="label-select-organization"
-                  id="select-organization"
-                  value={organization}
-                  label="Source"
-                  onChange={(e) => {
-                    setOrganization(e.target.value);
-                  }}
-                >
-                  {organizations.map((org) => {
-                    return (
-                      <MenuItem key={org.id} value={org}>
-                        {org.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </>
-            )}
-
-            <InputLabel id="label-select-flock">Flock</InputLabel>
-            <Autocomplete
-              disablePortal
-              id="combo-box-demo"
-              options={flocks}
-              sx={{ width: 300 }}
-              value={SampleDetails.flock_id}
-              onChange={handleSampleDetailsChange("flock_id")}
-              getOptionLabel={(option) => `${option.name}`}
-              inputValue={flockInput}
-              // defaultValue={flock}
-              onInputChange={handleFlockInputChange}
-              renderInput={(params) => <TextField {...params} />}
-            />
-
-            <TextField
-              label="Age *"
-              value={SampleDetails.flock_age}
-              type="number"
-              onChange={handleSampleDetailsChange("flock_age")}
-            />
-
-            <Grid item xs={6}>
-              <FormControl sx={{ width: "100%" }} required>
-                <InputLabel>D/W/M/Y</InputLabel>
-                <Select
-                  value={SampleDetails.flock_age_unit}
-                  label="D/W/M/Y *"
-                  onChange={handleSampleDetailsChange("flock_age_unit")}
-                >
-                  {Object.values(ageUnits).map((unit, index) => {
-                    return (
-                      <MenuItem value={unit} key={index}>
-                        {unit}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
-            </Grid>
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={8}>
+                  <TextField
+                    label="Age *"
+                    value={SampleDetails.flock_age}
+                    type="number"
+                    onChange={handleSampleDetailsChange("flock_age")}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <FormControl sx={{ width: "100%" }} required>
+                    <InputLabel>D/W/M/Y</InputLabel>
+                    <Select
+                      value={SampleDetails.flock_age_unit}
+                      label="D/W/M/Y *"
+                      onChange={handleSampleDetailsChange("flock_age_unit")}
+                    >
+                      {Object.values(ageUnits).map((unit, index) => {
+                        return (
+                          <MenuItem value={unit} key={index}>
+                            {unit}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </Box>
 
             <Grid>{sampleMeasurements()}</Grid>
             <br></br>
