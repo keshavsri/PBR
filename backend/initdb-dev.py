@@ -1,12 +1,14 @@
 from src.models import *
 from src import app
+from sqlalchemy import text
+
 import sys
+import bcrypt
 import traceback
 from sqlalchemy.sql import text
 from sqlalchemy import MetaData
 
 
-import bcrypt
 
 if len(sys.argv) != 3:
     print("Invalid number of Arguments! Usage: initdb su_username su_password")
@@ -458,97 +460,7 @@ else:
             db.session.commit()
 
             # Temporary for healthy range feature development
-            s1 = Sample(
-                flock_age = 3,
-                flock_age_unit = "Days",
-                validation_status = "Accepted",
-                sample_type = "Surveillance",
-                flock_id = 1
-            )
-            db.session.add(s1)
 
-            s2 = Sample(
-                flock_age = 3,
-                flock_age_unit = "Days",
-                validation_status = "Accepted",
-                sample_type = "Surveillance",
-                flock_id = 1
-            )
-            db.session.add(s2)
-
-            s3 = Sample(
-                flock_age = 3,
-                flock_age_unit = "Days",
-                validation_status = "Accepted",
-                sample_type = "Surveillance",
-                flock_id = 1
-            )
-            db.session.add(s3)
-
-            m11 = Measurement(
-                value = 11,
-                analyte_id = 1,
-                sample_id = 1
-            )
-            db.session.add(m11)
-
-            m12 = Measurement(
-                value = 12,
-                analyte_id = 1,
-                sample_id = 2
-            )
-            db.session.add(m12)
-
-            m13 = Measurement(
-                value = 13,
-                analyte_id = 1,
-                sample_id = 3
-            )
-            db.session.add(m13)
-
-            m21 = Measurement(
-                value = 21,
-                analyte_id = 2,
-                sample_id = 1
-            )
-            db.session.add(m21)
-
-            m22 = Measurement(
-                value = 22,
-                analyte_id = 2,
-                sample_id = 2
-            )
-            db.session.add(m22)
-
-            m23 = Measurement(
-                value = 23,
-                analyte_id = 2,
-                sample_id = 3
-            )
-            db.session.add(m23)
-
-            m31 = Measurement(
-                value = 31,
-                analyte_id = 3,
-                sample_id = 1
-            )
-            db.session.add(m31)
-
-            m32 = Measurement(
-                value = 32,
-                analyte_id = 3,
-                sample_id = 2
-            )
-            db.session.add(m32)
-
-            m33 = Measurement(
-                value = 33,
-                analyte_id = 3,
-                sample_id = 3
-            )
-            db.session.add(m33)
-
-            db.session.commit()
 
 
             # Link Measurement Types to Machines
@@ -577,7 +489,9 @@ else:
                 c5.analytes.append(child)
 
             db.session.commit()
-            print("Done!")
+
+
+            print("Partially intialized.")
         except Exception as e:
             traceback.print_exc()
             print("Could not finish import. Drop all tables and start again.")

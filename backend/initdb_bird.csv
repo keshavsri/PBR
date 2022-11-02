@@ -1,0 +1,2078 @@
+﻿bird_ID,species,strain,source,date_tested,age,age_unit,production_type,gender,healthy,comments
+1,turkey,not recorded,TAU,13-Aug-21,1,d,meat,female,TRUE,
+2,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+3,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+4,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+5,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+6,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+7,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+8,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+9,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+10,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+11,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+12,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+13,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+14,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+15,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+16,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+17,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+18,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+19,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+20,turkey,not reported,TAU,13-Aug-21,1,d,meat,female,TRUE,
+21,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+22,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+23,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+24,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+25,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+26,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+27,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+28,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+29,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+30,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+31,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+32,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+33,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+34,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+35,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+36,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+37,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+38,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+39,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+40,turkey,not reported,TAU,14-Aug-21,2,d,meat,female,TRUE,
+41,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+42,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+43,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+44,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+45,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+46,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+47,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+48,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+49,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+50,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+51,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+52,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+53,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+54,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+55,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+56,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+57,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+58,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+59,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+60,turkey,not reported,TAU,15-Aug-21,3,d,meat,female,TRUE,
+61,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+62,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+63,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+64,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+65,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+66,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+67,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+68,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+69,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+70,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+71,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+72,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+73,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+74,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+75,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+76,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+77,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+78,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+79,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+80,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,TRUE,
+81,turkey,not reported,TAU,16-Aug-21,4,d,meat,female,FALSE,paddling
+82,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+83,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+84,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+85,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+86,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+87,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+88,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+89,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+90,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+91,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+92,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+93,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+94,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+95,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+96,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+97,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+98,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+99,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+100,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+101,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,TRUE,
+102,turkey,not reported,TAU,17-Aug-21,5,d,meat,female,FALSE,downer
+103,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+104,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+105,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+106,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+107,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+108,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+109,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+110,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+111,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+112,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+113,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+114,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+115,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+116,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+117,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+118,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+119,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+120,turkey,not reported,TAU,18-Aug-21,6,d,meat,female,TRUE,"hot, panting"
+121,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+122,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+123,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+124,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+125,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+126,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+127,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+128,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+129,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+130,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+131,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+132,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+133,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+134,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+135,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+136,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+137,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+138,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+139,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+140,turkey,not reported,TAU,19-Aug-21,7,d,meat,female,TRUE,"hot, panting"
+141,turkey,not recorded,TAU,20-Aug-21,8,D,meat,female,TRUE,
+142,turkey,not recorded,TAU,20-Aug-21,8,D,meat,female,TRUE,
+143,turkey,not recorded,TAU,20-Aug-21,8,D,meat,female,TRUE,
+144,turkey,not recorded,TAU,20-Aug-21,8,D,meat,female,TRUE,
+145,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+146,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+147,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+148,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+149,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+150,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+151,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+152,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+153,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+154,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+155,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+156,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+157,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+158,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+159,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+160,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+161,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+162,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+163,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+164,turkey,Select Genetics,SGNC,25-Nov-20,32,w,breeder,female,TRUE,
+165,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+166,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+167,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+168,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+169,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+170,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+171,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+172,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+173,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+174,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+175,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+176,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+177,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+178,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+179,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+180,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+181,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+182,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+183,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+184,turkey,Select Genetics,SGNC,11-Dec-20,20,w,breeder,female,TRUE,
+185,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+186,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+187,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+188,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+189,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+190,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+191,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+192,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+193,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+194,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+195,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+196,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+197,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+198,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+199,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+200,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+201,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+202,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+203,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+204,turkey,Select Genetics,SGMN,31-Dec-20,28,w,breeder,female,TRUE,
+205,turkey,Select Genetics,SGMN,13-Jan-21,30,w,breeder,female,TRUE,
+206,turkey,Select Genetics,SGMN,13-Jan-21,30,w,breeder,female,TRUE,
+207,turkey,Select Genetics,SGMN,13-Jan-21,30,w,breeder,female,TRUE,
+208,turkey,Select Genetics,SGMN,13-Jan-21,30,w,breeder,female,TRUE,
+209,turkey,Select Genetics,SGMN,13-Jan-21,30,w,breeder,female,TRUE,
+210,turkey,Select Genetics,SGMN,13-Jan-21,30,w,breeder,female,TRUE,
+211,turkey,Select Genetics,SGMN,13-Jan-21,30,w,breeder,female,TRUE,
+212,turkey,Select Genetics,SGMN,13-Jan-21,30,w,breeder,female,TRUE,
+213,turkey,Select Genetics,SGMN,13-Jan-21,30,w,breeder,female,TRUE,
+214,turkey,Select Genetics,SGMN,13-Jan-21,30,w,breeder,female,TRUE,
+215,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,FALSE,24 hrs post light
+216,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,FALSE,24 hrs post light
+217,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,FALSE,24 hrs post light
+218,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,FALSE,24 hrs post light
+219,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,FALSE,24 hrs post light
+220,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,FALSE,24 hrs post light
+221,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,FALSE,24 hrs post light
+222,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,FALSE,24 hrs post light
+223,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,FALSE,24 hrs post light
+224,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,FALSE,24 hrs post light
+225,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,TRUE,24 hrs post light
+226,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,TRUE,24 hrs post light
+227,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,TRUE,24 hrs post light
+228,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,TRUE,24 hrs post light
+229,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,TRUE,24 hrs post light
+230,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,TRUE,24 hrs post light
+231,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,TRUE,24 hrs post light
+232,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,TRUE,24 hrs post light
+233,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,TRUE,24 hrs post light
+234,turkey,Select Genetics,SGMN,15-Jan-21,30,w,breeder,female,TRUE,24 hrs post light
+235,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+236,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+237,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+238,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+239,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+240,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+241,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+242,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+243,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+244,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+245,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+246,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+247,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+248,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+249,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+250,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+251,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+252,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+253,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+254,turkey,Select Genetics,SGNC,27-Jan-21,20,w,breeder,female,TRUE,
+255,turkey,Select Genetics,SGMN,05-Feb-21,33,w,breeder,female,TRUE,
+256,turkey,Select Genetics,SGMN,05-Feb-21,33,w,breeder,female,TRUE,
+257,turkey,Select Genetics,SGMN,05-Feb-21,33,w,breeder,female,TRUE,
+258,turkey,Select Genetics,SGMN,05-Feb-21,33,w,breeder,female,TRUE,
+259,turkey,Select Genetics,SGMN,05-Feb-21,33,w,breeder,female,TRUE,
+260,turkey,Select Genetics,SGMN,05-Feb-21,33,w,breeder,female,TRUE,
+261,turkey,Select Genetics,SGMN,05-Feb-21,33,w,breeder,female,TRUE,
+262,turkey,Select Genetics,SGMN,05-Feb-21,33,w,breeder,female,TRUE,
+263,turkey,Select Genetics,SGMN,05-Feb-21,33,w,breeder,female,TRUE,
+264,turkey,Select Genetics,SGMN,05-Feb-21,33,w,breeder,female,TRUE,
+265,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+266,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+267,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+268,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+269,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+270,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+271,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+272,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+273,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+274,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+275,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+276,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+277,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+278,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+279,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+280,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+281,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+282,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+283,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+284,turkey,Select Genetics,SGNC,12-Feb-21,29,w,breeder,female,TRUE,
+285,turkey,Select Genetics,SGNC,18-Feb-21,30,w,breeder,female,TRUE,
+286,turkey,Select Genetics,SGNC,18-Feb-21,30,w,breeder,female,TRUE,
+287,turkey,Select Genetics,SGNC,18-Feb-21,30,w,breeder,female,TRUE,
+288,turkey,Select Genetics,SGNC,18-Feb-21,30,w,breeder,female,TRUE,
+289,turkey,Select Genetics,SGNC,18-Feb-21,30,w,breeder,female,TRUE,
+290,turkey,Select Genetics,SGNC,18-Feb-21,30,w,breeder,female,TRUE,
+291,turkey,Select Genetics,SGNC,18-Feb-21,30,w,breeder,female,TRUE,
+292,turkey,Select Genetics,SGNC,18-Feb-21,30,w,breeder,female,TRUE,
+293,turkey,Select Genetics,SGNC,18-Feb-21,30,w,breeder,female,TRUE,
+294,turkey,Select Genetics,SGNC,18-Feb-21,30,w,breeder,female,TRUE,
+295,turkey,Select Genetics,SGMN,04-Mar-21,27,w,breeder,female,TRUE,
+296,turkey,Select Genetics,SGMN,04-Mar-21,27,w,breeder,female,TRUE,
+297,turkey,Select Genetics,SGMN,04-Mar-21,27,w,breeder,female,TRUE,
+298,turkey,Select Genetics,SGMN,04-Mar-21,27,w,breeder,female,TRUE,
+299,turkey,Select Genetics,SGMN,04-Mar-21,27,w,breeder,female,TRUE,
+300,turkey,Select Genetics,SGMN,04-Mar-21,27,w,breeder,female,TRUE,
+301,turkey,Select Genetics,SGMN,04-Mar-21,27,w,breeder,female,TRUE,
+302,turkey,Select Genetics,SGMN,04-Mar-21,27,w,breeder,female,TRUE,
+303,turkey,Select Genetics,SGMN,04-Mar-21,27,w,breeder,female,TRUE,
+304,turkey,Select Genetics,SGMN,04-Mar-21,27,w,breeder,female,TRUE,
+305,turkey,Select Genetics,SGNC,04-Mar-21,32,w,breeder,female,TRUE,2 wks post light
+306,turkey,Select Genetics,SGNC,04-Mar-21,32,w,breeder,female,TRUE,2 wks post light
+307,turkey,Select Genetics,SGNC,04-Mar-21,32,w,breeder,female,TRUE,2 wks post light
+308,turkey,Select Genetics,SGNC,04-Mar-21,32,w,breeder,female,TRUE,2 wks post light
+309,turkey,Select Genetics,SGNC,04-Mar-21,32,w,breeder,female,TRUE,2 wks post light
+310,turkey,Select Genetics,SGNC,04-Mar-21,32,w,breeder,female,TRUE,2 wks post light
+311,turkey,Select Genetics,SGNC,04-Mar-21,32,w,breeder,female,TRUE,2 wks post light
+312,turkey,Select Genetics,SGNC,04-Mar-21,32,w,breeder,female,TRUE,2 wks post light
+313,turkey,Select Genetics,SGNC,04-Mar-21,32,w,breeder,female,TRUE,2 wks post light
+314,turkey,Select Genetics,SGNC,04-Mar-21,32,w,breeder,female,TRUE,2 wks post light
+315,turkey,Select Genetics,SGMN,10-Mar-21,23,w,breeder,female,TRUE,
+316,turkey,Select Genetics,SGMN,10-Mar-21,23,w,breeder,female,TRUE,
+317,turkey,Select Genetics,SGMN,10-Mar-21,23,w,breeder,female,TRUE,
+318,turkey,Select Genetics,SGMN,10-Mar-21,23,w,breeder,female,TRUE,
+319,turkey,Select Genetics,SGMN,10-Mar-21,23,w,breeder,female,TRUE,
+320,turkey,Select Genetics,SGMN,10-Mar-21,23,w,breeder,female,TRUE,
+321,turkey,Select Genetics,SGMN,10-Mar-21,23,w,breeder,female,TRUE,
+322,turkey,Select Genetics,SGMN,10-Mar-21,23,w,breeder,female,TRUE,
+323,turkey,Select Genetics,SGMN,10-Mar-21,23,w,breeder,female,TRUE,
+324,turkey,Select Genetics,SGMN,10-Mar-21,23,w,breeder,female,TRUE,
+325,turkey,Select Genetics,SGMN,17-Mar-21,29,w,breeder,female,TRUE,
+326,turkey,Select Genetics,SGMN,17-Mar-21,29,w,breeder,female,TRUE,
+327,turkey,Select Genetics,SGMN,17-Mar-21,29,w,breeder,female,TRUE,
+328,turkey,Select Genetics,SGMN,17-Mar-21,29,w,breeder,female,TRUE,
+329,turkey,Select Genetics,SGMN,17-Mar-21,29,w,breeder,female,TRUE,
+330,turkey,Select Genetics,SGMN,17-Mar-21,29,w,breeder,female,TRUE,Water & Feed top dress with vit D & Ca
+331,turkey,Select Genetics,SGMN,17-Mar-21,29,w,breeder,female,TRUE,Water & Feed top dress with vit D & Ca
+332,turkey,Select Genetics,SGMN,17-Mar-21,29,w,breeder,female,TRUE,Water & Feed top dress with vit D & Ca
+333,turkey,Select Genetics,SGMN,17-Mar-21,29,w,breeder,female,TRUE,Water & Feed top dress with vit D & Ca
+334,turkey,Select Genetics,SGMN,17-Mar-21,29,w,breeder,female,TRUE,Water & Feed top dress with vit D & Ca
+335,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+336,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+337,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+338,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+339,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+340,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+341,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+342,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+343,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+344,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+345,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+346,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+347,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+348,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+349,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+350,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+351,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+352,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+353,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+354,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+355,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+356,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+357,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+358,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+359,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+360,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+361,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+362,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+363,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+364,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
+365,turkey,Select Genetics,SGNC,31-Mar-21,30,w,breeder,female,TRUE,24 hours post-light
+366,turkey,Select Genetics,SGNC,31-Mar-21,30,w,breeder,female,TRUE,24 hours post-light
+367,turkey,Select Genetics,SGNC,31-Mar-21,30,w,breeder,female,TRUE,24 hours post-light
+368,turkey,Select Genetics,SGNC,31-Mar-21,30,w,breeder,female,TRUE,24 hours post-light
+369,turkey,Select Genetics,SGNC,31-Mar-21,30,w,breeder,female,TRUE,24 hours post-light
+370,turkey,Select Genetics,SGNC,31-Mar-21,30,w,breeder,female,TRUE,24 hours post-light
+371,turkey,Select Genetics,SGNC,31-Mar-21,30,w,breeder,female,TRUE,24 hours post-light
+372,turkey,Select Genetics,SGNC,31-Mar-21,30,w,breeder,female,TRUE,24 hours post-light
+373,turkey,Select Genetics,SGNC,31-Mar-21,30,w,breeder,female,TRUE,24 hours post-light
+374,turkey,Select Genetics,SGNC,31-Mar-21,30,w,breeder,female,TRUE,24 hours post-light
+375,turkey,Select Genetics,SGMN,06-Apr-21,32,w,breeder,female,TRUE,
+376,turkey,Select Genetics,SGMN,06-Apr-21,32,w,breeder,female,TRUE,
+377,turkey,Select Genetics,SGMN,06-Apr-21,32,w,breeder,female,TRUE,
+378,turkey,Select Genetics,SGMN,06-Apr-21,32,w,breeder,female,TRUE,
+379,turkey,Select Genetics,SGMN,06-Apr-21,32,w,breeder,female,TRUE,
+380,turkey,Select Genetics,SGMN,06-Apr-21,32,w,breeder,female,TRUE,
+381,turkey,Select Genetics,SGMN,06-Apr-21,32,w,breeder,female,TRUE,
+382,turkey,Select Genetics,SGMN,06-Apr-21,32,w,breeder,female,TRUE,
+383,turkey,Select Genetics,SGMN,06-Apr-21,32,w,breeder,female,TRUE,
+384,turkey,Select Genetics,SGMN,06-Apr-21,32,w,breeder,female,TRUE,
+385,turkey,Select Genetics,SGNC,14-Apr-21,32,w,breeder,female,TRUE,
+386,turkey,Select Genetics,SGNC,14-Apr-21,32,w,breeder,female,TRUE,
+387,turkey,Select Genetics,SGNC,14-Apr-21,32,w,breeder,female,TRUE,
+388,turkey,Select Genetics,SGNC,14-Apr-21,32,w,breeder,female,TRUE,
+389,turkey,Select Genetics,SGNC,14-Apr-21,32,w,breeder,female,TRUE,
+390,turkey,Select Genetics,SGNC,14-Apr-21,32,w,breeder,female,TRUE,
+391,turkey,Select Genetics,SGNC,14-Apr-21,32,w,breeder,female,TRUE,
+392,turkey,Select Genetics,SGNC,14-Apr-21,32,w,breeder,female,TRUE,
+393,turkey,Select Genetics,SGNC,14-Apr-21,32,w,breeder,female,TRUE,
+394,turkey,Select Genetics,SGNC,14-Apr-21,32,w,breeder,female,TRUE,
+395,turkey,Select Genetics,SGMN,16-Apr-21,33,w,breeder,female,TRUE,
+396,turkey,Select Genetics,SGMN,16-Apr-21,33,w,breeder,female,TRUE,
+397,turkey,Select Genetics,SGMN,16-Apr-21,33,w,breeder,female,TRUE,
+398,turkey,Select Genetics,SGMN,16-Apr-21,33,w,breeder,female,TRUE,
+399,turkey,Select Genetics,SGMN,16-Apr-21,33,w,breeder,female,TRUE,
+400,turkey,Select Genetics,SGMN,16-Apr-21,33,w,breeder,female,TRUE,
+401,turkey,Select Genetics,SGMN,16-Apr-21,33,w,breeder,female,TRUE,
+402,turkey,Select Genetics,SGMN,16-Apr-21,33,w,breeder,female,TRUE,
+403,turkey,Select Genetics,SGMN,16-Apr-21,33,w,breeder,female,TRUE,
+404,turkey,Select Genetics,SGMN,16-Apr-21,33,w,breeder,female,TRUE,
+405,turkey,Select Genetics,SGMN,16-Apr-21,28,w,breeder,female,TRUE,
+406,turkey,Select Genetics,SGMN,16-Apr-21,28,w,breeder,female,TRUE,
+407,turkey,Select Genetics,SGMN,16-Apr-21,28,w,breeder,female,TRUE,
+408,turkey,Select Genetics,SGMN,16-Apr-21,28,w,breeder,female,TRUE,
+409,turkey,Select Genetics,SGMN,16-Apr-21,28,w,breeder,female,TRUE,
+410,turkey,Select Genetics,SGMN,16-Apr-21,28,w,breeder,female,TRUE,
+411,turkey,Select Genetics,SGMN,16-Apr-21,28,w,breeder,female,TRUE,
+412,turkey,Select Genetics,SGMN,16-Apr-21,28,w,breeder,female,TRUE,
+413,turkey,Select Genetics,SGMN,16-Apr-21,28,w,breeder,female,TRUE,
+414,turkey,Select Genetics,SGMN,16-Apr-21,28,w,breeder,female,TRUE,
+415,turkey,Select Genetics,SGMN,04-May-21,31,w,breeder,female,TRUE,
+416,turkey,Select Genetics,SGMN,04-May-21,31,w,breeder,female,TRUE,
+417,turkey,Select Genetics,SGMN,04-May-21,31,w,breeder,female,TRUE,
+418,turkey,Select Genetics,SGMN,04-May-21,31,w,breeder,female,TRUE,
+419,turkey,Select Genetics,SGMN,04-May-21,31,w,breeder,female,TRUE,
+420,turkey,Select Genetics,SGMN,04-May-21,31,w,breeder,female,TRUE,
+421,turkey,Select Genetics,SGMN,04-May-21,31,w,breeder,female,TRUE,
+422,turkey,Select Genetics,SGMN,04-May-21,31,w,breeder,female,TRUE,
+423,turkey,Select Genetics,SGMN,04-May-21,31,w,breeder,female,TRUE,
+424,turkey,Select Genetics,SGMN,04-May-21,31,w,breeder,female,TRUE,
+425,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,FALSE,soft shells
+426,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,FALSE,soft shells
+427,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,FALSE,soft shells
+428,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,FALSE,soft shells
+429,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,FALSE,soft shells
+430,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,FALSE,soft shells
+431,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+432,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+433,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+434,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+435,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+436,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+437,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+438,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+439,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+440,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+441,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+442,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+443,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+444,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+445,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+446,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+447,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+448,turkey,Select Genetics,SGNC,03-Jun-21,36,w,breeder,female,TRUE,
+449,turkey,Not reported,TAU,12-Sep-19,7,d,meat,female,TRUE,
+450,turkey,Not reported,TAU,12-Sep-19,7,d,meat,female,TRUE,
+451,turkey,Not reported,TAU,12-Sep-19,7,d,meat,female,TRUE,
+452,turkey,Not reported,TAU,12-Sep-19,7,d,meat,female,TRUE,
+453,turkey,Not reported,TAU,12-Sep-19,7,d,meat,female,TRUE,
+454,turkey,Not reported,TAU,12-Sep-19,7,d,meat,female,TRUE,
+455,turkey,Not reported,TAU,12-Sep-19,7,d,meat,female,TRUE,
+456,turkey,Not reported,TAU,12-Sep-19,7,d,meat,female,TRUE,
+457,turkey,Not reported,TAU,12-Sep-19,7,d,meat,female,TRUE,
+458,turkey,Not reported,TAU,13-Sep-19,7,d,meat,female,TRUE,
+459,turkey,Not reported,TAU,13-Sep-19,8,d,meat,female,TRUE,
+460,turkey,Not reported,TAU,13-Sep-19,8,d,meat,female,TRUE,
+461,turkey,Not reported,TAU,13-Sep-19,8,d,meat,female,TRUE,
+462,turkey,Not reported,TAU,13-Sep-19,8,d,meat,female,TRUE,
+463,turkey,Not reported,TAU,13-Sep-19,8,d,meat,female,TRUE,
+464,turkey,Not reported,TAU,13-Sep-19,8,d,meat,female,TRUE,
+465,turkey,Not reported,TAU,13-Sep-19,8,d,meat,female,TRUE,
+466,turkey,Not reported,TAU,13-Sep-19,8,d,meat,female,TRUE,
+467,turkey,Not reported,TAU,13-Sep-19,8,d,meat,female,TRUE,
+468,turkey,Not reported,TAU,13-Sep-19,8,d,meat,female,TRUE,
+469,turkey,Not reported,TAU,20-Sep-19,16,d,meat,female,FALSE,
+470,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,FALSE,downer
+471,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+472,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+473,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+474,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+475,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+476,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+477,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+478,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+479,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+480,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+481,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+482,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+483,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+484,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+485,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+486,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+487,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+488,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+489,turkey,Not reported,TAU,25-Sep-19,21,d,meat,female,TRUE,
+490,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+491,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+492,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+493,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+494,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+495,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+496,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+497,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+498,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+499,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+500,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+501,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+502,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+503,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+504,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+505,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+506,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+507,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+508,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+509,turkey,Not reported,TAU,09-Oct-19,35,d,meat,female,TRUE,
+510,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+511,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+512,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+513,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+514,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+515,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+516,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+517,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+518,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+519,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+520,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+521,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+522,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+523,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+524,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+525,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+526,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+527,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+528,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+529,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+530,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+531,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+532,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+533,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+534,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+535,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+536,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+537,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+538,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+539,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+540,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+541,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+542,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+543,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+544,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+545,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+546,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+547,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+548,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+549,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+550,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+551,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+552,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+553,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+554,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+555,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+556,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+557,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+558,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+559,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+560,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+561,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+562,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+563,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+564,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+565,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+566,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+567,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+568,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+569,turkey,Not reported,Prestage,25-Jun-08,0,D,meat,male,TRUE,
+570,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+571,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+572,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+573,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+574,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+575,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+576,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+577,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+578,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+579,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+580,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+581,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+582,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+583,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+584,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+585,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+586,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+587,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+588,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+589,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+590,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+591,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+592,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+593,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+594,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+595,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+596,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,FALSE,"flip over, paddling"
+597,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+598,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+599,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+600,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+601,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+602,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+603,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+604,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+605,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+606,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+607,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+608,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+609,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+610,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+611,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+612,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+613,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+614,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+615,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+616,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+617,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+618,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+619,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+620,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+621,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+622,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+623,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+624,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+625,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+626,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+627,turkey,Not reported,Prestage,26-Jun-08,1,D,meat,male,TRUE,
+628,chicken,Speckled Sussex,WA 1,11-Jun-16,6,m,"BYP, layer",female,TRUE,
+629,chicken,not reported,WA 1,11-Jun-16,6,m,"BYP, layer",female,TRUE,
+630,chicken,Leghorn,WA 3,28-Jun-16,6,m,"BYP, layer",female,TRUE,
+631,chicken,Leghorn,WA 3,28-Jun-16,6,m,"BYP, layer",female,TRUE,
+632,chicken,Barred Rock,WA 3,28-Jun-16,6,m,"BYP, layer",female,TRUE,
+633,chicken,Black Frizzle Cochin,WA 3,28-Jun-16,6,m,"BYP, layer",female,TRUE,
+634,chicken,not reported,WA 4,29-Jun-16,8,m,"BYP, layer",female,TRUE,
+635,chicken,Americana,WA 4,29-Jun-16,8,m,"BYP, layer",female,TRUE,
+636,chicken,not reported,WA 4,29-Jun-16,8,m,"BYP, layer",female,TRUE,
+637,chicken,not reported,WA 4,29-Jun-16,8,m,"BYP, layer",female,TRUE,
+638,chicken,Barred Rock,WA 5,01-Jul-16,8,m,"BYP, layer",female,TRUE,
+639,chicken,Wyandotte,WA 5,01-Jul-16,8,m,"BYP, layer",female,TRUE,
+640,chicken,Americana,WA 5,01-Jul-16,8,m,"BYP, layer",female,TRUE,
+641,chicken,Americana,WA 6,03-Jul-16,2,y,"BYP, layer",female,TRUE,
+642,chicken,Speckled Sussex,WA 6,03-Jul-16,2,y,"BYP, layer",female,TRUE,
+643,chicken,Welsummer,WA 6,03-Jul-16,2,y,"BYP, layer",female,TRUE,
+644,chicken,not reported,WA 6,03-Jul-16,2,y,"BYP, layer",female,TRUE,
+645,chicken,Barred Rock,WA 6,03-Jul-16,2,y,"BYP, layer",female,TRUE,
+646,chicken,Barred Rock,WA 6,03-Jul-16,2,y,"BYP, layer",female,TRUE,
+647,chicken,Americana,WA 7,04-Jul-16,8,m,"BYP, layer",female,TRUE,
+648,chicken,New Hampshire,WA 7,04-Jul-16,8,m,"BYP, layer",female,TRUE,
+649,chicken,New Hampshire,WA 7,04-Jul-16,8,m,"BYP, layer",female,TRUE,
+650,chicken,Speckled Sussex,WA 8,06-Jul-16,2,y,"BYP, layer",female,TRUE,
+651,chicken,Auracauna,WA 8,06-Jul-16,2,y,"BYP, layer",female,TRUE,
+652,chicken,Sussex,WA 8,06-Jul-16,2,y,"BYP, layer",female,TRUE,
+653,chicken,not reported,WA 8,06-Jul-16,2,y,"BYP, layer",female,TRUE,
+654,chicken,Cuckoo Maran,WA 9,24-Jul-16,8,m,"BYP, layer",female,TRUE,
+655,chicken,Americana,WA 9,24-Jul-16,8,m,"BYP, layer",female,TRUE,
+656,chicken,Americana,WA 9,24-Jul-16,8,m,"BYP, layer",female,TRUE,
+657,chicken,Americana,WA 9,24-Jul-16,8,m,"BYP, layer",female,TRUE,
+658,chicken,Frizzle Bantam,WA 9,24-Jul-16,8,m,"BYP, layer",female,TRUE,
+659,chicken,Americana,WA 10,25-Jul-16,4,y,"BYP, layer",female,TRUE,
+660,chicken,Ancona,WA 10,25-Jul-16,2,y,"BYP, layer",female,TRUE,
+661,chicken,Blue Andalusion,WA 10,25-Jul-16,4,y,"BYP, layer",female,TRUE,
+662,chicken,Naked Neck Turken,WA 10,25-Jul-16,2,y,"BYP, layer",female,TRUE,
+663,chicken,Maran,WA 11,25-Jul-16,7,m,"BYP, layer",female,TRUE,
+664,chicken,Maran,WA 11,25-Jul-16,7,m,"BYP, layer",female,TRUE,
+665,chicken,Black Star,WA 11,25-Jul-16,7,m,"BYP, layer",female,TRUE,
+666,chicken,Legbar,WA 11,25-Jul-16,7,m,"BYP, layer",female,TRUE,
+667,chicken,Welsummer,WA 11,25-Jul-16,7,m,"BYP, layer",female,TRUE,
+668,chicken,Barred Rock,WA 12,25-Jul-16,7,m,"BYP, layer",female,TRUE,
+669,chicken,not reported,WA 12,25-Jul-16,7,m,"BYP, layer",female,TRUE,
+670,chicken,Australorp,WA 12,25-Jul-16,5,y,"BYP, layer",female,TRUE,
+671,chicken,Salmon Faverolle,WA 13,26-Jul-16,,y,"BYP, layer",female,TRUE,
+672,chicken,Salmon Faverolle,WA 13,26-Jul-16,,y,"BYP, layer",female,TRUE,
+673,chicken,Americana,WA 13,26-Jul-16,,y,"BYP, layer",female,TRUE,
+674,chicken,not reported,WA 14,26-Jul-16,2,y,"BYP, layer",female,TRUE,
+675,chicken,not reported,WA 14,26-Jul-16,2,y,"BYP, layer",female,TRUE,
+676,chicken,not reported,WA 14,26-Jul-16,2,y,"BYP, layer",female,TRUE,
+677,chicken,Australorp,WA 15,26-Jul-16,2,y,"BYP, layer",female,TRUE,
+678,chicken,Wyandotte,WA 15,26-Jul-16,2,y,"BYP, layer",female,TRUE,
+679,chicken,Legbar,WA 15,26-Jul-16,2,y,"BYP, layer",female,TRUE,
+680,chicken,Americana,WA 15,26-Jul-16,3,y,"BYP, layer",female,TRUE,
+681,chicken,Americana,WA 16,27-Jul-16,0,y,"BYP, layer",female,TRUE,
+682,chicken,Barred Rock,WA 17,27-Jul-16,2,y,"BYP, layer",female,TRUE,
+683,chicken,Wyandotte,WA 17,27-Jul-16,2,y,"BYP, layer",female,TRUE,
+684,chicken,not reported,WA 17,27-Jul-16,2,y,"BYP, layer",female,TRUE,
+685,chicken,Buff Orpington,WA 17,27-Jul-16,2,y,"BYP, layer",female,TRUE,
+686,chicken,Wyandotte,WA 17,27-Jul-16,2,y,"BYP, layer",female,TRUE,
+687,chicken,New Hampshire,WA 18,27-Jul-16,3,y,"BYP, layer",female,TRUE,
+688,chicken,Wyandotte,WA 18,27-Jul-16,3,y,"BYP, layer",female,TRUE,
+689,chicken,Speckled Sussex,WA 18,27-Jul-16,3,y,"BYP, layer",female,TRUE,
+690,chicken,Americana,WA 18,27-Jul-16,6,y,"BYP, layer",female,TRUE,
+691,chicken,New Hampshire,WA 18,27-Jul-16,3,y,"BYP, layer",female,TRUE,
+692,chicken,not reported,WA 19,29-Jul-16,2,y,"BYP, layer",female,TRUE,
+693,chicken,Black Australorp,WA 19,29-Jul-16,4,y,"BYP, layer",female,TRUE,
+694,chicken,Americana,WA 19,29-Jul-16,2,y,"BYP, layer",female,TRUE,
+695,chicken,Red Sexlink,WA 19,29-Jul-16,4,y,"BYP, layer",female,TRUE,
+696,chicken,Speckled Sussex,WA 20,29-Jul-16,8,m,"BYP, layer",female,TRUE,
+697,chicken,not reported,WA 20,29-Jul-16,8,m,"BYP, layer",female,TRUE,
+698,chicken,not reported,WA 20,29-Jul-16,8,m,"BYP, layer",female,TRUE,
+699,chicken,White Leghorn,WA 20,29-Jul-16,8,m,"BYP, layer",female,TRUE,
+700,chicken,Java,WA 21,30-Jul-16,2,y,"BYP, layer",female,TRUE,
+701,chicken,Barred Rock,WA 21,30-Jul-16,3,y,"BYP, layer",female,TRUE,
+702,chicken,Speckled Sussex,WA 21,30-Jul-16,3,y,"BYP, layer",female,TRUE,
+703,chicken,Barnvelder,WA 21,30-Jul-16,7,y,"BYP, layer",female,TRUE,
+704,chicken,Wyandotte,WA 21,30-Jul-16,3,y,"BYP, layer",female,TRUE,
+705,chicken,Ancona,WA 22,30-Jul-16,7,y,"BYP, layer",female,TRUE,
+706,chicken,Ancona,WA 22,30-Jul-16,7,y,"BYP, layer",female,TRUE,
+707,chicken,Easter Egger,WA 23,30-Jul-16,2,y,"BYP, layer",female,TRUE,
+708,chicken,Americana,WA 23,30-Jul-16,3,y,"BYP, layer",female,TRUE,
+709,chicken,Egyptian Fayoumis,WA 23,30-Jul-16,1,y,"BYP, layer",female,TRUE,
+710,chicken,Barred Rock,WA 24,30-Jul-16,6,m,"BYP, layer",female,TRUE,
+711,chicken,Wyandotte,WA 24,30-Jul-16,6,m,"BYP, layer",female,TRUE,
+712,chicken,not reported,WA 24,30-Jul-16,6,m,"BYP, layer",female,TRUE,
+713,chicken,not reported,WA 24,30-Jul-16,6,m,"BYP, layer",female,TRUE,
+714,chicken,not reported,WA 24,30-Jul-16,6,m,"BYP, layer",female,TRUE,
+715,chicken,Buff Orpington,WA 25,31-Jul-16,6,m,"BYP, layer",female,TRUE,
+716,chicken,Wyandotte,WA 25,31-Jul-16,6,m,"BYP, layer",female,TRUE,
+717,chicken,Barred Rock,WA 25,31-Jul-16,6,m,"BYP, layer",female,TRUE,
+718,chicken,Buff Orpington,WA 25,31-Jul-16,6,m,"BYP, layer",female,TRUE,
+719,chicken,Barred Rock,WA 26,31-Jul-16,2,y,"BYP, layer",female,TRUE,
+720,chicken,Rhode Island Red,WA 26,31-Jul-16,2,y,"BYP, layer",female,TRUE,
+721,chicken,Barred Rock,WA 26,31-Jul-16,2,y,"BYP, layer",female,TRUE,
+722,chicken,Barred Rock,WA 26,31-Jul-16,2,y,"BYP, layer",female,TRUE,
+723,chicken,Rhode Island Red,WA 26,31-Jul-16,2,y,"BYP, layer",female,TRUE,
+724,chicken,not reported,WA 27,31-Jul-16,9,m,"BYP, layer",female,TRUE,
+725,chicken,not reported,WA 27,31-Jul-16,9,m,"BYP, layer",female,TRUE,
+726,chicken,not reported,WA 27,31-Jul-16,9,m,"BYP, layer",female,TRUE,
+727,chicken,not reported,WA 27,31-Jul-16,9,m,"BYP, layer",female,TRUE,
+728,chicken,Silver Gray Dorking,WA 28,01-Aug-16,2,y,"BYP, layer",female,TRUE,
+729,chicken,Silver Gray Dorking,WA 28,01-Aug-16,2,y,"BYP, layer",female,TRUE,
+730,chicken,Delaware,WA 28,01-Aug-16,2,y,"BYP, layer",female,TRUE,
+731,chicken,Delaware,WA 28,01-Aug-16,2,y,"BYP, layer",female,TRUE,
+732,chicken,Barred Rock,WA 28,01-Aug-16,4,y,"BYP, layer",female,TRUE,
+733,chicken,Rhode Island Red,WA 29,02-Aug-16,1,y,"BYP, layer",female,TRUE,
+734,chicken,Barred Rock,WA 29,02-Aug-16,1,y,"BYP, layer",female,TRUE,
+735,chicken,White Leghorn,WA 29,02-Aug-16,1,y,"BYP, layer",female,TRUE,
+736,chicken,Cuckoo Maran,WA 29,02-Aug-16,1,y,"BYP, layer",female,TRUE,
+737,chicken,Barred Rock,WA 30,02-Aug-16,4,y,"BYP, layer",female,TRUE,
+738,chicken,Buff Orpington,WA 30,02-Aug-16,4,y,"BYP, layer",female,TRUE,
+739,chicken,Buff Orpington,WA 31,02-Aug-16,2,y,"BYP, layer",female,TRUE,
+740,chicken,Barred Rock,WA 31,02-Aug-16,4,y,"BYP, layer",female,TRUE,
+741,chicken,Buff Orpington,WA 31,02-Aug-16,2,y,"BYP, layer",female,TRUE,
+742,chicken,Easter Egger,WA 32,02-Aug-16,2,y,"BYP, layer",female,TRUE,
+743,chicken,Wyandotte,WA 32,02-Aug-16,2,y,"BYP, layer",female,TRUE,
+744,chicken,Bantam Cochin,WA 32,02-Aug-16,2,y,"BYP, layer",female,TRUE,
+745,chicken,Bantam Cochin,WA 32,02-Aug-16,2,y,"BYP, layer",female,TRUE,
+746,chicken,Bantam Cochin,WA 32,02-Aug-16,2,y,"BYP, layer",female,TRUE,
+747,chicken,Buff Brahma,WA 33,09-Aug-16,4,y,"BYP, layer",female,TRUE,
+748,chicken,Salmon Faverolle,WA 33,09-Aug-16,2,y,"BYP, layer",female,TRUE,
+749,chicken,Cuckoo Maran,WA 33,09-Aug-16,4,y,"BYP, layer",female,TRUE,
+750,chicken,Cochin,WA 33,09-Aug-16,4,y,"BYP, layer",female,TRUE,
+751,chicken,Maran,WA 33,09-Aug-16,2,y,"BYP, layer",female,TRUE,
+752,chicken,Legbar,WA 33,09-Aug-16,3,y,"BYP, layer",female,TRUE,
+753,chicken,Rhode Island Red,WA 34,15-Aug-16,2,y,"BYP, layer",female,TRUE,
+754,chicken,Cochin,WA 34,15-Aug-16,2,y,"BYP, layer",female,TRUE,
+755,chicken,Barred Rock,WA 34,15-Aug-16,2,y,"BYP, layer",female,TRUE,
+756,chicken,Egyptian Fayoumis,WA 34,15-Aug-16,2,y,"BYP, layer",female,TRUE,
+757,chicken,not reported,WA 34,15-Aug-16,2,y,"BYP, layer",female,TRUE,
+758,chicken,Delaware,WA 35,15-Aug-16,2,y,"BYP, layer",female,TRUE,
+759,chicken,Buff Orpington,WA 35,15-Aug-16,2,y,"BYP, layer",female,TRUE,
+760,chicken,Barred Rock,WA 35,15-Aug-16,2,y,"BYP, layer",female,TRUE,
+761,chicken,cobb,TAU,21-Feb-19,7,D,broiler,not reported,TRUE,
+762,chicken,cobb,TAU,21-Feb-19,7,d,broiler,not reported,TRUE,
+763,chicken,cobb,TAU,21-Feb-19,7,d,broiler,not reported,TRUE,
+764,chicken,cobb,TAU,21-Feb-19,7,d,broiler,not reported,TRUE,
+765,chicken,cobb,TAU,21-Feb-19,7,d,broiler,not reported,TRUE,
+766,chicken,cobb,TAU,21-Feb-19,7,d,broiler,not reported,TRUE,
+767,chicken,cobb,TAU,21-Feb-19,7,d,broiler,not reported,TRUE,
+768,chicken,cobb,TAU,21-Feb-19,7,d,broiler,not reported,TRUE,
+769,chicken,cobb,TAU,21-Feb-19,7,d,broiler,not reported,TRUE,
+770,chicken,cobb,TAU,21-Feb-19,7,d,broiler,not reported,TRUE,
+771,chicken,cobb,TAU,21-Feb-19,7,d,broiler,not reported,TRUE,
+772,chicken,cobb,TAU,21-Feb-19,7,d,broiler,not reported,TRUE,
+773,chicken,cobb,TAU,21-Feb-19,7,d,broiler,not reported,TRUE,
+774,chicken,cobb,TAU,21-Feb-19,7,d,broiler,not reported,TRUE,
+775,chicken,cobb,TAU,21-Feb-19,7,d,broiler,not reported,TRUE,
+776,chicken,cobb,TAU,22-Feb-19,7,d,broiler,not reported,TRUE,
+777,chicken,cobb,TAU,22-Feb-19,7,d,broiler,not reported,TRUE,
+778,chicken,cobb,TAU,22-Feb-19,7,d,broiler,not reported,TRUE,
+779,chicken,cobb,TAU,22-Feb-19,7,d,broiler,not reported,TRUE,
+780,chicken,cobb,TAU,22-Feb-19,7,d,broiler,not reported,TRUE,
+781,chicken,cobb,TAU,06-Mar-19,20,d,broiler,not reported,TRUE,
+782,chicken,cobb,TAU,06-Mar-19,20,d,broiler,not reported,TRUE,
+783,chicken,cobb,TAU,06-Mar-19,20,d,broiler,not reported,TRUE,
+784,chicken,cobb,TAU,06-Mar-19,20,d,broiler,not reported,TRUE,
+785,chicken,cobb,TAU,06-Mar-19,20,d,broiler,not reported,TRUE,
+786,chicken,cobb,TAU,06-Mar-19,20,d,broiler,not reported,TRUE,
+787,chicken,cobb,TAU,06-Mar-19,20,d,broiler,not reported,TRUE,
+788,chicken,cobb,TAU,06-Mar-19,20,d,broiler,not reported,TRUE,
+789,chicken,cobb,TAU,06-Mar-19,20,d,broiler,not reported,TRUE,
+790,chicken,cobb,TAU,06-Mar-19,20,d,broiler,not reported,TRUE,
+791,chicken,cobb,TAU,06-Mar-19,20,d,broiler,not reported,TRUE,
+792,chicken,cobb,TAU,06-Mar-19,20,d,broiler,not reported,TRUE,
+793,chicken,cobb,TAU,07-Mar-19,21,d,broiler,not reported,TRUE,
+794,chicken,cobb,TAU,07-Mar-19,21,d,broiler,not reported,TRUE,
+795,chicken,cobb,TAU,07-Mar-19,21,d,broiler,not reported,TRUE,
+796,chicken,cobb,TAU,07-Mar-19,21,d,broiler,not reported,TRUE,
+797,chicken,cobb,TAU,07-Mar-19,21,d,broiler,not reported,TRUE,
+798,chicken,cobb,TAU,07-Mar-19,21,d,broiler,not reported,TRUE,
+799,chicken,cobb,TAU,07-Mar-19,21,d,broiler,not reported,TRUE,
+800,chicken,cobb,TAU,07-Mar-19,21,d,broiler,not reported,TRUE,
+801,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+802,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+803,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+804,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+805,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+806,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+807,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+808,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+809,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+810,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+811,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+812,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+813,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+814,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+815,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+816,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+817,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+818,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+819,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+820,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+821,chicken,cobb,TAU,20-Mar-19,34,d,broiler,not reported,TRUE,
+822,chicken,cobb,TAU,21-Feb-19,7,D,broiler,not reported,TRUE,
+823,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+824,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+825,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+826,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+827,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+828,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+829,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+830,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+831,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+832,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+833,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+834,chicken,cobb,TAU,12-Feb-20,6,D,broiler,not reported,TRUE,
+835,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+836,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+837,chicken,cobb,TAU,12-Feb-20,6,D,broiler,not reported,TRUE,
+838,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+839,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+840,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+841,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+842,chicken,cobb,TAU,12-Feb-20,6,d,broiler,not reported,TRUE,
+843,chicken,cobb,TAU,20-Feb-20,14,d,broiler,not reported,TRUE,
+844,chicken,cobb,TAU,20-Feb-20,14,d,broiler,not reported,TRUE,
+845,chicken,cobb,TAU,20-Feb-20,14,d,broiler,not reported,TRUE,
+846,chicken,cobb,TAU,25-Feb-20,19,d,broiler,not reported,TRUE,
+847,chicken,cobb,TAU,25-Feb-20,19,d,broiler,not reported,TRUE,
+848,chicken,cobb,TAU,25-Feb-20,19,d,broiler,not reported,TRUE,
+849,chicken,cobb,TAU,25-Feb-20,19,d,broiler,not reported,TRUE,
+850,chicken,cobb,TAU,25-Feb-20,19,D,broiler,not reported,TRUE,
+851,chicken,cobb,TAU,25-Feb-20,19,D,broiler,not reported,TRUE,
+852,chicken,cobb,TAU,26-Feb-20,21,d,broiler,not reported,TRUE,
+853,chicken,cobb,TAU,26-Feb-20,21,d,broiler,not reported,TRUE,
+854,chicken,cobb,TAU,26-Feb-20,21,d,broiler,not reported,TRUE,
+855,chicken,cobb,TAU,26-Feb-20,21,d,broiler,not reported,TRUE,
+856,chicken,cobb,TAU,26-Feb-20,21,d,broiler,not reported,TRUE,
+857,chicken,cobb,TAU,26-Feb-20,21,d,broiler,not reported,TRUE,
+858,chicken,cobb,TAU,26-Feb-20,21,d,broiler,not reported,TRUE,
+859,chicken,cobb,TAU,26-Feb-20,21,d,broiler,not reported,TRUE,
+860,chicken,cobb,TAU,26-Feb-20,21,d,broiler,not reported,TRUE,
+861,chicken,cobb,TAU,26-Feb-20,21,d,broiler,not reported,TRUE,
+862,chicken,cobb,TAU,26-Feb-20,21,D,broiler,not reported,TRUE,
+863,chicken,cobb,TAU,26-Feb-20,21,D,broiler,not reported,TRUE,
+864,chicken,cobb,TAU,26-Feb-20,21,D,broiler,not reported,TRUE,
+865,chicken,cobb,TAU,26-Feb-20,21,D,broiler,not reported,TRUE,
+866,chicken,cobb,TAU,26-Feb-20,21,D,broiler,not reported,TRUE,
+867,chicken,cobb,TAU,26-Feb-20,21,D,broiler,not reported,TRUE,
+868,chicken,cobb,TAU,26-Feb-20,21,D,broiler,not reported,TRUE,
+869,chicken,cobb,TAU,26-Feb-20,21,D,broiler,not reported,TRUE,
+870,chicken,cobb,TAU,26-Feb-20,21,D,broiler,not reported,TRUE,
+871,chicken,cobb,TAU,26-Feb-20,21,D,broiler,not reported,TRUE,
+872,chicken,cobb,TAU,26-Feb-20,21,D,broiler,not reported,TRUE,
+873,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+874,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+875,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+876,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+877,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+878,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+879,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+880,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+881,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+882,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+893,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+894,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+895,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+896,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+897,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+898,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+899,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+900,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+901,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+902,chicken,cobb,TAU,12-Mar-20,35,d,broiler,not reported,TRUE,
+903,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,G2- Cosabody
+904,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"C3- vaccine, cosabody"
+905,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,D4- vaccine
+906,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,D5- vaccine
+907,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"A6- vaccine, cosabody, Eimeria challenge (21d)"
+908,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"B7- vaccine, Eimeria challenge (21d)"
+909,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"A8- vaccine, cosabody, Eimeria challenge (21d)"
+910,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"E9- cosabody, Eimeria challenge (21d)"
+911,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"E10- cosabody, Eimeria challenge (21d)"
+912,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,D12- vaccine
+913,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"C13- vaccine, cosabody"
+914,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,H14- Negative  Control
+915,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,G15- Cosabody
+916,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,G16- Cosabody
+917,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"E17- cosabody, Eimeria challenge (21d)"
+918,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"E18- cosabody, Eimeria challenge (21d)"
+919,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,F19- Eimeria challenge (21d)
+920,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"B20- vaccine, Eimeria challenge (21d)"
+921,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"A21- vaccine, cosabody, Eimeria challenge (21d)"
+922,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"B22- vaccine, Eimeria challenge (21d)"
+923,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"C23- vaccine, cosabody"
+924,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"C24- vaccine, cosabody"
+925,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"C25- vaccine, cosabody"
+926,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,H26- Negative Control
+927,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,G27- Cosabody
+928,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"B29- vaccine, Eimeria challenge (21d)"
+929,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"A30- vaccine, cosabody, Eimeria challenge (21d)"
+930,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"B31- vaccine, Eimeria challenge (21d)"
+931,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"C32- vaccine, cosabody"
+932,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"C32- vaccine, cosabody"
+933,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"C34- vaccine, cosabody"
+934,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"E35- cosabody, Eimeria challenge (21d)"
+935,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"E36- cosabody, Eimeria challenge (21d)"
+936,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,F37- Eimeria challenge (21d)
+937,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"A39- vaccine, cosabody, Eimeria challenge (21d)"
+938,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"B40- vaccine, Eimeria challenge (21d)"
+939,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,G42- Cosabody
+940,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"B44- vaccine, Eimeria challenge (21d)"
+941,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"A45- vaccine, cosabody, Eimeria challenge (21d)"
+942,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"B46- vaccine, Eimeria challenge (21d)"
+943,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,D47- Vaccine
+944,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"C48- vaccine, cosabody"
+945,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,D49- Vaccine
+946,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"E50- cosabody, Eimeria challenge (21d)"
+947,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,F51- Eimeria challenge (21d)
+948,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,F52- Eimeria challenge (21d)
+949,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,G53- Cosabody
+950,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,H54- Negative Control
+951,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,D56- vaccine
+952,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,D57- vaccine
+953,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"C58- vaccine, cosabody"
+954,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"C58- vaccine, cosabody"
+955,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,G59- Cosabody
+956,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,G59- Cosabody
+957,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,G60- Cosabody
+958,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,H61- Negative Control
+959,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,F62- Eimeria challenge (21d)
+960,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,F63- Eimeria challenge (21d)
+961,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,F64- Eimeria challenge (21d)
+962,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"A65- vaccine, cosabody, Eimeria challenge (21d)"
+963,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"B67- vaccine, Eimeria challenge (21d)"
+964,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"A68- vaccine, cosabody, Eimeria challenge (21d)"
+965,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"A68- vaccine, cosabody, Eimeria challenge (21d)"
+966,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,F70- Eimeria challenge (21d)
+967,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,"E71- cosabody, Eimeria challenge (21d)"
+968,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"E72- cosabody, Eimeria challenge (21d)"
+969,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,H74- Negative Control
+970,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,G75- Cosabody
+971,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,D76- Vaccine
+972,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,D77- Vaccine
+973,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"C78- vaccine, cosabody"
+974,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,female,TRUE,F79- Eimeria challenge (21d)
+975,chicken,cobb,Elanco-TAU,12-Feb-21,7,D,broiler,male,TRUE,"E80- cosabody, Eimeria challenge (21d)"
+976,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,H1- Negative Control
+977,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,G2- Cosabody
+978,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"C3- vaccine, cosabody"
+979,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,D4- vaccine
+980,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,D5- vaccine
+981,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"A6- vaccine, cosabody, Eimeria challenge (21d)"
+982,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"B7- vaccine, Eimeria challenge (21d)"
+983,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"A8- vaccine, cosabody, Eimeria challenge (21d)"
+984,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"E9- cosabody, Eimeria challenge (21d)"
+985,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"E10- cosabody, Eimeria challenge (21d)"
+986,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,D12- vaccine
+987,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"C13- vaccine, cosabody"
+988,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,H14- Negative  Control
+989,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,G15- Cosabody
+990,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,G16- Cosabody
+991,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"E17- cosabody, Eimeria challenge (21d)"
+992,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"E18- cosabody, Eimeria challenge (21d)"
+993,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"B20- vaccine, Eimeria challenge (21d)"
+994,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"A21- vaccine, cosabody, Eimeria challenge (21d)"
+995,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"B22- vaccine, Eimeria challenge (21d)"
+996,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"C23- vaccine, cosabody"
+997,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"C24- vaccine, cosabody"
+998,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"C25- vaccine, cosabody"
+999,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,H26- Negative Control
+1000,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,G27- Cosabody
+1001,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,H28- Negative Control
+1002,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"B29- vaccine, Eimeria challenge (21d)"
+1003,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"A30- vaccine, cosabody, Eimeria challenge (21d)"
+1004,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"B31- vaccine, Eimeria challenge (21d)"
+1005,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"C32- vaccine, cosabody"
+1006,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,D33- Vaccine
+1007,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"C34- vaccine, cosabody"
+1008,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"E35- cosabody, Eimeria challenge (21d)"
+1009,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"E36- cosabody, Eimeria challenge (21d)"
+1010,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,F37- Eimeria challenge (21d)
+1011,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"A38- vaccine, cosabody, Eimeria challenge (21d)"
+1012,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"A39- vaccine, cosabody, Eimeria challenge (21d)"
+1013,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"B40- vaccine, Eimeria challenge (21d)"
+1014,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,H41- Negative Control
+1015,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,G42- Cosabody
+1016,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"B44- vaccine, Eimeria challenge (21d)"
+1017,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"A45- vaccine, cosabody, Eimeria challenge (21d)"
+1018,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"B46- vaccine, Eimeria challenge (21d)"
+1019,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,D47- Vaccine
+1020,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"C48- vaccine, cosabody"
+1021,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,D49- Vaccine
+1022,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"E50- cosabody, Eimeria challenge (21d)"
+1023,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,F52- Eimeria challenge (21d)
+1024,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,G53- Cosabody
+1025,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,H54- Negative Control
+1026,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,D56- vaccine
+1027,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,D57- vaccine
+1028,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"C58- vaccine, cosabody"
+1029,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,G59- Cosabody
+1030,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,G60- Cosabody
+1031,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,H61- Negative Control
+1032,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,F62- Eimeria challenge (21d)
+1033,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,F63- Eimeria challenge (21d)
+1034,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,F64- Eimeria challenge (21d)
+1035,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"A65- vaccine, cosabody, Eimeria challenge (21d)"
+1036,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"A66- vaccine, cosabody, Eimeria challenge (21d)"
+1037,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"B67- vaccine, Eimeria challenge (21d)"
+1038,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"A68- vaccine, cosabody, Eimeria challenge (21d)"
+1039,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"B69- vaccine, Eimeria challenge (21d)"
+1040,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,F70- Eimeria challenge (21d)
+1041,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"E71- cosabody, Eimeria challenge (21d)"
+1042,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"E72- cosabody, Eimeria challenge (21d)"
+1043,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,G73- Cosabody
+1044,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,G75- Cosabody
+1045,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,D76- Vaccine
+1046,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,D77- Vaccine
+1047,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"C78- vaccine, cosabody"
+1048,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,F79- Eimeria challenge (21d)
+1049,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,"E80- cosabody, Eimeria challenge (21d)"
+1050,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,male,TRUE,H14- Negative  Control
+1051,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,"B20- vaccine, Eimeria challenge (21d)"
+1052,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,H43- Negative Control
+1053,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,F52- Eimeria challenge (21d)
+1054,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,H55- Negative Control
+1055,chicken,cobb,Elanco-TAU,26-Feb-21,21,D,broiler,female,TRUE,H74- Negative Control
+1056,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,"C13- vaccine, cosabody"
+1057,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,"C13- vaccine, cosabody"
+1058,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,H14- Negative  Control
+1059,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,G15- Cosabody
+1060,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,G16- Cosabody
+1061,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,G16- Cosabody
+1062,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"E17- cosabody, Eimeria challenge (21d)"
+1063,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,"E18- cosabody, Eimeria challenge (21d)"
+1064,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,F19- Eimeria challenge (21d)
+1065,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,F19- Eimeria challenge (21d)
+1066,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,"A21- vaccine, cosabody, Eimeria challenge (21d)"
+1067,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,"A21- vaccine, cosabody, Eimeria challenge (21d)"
+1068,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"B22- vaccine, Eimeria challenge (21d)"
+1069,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,"C23- vaccine, cosabody"
+1070,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,"C24- vaccine, cosabody"
+1071,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,"C25- vaccine, cosabody"
+1072,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,"C25- vaccine, cosabody"
+1073,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,G27- Cosabody
+1074,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,G27- Cosabody
+1075,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,G2- Cosabody
+1076,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"B29- vaccine, Eimeria challenge (21d)"
+1077,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,"C3- vaccine, cosabody"
+1078,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,"B31- vaccine, Eimeria challenge (21d)"
+1079,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,"B31- vaccine, Eimeria challenge (21d)"
+1080,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,"C32- vaccine, cosabody"
+1081,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,D33- Vaccine
+1082,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,"C34- vaccine, cosabody"
+1083,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"E35- cosabody, Eimeria challenge (21d)"
+1084,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,"E36- cosabody, Eimeria challenge (21d)"
+1085,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,F37- Eimeria challenge (21d)
+1086,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,"A38- vaccine, cosabody, Eimeria challenge (21d)"
+1087,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"A39- vaccine, cosabody, Eimeria challenge (21d)"
+1088,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"B40- vaccine, Eimeria challenge (21d)"
+1089,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,H41- Negative Control
+1090,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,G42- Cosabody
+1091,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,H43- Negative Control
+1092,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,D4- vaccine
+1093,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"B44- vaccine, Eimeria challenge (21d)"
+1094,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"A45- vaccine, cosabody, Eimeria challenge (21d)"
+1095,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,"B46- vaccine, Eimeria challenge (21d)"
+1096,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,D47- Vaccine
+1097,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,"C48- vaccine, cosabody"
+1098,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,"C48- vaccine, cosabody"
+1099,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,"E50- cosabody, Eimeria challenge (21d)"
+1100,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,F51- Eimeria challenge (21d)
+1101,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,F51- Eimeria challenge (21d)
+1102,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,G53- Cosabody
+1103,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,D5- vaccine
+1104,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,G53- Cosabody
+1105,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,H54- Negative Control
+1106,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,H55- Negative Control
+1107,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,D56- vaccine
+1108,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,D57- vaccine
+1109,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,"C58- vaccine, cosabody"
+1110,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,G59- Cosabody
+1111,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,G60- Cosabody
+1112,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,H61- Negative Control
+1113,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,F62- Eimeria challenge (21d)
+1114,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,F63- Eimeria challenge (21d)
+1115,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,F64- Eimeria challenge (21d)
+1116,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"A6- vaccine, cosabody, Eimeria challenge (21d)"
+1117,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"A6- vaccine, cosabody, Eimeria challenge (21d)"
+1118,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,"A65- vaccine, cosabody, Eimeria challenge (21d)"
+1119,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,"B67- vaccine, Eimeria challenge (21d)"
+1120,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,"B67- vaccine, Eimeria challenge (21d)"
+1121,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"B69- vaccine, Eimeria challenge (21d)"
+1122,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,F70- Eimeria challenge (21d)
+1123,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,"B7- vaccine, Eimeria challenge (21d)"
+1124,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,FALSE,"E71- cosabody, Eimeria challenge (21d)"
+1125,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"E72- cosabody, Eimeria challenge (21d)"
+1126,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,G73- Cosabody
+1127,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,H74- Negative Control
+1128,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,H74- Negative Control
+1129,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,D76- Vaccine
+1130,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,D76- Vaccine
+1131,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,TRUE,"C78- vaccine, cosabody"
+1132,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,female,TRUE,F79- Eimeria challenge (21d)
+1133,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"E80- cosabody, Eimeria challenge (21d)"
+1134,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"E80- cosabody, Eimeria challenge (21d)"
+1135,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"E80- cosabody, Eimeria challenge (21d)"
+1136,chicken,cobb,Elanco-TAU,01-Mar-21,24,D,broiler,male,FALSE,"E9- cosabody, Eimeria challenge (21d)"
+1137,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,F11- Eimeria challenge (21d)
+1138,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,"C13- vaccine, cosabody"
+1139,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,H14- Negative  Control
+1140,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,G15- Cosabody
+1141,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,G16- Cosabody
+1142,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"E17- cosabody, Eimeria challenge (21d)"
+1143,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"E17- cosabody, Eimeria challenge (21d)"
+1144,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"E18- cosabody, Eimeria challenge (21d)"
+1145,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,F19- Eimeria challenge (21d)
+1146,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"B20- vaccine, Eimeria challenge (21d)"
+1147,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"B20- vaccine, Eimeria challenge (21d)"
+1148,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"A21- vaccine, cosabody, Eimeria challenge (21d)"
+1149,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"B22- vaccine, Eimeria challenge (21d)"
+1150,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,"C23- vaccine, cosabody"
+1151,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,"C24- vaccine, cosabody"
+1152,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,"C25- vaccine, cosabody"
+1153,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,H26- Negative Control
+1154,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,G27- Cosabody
+1155,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,G27- Cosabody
+1156,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,H28- Negative Control
+1157,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"B29- vaccine, Eimeria challenge (21d)"
+1158,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,"C3- vaccine, cosabody"
+1159,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"A30- vaccine, cosabody, Eimeria challenge (21d)"
+1160,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,"C32- vaccine, cosabody"
+1161,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,"C3- vaccine, cosabody"
+1162,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,D33- Vaccine
+1163,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,"C34- vaccine, cosabody"
+1164,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"E35- cosabody, Eimeria challenge (21d)"
+1165,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"E36- cosabody, Eimeria challenge (21d)"
+1166,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,F37- Eimeria challenge (21d)
+1167,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"A38- vaccine, cosabody, Eimeria challenge (21d)"
+1168,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"A39- vaccine, cosabody, Eimeria challenge (21d)"
+1169,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"B40- vaccine, Eimeria challenge (21d)"
+1170,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,H41- Negative Control
+1171,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,H41- Negative Control
+1172,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,D4- vaccine
+1173,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,H43- Negative Control
+1174,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"B44- vaccine, Eimeria challenge (21d)"
+1175,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"B44- vaccine, Eimeria challenge (21d)"
+1176,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"B46- vaccine, Eimeria challenge (21d)"
+1177,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"B46- vaccine, Eimeria challenge (21d)"
+1178,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,"C48- vaccine, cosabody"
+1179,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,D49- Vaccine
+1180,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,F51- Eimeria challenge (21d)
+1181,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,F51- Eimeria challenge (21d)
+1182,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,F52- Eimeria challenge (21d)
+1183,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,G53- Cosabody
+1184,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,G53- Cosabody
+1185,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,H54- Negative Control
+1186,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,H55- Negative Control
+1187,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,D56- vaccine
+1188,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,D57- vaccine
+1189,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,"C58- vaccine, cosabody"
+1190,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,G59- Cosabody
+1191,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,G60- Cosabody
+1192,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,H61- Negative Control
+1193,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,F62- Eimeria challenge (21d)
+1194,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,F63- Eimeria challenge (21d)
+1195,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,F64- Eimeria challenge (21d)
+1196,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"A6- vaccine, cosabody, Eimeria challenge (21d)"
+1197,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"A65- vaccine, cosabody, Eimeria challenge (21d)"
+1198,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"A66- vaccine, cosabody, Eimeria challenge (21d)"
+1199,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"B67- vaccine, Eimeria challenge (21d)"
+1200,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"A68- vaccine, cosabody, Eimeria challenge (21d)"
+1201,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"A68- vaccine, cosabody, Eimeria challenge (21d)"
+1202,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,F70- Eimeria challenge (21d)
+1203,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"B7- vaccine, Eimeria challenge (21d)"
+1204,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"B7- vaccine, Eimeria challenge (21d)"
+1205,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"E72- cosabody, Eimeria challenge (21d)"
+1206,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,G73- Cosabody
+1207,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,G73- Cosabody
+1208,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,G75- Cosabody
+1209,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,TRUE,D76- Vaccine
+1210,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,D77- Vaccine
+1211,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,TRUE,D77- Vaccine
+1212,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,F79- Eimeria challenge (21d)
+1213,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"A8- vaccine, cosabody, Eimeria challenge (21d)"
+1214,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,female,FALSE,"A8- vaccine, cosabody, Eimeria challenge (21d)"
+1215,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"E9- cosabody, Eimeria challenge (21d)"
+1216,chicken,cobb,Elanco-TAU,05-Mar-21,28,D,broiler,male,FALSE,"E9- cosabody, Eimeria challenge (21d)"
+1217,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,H1- Negative Control
+1218,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,"E10- cosabody, Eimeria challenge (21d)"
+1219,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,"E10- cosabody, Eimeria challenge (21d)"
+1220,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,"E10- cosabody, Eimeria challenge (21d)"
+1221,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,F11- Eimeria challenge (21d)
+1222,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,F11- Eimeria challenge (21d)
+1223,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,F11- Eimeria challenge (21d)
+1224,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,D12- vaccine
+1225,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,D12- vaccine
+1226,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,D12- vaccine
+1227,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,G15- Cosabody
+1228,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,H1- Negative Control
+1229,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,H1- Negative Control
+1230,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,"E18- cosabody, Eimeria challenge (21d)"
+1231,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,F19- Eimeria challenge (21d)
+1232,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,G2- Cosabody
+1233,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,G2- Cosabody
+1234,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,"B22- vaccine, Eimeria challenge (21d)"
+1235,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,"C23- vaccine, cosabody"
+1236,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,"C24- vaccine, cosabody"
+1237,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,H26- Negative Control
+1238,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,H26- Negative Control
+1239,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,H28- Negative Control
+1240,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,H28- Negative Control
+1241,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,"B29- vaccine, Eimeria challenge (21d)"
+1242,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,"A30- vaccine, cosabody, Eimeria challenge (21d)"
+1243,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,"A30- vaccine, cosabody, Eimeria challenge (21d)"
+1244,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,"B31- vaccine, Eimeria challenge (21d)"
+1245,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,"C32- vaccine, cosabody"
+1246,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,D33- Vaccine
+1247,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,"C34- vaccine, cosabody"
+1248,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,"E35- cosabody, Eimeria challenge (21d)"
+1249,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,"E36- cosabody, Eimeria challenge (21d)"
+1250,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,F37- Eimeria challenge (21d)
+1251,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,"A38- vaccine, cosabody, Eimeria challenge (21d)"
+1252,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,"A39- vaccine, cosabody, Eimeria challenge (21d)"
+1253,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,"B40- vaccine, Eimeria challenge (21d)"
+1254,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,H41- Negative Control
+1255,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,G42- Cosabody
+1256,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,G42- Cosabody
+1257,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,D4- vaccine
+1258,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,H43- Negative Control
+1259,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,"A45- vaccine, cosabody, Eimeria challenge (21d)"
+1260,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,"A45- vaccine, cosabody, Eimeria challenge (21d)"
+1261,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,D47- Vaccine
+1262,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,D47- Vaccine
+1263,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,D49- Vaccine
+1264,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,"E50- cosabody, Eimeria challenge (21d)"
+1265,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,F52- Eimeria challenge (21d)
+1266,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,D5- vaccine
+1267,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,D5- vaccine
+1268,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,H54- Negative Control
+1269,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,H55- Negative Control
+1270,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,D56- vaccine
+1271,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,D57- vaccine
+1272,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,"C58- vaccine, cosabody"
+1273,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,G59- Cosabody
+1274,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,G60- Cosabody
+1275,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,H61- Negative Control
+1276,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,F62- Eimeria challenge (21d)
+1277,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,F63- Eimeria challenge (21d)
+1278,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,F64- Eimeria challenge (21d)
+1279,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,"A65- vaccine, cosabody, Eimeria challenge (21d)"
+1280,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,"A66- vaccine, cosabody, Eimeria challenge (21d)"
+1281,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,"A66- vaccine, cosabody, Eimeria challenge (21d)"
+1282,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,"A68- vaccine, cosabody, Eimeria challenge (21d)"
+1283,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,"B69- vaccine, Eimeria challenge (21d)"
+1284,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,"B69- vaccine, Eimeria challenge (21d)"
+1285,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,F70- Eimeria challenge (21d)
+1286,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,"E71- cosabody, Eimeria challenge (21d)"
+1287,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,"E71- cosabody, Eimeria challenge (21d)"
+1288,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,FALSE,"E72- cosabody, Eimeria challenge (21d)"
+1289,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,H74- Negative Control
+1290,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,G75- Cosabody
+1291,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,G75- Cosabody
+1292,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,TRUE,D77- Vaccine
+1293,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,"C78- vaccine, cosabody"
+1294,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,male,TRUE,"C78- vaccine, cosabody"
+1295,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,F79- Eimeria challenge (21d)
+1296,chicken,cobb,Elanco-TAU,12-Mar-21,35,D,broiler,female,FALSE,"A8- vaccine, cosabody, Eimeria challenge (21d)"
+1297,turkey,not recorded,Lake Wheeler,03-Aug-21,28,d,meat,male,FALSE,valgus
+1298,turkey,not recorded,Lake Wheeler,03-Aug-21,28,d,meat,male,FALSE,valgus
+1299,turkey,not recorded,Lake Wheeler,03-Aug-21,28,d,meat,male,FALSE,valgus
+1300,turkey,not recorded,Lake Wheeler,03-Aug-21,28,d,meat,male,TRUE,
+1301,turkey,not recorded,Lake Wheeler,03-Aug-21,28,d,meat,male,TRUE,
+1302,turkey,not recorded,Lake Wheeler,03-Aug-21,28,d,meat,male,TRUE,
+1303,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1304,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1305,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1306,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1307,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1308,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1309,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1310,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1311,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1312,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1313,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1314,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1315,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1316,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1317,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,TRUE,
+1318,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,FALSE,down
+1319,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,FALSE,down
+1320,chicken,Ross 708,Mountaire,28-Jul-06,32,W,broiler breeder,female,FALSE,down
+1321,chicken,Ross 708,Townsends,29-Aug-06,28,W,broiler breeder,female,TRUE,
+1322,chicken,Ross 708,Townsends,29-Aug-06,28,W,broiler breeder,female,TRUE,
+1323,chicken,Ross 708,Townsends,29-Aug-06,28,W,broiler breeder,female,TRUE,
+1324,chicken,Ross 708,Townsends,29-Aug-06,28,W,broiler breeder,female,TRUE,
+1325,chicken,Ross 708,Townsends,29-Aug-06,28,W,broiler breeder,female,TRUE,
+1326,chicken,Ross 708,Townsends,29-Aug-06,28,W,broiler breeder,female,FALSE,down
+1327,chicken,Ross 708,Townsends,29-Aug-06,28,W,broiler breeder,female,FALSE,down
+1328,chicken,Ross 708,Townsends,29-Aug-06,28,W,broiler breeder,female,FALSE,down
+1329,chicken,Ross 708,Townsends,29-Aug-06,28,W,broiler breeder,female,FALSE,down
+1330,chicken,Ross 708,Townsends,29-Aug-06,28,W,broiler breeder,female,FALSE,down
+1331,chicken,Ross 708,Townsends,29-Aug-06,28,W,broiler breeder,female,FALSE,down
+1332,chicken,Ross 708,Townsends,29-Aug-06,28,W,broiler breeder,female,FALSE,down
+1333,chicken,Ross 708,Townsends,29-Aug-06,28,W,broiler breeder,female,FALSE,down
+1334,chicken,Ross 708,Townsends,29-Aug-06,28,W,broiler breeder,female,FALSE,down
+1335,chicken,Ross 708,Townsends,29-Aug-06,35,W,broiler breeder,female,TRUE,
+1336,chicken,Ross 708,Townsends,29-Aug-06,35,W,broiler breeder,female,TRUE,
+1337,chicken,Ross 708,Townsends,29-Aug-06,35,W,broiler breeder,female,TRUE,
+1338,chicken,Ross 708,Townsends,29-Aug-06,35,W,broiler breeder,female,TRUE,
+1339,chicken,Ross 708,Townsends,29-Aug-06,35,W,broiler breeder,female,TRUE,
+1340,chicken,Ross 708,Townsends,29-Aug-06,35,W,broiler breeder,female,TRUE,
+1341,chicken,Ross 708,Townsends,29-Aug-06,35,W,broiler breeder,female,TRUE,
+1342,chicken,Ross 708,Townsends,29-Aug-06,35,W,broiler breeder,female,TRUE,
+1343,chicken,Ross 708,Townsends,29-Aug-06,35,W,broiler breeder,female,TRUE,
+1344,chicken,Ross 708,Townsends,29-Aug-06,35,W,broiler breeder,female,TRUE,
+1345,chicken,Ross 708,Townsends,05-Sep-06,29,W,broiler breeder,female,TRUE,
+1346,chicken,Ross 708,Townsends,05-Sep-06,29,W,broiler breeder,female,TRUE,
+1347,chicken,Ross 708,Townsends,05-Sep-06,29,W,broiler breeder,female,TRUE,out
+1348,chicken,Ross 708,Townsends,05-Sep-06,29,W,broiler breeder,female,TRUE,
+1349,chicken,Ross 708,Townsends,05-Sep-06,29,W,broiler breeder,female,TRUE,
+1350,chicken,Ross 708,Townsends,05-Sep-06,29,W,broiler breeder,female,TRUE,
+1351,chicken,Ross 708,Townsends,05-Sep-06,29,W,broiler breeder,female,FALSE,down
+1352,chicken,Ross 708,Townsends,05-Sep-06,29,W,broiler breeder,female,FALSE,down
+1353,chicken,Ross 708,Townsends,05-Sep-06,29,W,broiler breeder,female,FALSE,down
+1354,chicken,Ross 708,Townsends,05-Sep-06,29,W,broiler breeder,female,FALSE,down
+1355,chicken,Ross 708,Townsends,05-Sep-06,29,W,broiler breeder,female,FALSE,down
+1356,chicken,Ross 708,Townsends,05-Sep-06,29,W,broiler breeder,female,FALSE,down
+1357,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,TRUE,
+1358,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,TRUE,
+1359,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,TRUE,
+1360,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,TRUE,
+1361,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,FALSE,down
+1362,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,FALSE,down
+1363,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,FALSE,down
+1364,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,FALSE,down
+1365,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,TRUE,
+1366,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,TRUE,
+1367,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,TRUE,
+1368,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,TRUE,
+1369,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,FALSE,down
+1370,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,FALSE,down
+1371,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,TRUE,out
+1372,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,TRUE,out
+1373,chicken,Ross 708,Townsends,08-Sep-06,29,W,broiler breeder,female,TRUE,out
+1374,chicken,Ross 708,Townsends,12-Sep-06,30,W,broiler breeder,female,TRUE,
+1375,chicken,Ross 708,Townsends,12-Sep-06,30,W,broiler breeder,female,TRUE,
+1376,chicken,Ross 708,Townsends,12-Sep-06,30,W,broiler breeder,female,TRUE,
+1377,chicken,Ross 708,Townsends,12-Sep-06,30,W,broiler breeder,female,TRUE,
+1378,chicken,Ross 708,Townsends,12-Sep-06,30,W,broiler breeder,female,TRUE,
+1379,chicken,Ross 708,Townsends,12-Sep-06,30,W,broiler breeder,female,FALSE,down
+1380,chicken,Ross 708,Townsends,12-Sep-06,30,W,broiler breeder,female,FALSE,down
+1381,chicken,Ross 708,Townsends,12-Sep-06,30,W,broiler breeder,female,FALSE,down
+1382,chicken,Ross 708,Townsends,12-Sep-06,30,W,broiler breeder,female,FALSE,down
+1383,chicken,Ross 708,Townsends,12-Sep-06,30,W,broiler breeder,female,FALSE,down
+1384,chicken,Ross 708,Townsends,12-Sep-06,30,W,broiler breeder,female,FALSE,down
+1385,chicken,Ross 708,Townsends,12-Sep-06,30,W,broiler breeder,female,FALSE,down
+1386,chicken,Ross 708,Townsends,12-Sep-06,30,W,broiler breeder,male,TRUE,
+1387,chicken,Ross 708,Townsends,19-Sep-06,25,W,broiler breeder,female,TRUE,
+1388,chicken,Ross 708,Townsends,19-Sep-06,25,W,broiler breeder,female,TRUE,
+1389,chicken,Ross 708,Townsends,19-Sep-06,25,W,broiler breeder,female,TRUE,
+1390,chicken,Ross 708,Townsends,19-Sep-06,25,W,broiler breeder,female,TRUE,
+1391,chicken,Ross 708,Townsends,19-Sep-06,25,W,broiler breeder,female,FALSE,down
+1392,chicken,Ross 708,Townsends,19-Sep-06,25,W,broiler breeder,female,FALSE,down
+1393,chicken,Ross 708,Townsends,19-Sep-06,25,W,broiler breeder,female,FALSE,down
+1394,chicken,Ross 708,Townsends,25-Sep-06,26,W,broiler breeder,female,TRUE,
+1395,chicken,Ross 708,Townsends,25-Sep-06,26,W,broiler breeder,female,TRUE,
+1396,chicken,Ross 708,Townsends,25-Sep-06,26,W,broiler breeder,female,TRUE,
+1397,chicken,Ross 708,Townsends,25-Sep-06,26,W,broiler breeder,female,TRUE,
+1398,chicken,Ross 708,Townsends,25-Sep-06,26,W,broiler breeder,female,FALSE,down
+1399,chicken,Ross 708,Townsends,25-Sep-06,26,W,broiler breeder,female,FALSE,down
+1400,chicken,Ross 708,Townsends,25-Sep-06,26,W,broiler breeder,female,FALSE,down
+1401,chicken,Ross 708,Townsends,25-Sep-06,26,W,broiler breeder,female,FALSE,down
+1402,chicken,Ross 708,Townsends,03-Oct-06,27,W,broiler breeder,female,TRUE,
+1403,chicken,Ross 708,Townsends,03-Oct-06,27,W,broiler breeder,female,TRUE,
+1404,chicken,Ross 708,Townsends,03-Oct-06,27,W,broiler breeder,female,TRUE,
+1405,chicken,Ross 708,Townsends,03-Oct-06,27,W,broiler breeder,female,TRUE,
+1406,chicken,Ross 708,Townsends,03-Oct-06,27,W,broiler breeder,female,TRUE,
+1407,chicken,Ross 708,Townsends,03-Oct-06,27,W,broiler breeder,female,FALSE,down
+1408,chicken,Ross 708,Townsends,03-Oct-06,27,W,broiler breeder,female,FALSE,down
+1409,chicken,Ross 708,Townsends,03-Oct-06,27,W,broiler breeder,female,FALSE,down
+1410,chicken,Ross 708,Townsends,10-Oct-06,28,W,broiler breeder,female,TRUE,
+1411,chicken,Ross 708,Townsends,10-Oct-06,28,W,broiler breeder,female,TRUE,
+1412,chicken,Ross 708,Townsends,10-Oct-06,28,W,broiler breeder,female,TRUE,
+1413,chicken,Ross 708,Townsends,10-Oct-06,28,W,broiler breeder,female,TRUE,
+1414,chicken,Ross 708,Townsends,10-Oct-06,28,W,broiler breeder,female,TRUE,
+1415,chicken,Ross 708,Townsends,10-Oct-06,28,W,broiler breeder,female,FALSE,down
+1416,chicken,Ross 708,Townsends,10-Oct-06,28,W,broiler breeder,female,FALSE,down
+1417,chicken,Ross 708,Townsends,10-Oct-06,28,W,broiler breeder,female,FALSE,down
+1418,chicken,Ross 708,Townsends,17-Oct-06,29,W,broiler breeder,female,TRUE,
+1419,chicken,Ross 708,Townsends,17-Oct-06,29,W,broiler breeder,female,TRUE,
+1420,chicken,Ross 708,Townsends,17-Oct-06,29,W,broiler breeder,female,TRUE,
+1421,chicken,Ross 708,Townsends,17-Oct-06,29,W,broiler breeder,female,TRUE,
+1422,chicken,Ross 708,Townsends,17-Oct-06,29,W,broiler breeder,female,TRUE,
+1423,chicken,Ross 708,Townsends,17-Oct-06,29,W,broiler breeder,female,FALSE,down
+1424,chicken,Ross 708,Townsends,17-Oct-06,29,W,broiler breeder,female,FALSE,down
+1425,chicken,Ross 708,Townsends,17-Oct-06,29,W,broiler breeder,female,FALSE,down
+1426,chicken,Ross 708,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1427,chicken,Ross 708,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1428,chicken,Ross 708,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1429,chicken,Ross 708,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1430,chicken,Ross 708,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1431,chicken,Ross 708,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1432,chicken,Ross 708,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1433,chicken,Ross 708,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1434,chicken,Ross 708,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1435,chicken,Ross 708,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1436,chicken,Ross 708,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,FALSE,down
+1437,chicken,Cobb 500,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1438,chicken,Cobb 500,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1439,chicken,Cobb 500,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1440,chicken,Cobb 500,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1441,chicken,Cobb 500,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1442,chicken,Cobb 500,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1443,chicken,Cobb 500,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1444,chicken,Cobb 500,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1445,chicken,Cobb 500,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1446,chicken,Cobb 500,Nash Johnson,23-Oct-06,32,W,broiler breeder,female,TRUE,
+1447,chicken,Ross 16,Townsends,04-Dec-06,19,W,broiler breeder,female,TRUE,
+1448,chicken,Ross 16,Townsends,04-Dec-06,19,W,broiler breeder,female,TRUE,
+1449,chicken,Ross 16,Townsends,04-Dec-06,19,W,broiler breeder,female,TRUE,
+1450,chicken,Ross 16,Townsends,04-Dec-06,19,W,broiler breeder,female,TRUE,
+1451,chicken,Ross 16,Townsends,04-Dec-06,19,W,broiler breeder,female,TRUE,
+1452,chicken,Ross 16,Townsends,04-Dec-06,19,W,broiler breeder,female,TRUE,
+1453,chicken,Ross 16,Townsends,04-Dec-06,19,W,broiler breeder,female,FALSE,down
+1454,chicken,Ross 16,Townsends,04-Dec-06,19,W,broiler breeder,female,FALSE,down
+1455,chicken,Ross 16,Townsends,04-Dec-06,19,W,broiler breeder,female,FALSE,down
+1456,chicken,Ross 16,Townsends,04-Dec-06,19,W,broiler breeder,female,FALSE,down
+1457,chicken,Ross 16,Townsends,23-Jan-07,26,W,broiler breeder,female,TRUE,
+1458,chicken,Ross 16,Townsends,23-Jan-07,26,W,broiler breeder,female,TRUE,
+1459,chicken,Ross 16,Townsends,23-Jan-07,26,W,broiler breeder,female,TRUE,
+1460,chicken,Ross 16,Townsends,23-Jan-07,26,W,broiler breeder,female,TRUE,
+1461,chicken,Ross 16,Townsends,23-Jan-07,26,W,broiler breeder,female,TRUE,
+1462,chicken,Ross 16,Townsends,23-Jan-07,26,W,broiler breeder,female,TRUE,
+1463,chicken,Ross 16,Townsends,23-Jan-07,26,W,broiler breeder,female,TRUE,
+1464,chicken,Ross 16,Townsends,23-Jan-07,26,W,broiler breeder,female,TRUE,
+1465,chicken,Ross 16,Townsends,23-Jan-07,26,W,broiler breeder,female,TRUE,
+1466,chicken,Ross 16,Townsends,23-Jan-07,26,W,broiler breeder,female,TRUE,
+1467,chicken,Ross 16,Townsends,23-Jan-07,26,W,broiler breeder,female,TRUE,
+1468,chicken,Ross 16,Townsends,23-Jan-07,26,W,broiler breeder,female,TRUE,
+1469,chicken,Ross 16,Townsends,23-Jan-07,26,W,broiler breeder,female,FALSE,down
+1470,chicken,Ross 16,Townsends,23-Jan-07,26,W,broiler breeder,female,FALSE,down
+1471,chicken,Ross 16,Townsends,05-Feb-07,28,W,broiler breeder,female,TRUE,
+1472,chicken,Ross 16,Townsends,05-Feb-07,28,W,broiler breeder,female,TRUE,
+1473,chicken,Ross 16,Townsends,05-Feb-07,28,W,broiler breeder,female,TRUE,
+1474,chicken,Ross 16,Townsends,05-Feb-07,28,W,broiler breeder,female,TRUE,
+1475,chicken,Ross 16,Townsends,05-Feb-07,28,W,broiler breeder,female,TRUE,
+1476,chicken,Ross 16,Townsends,05-Feb-07,28,W,broiler breeder,female,TRUE,
+1477,chicken,Ross 16,Townsends,05-Feb-07,28,W,broiler breeder,female,TRUE,
+1478,chicken,Ross 16,Townsends,05-Feb-07,28,W,broiler breeder,female,TRUE,
+1479,chicken,Ross 16,Townsends,05-Feb-07,28,W,broiler breeder,female,TRUE,
+1480,chicken,Ross 16,Townsends,05-Feb-07,28,W,broiler breeder,female,FALSE,down
+1481,chicken,Ross 16,Townsends,05-Feb-07,28,W,broiler breeder,female,FALSE,down
+1482,chicken,Ross 16,Townsends,05-Feb-07,28,W,broiler breeder,female,FALSE,down
+1483,chicken,Ross 16,Townsends,05-Feb-07,28,W,broiler breeder,female,FALSE,down
+1484,chicken,Ross 16,Townsends,05-Feb-07,28,W,broiler breeder,female,FALSE,down
+1485,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,TRUE,
+1486,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,TRUE,
+1487,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,TRUE,
+1488,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,TRUE,
+1489,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,TRUE,
+1490,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,TRUE,
+1491,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,TRUE,
+1492,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,TRUE,
+1493,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,TRUE,
+1494,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,FALSE,down
+1495,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,FALSE,down
+1496,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,FALSE,down
+1497,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,FALSE,down
+1498,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,FALSE,down
+1499,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,FALSE,down
+1500,chicken,Ross 16,Townsends,12-Feb-07,29,W,broiler breeder,female,TRUE,
+1501,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1502,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1503,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1504,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1505,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1506,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1507,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1508,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1509,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1510,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1511,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1512,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1513,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1514,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1515,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1516,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,TRUE,
+1517,chicken,Ross 16,Townsends,30-Apr-07,37,W,broiler breeder,female,FALSE,down
+1518,chicken,Ross 16,Townsends,30-Apr-07,25,W,broiler breeder,female,FALSE,down
+1519,chicken,Ross 16,Townsends,30-Apr-07,25,W,broiler breeder,female,FALSE,down
+1520,chicken,Ross 16,Townsends,05-Jun-07,26,W,broiler breeder,female,TRUE,
+1521,chicken,Ross 16,Townsends,05-Jun-07,26,W,broiler breeder,female,TRUE,
+1522,chicken,Ross 16,Townsends,05-Jun-07,26,W,broiler breeder,female,TRUE,
+1523,chicken,Ross 16,Townsends,05-Jun-07,26,W,broiler breeder,female,TRUE,
+1524,chicken,Ross 16,Townsends,05-Jun-07,26,W,broiler breeder,female,TRUE,
+1525,chicken,Ross 16,Townsends,05-Jun-07,26,W,broiler breeder,female,FALSE,down
+1526,chicken,Ross 16,Townsends,05-Jun-07,26,W,broiler breeder,female,FALSE,down
+1527,chicken,Ross 16,Townsends,05-Jun-07,26,W,broiler breeder,female,FALSE,"down, spinal abscess"
+1528,chicken,Ross 16,Townsends,05-Jun-07,26,W,broiler breeder,female,FALSE,"down, Ca tenaty suspect"
+1529,chicken,Ross 16,Townsends,05-Jun-07,26,W,broiler breeder,female,FALSE,"down, no response"
+1530,chicken,Ross 16,Townsends,12-Jun-07,29,W,broiler breeder,female,TRUE,
+1531,chicken,Ross 16,Townsends,12-Jun-07,29,W,broiler breeder,female,TRUE,
+1532,chicken,Ross 16,Townsends,12-Jun-07,29,W,broiler breeder,female,TRUE,
+1533,chicken,Ross 16,Townsends,12-Jun-07,29,W,broiler breeder,female,TRUE,
+1534,chicken,Ross 16,Townsends,12-Jun-07,29,W,broiler breeder,female,TRUE,
+1535,chicken,Ross 16,Townsends,12-Jun-07,29,W,broiler breeder,female,FALSE,"down, arthritis"
+1536,chicken,Ross 16,Townsends,12-Jun-07,29,W,broiler breeder,female,FALSE,"down, abscess"
+1537,chicken,Ross 16,Townsends,12-Jun-07,29,W,broiler breeder,female,FALSE,"down, arthritis"
+1538,chicken,Ross 16,Townsends,12-Jun-07,29,W,broiler breeder,female,FALSE,"down, no responsive"
+1539,chicken,Ross 16,Townsends,12-Jun-07,29,W,broiler breeder,female,FALSE,down
+1540,chicken,Ross 16,Townsends,11-Jul-07,32,W,broiler breeder,female,FALSE,wet vent
+1541,chicken,Ross 16,Townsends,11-Jul-07,32,W,broiler breeder,female,FALSE,wet vent
+1542,chicken,Ross 16,Townsends,11-Jul-07,32,W,broiler breeder,female,FALSE,wet vent
+1543,chicken,Ross 16,Townsends,11-Jul-07,32,W,broiler breeder,female,FALSE,wet vent
+1544,chicken,Ross 16,Townsends,11-Jul-07,32,W,broiler breeder,female,FALSE,wet vent
+1545,chicken,Ross 16,Townsends,11-Jul-07,32,W,broiler breeder,female,FALSE,peck out
+1546,chicken,Ross 16,Townsends,17-Jul-07,13,W,broiler breeder,female,TRUE,
+1547,chicken,Ross 16,Townsends,17-Jul-07,13,W,broiler breeder,female,TRUE,
+1548,chicken,Ross 16,Townsends,17-Jul-07,13,W,broiler breeder,female,TRUE,
+1549,chicken,Ross 16,Townsends,17-Jul-07,13,W,broiler breeder,female,TRUE,
+1550,chicken,Ross 708,Mountaire,07-Aug-07,51,W,broiler breeder,female,TRUE,
+1551,chicken,Ross 708,Mountaire,07-Aug-07,51,W,broiler breeder,female,TRUE,
+1552,chicken,Ross 708,Mountaire,07-Aug-07,51,W,broiler breeder,female,TRUE,
+1553,chicken,Ross 708,Mountaire,07-Aug-07,51,W,broiler breeder,female,TRUE,
+1554,chicken,Ross 708,Mountaire,07-Aug-07,51,W,broiler breeder,female,TRUE,
+1555,chicken,Ross 708,Mountaire,07-Aug-07,51,W,broiler breeder,female,TRUE,
+1556,chicken,Ross 708,Mountaire,07-Aug-07,51,W,broiler breeder,female,TRUE,
+1557,chicken,Ross 708,Mountaire,07-Aug-07,51,W,broiler breeder,female,TRUE,
+1558,chicken,Ross 708,Mountaire,07-Aug-07,51,W,broiler breeder,female,TRUE,
+1559,chicken,Ross 708,Mountaire,07-Aug-07,51,W,broiler breeder,female,TRUE,
+1560,chicken,Ross 708,Mountaire,07-Aug-07,51,W,broiler breeder,female,TRUE,
+1561,chicken,Ross 708,Mountaire,07-Aug-07,51,W,broiler breeder,female,TRUE,
+1562,chicken,Ross 708,Mountaire,07-Aug-07,51,W,broiler breeder,female,TRUE,
+1563,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1564,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1565,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1566,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1567,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1568,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1569,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1570,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1571,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1572,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1573,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1574,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1575,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1576,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1577,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1578,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1579,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1580,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1581,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1582,chicken,Ross 708,Allen's Hatchery,23-Aug-07,27,W,broiler breeder,female,TRUE,
+1583,chicken,Ross 708,Allen's Hatchery,30-Aug-07,28,W,broiler breeder,female,TRUE,
+1584,chicken,Ross 708,Allen's Hatchery,30-Aug-07,28,W,broiler breeder,female,TRUE,
+1585,chicken,Ross 708,Allen's Hatchery,30-Aug-07,28,W,broiler breeder,female,TRUE,
+1586,chicken,Ross 708,Allen's Hatchery,30-Aug-07,28,W,broiler breeder,female,TRUE,
+1587,chicken,Ross 708,Allen's Hatchery,30-Aug-07,28,W,broiler breeder,female,TRUE,
+1588,chicken,Ross 708,Allen's Hatchery,30-Aug-07,28,W,broiler breeder,female,TRUE,
+1589,chicken,Ross 708,Allen's Hatchery,30-Aug-07,28,W,broiler breeder,female,TRUE,
+1590,chicken,Ross 708,Allen's Hatchery,30-Aug-07,28,W,broiler breeder,female,TRUE,
+1591,chicken,Ross 708,Allen's Hatchery,30-Aug-07,28,W,broiler breeder,female,TRUE,
+1592,chicken,Ross 708,Allen's Hatchery,30-Aug-07,28,W,broiler breeder,female,TRUE,
+1593,chicken,Ross 708,Allen's Hatchery,06-Sep-07,29,W,broiler breeder,female,TRUE,
+1594,chicken,Ross 708,Allen's Hatchery,06-Sep-07,29,W,broiler breeder,female,TRUE,
+1595,chicken,Ross 708,Allen's Hatchery,06-Sep-07,29,W,broiler breeder,female,TRUE,
+1596,chicken,Ross 708,Allen's Hatchery,06-Sep-07,29,W,broiler breeder,female,TRUE,
+1597,chicken,Ross 708,Allen's Hatchery,06-Sep-07,29,W,broiler breeder,female,TRUE,
+1598,turkey,Select Genetis,SGNC,01-Sep-21,52,w,breeder,female,TRUE,Beaver Dam
+1599,turkey,Select Genetis,SGNC,01-Sep-21,52,w,breeder,female,TRUE,Beaver Dam
+1600,turkey,Select Genetis,SGNC,01-Sep-21,52,w,breeder,female,TRUE,Beaver Dam
+1601,turkey,Select Genetis,SGNC,01-Sep-21,52,w,breeder,female,TRUE,Beaver Dam
+1602,turkey,Select Genetis,SGNC,01-Sep-21,52,w,breeder,female,TRUE,Beaver Dam
+1603,turkey,Select Genetis,SGNC,01-Sep-21,52,w,breeder,female,TRUE,Beaver Dam
+1604,turkey,Select Genetis,SGNC,01-Sep-21,52,w,breeder,female,TRUE,Beaver Dam
+1605,turkey,Select Genetis,SGNC,01-Sep-21,52,w,breeder,female,TRUE,Beaver Dam
+1606,turkey,Select Genetis,SGNC,01-Sep-21,52,w,breeder,female,TRUE,Beaver Dam
+1607,turkey,Select Genetis,SGNC,01-Sep-21,52,w,breeder,female,TRUE,Beaver Dam
+1608,turkey,Select Genetis,SGNC,01-Sep-21,52,w,breeder,female,TRUE,Beaver Dam
+1609,turkey,Select Genetis,SGNC,02-Sep-21,58,w,breeder,female,TRUE,Green Acres
+1610,turkey,Select Genetis,SGNC,02-Sep-21,58,w,breeder,female,TRUE,Green Acres
+1611,turkey,Select Genetis,SGNC,02-Sep-21,58,w,breeder,female,TRUE,Green Acres
+1612,turkey,Select Genetis,SGNC,02-Sep-21,58,w,breeder,female,TRUE,Green Acres
+1613,turkey,Select Genetis,SGNC,02-Sep-21,58,w,breeder,female,TRUE,Green Acres
+1614,turkey,Select Genetis,SGNC,02-Sep-21,58,w,breeder,female,TRUE,Green Acres
+1615,turkey,Select Genetis,SGNC,02-Sep-21,58,w,breeder,female,TRUE,Green Acres
+1616,turkey,Select Genetis,SGNC,02-Sep-21,58,w,breeder,female,TRUE,Green Acres
+1617,turkey,Select Genetis,SGNC,02-Sep-21,58,w,breeder,female,TRUE,Green Acres
+1618,turkey,Select Genetis,SGNC,02-Sep-21,58,w,breeder,female,TRUE,Green Acres
+1619,turkey,not reported,TAU,09-Sep-21,28,d,meat,female,TRUE,
+1620,turkey,not reported,TAU,09-Sep-21,28,d,meat,female,TRUE,
+1621,turkey,not reported,TAU,09-Sep-21,28,d,meat,female,TRUE,
+1622,turkey,not reported,TAU,09-Sep-21,28,d,meat,female,TRUE,
+1623,turkey,not reported,TAU,09-Sep-21,28,d,meat,female,TRUE,
+1624,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1410
+1625,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1415
+1626,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1426
+1627,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1430
+1628,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1433
+1629,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1436
+1630,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1452
+1631,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1460
+1632,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1467
+1633,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1472
+1634,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1497
+1635,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1502
+1636,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1519
+1637,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1526
+1638,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1530
+1639,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1543
+1640,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1552
+1641,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1553
+1642,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1567
+1643,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,1574
+1644,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2803
+1645,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2816
+1646,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2830
+1647,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2840
+1648,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2845
+1649,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2851
+1650,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2864
+1651,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2865
+1652,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2876
+1653,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2886
+1654,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2890
+1655,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2894
+1656,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2907
+1657,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2909
+1658,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2925
+1659,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2926
+1660,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2930
+1661,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2932
+1662,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2949
+1663,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,2959
+1664,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3005
+1665,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3013
+1666,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3018
+1667,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3020
+1668,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3042
+1669,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3046
+1670,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3064
+1671,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3065
+1672,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3078
+1673,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3090
+1674,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3095
+1675,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3107
+1676,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3109
+1677,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3118
+1678,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3120
+1679,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3131
+1680,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3133
+1681,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,3155
+1682,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4573
+1683,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4575
+1684,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4602
+1685,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4603
+1686,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4624
+1687,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4626
+1688,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4634
+1689,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4642
+1690,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4652
+1691,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4656
+1692,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4670
+1693,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4683
+1694,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4686
+1695,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4689
+1696,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4710
+1697,chicken,not reported,lake wheeler,11-Mar-19,21,d,broiler,not reported,TRUE,4715
+1698,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1404
+1699,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1405
+1700,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1418
+1701,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1424
+1702,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1438
+1703,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1441
+1704,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1458
+1705,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1461
+1706,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1473
+1707,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1480
+1708,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1500
+1709,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1504
+1710,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1514
+1711,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1518
+1712,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1531
+1713,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1539
+1714,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1550
+1715,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1560
+1716,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,1572
+1717,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2810
+1718,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2813
+1719,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2818
+1720,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2839
+1721,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2848
+1722,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2856
+1723,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2874
+1724,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2877
+1725,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2882
+1726,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2890
+1727,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2904
+1728,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2912
+1729,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2913
+1730,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2923
+1731,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2943
+1732,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2944
+1733,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2945
+1734,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,2952
+1735,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3010
+1736,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3016
+1737,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3023
+1738,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3034
+1739,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3036
+1740,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3059
+1741,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3061
+1742,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3074
+1743,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3077
+1744,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3082
+1745,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3094
+1746,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3104
+1747,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3106
+1748,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3121
+1749,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3122
+1750,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3139
+1751,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3142
+1752,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,3151
+1753,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4554
+1754,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4568
+1755,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4591
+1756,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4593
+1757,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4604
+1758,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4606
+1759,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4612
+1760,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4616
+1761,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4633
+1762,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4636
+1763,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4646
+1764,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4654
+1765,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4668
+1766,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4688
+1767,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4692
+1768,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4708
+1769,chicken,not reported,lake wheeler,18-Mar-19,28,d,broiler,not reported,TRUE,4787
+1770,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1402
+1771,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1413
+1772,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1421
+1773,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1423
+1774,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1442
+1775,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1448
+1776,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1456
+1777,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1459
+1778,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1468
+1779,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1479
+1780,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1498
+1781,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1499
+1782,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1522
+1783,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1524
+1784,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1535
+1785,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1547
+1786,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1549
+1787,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1565
+1788,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,1566
+1789,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2801
+1790,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2824
+1791,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2828
+1792,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2834
+1793,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2845
+1794,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2854
+1795,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2862
+1796,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2868
+1797,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2869
+1798,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2883
+1799,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2887
+1800,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2897
+1801,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2910
+1802,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2914
+1803,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2922
+1804,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2936
+1805,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2938
+1806,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2953
+1807,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,2954
+1808,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3006
+1809,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3014
+1810,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3025
+1811,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3027
+1812,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3035
+1813,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3041
+1814,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3053
+1815,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3058
+1816,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3067
+1817,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3068
+1818,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3081
+1819,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3095
+1820,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3099
+1821,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3100
+1822,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3116
+1823,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3119
+1824,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3129
+1825,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3143
+1826,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,3150
+1827,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4548
+1828,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4555
+1829,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4563
+1830,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4574
+1831,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4582
+1832,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4583
+1833,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4607
+1834,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4609
+1835,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4614
+1836,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4625
+1837,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4635
+1838,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4637
+1839,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4651
+1840,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4653
+1841,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4669
+1842,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4671
+1843,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4687
+1844,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4690
+1845,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4713
+1846,chicken,not reported,lake wheeler,01-Apr-19,35,d,broiler,not reported,TRUE,4714
+1847,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1401
+1848,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1403
+1849,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1427
+1850,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1431
+1851,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1444
+1852,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1445
+1853,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1455
+1854,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1475
+1855,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1478
+1856,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1503
+1857,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1510
+1858,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1517
+1859,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1520
+1860,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1540
+1861,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1541
+1862,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1556
+1863,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1559
+1864,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1569
+1865,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,1576
+1866,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2805
+1867,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2807
+1868,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2817
+1869,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2829
+1870,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2833
+1871,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2835
+1872,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2850
+1873,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2858
+1874,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2870
+1875,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2872
+1876,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2888
+1877,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2894
+1878,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2898
+1879,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2908
+1880,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2915
+1881,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2916
+1882,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2934
+1883,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2940
+1884,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2956
+1885,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,2958
+1886,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3004
+1887,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3008
+1888,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3024
+1889,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3026
+1890,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3040
+1891,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3043
+1892,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3057
+1893,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3062
+1894,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3066
+1895,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3075
+1896,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3084
+1897,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3086
+1898,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3103
+1899,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3112
+1900,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3123
+1901,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3127
+1902,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3137
+1903,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3141
+1904,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3145
+1905,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,3157
+1906,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4556
+1907,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4557
+1908,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4565
+1909,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4576
+1910,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4581
+1911,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4595
+1912,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4610
+1913,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4615
+1914,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4618
+1915,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4630
+1916,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4631
+1917,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4647
+1918,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4657
+1919,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4681
+1920,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4696
+1921,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4699
+1922,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4711
+1923,chicken,not reported,lake wheeler,08-Apr-19,42,d,broiler,not reported,TRUE,4712
+1924,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,112
+1925,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,379
+1926,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,1039
+1927,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,1166
+1928,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,1194
+1929,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,1217
+1930,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,2053
+1931,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,2136
+1932,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,3026
+1933,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,3055
+1934,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,5005
+1935,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,5034
+1936,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,5123
+1937,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,5169
+1938,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,5194
+1939,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,5237
+1940,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,6068
+1941,chicken,not reported,lake wheeler,03-Jun-19,6,d,broiler,not reported,TRUE,6458
+1942,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,140
+1943,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,440
+1944,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,1049
+1945,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,1094
+1946,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,2111
+1947,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,2131
+1948,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,2181
+1949,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,3029
+1950,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,3054
+1951,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,3061
+1952,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,3176
+1953,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,4057
+1954,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,4174
+1955,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,4199
+1956,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,5003
+1957,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,5127
+1958,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,5195
+1959,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,5210
+1960,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,6040
+1961,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,6103
+1962,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,6162
+1963,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,6213
+1964,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,6310
+1965,chicken,not reported,lake wheeler,05-Jun-19,8,d,broiler,not reported,TRUE,6438
+1966,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,385
+1967,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,1040
+1968,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,1082
+1969,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,2038
+1970,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,2103
+1971,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,2150
+1972,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,3125
+1973,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,3154
+1974,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,3217
+1975,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,4183
+1976,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,4227
+1977,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,5032
+1978,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,5105
+1979,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,6005
+1980,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,6174
+1981,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,6197
+1982,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,6305
+1983,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,6391
+1984,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,6426
+1985,chicken,not reported,lake wheeler,10-Jun-19,13,d,broiler,not reported,TRUE,6467
+1986,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,1188
+1987,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,1236
+1988,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,2070
+1989,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,2084
+1990,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,2104
+1991,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,2180
+1992,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,2203
+1993,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,3015
+1994,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,3053
+1995,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,3107
+1996,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,3141
+1997,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,3200
+1998,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,4132
+1999,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,4173
+2000,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,4201
+2001,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,5026
+2002,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,5065
+2003,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,6009
+2004,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,6045
+2005,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,6306
+2006,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,6352
+2007,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,6379
+2008,chicken,not reported,lake wheeler,17-Jun-19,20,d,broiler,not reported,TRUE,6456
+2009,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,428
+2010,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,1069
+2011,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,1185
+2012,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,2029
+2013,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,2066
+2014,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,2086
+2015,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,2152
+2016,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,3049
+2017,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,3130
+2018,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,4114
+2019,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,5031
+2020,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,5099
+2021,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,5152
+2022,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,5175
+2023,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,5193
+2024,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,5229
+2025,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,6137
+2026,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,6193
+2027,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,6223
+2028,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,6322
+2029,chicken,not reported,lake wheeler,24-Jun-19,27,d,broiler,not reported,TRUE,6336
+2030,chicken,not reported,lake wheeler,27-Jun-19,27,d,broiler,not reported,TRUE,1162
+2031,chicken,not reported,lake wheeler,27-Jun-19,27,d,broiler,not reported,TRUE,1092T
+2032,chicken,not reported,lake wheeler,27-Jun-19,27,d,broiler,not reported,TRUE,16G
+2033,chicken,not reported,lake wheeler,27-Jun-19,27,d,broiler,not reported,TRUE,376T
+2034,chicken,not reported,lake wheeler,27-Jun-19,27,d,broiler,not reported,TRUE,37H
+2035,chicken,not reported,lake wheeler,27-Jun-19,27,d,broiler,not reported,TRUE,41G
+2036,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,126
+2037,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,176
+2038,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,470
+2039,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,1030
+2040,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,2037
+2041,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,2047
+2042,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,2074
+2043,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,2116
+2044,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,2179
+2045,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,2194
+2046,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,3057
+2047,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,3114
+2048,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,3192
+2049,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,3209
+2050,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,4083
+2051,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,4115
+2052,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,4137
+2053,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,5188
+2054,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,6104
+2055,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,6338
+2056,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,6367
+2057,chicken,not reported,lake wheeler,01-Jul-19,34,d,broiler,not reported,TRUE,6422
+2058,turkey,not recorded,TAU,15-Sep-21,32,d,meat,female,TRUE,
+2059,turkey,not recorded,TAU,15-Sep-21,32,d,meat,female,TRUE,
+2060,turkey,not recorded,TAU,15-Sep-21,32,d,meat,female,TRUE,
+2061,turkey,not recorded,TAU,15-Sep-21,32,d,meat,female,TRUE,
+2062,turkey,not recorded,TAU,15-Sep-21,32,d,meat,female,TRUE,
+2063,turkey,not recorded,TAU,24-Sep-21,43,d,meat,female,TRUE,
+2064,turkey,not recorded,TAU,24-Sep-21,43,d,meat,female,TRUE,
+2065,turkey,not recorded,TAU,24-Sep-21,43,d,meat,female,TRUE,
+2066,turkey,not recorded,TAU,24-Sep-21,43,d,meat,female,TRUE,
+2067,turkey,not recorded,TAU,24-Sep-21,43,d,meat,female,TRUE,
+2068,turkey,not recorded,TAU,01-Oct-21,50,d,meat,female,TRUE,
+2069,turkey,not recorded,TAU,01-Oct-21,50,d,meat,female,TRUE,
+2070,turkey,not recorded,TAU,01-Oct-21,50,d,meat,female,TRUE,
+2071,turkey,not recorded,TAU,01-Oct-21,50,d,meat,female,TRUE,
+2072,turkey,not recorded,TAU,01-Oct-21,50,d,meat,female,TRUE,
+2073,turkey,not recorded,TAU,08-Oct-21,57,d,meat,female,TRUE,
+2074,turkey,not recorded,TAU,08-Oct-21,57,d,meat,female,TRUE,
+2075,turkey,not recorded,TAU,08-Oct-21,57,d,meat,female,TRUE,
+2076,turkey,not recorded,TAU,08-Oct-21,57,d,meat,female,TRUE,
+2077,turkey,not recorded,TAU,08-Oct-21,57,d,meat,female,TRUE,
+2078,turkey,not recorded,TAU,15-Oct-21,64,d,meat,female,TRUE,
+2079,turkey,not recorded,TAU,15-Oct-21,64,d,meat,female,TRUE,
+2080,turkey,not recorded,TAU,15-Oct-21,64,d,meat,female,TRUE,
+2081,turkey,not recorded,TAU,15-Oct-21,64,d,meat,female,TRUE,
+2082,turkey,not recorded,TAU,15-Oct-21,64,d,meat,female,TRUE,
+2083,turkey,not recorded,TAU,22-Oct-21,70,d,meat,female,TRUE,
+2084,turkey,not recorded,TAU,22-Oct-21,70,d,meat,female,TRUE,
+2085,turkey,not recorded,TAU,22-Oct-21,70,d,meat,female,TRUE,
+2086,turkey,not recorded,TAU,22-Oct-21,70,d,meat,female,TRUE,
+2087,turkey,not recorded,TAU,22-Oct-21,70,d,meat,female,TRUE,

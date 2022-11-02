@@ -79,7 +79,7 @@ class AgeUnits(str, Enum):
 
 
 class AgeGroup(str, Enum):
-    Brooder = "Brooder"          # Can we adjust this to 1-6 days
+    Brooder = "Brooder"
     Growing = "Growing"
     Prelay = "Prelay"
     Lay = "Lay"
