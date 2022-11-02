@@ -48,7 +48,9 @@ def parse_machine_data():
 
 
 @sampleBlueprint.route('/', methods=['POST'])
-def create_sample():
+@token_required
+@allowed_roles([0, 1, 2, 3])
+def create_sample(current_user, access_allowed):
     """
     Creates a new sample, from a given sample json and returns the newly created sample.
     :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
@@ -58,6 +60,33 @@ def create_sample():
     """
     payload = request.json
 
+    sample:SampleORM = SampleORM()
+    for name, value in request.json.items():
+        if name != 'measurements' and name != "is_deleted":
+            setattr(sample, name, value)
+            
+    setattr(sample, "user_id", current_user.id)
+    setattr(sample, "validation_status", ValidationTypes.Saved)
+
+    models.db.session.add(sample)
+    models.db.session.commit()
+    models.db.session.refresh(sample)
+    
+    # Update the list of measurements.
+
+    measurements = []
+    for measurement in request.json["measurements"]:
+        measurement_model:MeasurementORM = MeasurementORM()
+        for name, value in measurement.items():
+            setattr(measurement_model, name, value)
+            setattr(measurement_model, "sample_id", sample.id)
+        measurements.append(measurement_model)
+    
+    setattr(sample, "measurements", measurements)
+
+    models.db.session.commit()
+    models.db.session.refresh(sample)
+
     new_sample = sample_helper.create_sample(payload)
 
     return schemas.Sample.from_orm(new_sample).dict(), 201
@@ -65,7 +94,7 @@ def create_sample():
 
 @sampleBlueprint.route('/org_cartrige_type', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2, 3, 4])
 def get_samples_by_cartridge_type_id_and_org(current_user, access_allowed):
 
     """
@@ -83,16 +112,24 @@ def get_samples_by_cartridge_type_id_and_org(current_user, access_allowed):
 
             sql_select_query = "sample_table sample, flock_table f, source_table source, organization_table o"
             sql_where_query = "WHERE sample.flock_id = f.id AND f.source_id = source.id AND source.organization_id = :org_id AND sample.cartridge_type_id = :cartridge_type_id"
+            
+            # If user is a data collector, they should only see their samples 
+            if current_user.role == 3:
+                sql_where_query += "AND sample.user_id = :current_user_id"
 
-            if current_user.role != 0:
+            # If user is admin or below, they should only see samples within their org
+            elif current_user.role != 0:
                 sql_select_query += ", user_table u"
-                sql_where_query += "AND u.organization_id = :current_user_id"
+                sql_where_query += "AND u.organization_id = :current_user_org_id"
 
 
             sql_query = "SELECT sample.id FROM " + sql_select_query + sql_where_query
-            result = connection.execute(text(sql_query + ";"), {"org_id": request.json["org_id"], "cartridge_type_id": request.json["cartridge_type_id"], "current_user_id": current_user.organization_id})
+            result = connection.execute(text(sql_query + ";"), {"org_id": request.json["org_id"], "cartridge_type_id": request.json["cartridge_type_id"], "current_user_id": current_user.id, "current_user_org_id": current_user.organization_id})
 
-            samples = [SampleORM.query.get(row.id) for row in result]
+            for row in result:
+                sample = SampleORM.query.get(row.id)
+                if sample.validation_status == "Saved" and sample.user_id == current_user.id:
+                    samples.append(sample)
                 
         results = []
         for sample in samples:

@@ -143,26 +143,6 @@ class Sample(PydanticModel):
     timestamp_added: Optional[datetime]
 
 
-class Batch(PydanticModel):
-    id: Optional[int]
-    name: str
-
-
-class Measurement(PydanticModel):
-    id: Optional[int]
-    value: Optional[float]
-    sample_id: int
-    analyte: Optional[Analyte]
-
-
-class Analyte(PydanticModel):
-    id: Optional[int]
-    name: Optional[str]
-    abbreviation: str
-    units: Optional[str]
-    machine_type_id: int
-
-
 class Machine(PydanticModel):
     id: Optional[int]
     serial_number: str
