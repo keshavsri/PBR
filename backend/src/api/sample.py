@@ -109,7 +109,7 @@ def get_samples_by_cartridge_type_id_and_org(current_user, access_allowed):
         with models.engine.connect() as connection:
 
             sql_select_query = "sample_table sample, flock_table f, source_table source, organization_table o"
-            sql_where_query = "WHERE sample.flock_id = f.id AND f.source_id = source.id AND source.organization_id = :org_id AND sample.cartridge_type_id = :cartridge_type_id"
+            sql_where_query = " WHERE sample.flock_id = f.id AND f.source_id = source.id AND source.organization_id = :org_id AND sample.cartridge_type_id = :cartridge_type_id "
             
             # If user is a data collector, they should only see their samples 
             if current_user.role == 3:
