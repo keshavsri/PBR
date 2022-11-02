@@ -21,7 +21,7 @@ organizationBlueprint = Blueprint('organization', __name__)
 @organizationBlueprint.route('/', methods=['GET'])
 @token_required
 @allowed_roles([0])
-def get_organizations(access_allowed):
+def get_organizations(access_allowed, current_user):
     """
     This function will return all the organizations in the database.
 

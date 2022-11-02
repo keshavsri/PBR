@@ -340,7 +340,7 @@ def update_user(access_allowed, current_user, user_id):
             # SQLAlchemy update and log action
             models.User.query.filter_by(id=edited_user.get("id")).update(edited_user)
             models.db.session.commit()
-            log.create_log(current_user, LogActions.EDIT_USER, 'Edited user: ' + str(edited_user.get("id")))
+            helpers.log.create_log(current_user, LogActions.EDIT_USER, 'Edited user: ' + str(edited_user.get("id")))
 
             # Return updated user object, retreived via db query (confirmation)
             updated_user = schemas.User.from_orm(
@@ -379,7 +379,7 @@ def delete_user(access_allowed, current_user, user_id):
         else:
             user.is_deleted = True
             models.db.session.commit()
-            log.create_log(current_user, LogActions.DELETE_SOURCE, f'Deleted user: ${user.first_name} ${user.last_name} in organization: ${models.Organization.query.get(user.organization_id).name}')
+            helpers.log.create_log(current_user, LogActions.DELETE_SOURCE, f'Deleted user: ${user.first_name} ${user.last_name} in organization: ${models.Organization.query.get(user.organization_id).name}')
             return jsonify({'message': 'User deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
