@@ -104,10 +104,10 @@ class Source(db.Model):
     # The fields below are stored in the database, they are assigned both a python and a database type
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(120))
-    street_address: str = db.Column(db.String(120))
-    city: str = db.Column(db.String(120))
-    state: States = db.Column(db.Enum(States))
-    zip: int = db.Column(db.Integer)
+    street_address: str = db.Column(db.String(120), nullable=True)
+    city: str = db.Column(db.String(120), nullable=True)
+    state: States = db.Column(db.Enum(States), nullable=True)
+    zip: int = db.Column(db.Integer, nullable=True)
     is_deleted: bool = db.Column(db.Boolean, server_default="0")
 
     # References to Foreign Objects
@@ -133,8 +133,8 @@ class Flock(db.Model):
 
     __tablename__ = 'flock_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name: str = db.Column(db.String(255), unique=True)
-    strain: str = db.Column(db.String(120))
+    name: str = db.Column(db.String(255), unique=True, nullable=True)
+    strain: str = db.Column(db.String(120), nullable=True)
     species: Species = db.Column(db.Enum(Species))
     gender: BirdGenders = db.Column(db.Enum(BirdGenders))
     production_type: ProductionTypes = db.Column(db.Enum(ProductionTypes))
@@ -322,7 +322,6 @@ class HealthyRange(db.Model):
                 gender: Gender we are constructing the healthy range for
                 age_group: Age Group we are constructing the healthy range for
                 analyte_id: Analyte we are constructing the healthy range for
-                cartridge_type_id: Cartridge Type used in measuring the analytes in this healthyh range object
     """
     __tablename__ = 'healthy_range_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)

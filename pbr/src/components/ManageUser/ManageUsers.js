@@ -85,12 +85,10 @@ export default function ManageUsers() {
   };
 
   const editUser = async (editedUser) => {
-    console.log("sending request for edit user");
-    await fetch(`/api/user/${selected[0]}`, {
-      method: "PUT",
-      body: JSON.stringify(editedUser),
-      headers: { "Content-Type": "application/json" },
-    })
+    await fetch(`/api/user/${selected[0]}`,
+          { method: "PUT",
+            body: JSON.stringify(editedUser),
+            headers: {"Content-Type" : "application/json"}})
       .then((response) => {
         return response.json();
       })
