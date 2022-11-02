@@ -1,6 +1,6 @@
 from flask import request, Blueprint, jsonify
 from http import HTTPStatus
-from src.enums import LogActions, ValidationTypes, Roles
+from src.enums import LogActions, ValidationTypes
 from src.api.user import token_required, allowed_roles
 from src import models, schemas
 from src.helpers import sample as sample_helper
@@ -9,9 +9,6 @@ from src.models import Measurement as MeasurementORM
 from sqlalchemy import text
 
 sampleBlueprint = Blueprint('sample', __name__)
-
-# A set of all allowed file extensions for parsing files
-ALLOWED_EXTENSIONS = {'txt'}
 
 
 # Inspiration from https://roytuts.com/python-flask-rest-api-file-upload/
@@ -58,38 +55,38 @@ def create_sample(current_user, access_allowed):
     :param request.json: The sample json to create the sample from.
     :return: The newly created sample.
     """
-    payload = request.json
 
-    sample:SampleORM = SampleORM()
-    for name, value in request.json.items():
-        if name != 'measurements' and name != "is_deleted":
-            setattr(sample, name, value)
-            
-    setattr(sample, "user_id", current_user.id)
-    setattr(sample, "validation_status", ValidationTypes.Saved)
+    if access_allowed:
 
-    models.db.session.add(sample)
-    models.db.session.commit()
-    models.db.session.refresh(sample)
+        sample:SampleORM = SampleORM()
+        for name, value in request.json.items():
+            if name != 'measurements' and name != "is_deleted":
+                setattr(sample, name, value)
+                
+        setattr(sample, "user_id", current_user.id)
+        setattr(sample, "validation_status", ValidationTypes.Saved)
+
+        models.db.session.add(sample)
+        models.db.session.commit()
+        models.db.session.refresh(sample)
+        
+        # Update the list of measurements.
+
+        measurements = []
+        for measurement in request.json["measurements"]:
+            measurement_model:MeasurementORM = MeasurementORM()
+            for name, value in measurement.items():
+                setattr(measurement_model, name, value)
+                setattr(measurement_model, "sample_id", sample.id)
+            measurements.append(measurement_model)
+        
+        setattr(sample, "measurements", measurements)
+
+        models.db.session.commit()
+        models.db.session.refresh(sample)
+
+        return schemas.Sample.from_orm(sample).dict(), 201
     
-    # Update the list of measurements.
-
-    measurements = []
-    for measurement in request.json["measurements"]:
-        measurement_model:MeasurementORM = MeasurementORM()
-        for name, value in measurement.items():
-            setattr(measurement_model, name, value)
-            setattr(measurement_model, "sample_id", sample.id)
-        measurements.append(measurement_model)
-    
-    setattr(sample, "measurements", measurements)
-
-    models.db.session.commit()
-    models.db.session.refresh(sample)
-
-    new_sample = sample_helper.create_sample(payload)
-
-    return schemas.Sample.from_orm(new_sample).dict(), 201
 
 
 @sampleBlueprint.route('/org_cartrige_type', methods=['GET'])
@@ -106,6 +103,7 @@ def get_samples_by_cartridge_type_id_and_org(current_user, access_allowed):
     """
 
     if access_allowed:
+
         samples = []
 
         with models.engine.connect() as connection:
@@ -142,6 +140,7 @@ def get_samples_by_cartridge_type_id_and_org(current_user, access_allowed):
             return jsonify(results), 404
         else:
             return jsonify(results), 200
+            
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -152,7 +151,7 @@ def get_samples_by_cartridge_type_id_and_org(current_user, access_allowed):
 def edit_sample(access_allowed, current_user, item_id):
     if access_allowed:
         old_sample = SampleORM.query.get(item_id)
-        if  SampleORM.query.get(item_id) is None:
+        if old_sample is None:
             return jsonify({'message': 'Sample cannot be found.'}), 404
         else:
             
@@ -160,12 +159,12 @@ def edit_sample(access_allowed, current_user, item_id):
                 if name != 'measurements':
                     setattr(old_sample, name, value)
             
-            measurement_dict = request.json.pop('measurements')
+            measurements = request.json.pop('measurements')
 
             # Update the list of measurements.
 
             measurements = []
-            for measurement in measurement_dict:
+            for measurement in measurements:
                 measurement_model:MeasurementORM = MeasurementORM()
                 for name, value in measurement.items():
                     setattr(measurement_model, name, value)
