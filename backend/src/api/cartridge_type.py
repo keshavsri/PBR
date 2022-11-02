@@ -8,7 +8,7 @@ cartridgeTypeBlueprint = Blueprint('cartridge-type', __name__)
 @cartridgeTypeBlueprint.route('/', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
-def get_cartridge_types(access_allowed):
+def get_cartridge_types(access_allowed, current_user):
     if access_allowed:
         cartridge_types_models = CartridgeTypeORM.query.all()
         cartridge_types = [CartridgeType.from_orm(cartridge_type).dict() for cartridge_type in cartridge_types_models]

@@ -86,6 +86,9 @@ def create_sample(current_user, access_allowed):
         models.db.session.refresh(sample)
 
         return schemas.Sample.from_orm(sample).dict(), 201
+        
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
     
 
 
