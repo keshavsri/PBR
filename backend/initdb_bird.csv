@@ -669,9 +669,15 @@
 668,chicken,Barred Rock,WA 12,25-Jul-16,7,m,"BYP, layer",female,TRUE,
 669,chicken,not reported,WA 12,25-Jul-16,7,m,"BYP, layer",female,TRUE,
 670,chicken,Australorp,WA 12,25-Jul-16,5,y,"BYP, layer",female,TRUE,
+<<<<<<< HEAD
 671,chicken,Salmon Faverolle,WA 13,26-Jul-16,1,y,"BYP, layer",female,TRUE,
 672,chicken,Salmon Faverolle,WA 13,26-Jul-16,1,y,"BYP, layer",female,TRUE,
 673,chicken,Americana,WA 13,26-Jul-16,1,y,"BYP, layer",female,TRUE,
+=======
+671,chicken,Salmon Faverolle,WA 13,26-Jul-16,,y,"BYP, layer",female,TRUE,
+672,chicken,Salmon Faverolle,WA 13,26-Jul-16,,y,"BYP, layer",female,TRUE,
+673,chicken,Americana,WA 13,26-Jul-16,,y,"BYP, layer",female,TRUE,
+>>>>>>> 11ad4b1 (Adding in samples from access db, untested)
 674,chicken,not reported,WA 14,26-Jul-16,2,y,"BYP, layer",female,TRUE,
 675,chicken,not reported,WA 14,26-Jul-16,2,y,"BYP, layer",female,TRUE,
 676,chicken,not reported,WA 14,26-Jul-16,2,y,"BYP, layer",female,TRUE,
