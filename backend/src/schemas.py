@@ -27,6 +27,7 @@ class User(PydanticModel):
 class Organization(PydanticModel):
     """
     Pydantic model for the Organization table set to orm_mode=True
+
     Attributes:
         id (int): The id of the organization object, set as Optional to allow for creation of new organizations without an id
         name (str): The name of the organization
@@ -36,6 +37,7 @@ class Organization(PydanticModel):
         zip (str): The zip code of the organization
         notes (str): The notes on the organization
         organization_code (str): NOT IMPLEMENTED The organization code of the organization, set as Optional to allow for creation of new organizations without an organization code
+
         sources (List[Source]): The sources of the organization, set as Optional to allow for creation of new organizations without sources
     """
     id: Optional[int]
@@ -55,6 +57,7 @@ class Organization(PydanticModel):
 class Source(PydanticModel):
     """
     Pydantic model for the Source table set to orm_mode=True
+
     Attributes:
         id (int): The id of the source object, set as Optional to allow for creation of new sources without an id
         name (str): The name of the source
@@ -75,6 +78,7 @@ class Source(PydanticModel):
 class Flock(PydanticModel):
     """
     Pydantic model for the Flock table set to orm_mode=True
+
     Attributes:
         id (int): The id of the flock object, set as Optional to allow for creation of new flocks without an id
         name (str): The name of the flock
@@ -98,9 +102,30 @@ class Flock(PydanticModel):
     birthday: Optional[datetime]
 
 
+class Batch(PydanticModel):
+    id: Optional[int]
+    name: str
+
+
+class Analyte(PydanticModel):
+    id: Optional[int]
+    name: Optional[str]
+    abbreviation: str
+    units: Optional[str]
+    machine_type_id: int
+
+
+class Measurement(PydanticModel):
+    id: Optional[int]
+    value: Optional[float]
+    sample_id: int
+    analyte: Analyte
+
+
 class Sample(PydanticModel):
     """
     Pydantic model for the Sample table set to orm_mode=True
+
     Attributes:
         id (int): The id of the sample object, set as Optional to allow for creation of new samples without an id
         flock_age (int): The age of the flock at the time of the sample
@@ -114,6 +139,7 @@ class Sample(PydanticModel):
         sample_type (SampleTypes): The type of the sample, set as Optional to allow for creation of new samples without a sample type
         entered_by_id (int): The id of the user who entered the sample, set as Optional to allow for creation of new samples without an entered by id as it is set by the helper function
         organization (Organization): The organization the sample is from, set as Optional to allow for creation of new samples without an organization
+
     """
     id: Optional[int]
     flock_age: Optional[int]
@@ -126,26 +152,6 @@ class Sample(PydanticModel):
     timestamp_added: Optional[datetime]
 
 
-class Batch(PydanticModel):
-    id: Optional[int]
-    name: str
-
-
-class Measurement(PydanticModel):
-    id: Optional[int]
-    value: Optional[float]
-    sample_id: int
-    analyte: Analyte
-
-
-class Analyte(PydanticModel):
-    id: Optional[int]
-    name: Optional[str]
-    abbreviation: str
-    units: Optional[str]
-    machine_type_id: int
-
-
 class Machine(PydanticModel):
     id: Optional[int]
     serial_number: str
@@ -156,13 +162,6 @@ class Machine(PydanticModel):
 class MachineType(PydanticModel):
     id: Optional[int]
     name: str
-
-
-class Cartridge(PydanticModel):
-    id: Optional[int]
-    rotor_lot_number: str
-    cartridge_type_id: int
-    organization_id: int
 
 
 class CartridgeType(PydanticModel):

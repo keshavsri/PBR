@@ -177,6 +177,7 @@ class Sample(db.Model):
     is_deleted: bool = db.Column(db.Boolean, server_default="0")
     validation_status: ValidationTypes = db.Column(db.Enum(ValidationTypes))
     sample_type: SampleTypes = db.Column(db.Enum(SampleTypes), nullable=True)
+    rotor_lot_number: str = db.Column(db.String(120), nullable=True)
 
     # References to Foreign Objects
     user_id: int = db.Column(db.Integer, db.ForeignKey('user_table.id'))
@@ -184,8 +185,8 @@ class Sample(db.Model):
         'batch_table.id'), nullable=True)
     flock_id: int = db.Column(db.Integer, db.ForeignKey(
         'flock_table.id'), nullable=True)
-    cartridge_id: int = db.Column(db.Integer, db.ForeignKey(
-        'cartridge_table.id'), nullable=True)
+    cartridge_type_id: int = db.Column(db.Integer, db.ForeignKey(
+        'cartridge_type_table.id'), nullable=True)
     machine_id: int = db.Column(db.Integer, db.ForeignKey(
         'machine_table.id'), nullable=True)
 
@@ -215,6 +216,7 @@ class Measurement(db.Model):
       sample_id: Sample that the measurement is a part of
     """
     __tablename__ = 'measurement_table'
+
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     value: float = db.Column(db.Float, nullable=True)
 
@@ -223,7 +225,7 @@ class Measurement(db.Model):
     sample_id: int = db.Column(db.Integer, db.ForeignKey('sample_table.id'))
 
     # Foreign References to this Object
-    analayte = db.relationship('Analyte')
+    analyte = db.relationship('Analyte')
 
 
 """

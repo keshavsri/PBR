@@ -16,7 +16,6 @@ import { tableCellClasses } from "@mui/material/TableCell";
 import EnhancedTableHead from "./EnhancedTableHead";
 import EnhancedTableToolbar from "./EnhancedTableToolbar";
 
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
@@ -94,9 +93,8 @@ export default function EnhancedTable(props) {
     onSubmit,
     onEdit,
     isSample,
-    setOpenReviewSampleModal
+    setOpenReviewSampleModal,
   } = props;
-
 
   const [order, setOrder] = React.useState("");
   const [orderBy, setOrderBy] = React.useState("");
@@ -130,7 +128,7 @@ export default function EnhancedTable(props) {
     setPendingFlag(true);
     if (event.target.checked) {
       let newSelecteds = rows.filter((n) => n.deletable).map((n) => n.id);
-      
+
       setSelected(newSelecteds);
       setPendingFlag(newSelecteds);
 
@@ -139,7 +137,6 @@ export default function EnhancedTable(props) {
           setSavedFlag(false);
           break;
         }
-       
       }
 
       for (let i = 0; i < rows.length; i++) {
@@ -147,7 +144,6 @@ export default function EnhancedTable(props) {
           setPendingFlag(false);
           break;
         }
-       
       }
 
       if (pendingFlag) {
@@ -163,11 +159,10 @@ export default function EnhancedTable(props) {
   };
 
   const handleClick = (event, name) => {
-    
     setSavedFlag(true);
     setPendingFlag(true);
     const selectedIndex = selected.indexOf(name);
-    
+
     let newSelected = [];
     let selectedSamples = [];
     let pendingSamples = [];
@@ -184,29 +179,25 @@ export default function EnhancedTable(props) {
         selected.slice(selectedIndex + 1)
       );
     }
-    
+
     setSelected(newSelected);
-    
 
-
-      for (let i = 0; i < rows.length; i++) {
-        for (let j = 0; j < newSelected.length; j++) {
-          if (newSelected[j] === rows[i].id) {
-            if (selectedSamples.indexOf(rows[i]) === -1) {
-              selectedSamples.push(rows[i]);
-              pendingSamples.push(rows[i]);
-            }
+    for (let i = 0; i < rows.length; i++) {
+      for (let j = 0; j < newSelected.length; j++) {
+        if (newSelected[j] === rows[i].id) {
+          if (selectedSamples.indexOf(rows[i]) === -1) {
+            selectedSamples.push(rows[i]);
+            pendingSamples.push(rows[i]);
           }
         }
       }
-
-      console.log("Selected samples From Enhanced Table: ", selectedSamples);
+    }
 
     if (selectedSamples.length > 0) {
-        for (let i = 0; i < selectedSamples.length; i++) {
-          if (selectedSamples[i].validation_status != "Saved") {
-            setSavedFlag(false);
-            break;
+      for (let i = 0; i < selectedSamples.length; i++) {
+        if (selectedSamples[i].validation_status != "Saved") {
+          setSavedFlag(false);
+          break;
         }
 
         setSelectedSamples(selectedSamples);
@@ -218,16 +209,12 @@ export default function EnhancedTable(props) {
         if (pendingSamples[i].validation_status != "Pending") {
           setPendingFlag(false);
           break;
-      }
+        }
 
-      setPendingSamples(pendingSamples);
+        setPendingSamples(pendingSamples);
       }
     }
-
-  
   };
-
- 
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -323,60 +310,91 @@ export default function EnhancedTable(props) {
                           }}
                         />
                       </StyledTableCell>
-                      {headCells.map((headCell, index) => {
-                        return (
-                          <StyledTableCell
-                            padding="none"
-                            align="left"
-                            id={index}
-                            key={index}
-                          >
-                            {row[headCell.id]}
-                          </StyledTableCell>
-                        );
-                      })}
 
-                      {/* <StyledTableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.id}
-                      </StyledTableCell>
-                      <StyledTableCell padding="none" align="left">
-                        {row.bird_type}
-                      </StyledTableCell>
-                      <StyledTableCell padding="none" align="left">
-                        {row.source}
-                      </StyledTableCell>
-                      <StyledTableCell padding="none" align="left">
-                        {new Date(row.timestamp).toLocaleString()}
-                      </StyledTableCell>
-                      <StyledTableCell padding="none" align="left">
-                        {new Date(row.age).toLocaleString()}
-                      </StyledTableCell>
-                      <StyledTableCell padding="none" align="left">
-                        {row.gender}
-                      </StyledTableCell>
-                      <StyledTableCell padding="none" align="left">
-                        {row.status}
-                      </StyledTableCell>
-                      <StyledTableCell padding="none" align="left">
-                        {row.sample_type}
-                      </StyledTableCell>
-                      {machineHeadCells.map((columnHead, index) => {
-                        const field = columnHead.id;
-                        return (
-                          <StyledTableCell padding="none" align="left">
-                            {findMachineDataPoint(
-                              row,
-                              columnHead.machineName,
-                              columnHead.name
-                            )}
-                          </StyledTableCell>
-                        );
-                      })} */}
+                      {headCells.map((headCell, index) => {
+                        if (index === 0) {
+                          return (
+                            <StyledTableCell
+                              padding="none"
+                              align="left"
+                              id={index}
+                              key={index}
+                            >
+                              {row.id}
+                            </StyledTableCell>
+                          );
+                        } else if (index === 1) {
+                          return (
+                            <StyledTableCell
+                              padding="none"
+                              align="left"
+                              id={index}
+                              key={index}
+                            ></StyledTableCell>
+                          );
+                        } else if (index === 3) {
+                          return (
+                            <StyledTableCell
+                              padding="none"
+                              align="left"
+                              id={index}
+                              key={index}
+                            >
+                              {row.flock_age}
+                            </StyledTableCell>
+                          );
+                        } else if (index === 2) {
+                          return (
+                            <StyledTableCell
+                              padding="none"
+                              align="left"
+                              id={index}
+                              key={index}
+                            >
+                              {row.flock.name}
+                            </StyledTableCell>
+                          );
+                        } else if (index === 4) {
+                          return (
+                            <StyledTableCell
+                              padding="none"
+                              align="left"
+                              id={index}
+                              key={index}
+                            >
+                              {row.validation_status}
+                            </StyledTableCell>
+                          );
+                        } else if (row.measurements.length > 0) {
+                          row.measurements.map((measurement, index) => {});
+
+                          if (
+                            row.measurements[0].analyte.name === headCell.name
+                          ) {
+                            return (
+                              <StyledTableCell
+                                padding="none"
+                                align="left"
+                                id={index}
+                                key={index}
+                              >
+                                {row.measurements[0].value}
+                              </StyledTableCell>
+                            );
+                          } else {
+                            return (
+                              <StyledTableCell
+                                padding="none"
+                                align="left"
+                                id={index}
+                                key={index}
+                              >
+                                not found
+                              </StyledTableCell>
+                            );
+                          }
+                        }
+                      })}
                     </StyledTableRow>
                   );
                 })}
