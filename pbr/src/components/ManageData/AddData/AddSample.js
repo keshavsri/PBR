@@ -33,7 +33,7 @@ import {
   ageUnits,
   productionTypes,
   speciesTypes,
-} from "../../models/enums";
+} from "../../../models/enums";
 import FlagIcon from "@mui/icons-material/Flag";
 import OutlinedFlagIcon from "@mui/icons-material/OutlinedFlag";
 import { tooltipClasses } from "@mui/material/Tooltip";

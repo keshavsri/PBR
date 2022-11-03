@@ -268,7 +268,7 @@ class Analyte(db.Model):
       name: name of the Analyte
       abbreviation: abbreviation of the Analyte
       units: units of the Analyte
-      cartridge_type_id: CartridgeType
+      machine_type_id: MachineType
 
     """
 

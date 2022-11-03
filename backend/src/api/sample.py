@@ -10,9 +10,6 @@ from sqlalchemy import text
 
 sampleBlueprint = Blueprint('sample', __name__)
 
-# A set of all allowed file extensions for parsing files
-ALLOWED_EXTENSIONS = {'txt'}
-
 
 # Inspiration from https://roytuts.com/python-flask-rest-api-file-upload/
 @sampleBlueprint.route('/parse', methods=['POST'])
@@ -48,7 +45,9 @@ def parse_machine_data():
 
 
 @sampleBlueprint.route('/', methods=['POST'])
-def create_sample():
+@token_required
+@allowed_roles([0, 1, 2, 3])
+def create_sample(current_user, access_allowed):
     """
     Creates a new sample, from a given sample json and returns the newly created sample.
     :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
@@ -56,40 +55,83 @@ def create_sample():
     :param request.json: The sample json to create the sample from.
     :return: The newly created sample.
     """
-    payload = request.json
 
-    new_sample = sample_helper.create_sample(payload)
+    if access_allowed:
 
-    return schemas.Sample.from_orm(new_sample).dict(), 201
+        sample:SampleORM = SampleORM()
+        for name, value in request.json.items():
+            if name != 'measurements' and name != "is_deleted":
+                setattr(sample, name, value)
+                
+        setattr(sample, "user_id", current_user.id)
+        setattr(sample, "validation_status", ValidationTypes.Saved)
+
+        models.db.session.add(sample)
+        models.db.session.commit()
+        models.db.session.refresh(sample)
+        
+        # Update the list of measurements.
+
+        measurements = []
+        for measurement in request.json["measurements"]:
+            measurement_model:MeasurementORM = MeasurementORM()
+            for name, value in measurement.items():
+                setattr(measurement_model, name, value)
+                setattr(measurement_model, "sample_id", sample.id)
+            measurements.append(measurement_model)
+        
+        setattr(sample, "measurements", measurements)
+
+        models.db.session.commit()
+        models.db.session.refresh(sample)
+
+        return schemas.Sample.from_orm(sample).dict(), 201
+
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+    
 
 
 @sampleBlueprint.route('/org_cartrige_type', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
-def get_samples_by_cartridge_type_id_and_org(access_allowed):
+def get_samples_by_cartridge_type_id_and_org(current_user):
 
     """
-    This function gets all samples for a specified cartridge type.
-    :param access_allowed: boolean, whether the user has access to the endpoint
+    This function gets all samples for a specified cartridge type and organization.
+    Allowed Roles check not needed for this since all users should be able to get samples
     :param current_user: the user object of the user making the request
-    :param cartridge_type_id: the id of the cartridge type to retrieve samples of
-    :return: a json response containing all samples for the cartridge type
+    :return: a json response containing all samples for the org and cartridge type
     """
 
-    if access_allowed:
+    # If user ins't superadmin, they should only be allowed to access samples in their org
+    if current_user.role != 0 and current_user.organization_id != request.args.get('organization_id'):
+        return jsonify({'message': 'Role not allowed'}), 403    
+		
+    else:
         samples = []
-
         with models.engine.connect() as connection:
-            result = connection.execute(text(
-            """
-            SELECT sample.id FROM sample_table sample, flock_table f, source_table source, organization_table o
-            WHERE sample.flock_id = f.id 
-            AND f.source_id = source.id 
-            AND source.organization_id = :org_id 
-            AND sample.cartridge_type_id = :cartridge_type_id;
-            """), {"org_id": request.json["org_id"], "cartridge_type_id": request.json["cartridge_type_id"]})
 
-            samples = [SampleORM.query.get(row.id) for row in result]
+            sql_select_query = "sample_table sample, flock_table f, source_table source, organization_table o"
+            sql_where_query = """
+        	WHERE sample.flock_id = f.id 
+        	AND f.source_id = source.id 
+        	AND source.organization_id = :organization_id 
+        	AND sample.cartridge_type_id = :cartridge_type_id
+        	AND CASE WHEN sample.validation_status = "Saved" THEN sample.user_id = :current_user_id
+            	END
+        	"""
+            
+            # If user is a data collector, they should only see their samples 
+            if current_user.role == Roles.Data_Collector:
+                sql_where_query += "AND sample.user_id = :current_user_id"
+
+
+            sql_query = "SELECT sample.id FROM " + sql_select_query + sql_where_query
+            result = connection.execute(text(sql_query + ";"), {"org_id": request.args.get('organization_id'), "cartridge_type_id": request.args.get('cartridge_type_id'), "current_user_id": current_user.id})
+
+            for row in result:
+                sample = SampleORM.query.get(row.id)
+                samples.append(sample)
                 
         results = []
         for sample in samples:
@@ -102,8 +144,8 @@ def get_samples_by_cartridge_type_id_and_org(access_allowed):
             return jsonify(results), 404
         else:
             return jsonify(results), 200
-    else:
-        return jsonify({'message': 'Role not allowed'}), 403
+            
+
 
 
 @sampleBlueprint.route('/<int:item_id>', methods=['PUT'])
@@ -112,7 +154,7 @@ def get_samples_by_cartridge_type_id_and_org(access_allowed):
 def edit_sample(access_allowed, current_user, item_id):
     if access_allowed:
         old_sample = SampleORM.query.get(item_id)
-        if  SampleORM.query.get(item_id) is None:
+        if old_sample is None:
             return jsonify({'message': 'Sample cannot be found.'}), 404
         else:
             
@@ -120,12 +162,12 @@ def edit_sample(access_allowed, current_user, item_id):
                 if name != 'measurements':
                     setattr(old_sample, name, value)
             
-            measurement_dict = request.json.pop('measurements')
+            measurements = request.json.pop('measurements')
 
             # Update the list of measurements.
 
             measurements = []
-            for measurement in measurement_dict:
+            for measurement in measurements:
                 measurement_model:MeasurementORM = MeasurementORM()
                 for name, value in measurement.items():
                     setattr(measurement_model, name, value)

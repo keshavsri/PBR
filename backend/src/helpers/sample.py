@@ -1,51 +1,7 @@
-from typing import List
-from src.enums import ValidationTypes
 import re
 
-from src.models import db
-from src.models import User as UserORM
-from src.models import Sample as SampleORM
-from src.models import Measurement as MeasurementORM
-from src.schemas import Flock, Organization, Source, Sample as Sample_pydantic, Machine, Measurement, User
-
-def create_sample(sample_dict: dict):
-    """
-    The create_sample function accepts a dictionary containing the sample's information and creates
-    a new sample using the pydantic model to parse and the ORM model to store the information.
-
-    :param sample_dict:dict: Used to specify the sample's information.
-    :return: sample:Sample: A Sample sqlalchemy model.
-    """
-    sample:SampleORM = SampleORM()
-    for name, value in sample_dict.items():
-        if name != 'measurements' and name != "is_deleted":
-            setattr(sample, name, value)
-            
-    setattr(sample, "user_id", 1)
-    setattr(sample, "validation_status", ValidationTypes.Saved)
-
-    db.session.add(sample)
-    db.session.commit()
-    db.session.refresh(sample)
-    
-    # Update the list of measurements.
-
-    measurements = []
-    for measurement in sample_dict["measurements"]:
-        measurement_model:MeasurementORM = MeasurementORM()
-        for name, value in measurement.items():
-            setattr(measurement_model, name, value)
-            setattr(measurement_model, "sample_id", sample.id)
-        measurements.append(measurement_model)
-    
-    setattr(sample, "measurements", measurements)
-
-    db.session.add(sample)
-    db.session.commit()
-    db.session.refresh(sample)
-
-    return sample
-
+# A set of all allowed file extensions for parsing files
+ALLOWED_EXTENSIONS = {'txt'}
 
 # Method to check the filetype of a given filename
 def check_allowed_filetype(filename):
