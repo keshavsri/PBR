@@ -72,7 +72,8 @@ const useStyles = makeStyles((theme) => ({
 
 const filter = createFilterOptions();
 
-export default function DataViewSampleModal({ getData }) {
+export default function DataViewSampleModal(props) {
+  const { getData } = props;
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
   useTheme();
@@ -86,6 +87,7 @@ export default function DataViewSampleModal({ getData }) {
     sampleNextAction,
     error,
     setError,
+    
     restartSample,
     timestamp,
     machineDetails,
@@ -317,14 +319,9 @@ export default function DataViewSampleModal({ getData }) {
       sample_type: SampleDetails.sample_type,
       batch_id: SampleDetails.batch_id,
       flock_id: flock.id,
-      cartridge_id: cartridgeType.id,
+      cartridge_type_id: cartridgeType.id,
       machine_id: SampleDetails.machine_id,
-      measurements: [
-        {
-          analyte_id: 1,
-          value: 1,
-        },
-      ],
+      measurements: [],
       organization_id: organization.id,
     };
     console.log("Submitting!", payload);
@@ -348,7 +345,7 @@ export default function DataViewSampleModal({ getData }) {
         } else {
           closeSampleModal();
           resetSampleDetails();
-
+          getData();
           return response.json();
         }
       });

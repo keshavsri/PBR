@@ -18,7 +18,10 @@ import ReviewSampleModal from "../ValidateData/ReviewSampleModal";
 const useStyles = makeStyles({});
 
 export default function DataView() {
-  const [rowList, setRowList] = React.useState([]);
+  const [SampleList, setSampleList] = React.useState([]);
+  const [analytes, setAnalytes] = React.useState([]);
+  const [currentCartridgeType, setCurrentCartridgeType] = React.useState({});
+  const [cartridgeTypes, setCartridgeTypes] = React.useState([]);
   const [pendingRowList, setPendingRowList] = React.useState([]);
   const [fullRowList, setFullRowList] = React.useState([]);
   const [showOnlyPendingSamples, setShowOnlyPendingSamples] =
@@ -28,6 +31,8 @@ export default function DataView() {
   const [isSample] = React.useState(true);
   const [openReviewSampleModal, setOpenReviewSampleModal] =
     React.useState(false);
+
+  const [organizationId, setOrganizationId] = React.useState(1);
 
   const [selectedSamples, setSelectedSamples] = React.useState([]);
   const [pendingSamples, setPendingSamples] = React.useState([]);
@@ -74,35 +79,38 @@ export default function DataView() {
 
   const turnPendingFilterOff = async () => {
     setShowOnlyPendingSamples(false);
-    setRowList(fullRowList);
+    setSampleList(fullRowList);
     setPendingRowList([]);
   };
 
   const filterPendingSamples = async () => {
-    rowList.map((row) => {
+    SampleList.map((row) => {
       if (row.validation_status == "Pending") {
         pendingRowList.push(row);
       }
     });
-    setFullRowList(rowList);
-    setRowList(pendingRowList);
+    setFullRowList(SampleList);
+    setSampleList(pendingRowList);
     setShowOnlyPendingSamples(true);
   };
 
   const getData = async () => {
+    console.log("getting data for org 1 and cartridge type 1");
+
+    console.log("cartridgeTypeId", currentCartridgeType.id);
+    console.log("organizationId", organizationId);
+
     getHeadCells();
-    await fetch(`/api/sample/`, { method: "GET" })
+    const uri = `/api/sample/org_cartridge_type?organization_id=${organizationId}&cartridge_type_id=${currentCartridgeType.id}`;
+    await fetch(uri, { method: "GET" })
       .then((response) => {
         return response.json();
       })
       .then(checkResponseAuth)
       .then((data) => {
-        denestMachineData(data.rows);
-        assignRowHtml(data.rows);
-        setRowList(data.rows);
-
+        setSampleList(data);
+        assignRowHtml(data);
       });
-
   };
 
   const getCartridgeTypes = async () => {
@@ -128,69 +136,34 @@ export default function DataView() {
       {
         id: "buttons",
       },
-      {
-        id: "flock.id",
-        numeric: false,
-        disablePadding: true,
-        label: "Flock ID",
-      },
+
       {
         id: "flock.name",
         numeric: false,
         disablePadding: true,
         label: "Flock Name",
       },
-      {
-        id: "flock.source_name",
-        numeric: false,
-        disablePadding: true,
-        label: "Source",
-      },
-      {
-        id: "flock.production_type",
-        numeric: false,
-        disablePadding: true,
-        label: "Production Type",
-      },
-      {
-        id: "timestamp_added",
-        numeric: false,
-        disablePadding: true,
-        label: "Date Entered",
-      },
+
       {
         id: "flock_age_combined",
         numeric: false,
         disablePadding: true,
         label: "Flock Age",
       },
-      {
-        id: "flock.gender",
-        numeric: false,
-        disablePadding: true,
-        label: "Gender",
-      },
+
       {
         id: "validation_status",
         numeric: false,
         disablePadding: true,
         label: "Status",
       },
-      {
-        id: "sample_type",
-        numeric: false,
-        disablePadding: true,
-        label: "Sample Type",
-      },
     ];
     console.log("Getting Head Cells");
     if (currentCartridgeType) {
       console.log("Getting Head Cells");
-      console.log(currentCartridgeType)
+      console.log(currentCartridgeType);
       currentCartridgeType.analytes.forEach((analyte, index) => {
-        headCells.push(
-          createHeadCell(analyte, "", index)
-        );
+        headCells.push(createHeadCell(analyte, "", index));
       });
     }
     setHeadCellList(headCells);
@@ -209,35 +182,13 @@ export default function DataView() {
     return {
       machineName: machineName,
       name: point.name,
-      id: "measurement." + point.id,
+      id: point.id,
       numeric: false,
       disablePadding: true,
       label: headerLabel,
       sublabel: "" + machineName,
     };
   }
-  const denestMachineData = (rows) => {
-    rows.map((row, index) => {
-      row["flock_age_combined"] = "" + row.flock_age + " " + row.flock_age_unit;
-      row.measurement_values.map((m, index2) => {
-        let temp = "measurement." + m.measurement_id;
-        row[temp] = m.value;
-        if (m.measurement.measurementtype.units) {
-          row[temp] += ` ${m.measurement.measurementtype.units}`;
-        }
-      });
-      Object.keys(row.flock).map((key) => {
-        let temp = "flock." + key;
-        row[temp] = row.flock[key];
-        if (key == "source_id") {
-          row.organization.sources.map((source) => {
-            if (source["id"] == row.flock["id"])
-              row["flock.source_name"] = source["name"];
-          });
-        }
-      });
-    });
-  };
 
   const onSubmit = () => {
     openSavedToPendingVisibility();
@@ -335,7 +286,7 @@ export default function DataView() {
       <Paper>
         <EnhancedTable
           headCells={headCellList}
-          rows={rowList}
+          rows={SampleList}
           toolbarButtons={
             <DVTableToolbar
               filterPendingSamples={filterPendingSamples}
@@ -360,7 +311,7 @@ export default function DataView() {
                 selected={selected}
                 submitAll={submitAll}
                 submitOne={submitOne}
-                rows={rowList}
+                rows={SampleList}
                 selectedSamples={selectedSamples}
                 setSelectedSamples={setSelectedSamples}
                 SavedToPendingVisibility={SavedToPendingVisibility}
@@ -371,12 +322,12 @@ export default function DataView() {
         </Grid>
       </Paper>
       <DataViewFilterModal
-        setRowList={setRowList}
+        setRowList={setSampleList}
         setHeadCellList={setHeadCellList}
         getData={getData}
-        rows={rowList}
+        rows={SampleList}
       />
-      <DataViewSampleModal />
+      <DataViewSampleModal getData={getData} />
       <ReviewSampleModal
         openReviewSampleModal={openReviewSampleModal}
         setOpenReviewSampleModal={setOpenReviewSampleModal}
