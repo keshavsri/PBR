@@ -1,9 +1,7 @@
 from pydantic import BaseModel, constr
-from typing import Optional, List
-from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup
+from src.enums import States, Species, ProductionTypes, BirdGenders, AgeUnits, AgeGroup, ValidationTypes, SampleTypes, Roles, LogActions
+from typing import List, Optional
 from datetime import datetime
-from src.models import *
-
 
 class PydanticModel(BaseModel):
     class Config:
@@ -14,7 +12,7 @@ class PydanticModel(BaseModel):
 class User(PydanticModel):
     id: int
     email: constr(max_length=120)
-    password: constr(max_length=120)
+    # password: constr(max_length=120)
     first_name: constr(max_length=120)
     last_name: constr(max_length=120)
     phone_number: Optional[constr(max_length=120)]
@@ -101,6 +99,22 @@ class Flock(PydanticModel):
     source_id: int
     birthday: Optional[datetime]
 
+class Batch(PydanticModel):
+    id: Optional[int]
+    name: str
+
+class Analyte(PydanticModel):
+    id: Optional[int]
+    name: str
+    abbreviation: str
+    units: str
+    machine_type_id: int
+
+class Measurement(PydanticModel):
+    id: Optional[int]
+    value: Optional[float]
+    sample_id: int
+    analyte: Analyte
 
 class Sample(PydanticModel):
     """
@@ -111,14 +125,11 @@ class Sample(PydanticModel):
         flock_age (int): The age of the flock at the time of the sample
         flock_age_unit (AgeUnits): The unit of the flock age
         flock (Flock): The flock the sample is from, set as Optional to allow for creation of new samples without a flock
-        flagged (bool): Whether the sample is flagged for review or not
         comments (str): The comments on the sample, set as Optional to allow for creation of new samples without comments
-        measurement_values (List[MeasurementValue]): The values of the measurements of the sample, set as Optional to allow for creation of new samples without measurements
+        measurements (List[Measurement]): The values of the measurements of the sample, set as Optional to allow for creation of new samples without measurements
         timestamp_added (datetime): The timestamp the sample was added, set as Optional to allow for creation of new samples without a timestamp as it is set by the DB
         validation_status (ValidationStatus): The status of the sample, set as Optional to allow for creation of new samples without a validation status
         sample_type (SampleTypes): The type of the sample, set as Optional to allow for creation of new samples without a sample type
-        entered_by_id (int): The id of the user who entered the sample, set as Optional to allow for creation of new samples without an entered by id as it is set by the helper function
-        organization (Organization): The organization the sample is from, set as Optional to allow for creation of new samples without an organization
 
     """
     id: Optional[int]
@@ -132,26 +143,6 @@ class Sample(PydanticModel):
     timestamp_added: Optional[datetime]
 
 
-class Batch(PydanticModel):
-    id: Optional[int]
-    name: str
-
-
-class Measurement(PydanticModel):
-    id: Optional[int]
-    value: Optional[float]
-    sample_id: int
-    analyte: Analyte
-
-
-class Analyte(PydanticModel):
-    id: Optional[int]
-    name: Optional[str]
-    abbreviation: str
-    units: Optional[str]
-    machine_type_id: int
-
-
 class Machine(PydanticModel):
     id: Optional[int]
     serial_number: str
@@ -162,13 +153,6 @@ class Machine(PydanticModel):
 class MachineType(PydanticModel):
     id: Optional[int]
     name: str
-
-
-class Cartridge(PydanticModel):
-    id: Optional[int]
-    rotor_lot_number: str
-    cartridge_type_id: int
-    organization_id: int
 
 
 class CartridgeType(PydanticModel):
