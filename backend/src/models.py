@@ -1,8 +1,8 @@
 from email.policy import default
-from src.enums import Roles, States, AgeUnits, AgeGroup, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes
+from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
-from typing import List
+from typing import List, Optional
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy import create_engine
 import os
@@ -12,15 +12,10 @@ db = SQLAlchemy()
 engine = create_engine(os.environ.get("DATABASE_URL"))
 
 
-
-engine = create_engine(os.environ.get("DATABASE_URL"))
-
 class User(db.Model):
 
     """ ORM model for the User table
-
     This table contains all the information about the users of the application.
-
     Attributes:
         id:int unique identifier for the user.
         email: email address for the user
@@ -28,11 +23,8 @@ class User(db.Model):
         role: role enum of the user
         notes: notes for the user
         organization_id: id of the organization the user belongs to
-
         sample: foreign reference to the samples the user is assigned to
         log: foreign reference to the logs the user is assigned to
-
-
     """
 
     __tablename__ = 'user_table'
@@ -55,9 +47,7 @@ class User(db.Model):
 class Organization(db.Model):
 
     """ ORM model for the Organization table
-
     This table contains all the infromation about the organizations of the application.
-
     Attributes:
         id: unique identifier for the organization
         name: name of the organization
@@ -69,7 +59,6 @@ class Organization(db.Model):
         code_last_updated: dataetime that the organization_code was last updated
         organization_code: NOT IMPLEMENTED yet But will be used to generate a unique organization code which is used to register a user to an organization on account creation
         is_deleted: If the organization is deleted
-
         users: foreign reference to users
         machines: foreign reference to machines
         logs: foreign reference to logs
@@ -99,9 +88,7 @@ class Organization(db.Model):
 
 class Source(db.Model):
     """ ORM model for the Source table
-
     This table contains the sources from which the flock data is collected.
-
     Attributes:
         id: unique identifier for the source
         name: name of the source
@@ -131,9 +118,7 @@ class Source(db.Model):
 class Flock(db.Model):
 
     """ ORM model for the Flock table
-
     This table contains the flocks from which the samples are collected.
-
     Attributes:
         id: unique identifier for the flock
         name: name of the flock
@@ -163,9 +148,7 @@ class Flock(db.Model):
 class Sample(db.Model):
 
     """ ORM model for the Sample table
-
     This table contains the bloodwork samples for a flock of birds.
-
     Attributes:
         id: unique identifier for the sample
         timestamp_added: timestamp of the sample
@@ -178,10 +161,9 @@ class Sample(db.Model):
         is_deleted: boolean value for if the sample is deleted
         validation_status: validation status of the sample
         sample_type: type of the sample
-        rotor_lot_number: Rotor lot number of the cartridge used for this sample
         flock_id: Flock that the sample is testing
         machine_id: Machine that the sample is collected from
-        cartridge_type_id: Cartridge Type that is used for the sample
+        cartridge_id: Cartridge that is used for the sample
         measurements: list of measurement values for the sample
     """
 
@@ -195,7 +177,6 @@ class Sample(db.Model):
     is_deleted: bool = db.Column(db.Boolean, server_default="0")
     validation_status: ValidationTypes = db.Column(db.Enum(ValidationTypes))
     sample_type: SampleTypes = db.Column(db.Enum(SampleTypes), nullable=True)
-    rotor_lot_number: str = db.Column(db.String(120), nullable=True)
 
     # References to Foreign Objects
     user_id: int = db.Column(db.Integer, db.ForeignKey('user_table.id'))
@@ -203,8 +184,8 @@ class Sample(db.Model):
         'batch_table.id'), nullable=True)
     flock_id: int = db.Column(db.Integer, db.ForeignKey(
         'flock_table.id'), nullable=True)
-    cartridge_type_id: int = db.Column(db.Integer, db.ForeignKey(
-        'cartridge_type_table.id'), nullable=True)
+    cartridge_id: int = db.Column(db.Integer, db.ForeignKey(
+        'cartridge_table.id'), nullable=True)
     machine_id: int = db.Column(db.Integer, db.ForeignKey(
         'machine_table.id'), nullable=True)
 
@@ -216,11 +197,9 @@ class Sample(db.Model):
 class Batch(db.Model):
     """ This table stores the batches.
     NOT IMPLEMENTED
-
         Attributes:
             id: Primary Key
             name: The name of the batch
-
             sample: Foreign reference to the samples in this batch
     """
     __tablename__ = 'batch_table'
@@ -236,7 +215,6 @@ class Measurement(db.Model):
       sample_id: Sample that the measurement is a part of
     """
     __tablename__ = 'measurement_table'
-
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     value: float = db.Column(db.Float, nullable=True)
 
@@ -245,7 +223,7 @@ class Measurement(db.Model):
     sample_id: int = db.Column(db.Integer, db.ForeignKey('sample_table.id'))
 
     # Foreign References to this Object
-    analyte = db.relationship('Analyte')
+    analayte = db.relationship('Analyte')
 
 
 """
@@ -268,8 +246,7 @@ class Analyte(db.Model):
       name: name of the Analyte
       abbreviation: abbreviation of the Analyte
       units: units of the Analyte
-      machine_type_id: MachineType
-
+      cartridge_type_id: CartridgeType
     """
 
     __tablename__ = 'analyte_table'
@@ -285,18 +262,14 @@ class Analyte(db.Model):
 
 class Machine(db.Model):
     """ This table stores the machines.
-
     These hold the additional information about the machine which is shared between all measurements of the same machine.
-
         Attributes:
             id: Primary Key
             serial_number: The serial number of the machine
-
             machine_type_id: Foreign Key to MachineType
             machine_type: foreign reference to MachineType
             organization_id: Foreign Key to Organization
             measurements: list of Measurements from this machine
-
             measurement: foreign reference to this object
     """
     __tablename__ = 'machine_table'
@@ -312,9 +285,7 @@ class Machine(db.Model):
 
 class MachineType(db.Model):
     """ This table stores the machine types.
-
     It pretty much just stores the names of the machine types.
-
         Attributes:
             id: Primary Key
             name: The name of the machine type
@@ -322,6 +293,28 @@ class MachineType(db.Model):
     __tablename__ = 'machine_type_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(120), unique=True, nullable=False)
+
+
+class Cartridge(db.Model):
+
+    """
+    This table represents a Cartridge object used to measure a sample
+    Attributes:
+        id: Primary Key
+        rotor_lot_number: The rotor lot number of the cartridge
+        cartridge_type_id: CartridgeType
+        organization_id: Foreign Key to Organization
+    """
+
+    __tablename__ = 'cartridge_table'
+    id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    rotor_lot_number: str = db.Column(db.String(120))
+
+    # References to Foreign Objects
+    cartridge_type_id: int = db.Column(
+        db.Integer, db.ForeignKey('cartridge_type_table.id'))
+    organization_id: int = db.Column(
+        db.Integer, db.ForeignKey('organization_table.id'))
 
 
 class CartridgeType(db.Model):
@@ -339,7 +332,6 @@ class CartridgeType(db.Model):
 class HealthyRange(db.Model):
     """
     This table represents a Healthy Range object for a specific analyte
-
     Attributes:
                 id: Primary Key
                 lower_bound: Lower Bound of the healthy range
@@ -349,7 +341,6 @@ class HealthyRange(db.Model):
                 age_group: Age Group we are constructing the healthy range for
                 analyte_id: Analyte we are constructing the healthy range for
                 cartridge_type_id: Cartridge Type used in measuring the analytes in this healthyh range object
-
     """
     __tablename__ = 'healthy_range_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -367,10 +358,8 @@ class HealthyRange(db.Model):
 
 class Log(db.Model):
     """ This table stores the logs.
-
     The logs store the user who did the action, their role, the enum for the action, the content is a more readable
     version of the action with an ID or name of the affected object.
-
         Attributes:
             id: Primary Key
             user: The user who did the action
@@ -378,7 +367,6 @@ class Log(db.Model):
             action: The action that was performed
             content: A more readable version of the action with an ID or name of the affected object
             log_time: The time the action was performed
-
             user_id: Foreign Key to User
             organization_id: Foreign Key to Organization
     """
