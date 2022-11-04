@@ -4,30 +4,28 @@ from flask import request, Blueprint, jsonify, Response, make_response
 import bcrypt
 from datetime import datetime, timedelta, timezone
 import os
-import uuid
 import jwt
 import json
 from src.auth_token import Auth_Token
 from functools import wraps
 from src import models, helpers, schemas
-import src.helpers
 from src.enums import Roles, LogActions
-from src.models import User as UserORM
-from src.schemas import User
+from src.helpers import log
+
 
 userBlueprint = Blueprint('user', __name__)
 
 
 def allowed_roles(roles):
-    """ Accepts a list of roles and returns true to the decorated function if the user has one of those roles, false otherwise
-
-        :param roles:List[int]: the list of roles that are allowed to access the route
-        :return: bool: true if the user has one of the roles, false otherwise      
     """
+    Accepts a list of roles and returns true to the decorated function if the user has one of those roles, false otherwise
+    :param roles:List[int]: the list of roles that are allowed to access the route
+    :return: bool: true if the user has one of the roles, false otherwise      
+    """
+
     def wrapper(f):
         @wraps(f)
         def decorated(*args, **kwargs):
-
             token = None
             allowed = False
             # jwt is passed in the request header
@@ -40,13 +38,11 @@ def allowed_roles(roles):
                 # PULL OUT DATA FROM TOKEN
                 data = Auth_Token.decode_token(token)
                 # GET AND RETURN CURRENT USER
-
                 current_user = models.User.query.filter_by(
                     id=data["id"]).first()
-
                 for role in roles:
                     if current_user.role == 0 or int(current_user.role) is role:
-                        allowed = True
+                      allowed = True
             except jwt.ExpiredSignatureError as error:
                 return jsonify({
                     'message': 'Token is expired!'
@@ -56,14 +52,15 @@ def allowed_roles(roles):
         return decorated
     return wrapper
 
+
 # decorator for verifying the JWT
 # Template from GeeksForGeeks: https://www.geeksforgeeks.org/using-jwt-for-user-authentication-in-flask/
-
-
 def token_required(f):
-    """ Decorator for authenticating the user via the JWT in the request header and returning the current user to the decorated function
-        :return: User: the current user as a SQLAlchemy model
     """
+    Decorator for authenticating the user via the JWT in the request header and returning the current user to the decorated function
+    :return: User: the current user as a SQLAlchemy model
+    """
+
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
@@ -99,12 +96,6 @@ def token_required(f):
     return decorated
 
 
-@userBlueprint.route('/<int:item_id>', methods=['GET', 'PUT', 'POST'])
-@userBlueprint.route('/', methods=['GET', 'POST'])
-def route_setting_all(item_id=None):
-    return models.User.fs_get_delete_put_post(item_id)
-
-
 @userBlueprint.route('/me', methods=['GET'])
 @token_required
 def me(current_user):
@@ -132,21 +123,16 @@ def login():
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
         data = request.json
-
     print(data)
-
     if data["email"] and data["password"]:
         data["email"] = data["email"].lower()
         print(data["email"])
         dbUser = models.User.query.filter_by(email=data["email"]).first()
-
         print(dbUser)
         if not dbUser:
             print("USER DOES NOT EXIST.")
             return jsonify({"message": "Not Logged in"}), 401
-
         if bcrypt.checkpw(data["password"].encode('utf8'), dbUser.password.encode('utf8')):
-
             ret_user = {
                 "email": dbUser.email,
                 "firstname": dbUser.first_name,
@@ -154,7 +140,6 @@ def login():
                 "role": dbUser.role,
                 "organization_id": dbUser.organization_id,
                 "id": dbUser.id
-
             }
             response = make_response(jsonify(ret_user), 200)
             response.set_cookie(key="pbr_token", value=Auth_Token.create_token(dbUser), expires=datetime.now(
@@ -164,7 +149,6 @@ def login():
         else:
             print("FAIL")
             return jsonify({"message": "Not Logged in"}), 401
-
     return jsonify({"message": "Not Logged in!"}), 401
 
 
@@ -216,7 +200,7 @@ def register():
     return jsonify({"message": 'Success'}), 200
 
 
-@userBlueprint.route('/users/<int:org_id>', methods=['GET'])
+@userBlueprint.route('/organization/<int:org_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
 def get_users(access_allowed, current_user, org_id):
@@ -229,50 +213,46 @@ def get_users(access_allowed, current_user, org_id):
     """
 
     if access_allowed:
-        # response json is created here and gets returned at the end of the block for GET requests.
-        responseJSON = None
-        # if item id exists then it will return the users in the organization
-        if org_id and current_user.role == Roles.Super_Admin:
-            responseJSON = src.helpers.get_users(org_id, current_user)
-        elif current_user.organization_id == org_id:
-            responseJSON = src.helpers.get_users(
-                current_user.organization_id, current_user)
-        # otherwise it will return a 404
-        if responseJSON is None:
-            responseJSON = jsonify({'message': 'No records found'})
-            return responseJSON, 404
-        else:
+        if current_user.organization_id == org_id or current_user.role == Roles.Super_Admin:
+            users = models.User.query.filter_by(
+                organization_id=org_id, is_deleted=False)
+            ret = {
+                "rows": [],
+                "types": []
+            }
+            for user in users:
+                ret["rows"].append(schemas.User.from_orm(user).dict())
+            responseJSON = jsonify(ret)
             return responseJSON, 200
+        else:
+            return jsonify({'message': 'Invalid user permissions'}), 403
     else:
         return jsonify({'message': 'Role not allowed' + str(access_allowed)}), 403
 
 
-@userBlueprint.route('/<int:user_id>', methods=['DELETE'])
+@userBlueprint.route('/<int:user_id>', methods=['GET'])
 @token_required
-@allowed_roles([0, 1])
-def deleteUser(access_allowed, current_user, user_id):
+@allowed_roles([0, 1, 2, 3, 4])
+def get_user(access_allowed, current_user, user_id):
     """
-    Deletes a user from the organization
-    :param access_allowed: boolean, whether the user has access to the route
-    :param current_user: the user object of the user making the request
-    :param user_id: the id of the user to delete
-    :return: a json response with the user deleted
+    This function will return the user with a matching id.
+    :param access_allowed: This is the access_allowed variable that is passed in from the token_required function.
+    :param current_user: This is the current_user variable that is passed in from the token_required function.
+    :param user_id: This is the id of the user that is passed in.
+    :return: This function will return the user with the specified id.
     """
 
     if access_allowed:
-        user = models.User.query.get(user_id)
-        if user is None:
-            return jsonify({'message': 'User does not exist'}), 404
-        elif user.organization_id != current_user.organization_id and user.role != Roles.Super_Admin:
-            return jsonify({'message': 'Cannot delete user in another organization'}), 403
-        elif user.id == current_user.id:
-            return jsonify({'message': 'Cannot delete the current user'}), 403
+        if user_id is None:
+            return jsonify({'message': 'User ID must be specified'}), 400
         else:
-            user.is_deleted = True
-            models.db.session.commit()
-            models.create_log(current_user, LogActions.DELETE_SOURCE,
-                              f'Deleted user: ${user.first_name} ${user.last_name} in organization: ${models.Organization.query.get(user.organization_id).name}')
-            return jsonify({'message': 'User deleted'}), 200
+            user = models.User.query.filter_by(
+                id=user_id, is_deleted=False).first()
+            if user is None:
+                return jsonify({'message': 'User not found'}), 404
+            else:
+                response = schemas.User.from_orm(user).dict()
+                return jsonify(response), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -288,33 +268,28 @@ def get_admin_organization(access_allowed, current_user, org_id):
     :param item_id: This is the id of the organization that is passed in.
     :return: This function will return the admin with the org id either attached to the user or one that is passed in.
     """
-    print(org_id, flush=True)
+
     if access_allowed:
         # response json is created here and gets returned at the end of the block for GET requests.
         responseJSON = None
         # if organization id exists then it will return the admin in the organization
-        if org_id and current_user.role == Roles.Super_Admin:
-            admin = UserORM.query.filter_by(
-                organization_id=org_id, role=Roles.Admin).first()
-        elif current_user.organization_id == org_id:
-            admin = UserORM.query.filter_by(
-                organization_id=org_id, role=Roles.Admin).first()
-            print(admin, flush=True)
+        if org_id and current_user.role == Roles.Super_Admin or current_user.organization_id == org_id:
+            admin = models.User.query.filter_by(
+                organization_id=org_id, role=Roles.Admin, is_deleted=False).first()
         else:
-            return jsonify({'message': 'Cannot get admin for organization user is not a part of'}), 403
+            return jsonify({'message': 'Cannot get admin for another organization'}), 403
         # otherwise it will return a 404
         if admin is None:
-            responseJSON = jsonify({'message': 'No records found'})
+            responseJSON = jsonify({'message': 'No admin found'})
             return responseJSON, 404
         else:
-            responseJSON = User.from_orm(admin).dict()
-            print(responseJSON, flush=True)
+            responseJSON = jsonify(schemas.User.from_orm(admin).dict())
             return responseJSON, 200
     else:
         return jsonify({'message': 'Role not allowed' + str(access_allowed)}), 403
 
 
-@userBlueprint.route('/users/<int:user_id>', methods=['PUT'])
+@userBlueprint.route('/<int:user_id>', methods=['PUT'])
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
 def update_user(access_allowed, current_user, user_id):
@@ -325,15 +300,17 @@ def update_user(access_allowed, current_user, user_id):
     :param item_id: This is the id of the user to be edited.
     :return: This function will return the edited user object as a dictionary.
     """
-    if access_allowed:
 
+    if access_allowed:
         # Get json dict representing new user object
         edited_user = request.json
         # Get existing user object with the same id as edited_user
-        existing_user = models.User.query.filter_by(id=user_id).first()
+        existing_user = models.User.query.get(user_id)
 
         if existing_user is None:
             return jsonify({'message': 'User does not exist'}), 404
+        elif existing_user.is_deleted is True:
+            return jsonify({'message': 'Cannot edit a deleted user'}), 400
         else:
             # If editing self, prevent editing of role
             # If editing others, prevent editing of higher privileged users
@@ -341,8 +318,8 @@ def update_user(access_allowed, current_user, user_id):
             if current_user.id == existing_user.id:
                 edited_user["role"] = existing_user.role
             else:
-                if current_user.role >= existing_user.role or current_user.role == Roles.Data_Collector:
-                    return jsonify({'message': 'Role not allowed'}), 403
+              if current_user.role >= existing_user.role or current_user.role == Roles.Data_Collector:
+                return jsonify({'message': 'Role not allowed'}), 403
 
             # These fields cannot be edited
             # Should maybe allow password change on self edit
@@ -359,11 +336,45 @@ def update_user(access_allowed, current_user, user_id):
             models.User.query.filter_by(
                 id=edited_user.get("id")).update(edited_user)
             models.db.session.commit()
-            models.create_log(current_user, LogActions.EDIT_USER,
-                              'Edited user: ' + str(edited_user.get("id")))
+            # log.create_log(current_user, LogActions.EDIT_USER,
+            #                'Edited user: ' + str(edited_user.get("id")))
 
             # Return updated user object, retreived via db query (confirmation)
-            return schemas.User.from_orm(models.User.query.filter_by(id=edited_user.get("id")).first()).dict(), 200
+            updated_user = schemas.User.from_orm(
+                models.User.query.filter_by(id=edited_user.get("id")).first()
+            ).dict()
+            return jsonify(updated_user), 200
     else:
-        print("PROBLEM>>>>>>>>>>>>>>>>>>>>>", flush=True)
+        return jsonify({'message': 'Role not allowed'}), 403
+
+
+@userBlueprint.route('/<int:user_id>', methods=['DELETE'])
+@token_required
+@allowed_roles([0, 1])
+def delete_user(access_allowed, current_user, user_id):
+    """
+    Deletes a user from the organization
+    :param access_allowed: boolean, whether the user has access to the route
+    :param current_user: the user object of the user making the request
+    :param user_id: the id of the user to delete
+    :return: a json response with the user deleted
+    """
+
+    if access_allowed:
+        user = models.User.query.get(user_id)
+        if user is None:
+            return jsonify({'message': 'User does not exist'}), 404
+        elif user.is_deleted:
+            return jsonify({'message': 'User is already deleted'}), 400
+        elif user.organization_id != current_user.organization_id and user.role != Roles.Super_Admin:
+            return jsonify({'message': 'Cannot delete user in another organization'}), 403
+        elif user.id == current_user.id:
+            return jsonify({'message': 'Cannot delete the current user'}), 403
+        else:
+            user.is_deleted = True
+            models.db.session.commit()
+            log.create_log(current_user, LogActions.DELETE_SOURCE,
+                           f'Deleted user: ${user.first_name} ${user.last_name} in organization: ${models.Organization.query.get(user.organization_id).name}')
+            return jsonify({'message': 'User deleted'}), 200
+    else:
         return jsonify({'message': 'Role not allowed'}), 403
