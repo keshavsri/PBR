@@ -312,92 +312,21 @@ export default function EnhancedTable(props) {
                       </StyledTableCell>
 
                       {headCells.map((headCell, index) => {
-                        if (index === 0) {
-                          return (
-                            <StyledTableCell
-                              padding="none"
-                              align="left"
-                              id={index}
-                              key={index}
-                            >
-                              {row.id}
-                            </StyledTableCell>
-                          );
-                        } else if (index === 1) {
-                          return (
-                            <StyledTableCell
-                              padding="none"
-                              align="left"
-                              id={index}
-                              key={index}
-                            ></StyledTableCell>
-                          );
-                        } else if (index === 3) {
-                          return (
-                            <StyledTableCell
-                              padding="none"
-                              align="left"
-                              id={index}
-                              key={index}
-                            >
-                              {row.flock_age}
-                            </StyledTableCell>
-                          );
-                        } else if (index === 2) {
-                          return (
-                            <StyledTableCell
-                              padding="none"
-                              align="left"
-                              id={index}
-                              key={index}
-                            >
-                              {row.flock.name}
-                            </StyledTableCell>
-                          );
-                        } else if (index === 4) {
-                          return (
-                            <StyledTableCell
-                              padding="none"
-                              align="left"
-                              id={index}
-                              key={index}
-                            >
-                              {row.validation_status}
-                            </StyledTableCell>
-                          );
-                        } else if (row.measurements.length > 0) {
-                          row.measurements.map((measurement, index) => {});
-
-                          if (
-                            row.measurements[0].analyte.name === headCell.name
-                          ) {
-                            return (
-                              <StyledTableCell
-                                padding="none"
-                                align="left"
-                                id={index}
-                                key={index}
-                              >
-                                {row.measurements[0].value}
-                              </StyledTableCell>
-                            );
-                          } else {
-                            return (
-                              <StyledTableCell
-                                padding="none"
-                                align="left"
-                                id={index}
-                                key={index}
-                              >
-                                not found
-                              </StyledTableCell>
-                            );
-                          }
-                        }
-                      })}
+                        return (
+                          <StyledTableCell
+                            padding="none"
+                            align="left"
+                            id={index}
+                            key={index}
+                          >
+                            {row[headCell.id]}
+                          </StyledTableCell>
+                        );
+                        })
+                      }
                     </StyledTableRow>
                   );
-                })}
+
               {emptyRows > 0 && (
                 <TableRow
                   style={{
@@ -407,8 +336,8 @@ export default function EnhancedTable(props) {
                   <TableCell colSpan={6} />
                 </TableRow>
               )}
-
               {/* {rowComponents} */}
+                })}
             </TableBody>
           </Table>
         </TableContainer>

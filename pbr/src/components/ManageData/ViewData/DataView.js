@@ -18,7 +18,7 @@ import ReviewSampleModal from "../ValidateData/ReviewSampleModal";
 const useStyles = makeStyles({});
 
 export default function DataView() {
-  const [SampleList, setSampleList] = React.useState([]);
+  const [sampleList, setSampleList] = React.useState([]);
   const [analytes, setAnalytes] = React.useState([]);
   const [currentCartridgeType, setCurrentCartridgeType] = React.useState({});
   const [cartridgeTypes, setCartridgeTypes] = React.useState([]);
@@ -84,12 +84,12 @@ export default function DataView() {
   };
 
   const filterPendingSamples = async () => {
-    SampleList.map((row) => {
+    sampleList.map((row) => {
       if (row.validation_status == "Pending") {
         pendingRowList.push(row);
       }
     });
-    setFullRowList(SampleList);
+    setFullRowList(sampleList);
     setSampleList(pendingRowList);
     setShowOnlyPendingSamples(true);
   };
@@ -108,6 +108,14 @@ export default function DataView() {
       })
       .then(checkResponseAuth)
       .then((data) => {
+        console.log(data);
+
+        data.forEach((sample) => {
+          sample.measurements.map((meas) => {
+            sample[meas.analyte.abbreviation] = meas.value;
+          })
+          sample['flock_name'] = sample.flock.name;
+        })
         setSampleList(data);
         assignRowHtml(data);
       });
@@ -138,14 +146,14 @@ export default function DataView() {
       },
 
       {
-        id: "flock.name",
+        id: "flock_name",
         numeric: false,
         disablePadding: true,
         label: "Flock Name",
       },
 
       {
-        id: "flock_age_combined",
+        id: "flock_age",
         numeric: false,
         disablePadding: true,
         label: "Flock Age",
@@ -182,7 +190,7 @@ export default function DataView() {
     return {
       machineName: machineName,
       name: point.name,
-      id: point.id,
+      id: point.abbreviation,
       numeric: false,
       disablePadding: true,
       label: headerLabel,
@@ -293,7 +301,7 @@ export default function DataView() {
       <Paper>
         <EnhancedTable
           headCells={headCellList}
-          rows={SampleList}
+          rows={sampleList}
           toolbarButtons={
             <DVTableToolbar
               filterPendingSamples={filterPendingSamples}
@@ -321,7 +329,7 @@ export default function DataView() {
                 selected={selected}
                 submitAll={submitAll}
                 submitOne={submitOne}
-                rows={SampleList}
+                rows={sampleList}
                 selectedSamples={selectedSamples}
                 setSelectedSamples={setSelectedSamples}
                 SavedToPendingVisibility={SavedToPendingVisibility}
@@ -335,7 +343,7 @@ export default function DataView() {
         setRowList={setSampleList}
         setHeadCellList={setHeadCellList}
         getData={getData}
-        rows={SampleList}
+        rows={sampleList}
       />
       <DataViewSampleModal getData={getData} />
       <ReviewSampleModal

@@ -6,6 +6,7 @@ from src.api.user import token_required, allowed_roles
 from src import models, schemas
 from src.helpers import sample as sample_helper
 from src.models import Sample as SampleORM
+from src.schemas import Sample
 from src.models import Measurement as MeasurementORM
 from sqlalchemy import text
 
@@ -88,7 +89,7 @@ def create_sample(access_allowed, current_user):
         models.db.session.commit()
         models.db.session.refresh(sample)
 
-        return schemas.Sample.from_orm(sample).dict(), 201
+        return Sample.from_orm(sample).dict(), 201
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -138,12 +139,9 @@ def get_samples_by_cartridge_type_id_and_org(current_user):
             measurements = MeasurementORM.query.filter_by(
                 sample_id=sample.id).all()
             setattr(sample, "measurements", measurements)
-            results.append(schemas.Sample.from_orm(sample).dict())
+            results.append(Sample.from_orm(sample).dict())
 
-        if not results:
-            return jsonify(results), 404
-        else:
-            return jsonify(results), 200
+        return jsonify(results), 200
 
 
 @sampleBlueprint.route('/<int:item_id>', methods=['PUT'])
@@ -178,7 +176,7 @@ def edit_sample(access_allowed, current_user, item_id):
             edited_sample = SampleORM.query.get(item_id)
             models.createLog(current_user, LogActions.EDIT_SAMPLE,
                              'Edited sample: ' + str(edited_sample.id))
-            return schemas.Sample.from_orm(edited_sample).dict(), 200
+            return Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -204,7 +202,7 @@ def delete_sample(access_allowed, current_user, item_id):
             models.db.session.commit()
             models.create_log(current_user, LogActions.DELETE_SAMPLE,
                               'Deleted sample: ' + str(deleted_sample.id))
-            return schemas.Sample.from_orm(deleted_sample).dict(), 200
+            return Sample.from_orm(deleted_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -230,7 +228,7 @@ def submit_sample(access_allowed, current_user, item_id):
             edited_sample = models.Sample.query.get(item_id)
             models.create_log(current_user, LogActions.EDIT_SAMPLE,
                               'Edited sample: ' + str(edited_sample.id))
-            return schemas.Sample.from_orm(edited_sample).dict(), 200
+            return Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -256,7 +254,7 @@ def accept_sample(access_allowed, current_user, item_id):
             edited_sample = models.Sample.query.get(item_id)
             models.create_log(current_user, LogActions.PENDING_TO_VALID,
                               'Accepted sample: ' + str(edited_sample.id))
-            return schemas.Sample.from_orm(edited_sample).dict(), 200
+            return Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -282,6 +280,6 @@ def reject_sample(access_allowed, current_user, item_id):
             edited_sample = models.Sample.query.get(item_id)
             models.create_log(current_user, LogActions.PENDING_TO_REJECT,
                               'Reject sample: ' + str(edited_sample.id))
-            return schemas.Sample.from_orm(edited_sample).dict(), 200
+            return Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

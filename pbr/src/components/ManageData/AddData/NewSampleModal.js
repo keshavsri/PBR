@@ -192,13 +192,21 @@ export default function DataViewSampleModal(props) {
           </AccordionSummary>
 
           <AccordionDetails>
-            {cartridgeType.analytes &&
-              cartridgeType.analytes.map((a) => {
+            {cartridgeType.analytes  && SampleDetails.measurements && SampleDetails.measurements.length > 0 &&
+              cartridgeType.analytes.map((a, index) => {
                 return (
                   <>
                     <TextField
                       label={a.abbreviation}
-                      value={SampleDetails.ageNumber}
+                      value={SampleDetails.measurements[index].value}
+                      onChange={e => {
+                        const measurements = SampleDetails.measurements;
+                        measurements[index].value = e.target.value;
+                        setSampleDetails((prevState) => {
+                          return (
+                            {...prevState, measurements: measurements}
+                          )
+                      })}}
                     />
                   </>
                 );
@@ -266,6 +274,16 @@ export default function DataViewSampleModal(props) {
       .then((data) => {
         setCartridgeTypes(data);
         setCartridgeType(data[0]);
+        console.log(data[0].analytes);
+        const measurements = data[0].analytes.map((analyte) => ({analyte_id: analyte.id, value: ""}));
+        console.log(measurements);
+        setSampleDetails((prevState) => {
+          return ({
+            ...prevState,
+            measurements: measurements
+          })
+        })
+
       });
   };
 
@@ -321,7 +339,7 @@ export default function DataViewSampleModal(props) {
       flock_id: flock.id,
       cartridge_type_id: cartridgeType.id,
       machine_id: SampleDetails.machine_id,
-      measurements: [],
+      measurements: SampleDetails.measurements,
       organization_id: organization.id,
     };
     console.log("Submitting!", payload);
