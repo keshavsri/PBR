@@ -226,7 +226,7 @@ export default function DataView() {
   };
 
   const acceptSample = async (id) => {
-    let path = `/api/sample/datapoint/accept/`;
+    let path = `/api/sample/accept/`;
 
     let temp = path + id;
     await fetch(temp, { method: "PUT" })
@@ -241,7 +241,7 @@ export default function DataView() {
   };
 
   const rejectSample = async (id) => {
-    let path = `/api/sample/datapoint/reject/`;
+    let path = `/api/sample/reject/`;
 
     let temp = path + id;
     await fetch(temp, { method: "PUT" })
@@ -260,9 +260,7 @@ export default function DataView() {
     selected.map(async (id, index) => {
       let temp = path + id;
       await fetch(temp, { method: "DELETE" })
-        .then((response) => {
-          // return response.json();
-        })
+        .then((response) => {})
         .then(() => {
           getData();
         });
