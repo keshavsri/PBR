@@ -116,6 +116,7 @@ def get_samples_by_cartridge_type_id_and_org(current_user):
             sql_where_query = """
         	WHERE sample.flock_id = f.id
         	AND f.source_id = source.id
+            AND sample.is_deleted = 0
         	AND source.organization_id = :organization_id
         	AND sample.cartridge_type_id = :cartridge_type_id
         	AND CASE WHEN sample.validation_status = "Saved" THEN sample.user_id = :current_user_id
@@ -193,15 +194,16 @@ def delete_sample(access_allowed, current_user, item_id):
     :return: The deleted sample.
     """
     if access_allowed:
+        print("Deleting sample with id: " + str(item_id), flush=True)
         if models.Sample.query.get(item_id) is None:
-            return jsonify({'message': 'Sample cannot be found.'}), 404
+            return jsonify({'message': 'Sample cannot be found.'}), 407
         else:
             deleted_sample = models.Sample.query.get(item_id)
             models.Sample.query.filter_by(
                 id=item_id).update({'is_deleted': True})
             models.db.session.commit()
-            models.create_log(current_user, LogActions.DELETE_SAMPLE,
-                              'Deleted sample: ' + str(deleted_sample.id))
+            # models.create_log(current_user, LogActions.DELETE_SAMPLE,
+            #                   'Deleted sample: ' + str(deleted_sample.id))
             return Sample.from_orm(deleted_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
