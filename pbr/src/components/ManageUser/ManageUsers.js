@@ -1,12 +1,12 @@
 import React from "react";
-import EditUsers from "./EditUsers"
+import EditUsers from "./EditUsers";
 
 import { Paper, Button, Tooltip, IconButton, Chip, Box } from "@mui/material";
-import InputLabel from '@mui/material/InputLabel';
-import Grid from '@mui/material/Grid';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import InputLabel from "@mui/material/InputLabel";
+import Grid from "@mui/material/Grid";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import useAuth from "../../services/useAuth";
 import EnhancedTable from "../EnhancedTable/EnhancedTable";
 
@@ -19,14 +19,13 @@ export default function ManageUsers() {
   const [openEditUsersModal, setOpenEditUsersModal] = React.useState(false);
   const [organization, setOrganization] = React.useState(user.organization_id);
 
-
   const roleMap = {
     0: "Super Admin",
     1: "Admin",
     2: "Supervisor",
     3: "Data Collector",
-    4: "Guest"
-  }
+    4: "Guest",
+  };
 
   React.useEffect(async () => {
     await getOrganizations();
@@ -38,63 +37,72 @@ export default function ManageUsers() {
     await getUsers();
   }, [organization]);
 
-
   const getUsers = async () => {
     let orgId = user.organization_id;
     if (user.role === 0) {
       orgId = organization;
     }
-    await fetch(`/api/user/users/${orgId}`, { method: "GET", })
+    await fetch(`/api/user/organization/${orgId}`, { method: "GET" })
       .then((response) => {
         return response.json();
-      }).then((data) => {
+      })
+      .then((data) => {
+        console.log(data);
         assignRowHtml(data.rows);
         setRowList(data.rows);
         console.log(rowList);
-      }).catch((error) => {
-        console.log(error);
       })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const getOrganizations = async () => {
     if (user.role === 0) {
-      await fetch(`/api/organization`, { method: "GET", })
+      await fetch(`/api/organization`, { method: "GET" })
         .then((response) => {
           return response.json();
-        }).then((data) => {
-          setOrganizations(data);
-        }).catch((error) => {
-          console.log(error);
         })
+        .then((data) => {
+          setOrganizations(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
   const deleteUser = async (deletedUserId) => {
-    await fetch(`/api/user/${deletedUserId}`, { method: "DELETE", })
+    await fetch(`/api/user/${deletedUserId}`, { method: "DELETE" })
       .then((response) => {
         return response.json();
-      }).then((data) => {
-      }).catch((error) => {
-        console.log(error);
       })
-      await getUsers();
-  }
+      .then((data) => {})
+      .catch((error) => {
+        console.log(error);
+      });
+    await getUsers();
+  };
 
   const editUser = async (editedUser) => {
-    await fetch(`/api/user/users/${selected[0]}`,
-          { method: "PUT",
-            body: JSON.stringify(editedUser),
-            headers: {"Content-Type" : "application/json"}})
+    console.log("sending request for edit user");
+    await fetch(`/api/user/${selected[0]}`, {
+      method: "PUT",
+      body: JSON.stringify(editedUser),
+      headers: { "Content-Type": "application/json" },
+    })
       .then((response) => {
         return response.json();
-      }).then((data) => {
+      })
+      .then((data) => {
         setOpenEditUsersModal(false);
         getUsers();
         setSelected([]);
-      }).catch((error) => {
+      })
+      .catch((error) => {
         console.log(error);
       });
-  }
+  };
 
   const onDelete = async () => {
     if (user.role === 0 || user.role === 1) {
@@ -103,21 +111,21 @@ export default function ManageUsers() {
       });
       setSelected([]);
     }
-  }
+  };
 
   const onChangeOrganization = (event) => {
     setOrganization(event.target.value);
     setSelected([]);
-  }
+  };
 
   const onEdit = () => {
     setOpenEditUsersModal(true);
-  }
+  };
 
   const assignRowHtml = (rows) => {
-    rows.map((row, index) => { 
+    rows.map((row, index) => {
       console.log(row.id);
-      console.log(user.role);  
+      console.log(user.role);
       row.role_id = row.role;
       row.role = roleMap[Number(row.role)];
       row.deletable = isDeletable(row);
@@ -131,11 +139,10 @@ export default function ManageUsers() {
       return true;
     } else if (user.id === row.id) {
       return true;
-    }
-      else {
+    } else {
       return false;
     }
-  }
+  };
 
   const getHeadCells = () => {
     const headCells = [
@@ -192,7 +199,7 @@ export default function ManageUsers() {
 
   const OrganizationDropdown = () => {
     return (
-      <Grid item xs={12} sm={6} >
+      <Grid item xs={12} sm={6}>
         <FormControl fullWidth>
           <Select
             labelId="demo-simple-select-label"
@@ -203,15 +210,17 @@ export default function ManageUsers() {
           >
             {organizations.map((org) => {
               return (
-                <MenuItem key={org.id} value={org.id}>{org.name}</MenuItem>
-              )
+                <MenuItem key={org.id} value={org.id}>
+                  {org.name}
+                </MenuItem>
+              );
             })}
           </Select>
           <InputLabel id="demo-simple-select-label">Organization</InputLabel>
         </FormControl>
-      </Grid >
-    )
-  }
+      </Grid>
+    );
+  };
 
   return (
     <>
@@ -220,15 +229,7 @@ export default function ManageUsers() {
           headCells={headCellList}
           rows={rowList}
           onDelete={onDelete}
-          toolbarButtons={
-            <>
-            {
-              user.role === 0 &&
-              <OrganizationDropdown/>
-            }
-            </>
-          }
-
+          toolbarButtons={<>{user.role === 0 && <OrganizationDropdown />}</>}
           onEdit={onEdit}
           selected={selected}
           setSelected={setSelected}
@@ -236,19 +237,18 @@ export default function ManageUsers() {
 
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12}>
-            { openEditUsersModal ? (
+            {openEditUsersModal ? (
               <EditUsers
-              roleMap = {roleMap}
-              currentUser = {user}
-              user = {rowList.find(user => user.id === selected[0])}
-              editUser={editUser}
-              openEditUsersModal={openEditUsersModal}
-              setOpenEditUsersModal={setOpenEditUsersModal}
-            />) : null
-            }
+                roleMap={roleMap}
+                currentUser={user}
+                user={rowList.find((user) => user.id === selected[0])}
+                editUser={editUser}
+                openEditUsersModal={openEditUsersModal}
+                setOpenEditUsersModal={setOpenEditUsersModal}
+              />
+            ) : null}
           </Grid>
         </Grid>
-
       </Paper>
     </>
   );
