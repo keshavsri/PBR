@@ -113,9 +113,9 @@ export default function DataView() {
         data.forEach((sample) => {
           sample.measurements.map((meas) => {
             sample[meas.analyte.abbreviation] = meas.value;
-          })
-          sample['flock_name'] = sample.flock.name;
-        })
+          });
+          sample["flock_name"] = sample.flock.name;
+        });
         setSampleList(data);
         assignRowHtml(data);
       });
@@ -265,7 +265,7 @@ export default function DataView() {
   };
 
   const onDelete = async () => {
-    let path = `/api/sample/datapoint/`;
+    let path = `/api/sample/`;
     selected.map(async (id, index) => {
       let temp = path + id;
       await fetch(temp, { method: "DELETE" })
