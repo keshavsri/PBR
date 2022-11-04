@@ -55,7 +55,7 @@ def get_sources(access_allowed):
 # return all the sources for a specific organization
 @sourceBlueprint.route('/organization/<int:org_id>', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2])
+@allowed_roles([0, 1, 2, 3])
 def get_sources_by_organization(access_allowed, current_user, org_id):
     if access_allowed:
         if current_user.organization_id == org_id or current_user.role == Roles.Super_Admin:

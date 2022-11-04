@@ -96,7 +96,8 @@ def create_sample(access_allowed, current_user):
 
 @sampleBlueprint.route('/org_cartridge_type', methods=['GET'])
 @token_required
-def get_samples_by_cartridge_type_id_and_org(current_user):
+@allowed_roles([0, 1, 2, 3])
+def get_samples_by_cartridge_type_id_and_org(access_allowed, current_user):
     """
     This function gets all samples for a specified cartridge type and organization.
     Allowed Roles check not needed for this since all users should be able to get samples

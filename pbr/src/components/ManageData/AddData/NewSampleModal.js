@@ -111,6 +111,7 @@ export default function DataViewSampleModal(props) {
   const [source, setSource] = React.useState({});
   const [organization, setOrganization] = React.useState({});
   const [expanded, setExpanded] = React.useState(true);
+  const [roles, setRoles] = React.useState({});
   const [errorSubmission, setErrorSubmission] = React.useState(false);
   const [SampleDetails, setSampleDetails] = React.useState({
     comments: "",
@@ -128,6 +129,14 @@ export default function DataViewSampleModal(props) {
     const data = await response.json();
     setOrganizations(data);
     setOrganization(data[0]);
+  };
+
+  const getRoles = async () => {
+    const response = await fetch(`/api/enum/roles/`, {
+      method: "GET",
+    }).then(checkResponseAuth);
+    const data = await response.json();
+    setRoles(data);
   };
 
   const getFlocks = async () => {
@@ -283,9 +292,16 @@ export default function DataViewSampleModal(props) {
       });
   };
 
+
+
   React.useEffect(async () => {
     if (sampleModalVisibility) {
-      await getOrganizations();
+      if (user.role === roles["Super_Admin"]) {
+        await getOrganizations();
+      } else {
+        setOrganization({id: user.organization_id});
+      }
+
       await getCartridgeTypes();
     }
   }, [sampleModalVisibility]);
@@ -318,8 +334,11 @@ export default function DataViewSampleModal(props) {
       sample_type: null,
       measurements: [],
     });
-
-    setOrganization(organizations[0]);
+    if (user.role === roles["Super_Admin"]) {
+      setOrganization(organizations[0]);
+    } else {
+      setOrganization({id: user.organization_id});
+    }
     setSource(sources[0]);
     setFlock(flocks[0]);
     setCartridgeType(cartridgeTypes[0]);
@@ -424,7 +443,7 @@ export default function DataViewSampleModal(props) {
                     </Select>
                   </Grid>
                   <Grid item xs={4}>
-                    {user.role === 0 && (
+                    {user.role === roles["Super_Admin"] && (
                       <>
                         <InputLabel id="label-select-organization">
                           Organization
