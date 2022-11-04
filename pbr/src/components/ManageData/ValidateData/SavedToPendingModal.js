@@ -69,15 +69,6 @@ export default function SavedToPendingModal(props) {
     setSelectedSamples,
   } = props;
 
-  const validateSampleBeforeSubmission = (sample) => {
-    if (
-      sample.measurement_values.length === 13 ||
-      sample.measurement_values.length === 17
-    ) {
-      return true;
-    }
-  };
-
   const removeFromSelected = (sample) => {
     let newSelected = selectedSamples.filter((s) => s !== sample);
     setSelectedSamples(newSelected);
@@ -91,14 +82,11 @@ export default function SavedToPendingModal(props) {
   };
 
   const onSubmitOne = async (sample) => {
-    if (validateSampleBeforeSubmission(sample)) {
-      await submitOne(sample.id);
-      removeFromSelected(sample);
-      listSamples();
-      setErrorSubmission(false);
-    } else {
-      setErrorSubmission(true);
-    }
+    console.log("submitting one");
+    await submitOne(sample.id);
+    removeFromSelected(sample);
+    listSamples();
+    setErrorSubmission(false);
   };
 
   const IstatORVescan = (sample) => {
@@ -118,10 +106,10 @@ export default function SavedToPendingModal(props) {
   };
 
   const fillMachineData = (sample) => {
-    return sample.measurement_values.map((measurement) => (
+    return sample.measurements.map((measurement) => (
       <Grid item xs={12} sm={6}>
         <TextField
-          label={measurement.measurement.measurementtype.abbreviation}
+          label={measurement.analyte.abbreviation}
           value={measurement.value}
           disabled
         />
@@ -169,13 +157,13 @@ export default function SavedToPendingModal(props) {
                 <TextField label="Flock" value={sample.flock.name} disabled />
               </Grid>
 
-              <Grid item xs>
+              {/* <Grid item xs>
                 <TextField
                   label="Source"
                   value={sample.organization.sources[0].name}
                   disabled
                 />
-              </Grid>
+              </Grid> */}
 
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -232,22 +220,9 @@ export default function SavedToPendingModal(props) {
           <Grid item xs={12} sm={12}>
             <Typography gutterBottom variant="h5">
               {" "}
-              Machine Data{" "}
+              Measurements{" "}
             </Typography>
-            {sample.measurement_values.length === 13 ||
-            sample.measurement_values.length == 17 ? (
-              IstatORVescan(sample)
-            ) : (
-              <Typography
-                gutterBottom
-                variant="button"
-                style={{ color: "red" }}
-              >
-                The Machine Data associated to the sample is incomplete.
-              </Typography>
-            )}
-            <br />
-            <br />
+
             <br />
           </Grid>
 
@@ -256,12 +231,13 @@ export default function SavedToPendingModal(props) {
               {fillMachineData(sample)}
             </Grid>
           </Box>
-
+          <br />
           <Grid item xs={12} sm={12}>
             <Typography gutterBottom variant="h5">
               {" "}
               Comments{" "}
             </Typography>
+            <br />
           </Grid>
 
           <Grid item xs={12} sm={12}>
@@ -279,6 +255,7 @@ export default function SavedToPendingModal(props) {
             <Button
               variant="contained"
               onClick={() => {
+                console.log("submitting sample");
                 onSubmitOne(sample);
               }}
             >
