@@ -156,14 +156,14 @@ export default function SavedToPendingModal(props) {
 
           <Box sx={{ flexGrow: 1 }}>
             <Grid container direction="row" alignItems="center" spacing={3}>
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
                 <TextField
                   fullWidth
                   label="Organization"
                   value={sample.organization.name}
                   disabled
                 />
-              </Grid>
+              </Grid> */}
 
               <Grid item xs>
                 <TextField label="Flock" value={sample.flock.name} disabled />

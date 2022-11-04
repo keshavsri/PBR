@@ -1,6 +1,15 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
-import { Typography, InputLabel, Box, Button, Tooltip, IconButton, Select, MenuItem} from "@mui/material";
+import {
+  Typography,
+  InputLabel,
+  Box,
+  Button,
+  Tooltip,
+  IconButton,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDatabase } from "@fortawesome/free-solid-svg-icons";
 import { makeStyles } from "@mui/styles";
@@ -13,13 +22,13 @@ import useDataView from "../../../services/useDataView";
 const useStyles = makeStyles({});
 
 export default function DVTableToolbar({
-    filterPendingSamples,
-    showOnlyPendingSamples,
-    turnPendingFilterOff,
-    selected,
-    currentCartridgeType,
-    setCurrentCartridgeType,
-    cartridgeTypes
+  filterPendingSamples,
+  showOnlyPendingSamples,
+  turnPendingFilterOff,
+  selected,
+  currentCartridgeType,
+  setCurrentCartridgeType,
+  cartridgeTypes,
 }) {
   const {
     samplePayload,
@@ -42,13 +51,12 @@ export default function DVTableToolbar({
     setTimestamp,
     generalFilterState,
     setGeneralFilterState,
-    openFilterModal, 
+    openFilterModal,
     setOpenFilterModal,
     handleOpenFilterModal,
     handleCloseFilterModal,
   } = useDataView();
   const classes = useStyles();
-
 
   useTheme();
 
@@ -59,22 +67,20 @@ export default function DVTableToolbar({
   return (
     <>
       <>
-        <InputLabel id="label-select-flock">Cartridge Type</InputLabel>
         <Select
           labelId="label-select-organization"
           id="select-organizations"
           value={currentCartridgeType}
-          onChange={(e)=> {
-            console.log(e);
-            console.log(e.target);
-            console.log(e.target.value);
+          onChange={(e) => {
             setCurrentCartridgeType(e.target.value);
           }}
         >
           {cartridgeTypes.map((ct) => {
             return (
-              <MenuItem key={ct.id} value={ct}>{ct.name}</MenuItem>
-            )
+              <MenuItem key={ct.id} value={ct}>
+                {ct.name}
+              </MenuItem>
+            );
           })}
         </Select>
       </>
@@ -89,7 +95,7 @@ export default function DVTableToolbar({
           <FilterListIcon />
         </IconButton>
       </Tooltip>
-     
+
       <Tooltip title="Batch Import">
         <Button variant="contained" startIcon={<BulkIcon />} sx={{ ml: 1 }}>
           Batch Import
@@ -105,34 +111,40 @@ export default function DVTableToolbar({
           Add Sample
         </Button>
       </Tooltip>
-      {showOnlyPendingSamples ? (      
-      <Tooltip title="Show All Samples">
-        <Button
-          variant="contained"
-          onClick={turnPendingFilterOff}
-          startIcon={<FontAwesomeIcon
-            icon={faDatabase}
-            style={{ height: "24px", width: "24px", padding: "3px" }}
-          />}
-          sx={{ ml: 1 }}
-        >
-          Show All Samples
-        </Button>
-      </Tooltip>) : (      
-      <Tooltip title="Show Pending Samples">
-        <Button style={{ width: 275, marginTop: 10, marginBottom: 10 }}
-          variant="contained"
-          onClick={filterPendingSamples}
-          startIcon={<FontAwesomeIcon
-            icon={faDatabase}
-            style={{ height: "24px", width: "24px", padding: "3px" }}
-          />}
-          sx={{ ml: 1 }}
-        >
-          Show Pending Samples
-        </Button>
-      </Tooltip>) }
-
+      {showOnlyPendingSamples ? (
+        <Tooltip title="Show All Samples">
+          <Button
+            variant="contained"
+            onClick={turnPendingFilterOff}
+            startIcon={
+              <FontAwesomeIcon
+                icon={faDatabase}
+                style={{ height: "24px", width: "24px", padding: "3px" }}
+              />
+            }
+            sx={{ ml: 1 }}
+          >
+            Show All Samples
+          </Button>
+        </Tooltip>
+      ) : (
+        <Tooltip title="Show Pending Samples">
+          <Button
+            style={{ width: 275, marginTop: 10, marginBottom: 10 }}
+            variant="contained"
+            onClick={filterPendingSamples}
+            startIcon={
+              <FontAwesomeIcon
+                icon={faDatabase}
+                style={{ height: "24px", width: "24px", padding: "3px" }}
+              />
+            }
+            sx={{ ml: 1 }}
+          >
+            Show Pending Samples
+          </Button>
+        </Tooltip>
+      )}
     </>
   );
 }
