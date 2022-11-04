@@ -87,7 +87,7 @@ export default function DataViewSampleModal(props) {
     sampleNextAction,
     error,
     setError,
-    
+
     restartSample,
     timestamp,
     machineDetails,
@@ -140,7 +140,6 @@ export default function DataViewSampleModal(props) {
       })
       .then((data) => {
         data.forEach((flock) => {
-          console.log(flock);
           flock.label = flock.name;
         });
         setFlocks(data);
@@ -149,15 +148,10 @@ export default function DataViewSampleModal(props) {
   };
 
   const handleSampleDetailsChange = (prop) => (event) => {
-    console.log("GENERAL DETAILS CHANGE");
-    console.log(event.target.value);
-
     setSampleDetails({
       ...SampleDetails,
       [prop]: event.target.value,
     });
-
-    console.log(SampleDetails);
   };
 
   const handleSampleTypeChange = (event) => {
@@ -192,21 +186,22 @@ export default function DataViewSampleModal(props) {
           </AccordionSummary>
 
           <AccordionDetails>
-            {cartridgeType.analytes  && SampleDetails.measurements && SampleDetails.measurements.length > 0 &&
+            {cartridgeType.analytes &&
+              SampleDetails.measurements &&
+              SampleDetails.measurements.length > 0 &&
               cartridgeType.analytes.map((a, index) => {
                 return (
                   <>
                     <TextField
                       label={a.abbreviation}
                       value={SampleDetails.measurements[index].value}
-                      onChange={e => {
+                      onChange={(e) => {
                         const measurements = SampleDetails.measurements;
                         measurements[index].value = e.target.value;
                         setSampleDetails((prevState) => {
-                          return (
-                            {...prevState, measurements: measurements}
-                          )
-                      })}}
+                          return { ...prevState, measurements: measurements };
+                        });
+                      }}
                     />
                   </>
                 );
@@ -274,16 +269,17 @@ export default function DataViewSampleModal(props) {
       .then((data) => {
         setCartridgeTypes(data);
         setCartridgeType(data[0]);
-        console.log(data[0].analytes);
-        const measurements = data[0].analytes.map((analyte) => ({analyte_id: analyte.id, value: ""}));
+        const measurements = data[0].analytes.map((analyte) => ({
+          analyte_id: analyte.id,
+          value: "",
+        }));
         console.log(measurements);
         setSampleDetails((prevState) => {
-          return ({
+          return {
             ...prevState,
-            measurements: measurements
-          })
-        })
-
+            measurements: measurements,
+          };
+        });
       });
   };
 
@@ -369,6 +365,26 @@ export default function DataViewSampleModal(props) {
       });
   };
 
+  const handleAnalytes = (e) => {
+    console.log("changing analytes");
+    console.log(e.target.value.analytes);
+
+    const measurements = e.target.value.analytes.map((analyte) => ({
+      analyte_id: analyte.id,
+      value: "",
+    }));
+
+    setSampleDetails((prevState) => {
+      console.log("setting new analytes");
+      return {
+        ...prevState,
+        measurements: measurements,
+      };
+    });
+
+    console.log("new measurements", SampleDetails.measurements);
+  };
+
   return (
     <>
       <Modal
@@ -394,6 +410,8 @@ export default function DataViewSampleModal(props) {
                       label="Cartridge Type"
                       onChange={(e) => {
                         setCartridgeType(e.target.value);
+                        console.log("cartridge type", e.target.value);
+                        handleAnalytes(e);
                       }}
                     >
                       {cartridgeTypes.map((ct) => {

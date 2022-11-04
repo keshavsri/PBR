@@ -95,11 +95,6 @@ export default function DataView() {
   };
 
   const getData = async () => {
-    console.log("getting data for org 1 and cartridge type 1");
-
-    console.log("cartridgeTypeId", currentCartridgeType.id);
-    console.log("organizationId", organizationId);
-
     getHeadCells();
     const uri = `/api/sample/org_cartridge_type?organization_id=${organizationId}&cartridge_type_id=${currentCartridgeType.id}`;
     await fetch(uri, { method: "GET" })
@@ -108,8 +103,8 @@ export default function DataView() {
       })
       .then(checkResponseAuth)
       .then((data) => {
+        console.log("current cartridge type: ", cartridgeTypes);
         console.log(data);
-
         data.forEach((sample) => {
           sample.measurements.map((meas) => {
             sample[meas.analyte.abbreviation] = meas.value;
@@ -166,10 +161,7 @@ export default function DataView() {
         label: "Status",
       },
     ];
-    console.log("Getting Head Cells");
     if (currentCartridgeType) {
-      console.log("Getting Head Cells");
-      console.log(currentCartridgeType);
       currentCartridgeType.analytes.forEach((analyte, index) => {
         headCells.push(createHeadCell(analyte, "", index));
       });
@@ -216,8 +208,6 @@ export default function DataView() {
 
     setSelected([]);
   };
-
-  console.log("Selected samples From Data View: ", selectedSamples);
 
   const submitAll = async () => {
     let path = `/api/sample/datapoint/submit/`;
