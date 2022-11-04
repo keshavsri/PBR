@@ -85,25 +85,46 @@ export default function DVTableToolbar({
         </Select>
       </>
 
-      <Tooltip title="Generate Group Report">
-        <IconButton sx={{ ml: -0.5 }}>
-          <ReportIcon />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="Filter list">
-        <IconButton onClick={handleOpenFilterModal} sx={{ ml: -0.5 }}>
-          <FilterListIcon />
-        </IconButton>
+      <Tooltip title="Batch Import">
+        <Button
+          variant="contained"
+          color="secondary"
+          style={{ width: 275, marginTop: 10, marginBottom: 10 }}
+          startIcon={<ReportIcon />}
+          sx={{ ml: 1 }}
+          // onClick={}
+        >
+          Generate Report
+        </Button>
       </Tooltip>
 
       <Tooltip title="Batch Import">
-        <Button variant="contained" startIcon={<BulkIcon />} sx={{ ml: 1 }}>
+        <Button
+          variant="contained"
+          color="secondary"
+          style={{ width: 275, marginTop: 10, marginBottom: 10 }}
+          startIcon={<FilterListIcon />}
+          sx={{ ml: 1 }}
+          onClick={handleOpenFilterModal}
+        >
+          Filter Samples
+        </Button>
+      </Tooltip>
+
+      <Tooltip title="Batch Import">
+        <Button
+          variant="contained"
+          style={{ width: 275, marginTop: 10, marginBottom: 10 }}
+          startIcon={<BulkIcon />}
+          sx={{ ml: 1 }}
+        >
           Batch Import
         </Button>
       </Tooltip>
       <Tooltip title="Add Sample Entry">
         <Button
           variant="contained"
+          style={{ width: 275, marginTop: 10, marginBottom: 10 }}
           onClick={openSampleModal}
           startIcon={<SampleIcon />}
           sx={{ ml: 1 }}
@@ -141,7 +162,7 @@ export default function DVTableToolbar({
             }
             sx={{ ml: 1 }}
           >
-            Show Pending Samples
+            Pending Samples
           </Button>
         </Tooltip>
       )}
