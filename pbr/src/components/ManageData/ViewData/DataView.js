@@ -41,6 +41,8 @@ export default function DataView() {
     React.useState(false);
 
   const openSavedToPendingVisibility = () => setSavedToPendingVisibility(true);
+
+  console.log("SavedToPendingVisibility: ", SavedToPendingVisibility);
   const closeSavedToPendingVisibility = () =>
     setSavedToPendingVisibility(false);
 
@@ -195,8 +197,7 @@ export default function DataView() {
   };
 
   const submitOne = async (id) => {
-    let path = `/api/sample/datapoint/submit/`;
-
+    let path = `/api/sample/submit/`;
     let temp = path + id;
     await fetch(temp, { method: "PUT" })
       .then((response) => {
@@ -210,7 +211,7 @@ export default function DataView() {
   };
 
   const submitAll = async () => {
-    let path = `/api/sample/datapoint/submit/`;
+    let path = `/api/sample/submit/`;
     selected.map(async (id, index) => {
       let temp = path + id;
       await fetch(temp, { method: "PUT" })
