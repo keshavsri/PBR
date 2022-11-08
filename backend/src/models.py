@@ -381,9 +381,7 @@ class Log(db.Model):
     # References to Foreign Objects
     user = db.relationship('User')
 
-    def __init__(self, user, organization, role, action, logContent):
+    def __init__(self, user, action, logContent):
         self.user_id = user
-        self.organization_id = organization
-        self.role = role
         self.action = action
         self.logContent = logContent
