@@ -20,7 +20,7 @@ sourceBlueprint = Blueprint('source', __name__)
 # get a specifc source
 @sourceBlueprint.route('/<int:item_id>', methods=['GET'])
 @token_required
-@allowed_roles([0])
+@allowed_roles([0, 1, 2, 3, 4])
 def get_source(access_allowed, item_id):
 
     if access_allowed:
@@ -39,7 +39,7 @@ def get_source(access_allowed, item_id):
 # return all sources in the database
 @sourceBlueprint.route('/', methods=['GET'])
 @token_required
-@allowed_roles([0])
+@allowed_roles([0, 1, 2, 3, 4])
 def get_sources(access_allowed):
 
     if access_allowed:
@@ -55,7 +55,7 @@ def get_sources(access_allowed):
 # return all the sources for a specific organization
 @sourceBlueprint.route('/organization/<int:org_id>', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2, 3, 4])
 def get_sources_by_organization(access_allowed, current_user, org_id):
     if access_allowed:
         if current_user.organization_id == org_id or current_user.role == Roles.Super_Admin:
