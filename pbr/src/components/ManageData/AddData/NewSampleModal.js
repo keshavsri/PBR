@@ -284,7 +284,7 @@ export default function DataViewSampleModal(props) {
         setCartridgeType(data[0]);
         const measurements = data[0].analytes.map((analyte) => ({
           analyte_id: analyte.id,
-          value: "",
+          value: null,
         }));
         console.log(measurements);
         setSampleDetails((prevState) => {
@@ -394,7 +394,7 @@ export default function DataViewSampleModal(props) {
 
     const measurements = e.target.value.analytes.map((analyte) => ({
       analyte_id: analyte.id,
-      value: "",
+      value: null,
     }));
 
     setSampleDetails((prevState) => {

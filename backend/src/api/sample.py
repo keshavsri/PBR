@@ -188,8 +188,7 @@ def edit_sample(access_allowed, current_user, item_id):
             models.db.session.commit()
 
             edited_sample = SampleORM.query.get(item_id)
-            create_log(current_user, LogActions.EDIT_SAMPLE,
-                             'Edited sample: ' + str(edited_sample.id))
+            create_log(current_user, LogActions.EDIT_SAMPLE, 'Edited sample: ' + str(edited_sample.id))
             return Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -215,8 +214,7 @@ def delete_sample(access_allowed, current_user, item_id):
             models.Sample.query.filter_by(
                 id=item_id).update({'is_deleted': True})
             models.db.session.commit()
-            create_log(current_user, LogActions.DELETE_SAMPLE,
-                               'Deleted sample: ' + str(deleted_sample.id))
+            create_log(current_user, LogActions.DELETE_SAMPLE, 'Deleted sample: ' + str(deleted_sample.id))
             return Sample.from_orm(deleted_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -241,8 +239,7 @@ def submit_sample(access_allowed, current_user, item_id):
                 {'validation_status': ValidationTypes.Pending})
             models.db.session.commit()
             edited_sample = models.Sample.query.get(item_id)
-            create_log(current_user, LogActions.EDIT_SAMPLE,
-                              'Edited sample: ' + str(edited_sample.id))
+            create_log(current_user, LogActions.EDIT_SAMPLE, 'Submitted sample: ' + str(edited_sample.id))
             return Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -267,8 +264,7 @@ def accept_sample(access_allowed, current_user, item_id):
                 {'validation_status': ValidationTypes.Accepted})
             models.db.session.commit()
             edited_sample = models.Sample.query.get(item_id)
-            create_log(current_user, LogActions.PENDING_TO_VALID,
-                              'Accepted sample: ' + str(edited_sample.id))
+            create_log(current_user, LogActions.PENDING_TO_VALID, 'Accepted sample: ' + str(edited_sample.id))
             return Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -293,8 +289,7 @@ def reject_sample(access_allowed, current_user, item_id):
                 {'validation_status': ValidationTypes.Rejected})
             models.db.session.commit()
             edited_sample = models.Sample.query.get(item_id)
-            create_log(current_user, LogActions.PENDING_TO_REJECT,
-                              'Reject sample: ' + str(edited_sample.id))
+            create_log(current_user, LogActions.PENDING_TO_REJECT, 'Rejected sample: ' + str(edited_sample.id))
             return Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
