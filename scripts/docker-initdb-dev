@@ -6,6 +6,10 @@ echo "====> Starting database initialization"
 source $SCRIPT_DIR/setenv.sh
 echo "Running: docker exec backend python3 initdb.py $DEFAULT_SU_EMAIL $DEFAULT_SU_PASSWORD"
 docker exec backend python3 initdb-dev.py $DEFAULT_SU_EMAIL $DEFAULT_SU_PASSWORD
+<<<<<<< HEAD
 #docker exec backend python3 initdb-data.py
+=======
+docker exec backend python3 initdb-data.py
+>>>>>>> 810105d (Removed print statements)
 echo "====> Database initialized."
 
