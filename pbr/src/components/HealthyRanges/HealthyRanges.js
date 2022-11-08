@@ -12,7 +12,8 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  Alert
 } from '@mui/material';
 import { tableCellClasses } from '@mui/material/TableCell'
 
@@ -51,7 +52,7 @@ export default function HealthyRanges() {
   const [cartridgeTypeList, setCartridgeTypeList] = React.useState([]);
 
   const [healthyRanges, setHealthyRanges] = React.useState([]);
-
+  const [noHealthyRanges, setNoHealthyRanges] = React.useState(false);
 
   const [selectedSpecies, setSelectedSpecies] = React.useState();
   const [selectedGender, setSelectedGender] = React.useState();
@@ -185,6 +186,7 @@ export default function HealthyRanges() {
       .then(checkResponseAuth)
       .then((data) => {
         setHealthyRanges(data);
+        setNoHealthyRanges(data.length === 0);
         console.log(data);
       });
   }
@@ -268,6 +270,14 @@ export default function HealthyRanges() {
                 Display Healthy Ranges
               </Button>
             </Grid>
+        </Grid>
+        <Grid container item gutterbottom spacing={2} xs={12} sm={12}>
+          {noHealthyRanges ? 
+          (<Grid item xs={12} sm={12}>
+            <Alert severity="error" color="error">
+              There was not enough data to have calculated Healthy Ranges for birds matching these characteristics.
+            </Alert>
+          </Grid>) : null}
         </Grid>
         <Grid container item spacing={2} xs={12} sm={12}>
           <Grid item xs={12} sm={12}>

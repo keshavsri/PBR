@@ -12,21 +12,83 @@ healthyRangeBlueprint = Blueprint('healthy-range', __name__)
 
 
 @healthyRangeBlueprint.route('/', methods=['POST'])
-# @token_required
-# @allowed_roles([0])
-# def post_healthy_ranges(access_allowed, current_user):
-def post_healthy_ranges():
-    # if access_allowed:
-    HealthyRangeORM.query.filter_by(current=True).update({'current': False})
+@token_required
+@allowed_roles([0])
+def post_healthy_ranges(access_allowed, current_user):
+    if access_allowed:
+        HealthyRangeORM.query.filter_by(current=True).update({'current': False})
 
-    analytes = AnalyteORM.query.all()
-    for analyte in analytes:
-        for species in Species:
-            for age_group in AgeGroup:
-                min_age, max_age = get_min_max_from_age_group(age_group)
-                for gender in BirdGenders:
-                    if gender != BirdGenders.Male and gender != BirdGenders.Female:
-                        continue
+        analytes = AnalyteORM.query.all()
+        for analyte in analytes:
+            for species in Species:
+                for age_group in AgeGroup:
+                    min_age, max_age = get_min_max_from_age_group(age_group)
+                    for gender in BirdGenders:
+                        if gender != BirdGenders.Male and gender != BirdGenders.Female:
+                            continue
+                        
+                        sql_text = db.text(
+                            """
+                            SELECT m.value
+                            FROM measurement_table m,
+                                sample_table s,
+                                flock_table f
+                            WHERE m.analyte_id = :analyte_id
+                                AND m.sample_id = s.id
+                                AND s.is_deleted = 0
+                                AND s.validation_status = "Accepted"
+                                AND s.sample_type = "Surveillance"
+                                AND s.flock_id = f.id
+                                AND f.species = :species
+                                AND f.gender = :gender
+                                AND CASE
+                                    WHEN s.flock_age_unit = "Days"
+                                        THEN s.flock_age BETWEEN :min_age AND :max_age
+                                    WHEN s.flock_age_unit = "Weeks"
+                                        THEN s.flock_age * 7 BETWEEN :min_age AND :max_age
+                                    WHEN s.flock_age_unit = "Months"
+                                        THEN s.flock_age * 30 BETWEEN :min_age AND :max_age
+                                    WHEN s.flock_age_unit = "Years"
+                                        THEN s.flock_age * 365 BETWEEN :min_age AND :max_age
+                                    END;
+                            """
+                        )
+
+                        sql_args = {
+                            'analyte_id' : analyte.id, 
+                            'species' : species,
+                            'gender' : gender,
+                            'min_age' : min_age,
+                            'max_age' : max_age
+                        }
+
+                        reponse = None
+                        with engine.connect() as connection:
+                            reponse = connection.execute(sql_text, sql_args).all()
+                            if reponse is None or reponse == []:
+                                continue
+
+                        measurements = []
+                        for row in reponse:
+                            measurements.append(row[0])
+                        print(measurements, flush=True)
+                        if len(measurements) < 2:
+                            continue
+                        
+                        lower_bound, upper_bound = reference_interval(measurements)
+                        print(lower_bound, flush=True)
+                        print(upper_bound, flush=True)
+                        healthy_range = HealthyRangeORM(
+                            lower_bound=lower_bound,
+                            upper_bound=upper_bound,
+                            species=species,
+                            gender=gender,
+                            age_group=age_group,
+                            analyte_id=analyte.id,
+                        )
+
+                        db.session.add(healthy_range)
+                        db.session.commit()
                     
                     sql_text = db.text(
                         """
@@ -41,7 +103,6 @@ def post_healthy_ranges():
                             AND s.sample_type = "Surveillance"
                             AND s.flock_id = f.id
                             AND f.species = :species
-                            AND f.gender = :gender
                             AND CASE
                                 WHEN s.flock_age_unit = "Days"
                                     THEN s.flock_age BETWEEN :min_age AND :max_age
@@ -58,7 +119,6 @@ def post_healthy_ranges():
                     sql_args = {
                         'analyte_id' : analyte.id, 
                         'species' : species,
-                        'gender' : gender,
                         'min_age' : min_age,
                         'max_age' : max_age
                     }
@@ -72,81 +132,31 @@ def post_healthy_ranges():
                     measurements = []
                     for row in reponse:
                         measurements.append(row[0])
-
+                    print(measurements, flush=True)
+                    if len(measurements) < 2:
+                        continue
+                    
+                    lower_bound, upper_bound = reference_interval(measurements)
+                    print(lower_bound, flush=True)
+                    print(upper_bound, flush=True)
                     lower_bound, upper_bound = reference_interval(measurements)
                     healthy_range = HealthyRangeORM(
                         lower_bound=lower_bound,
                         upper_bound=upper_bound,
                         species=species,
-                        gender=gender,
+                        gender=None,
                         age_group=age_group,
                         analyte_id=analyte.id,
                     )
 
                     db.session.add(healthy_range)
                     db.session.commit()
-                
-                sql_text = db.text(
-                    """
-                    SELECT m.value
-                    FROM measurement_table m,
-                        sample_table s,
-                        flock_table f
-                    WHERE m.analyte_id = :analyte_id
-                        AND m.sample_id = s.id
-                        AND s.is_deleted = 0
-                        AND s.validation_status = "Accepted"
-                        AND s.sample_type = "Surveillance"
-                        AND s.flock_id = f.id
-                        AND f.species = :species
-                        AND CASE
-                            WHEN s.flock_age_unit = "Days"
-                                THEN s.flock_age BETWEEN :min_age AND :max_age
-                            WHEN s.flock_age_unit = "Weeks"
-                                THEN s.flock_age * 7 BETWEEN :min_age AND :max_age
-                            WHEN s.flock_age_unit = "Months"
-                                THEN s.flock_age * 30 BETWEEN :min_age AND :max_age
-                            WHEN s.flock_age_unit = "Years"
-                                THEN s.flock_age * 365 BETWEEN :min_age AND :max_age
-                            END;
-                    """
-                )
+                    
 
-                sql_args = {
-                    'analyte_id' : analyte.id, 
-                    'species' : species,
-                    'min_age' : min_age,
-                    'max_age' : max_age
-                }
-
-                reponse = None
-                with engine.connect() as connection:
-                    reponse = connection.execute(sql_text, sql_args).all()
-                    if reponse is None or reponse == []:
-                        continue
-
-                measurements = []
-                for row in reponse:
-                    measurements.append(row[0])
-
-                lower_bound, upper_bound = reference_interval(measurements)
-                healthy_range = HealthyRangeORM(
-                    lower_bound=lower_bound,
-                    upper_bound=upper_bound,
-                    species=species,
-                    gender=None,
-                    age_group=age_group,
-                    analyte_id=analyte.id,
-                )
-
-                db.session.add(healthy_range)
-                db.session.commit()
-                
-
-    # log.create_log(current_user, LogActions.GENERATE_HEALTHY_RANGES, 'Generated healthy ranges:')
-    return jsonify({'message': 'Generated new healthy ranges'}), 200
-    # else:
-    #     return jsonify({'message': 'Role not allowed'}), 403
+        # log.create_log(current_user, LogActions.GENERATE_HEALTHY_RANGES, 'Generated healthy ranges:')
+        return jsonify({'message': 'Generated new healthy ranges'}), 200
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
 
 
 @healthyRangeBlueprint.route('', methods=['GET'])

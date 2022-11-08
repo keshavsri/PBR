@@ -1,5 +1,7 @@
 from src.enums import AgeGroup
-from scipy import stats, ndimage
+from scipy import stats
+import statistics
+import math
 
 def get_min_max_from_age_group(age_group: AgeGroup):
     if age_group == AgeGroup.Brooder:
@@ -13,9 +15,9 @@ def get_min_max_from_age_group(age_group: AgeGroup):
 
 def reference_interval(data):
     N = len(data)
-    median = ndimage.median(data)
-    mad = stats.median_abs_deviation(data)
+    mean = statistics.mean(data)
+    std = statistics.stdev(data)
     t = stats.t(df=N-1).ppf(.975)
-    lower_bound = median - t*mad
-    upper_bound = median + t*mad
+    lower_bound = mean - t*std*math.sqrt((N+1)/N)
+    upper_bound = mean + t*std*math.sqrt((N+1)/N)
     return lower_bound, upper_bound
