@@ -50,8 +50,6 @@ def insert_records(df, abbrvs ,machine_type_id):
         db.session.commit()
         db.session.refresh(flock)
 
-        print(row, flush=True)
-
         sample = Sample(
             comments = row.comments,
             flock_age = row.age,
@@ -70,8 +68,6 @@ def insert_records(df, abbrvs ,machine_type_id):
         analyte_abbrvs = abbrvs
         for abbrv in analyte_abbrvs:
             analyte = Analyte.query.filter_by(abbreviation=abbrv, machine_type_id=machine_type_id).first()
-            #print(abbrv, flush=True)
-            print(analyte.abbreviation, flush=True)
             if math.isnan(getattr(row, abbrv.replace("+",""))):
                 continue
             measurement = Measurement(
@@ -84,55 +80,49 @@ def insert_records(df, abbrvs ,machine_type_id):
         db.session.commit()
 
 
-def load_samples():
-    # Read
-    bird_df = pd.read_csv("initdb_bird.csv", engine="python")
-    istat_df = pd.read_csv("initdb_istat.csv", engine="python")
-    vetscan_df = pd.read_csv("initdb_vetscan.csv", engine="python")
-    
+# Read
+bird_df = pd.read_csv("initdb_bird.csv", engine="python")
+istat_df = pd.read_csv("initdb_istat.csv", engine="python")
+vetscan_df = pd.read_csv("initdb_vetscan.csv", engine="python")
 
-    # Wrangling I
-    bird_df["gender"] = bird_df.gender.apply(capitalize)
-    bird_df["species"] = bird_df.species.apply(capitalize)
-    bird_df["age_unit"] = bird_df.age_unit.apply(capitalize)
-    bird_df["production_type"] = bird_df.production_type.apply(capitalize)
-    bird_df["sample_type"] = bird_df.healthy.apply(determine_sample_type)
 
-    bird_df = bird_df.drop(columns=["strain"])
-    bird_df = bird_df.drop(columns=["healthy"])
-    bird_df = bird_df.drop(columns=["date_tested"])
-    istat_df = istat_df.drop(columns=["ID"])
-    vetscan_df = vetscan_df.drop(columns=["ID"])
+# Wrangling I
+bird_df["gender"] = bird_df.gender.apply(capitalize)
+bird_df["species"] = bird_df.species.apply(capitalize)
+bird_df["age_unit"] = bird_df.age_unit.apply(capitalize)
+bird_df["production_type"] = bird_df.production_type.apply(capitalize)
+bird_df["sample_type"] = bird_df.healthy.apply(determine_sample_type)
 
-    bird_df = bird_df.replace("Not reported", "Unknown")
-    bird_df = bird_df.replace("Broiler breeder", "Broiler")
-    bird_df = bird_df.replace("Byp, layer", "BYP")
-    bird_df = bird_df.rename(columns={"bird_ID" : "flock_ID"})
-    istat_df = istat_df.rename(columns={"bird_ID" : "flock_ID"})
-    vetscan_df = vetscan_df.rename(columns={"bird_ID" : "flock_ID"})
+bird_df = bird_df.drop(columns=["strain"])
+bird_df = bird_df.drop(columns=["healthy"])
+bird_df = bird_df.drop(columns=["date_tested"])
+istat_df = istat_df.drop(columns=["ID"])
+vetscan_df = vetscan_df.drop(columns=["ID"])
 
-    # Merging
-    istat_df = istat_df.merge(bird_df, how="inner", on =["flock_ID"])
-    vetscan_df = vetscan_df.merge(bird_df, how="inner", on =["flock_ID"])
+bird_df = bird_df.replace("Not reported", "Unknown")
+bird_df = bird_df.replace("Broiler breeder", "Broiler")
+bird_df = bird_df.replace("Byp, layer", "BYP")
+bird_df = bird_df.rename(columns={"bird_ID" : "flock_ID"})
+istat_df = istat_df.rename(columns={"bird_ID" : "flock_ID"})
+vetscan_df = vetscan_df.rename(columns={"bird_ID" : "flock_ID"})
 
-    # Wrangling II
-    istat_df = istat_df.where(pd.notnull(istat_df), None)
-    vetscan_df = vetscan_df.where(pd.notnull(vetscan_df), None)
+# Merging
+istat_df = istat_df.merge(bird_df, how="inner", on =["flock_ID"])
+vetscan_df = vetscan_df.merge(bird_df, how="inner", on =["flock_ID"])
 
-    # DB Session begins
-    with app.app_context():
+# Wrangling II
+istat_df = istat_df.where(pd.notnull(istat_df), None)
+vetscan_df = vetscan_df.where(pd.notnull(vetscan_df), None)
+
+# DB Session begins
+with app.app_context():
+    try:
         # Inserting sources, flocks, and samples (vetscan)
-        # TODO vetscan
         vetscan_analyte_abbrvs = ["AST","BA","CK","UA","GLU","CA","PHOS","TP","ALB","GLOB","K+","NA+"]
         insert_records(vetscan_df, vetscan_analyte_abbrvs, 2)
 
         # Inserting sources, flocks, and samples (istat)
         istat_analyte_abbrvs = ["pH", "PCO2", "PO2", "BE", "HCO3", "TCO2", "sO2", "Na", "K", "iCa", "Glu", "Hct", "Hgb"]
-        # TODO get istat_analyte_abbrvs via ORM
         insert_records(istat_df, istat_analyte_abbrvs, 1)
-
-        print("Initial sample, flock, and source data")
-
-
-load_samples()
-
+    except:
+        print("Error: Drop all tables and start again.")

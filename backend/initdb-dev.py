@@ -16,7 +16,7 @@ else:
         print("Creating database tables...")
         db.create_all()
 
-        print("Initializing database with data...")
+        print("Initializing default values...")
 
         try:
             # Create an Organization
@@ -479,10 +479,9 @@ else:
                 c5.analytes.append(child)
 
             db.session.commit()
+            print("Migrating existing data...")
 
-
-            print("Partially intialized.")
         except Exception as e:
             traceback.print_exc()
-            print("Could not finish import. Drop all tables and start again.")
+            print("Error: Drop all tables and start again.")
 
