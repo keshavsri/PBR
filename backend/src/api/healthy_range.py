@@ -71,13 +71,10 @@ def post_healthy_ranges(access_allowed, current_user):
                         measurements = []
                         for row in reponse:
                             measurements.append(row[0])
-                        print(measurements, flush=True)
                         if len(measurements) < 2:
                             continue
                         
                         lower_bound, upper_bound = reference_interval(measurements)
-                        print(lower_bound, flush=True)
-                        print(upper_bound, flush=True)
                         healthy_range = HealthyRangeORM(
                             lower_bound=lower_bound,
                             upper_bound=upper_bound,
@@ -132,13 +129,10 @@ def post_healthy_ranges(access_allowed, current_user):
                     measurements = []
                     for row in reponse:
                         measurements.append(row[0])
-                    print(measurements, flush=True)
                     if len(measurements) < 2:
                         continue
                     
                     lower_bound, upper_bound = reference_interval(measurements)
-                    print(lower_bound, flush=True)
-                    print(upper_bound, flush=True)
                     lower_bound, upper_bound = reference_interval(measurements)
                     healthy_range = HealthyRangeORM(
                         lower_bound=lower_bound,
@@ -218,8 +212,6 @@ def get_healthy_ranges(access_allowed, current_user):
                 'cartridge_type_id' : filters['cartridge_type_id']
             }
 
-
-        print(".........................................", flush=True)
 
         rows = []
         with engine.connect() as connection:
