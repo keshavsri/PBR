@@ -122,6 +122,10 @@ export default function DataViewSampleModal(props) {
     measurements: [],
   });
 
+    React.useEffect(() => {
+    getRoles();
+  }, [])
+
   const getOrganizations = async () => {
     const response = await fetch(`/api/organization/`, {
       method: "GET",

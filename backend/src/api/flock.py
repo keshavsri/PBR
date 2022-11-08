@@ -9,7 +9,7 @@ from src.helpers.log import create_log
 flockBlueprint = Blueprint('flock', __name__)
 
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2, 3, 4])
 @flockBlueprint.route('/organization/<int:org_id>', methods=['GET'])
 def get_flocks_by_organization(access_allowed, current_user, org_id):
 
@@ -36,7 +36,7 @@ def get_flocks_by_organization(access_allowed, current_user, org_id):
 
 @flockBlueprint.route('/source/<int:source_id>', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2, 3, 4])
 def get_flocks_by_source(access_allowed, current_user, source_id):
 
     """
@@ -63,7 +63,7 @@ def get_flocks_by_source(access_allowed, current_user, source_id):
 
 @flockBlueprint.route('/<int:item_id>', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2, 3, 4])
 def get_flock(access_allowed, current_user, item_id):
     """
     This function handles the GET request for a specific flock.

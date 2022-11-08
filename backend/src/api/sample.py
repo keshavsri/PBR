@@ -89,6 +89,8 @@ def create_sample(access_allowed, current_user):
         models.db.session.commit()
         models.db.session.refresh(sample)
 
+        models.create_log(current_user, LogActions.ADD_SAMPLE,'Added sample: ' + str(sample.id))
+
         return Sample.from_orm(sample).dict(), 201
     else:
         return jsonify({'message': 'Role not allowed'}), 403
@@ -96,8 +98,8 @@ def create_sample(access_allowed, current_user):
 
 @sampleBlueprint.route('/org_cartridge_type', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
-def get_samples_by_cartridge_type_id_and_org(access_allowed, current_user):
+@allowed_roles([0, 1, 2, 3, 4])
+def get_samples(access_allowed, current_user):
     """
     This function gets all samples for a specified cartridge type and organization.
     Allowed Roles check not needed for this since all users should be able to get samples
@@ -105,45 +107,55 @@ def get_samples_by_cartridge_type_id_and_org(access_allowed, current_user):
     :return: a json response containing all samples for the org and cartridge type
     """
 
-    # If user ins't superadmin, they should only be allowed to access samples in their org
-    if current_user.role != 0 and current_user.organization_id != request.args.get('organization_id'):
-        return jsonify({'message': 'Role not allowed'}), 403
+    if access_allowed:
+
+        # If user isn't superadmin, they should only be allowed to access samples in their org
+        if current_user.role != 0 and str(current_user.organization_id) != request.args.get('organization_id'):
+            print("====================================")
+            print(current_user.organization_id != request.args.get('organization_id'))
+            return jsonify({'message': 'Role not allowed'}), 403
+
+        else:
+            samples = []
+            with models.engine.connect() as connection:
+
+                sql_select_query = "sample_table sample, flock_table f, source_table source"
+                sql_where_query = """
+                WHERE sample.flock_id = f.id
+                AND f.source_id = source.id
+                AND sample.is_deleted = 0
+                AND source.organization_id = :organization_id
+                AND sample.cartridge_type_id = :cartridge_type_id
+                AND CASE 
+                        WHEN sample.validation_status = "Saved" 
+                            THEN sample.user_id = :current_user_id
+                        ELSE TRUE
+                    END
+                """
+
+                # If user is a data collector, they should only see their samples
+                if current_user.role == Roles.Data_Collector:
+                    sql_where_query += "AND sample.user_id = :current_user_id"
+
+                sql_query = "SELECT DISTINCT sample.id FROM " + sql_select_query + sql_where_query
+                result = connection.execute(text(sql_query + ";"), {"organization_id": request.args.get(
+                    'organization_id'), "cartridge_type_id": request.args.get('cartridge_type_id'), "current_user_id": current_user.id})
+
+                for row in result:
+                    sample = SampleORM.query.get(row.id)
+                    samples.append(sample)
+
+            results = []
+            for sample in samples:
+                measurements = MeasurementORM.query.filter_by(
+                    sample_id=sample.id).all()
+                setattr(sample, "measurements", measurements)
+                results.append(Sample.from_orm(sample).dict())
+
+            return jsonify(results), 200
 
     else:
-        samples = []
-        with models.engine.connect() as connection:
-
-            sql_select_query = "sample_table sample, flock_table f, source_table source, organization_table o"
-            sql_where_query = """
-        	WHERE sample.flock_id = f.id
-        	AND f.source_id = source.id
-            AND sample.is_deleted = 0
-        	AND source.organization_id = :organization_id
-        	AND sample.cartridge_type_id = :cartridge_type_id
-        	AND CASE WHEN sample.validation_status = "Saved" THEN sample.user_id = :current_user_id
-            	END
-        	"""
-
-            # If user is a data collector, they should only see their samples
-            if current_user.role == Roles.Data_Collector:
-                sql_where_query += "AND sample.user_id = :current_user_id"
-
-            sql_query = "SELECT DISTINCT sample.id FROM " + sql_select_query + sql_where_query
-            result = connection.execute(text(sql_query + ";"), {"organization_id": request.args.get(
-                'organization_id'), "cartridge_type_id": request.args.get('cartridge_type_id'), "current_user_id": current_user.id})
-
-            for row in result:
-                sample = SampleORM.query.get(row.id)
-                samples.append(sample)
-
-        results = []
-        for sample in samples:
-            measurements = MeasurementORM.query.filter_by(
-                sample_id=sample.id).all()
-            setattr(sample, "measurements", measurements)
-            results.append(Sample.from_orm(sample).dict())
-
-        return jsonify(results), 200
+        return jsonify({'message': 'Role not allowed'}), 403
 
 
 @sampleBlueprint.route('/<int:item_id>', methods=['PUT'])
@@ -203,8 +215,8 @@ def delete_sample(access_allowed, current_user, item_id):
             models.Sample.query.filter_by(
                 id=item_id).update({'is_deleted': True})
             models.db.session.commit()
-            # models.create_log(current_user, LogActions.DELETE_SAMPLE,
-            #                   'Deleted sample: ' + str(deleted_sample.id))
+            models.create_log(current_user, LogActions.DELETE_SAMPLE,
+                               'Deleted sample: ' + str(deleted_sample.id))
             return Sample.from_orm(deleted_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
