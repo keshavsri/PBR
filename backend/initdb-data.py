@@ -70,12 +70,12 @@ def insert_records(df, abbrvs ,machine_type_id):
         analyte_abbrvs = abbrvs
         for abbrv in analyte_abbrvs:
             analyte = Analyte.query.filter_by(abbreviation=abbrv, machine_type_id=machine_type_id).first()
-            print(abbrv, flush=True)
+            #print(abbrv, flush=True)
             print(analyte.abbreviation, flush=True)
-            if math.isnan(getattr(row, analyte.abbreviation)):
+            if math.isnan(getattr(row, abbrv.replace("+",""))):
                 continue
             measurement = Measurement(
-                value = getattr(row, analyte.abbreviation),
+                value = getattr(row, abbrv.replace("+","")),
                 analyte_id = analyte.id,
                 sample_id = sample.id
             )
@@ -89,6 +89,7 @@ def load_samples():
     bird_df = pd.read_csv("initdb_bird.csv", engine="python")
     istat_df = pd.read_csv("initdb_istat.csv", engine="python")
     vetscan_df = pd.read_csv("initdb_vetscan.csv", engine="python")
+    
 
     # Wrangling I
     bird_df["gender"] = bird_df.gender.apply(capitalize)
@@ -105,6 +106,7 @@ def load_samples():
 
     bird_df = bird_df.replace("Not reported", "Unknown")
     bird_df = bird_df.replace("Broiler breeder", "Broiler")
+    bird_df = bird_df.replace("Byp, layer", "BYP")
     bird_df = bird_df.rename(columns={"bird_ID" : "flock_ID"})
     istat_df = istat_df.rename(columns={"bird_ID" : "flock_ID"})
     vetscan_df = vetscan_df.rename(columns={"bird_ID" : "flock_ID"})
@@ -119,13 +121,15 @@ def load_samples():
 
     # DB Session begins
     with app.app_context():
+        # Inserting sources, flocks, and samples (vetscan)
+        # TODO vetscan
+        vetscan_analyte_abbrvs = ["AST","BA","CK","UA","GLU","CA","PHOS","TP","ALB","GLOB","K+","NA+"]
+        insert_records(vetscan_df, vetscan_analyte_abbrvs, 2)
+
         # Inserting sources, flocks, and samples (istat)
         istat_analyte_abbrvs = ["pH", "PCO2", "PO2", "BE", "HCO3", "TCO2", "sO2", "Na", "K", "iCa", "Glu", "Hct", "Hgb"]
         # TODO get istat_analyte_abbrvs via ORM
         insert_records(istat_df, istat_analyte_abbrvs, 1)
-
-        # Inserting sources, flocks, and samples (vetscan)
-        # TODO vetscan
 
         print("Initial sample, flock, and source data")
 
