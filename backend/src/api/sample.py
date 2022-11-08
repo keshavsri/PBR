@@ -9,6 +9,8 @@ from src.models import Sample as SampleORM
 from src.schemas import Sample
 from src.models import Measurement as MeasurementORM
 from sqlalchemy import text
+from src.helpers.log import create_log
+
 
 sampleBlueprint = Blueprint('sample', __name__)
 
@@ -89,7 +91,7 @@ def create_sample(access_allowed, current_user):
         models.db.session.commit()
         models.db.session.refresh(sample)
 
-        models.create_log(current_user, LogActions.ADD_SAMPLE,'Added sample: ' + str(sample.id))
+        create_log(current_user, LogActions.ADD_SAMPLE,'Added sample: ' + str(sample.id))
 
         return Sample.from_orm(sample).dict(), 201
     else:
@@ -111,8 +113,6 @@ def get_samples(access_allowed, current_user):
 
         # If user isn't superadmin, they should only be allowed to access samples in their org
         if current_user.role != 0 and str(current_user.organization_id) != request.args.get('organization_id'):
-            print("====================================")
-            print(current_user.organization_id != request.args.get('organization_id'))
             return jsonify({'message': 'Role not allowed'}), 403
 
         else:
@@ -188,7 +188,7 @@ def edit_sample(access_allowed, current_user, item_id):
             models.db.session.commit()
 
             edited_sample = SampleORM.query.get(item_id)
-            models.createLog(current_user, LogActions.EDIT_SAMPLE,
+            create_log(current_user, LogActions.EDIT_SAMPLE,
                              'Edited sample: ' + str(edited_sample.id))
             return Sample.from_orm(edited_sample).dict(), 200
     else:
@@ -215,7 +215,7 @@ def delete_sample(access_allowed, current_user, item_id):
             models.Sample.query.filter_by(
                 id=item_id).update({'is_deleted': True})
             models.db.session.commit()
-            models.create_log(current_user, LogActions.DELETE_SAMPLE,
+            create_log(current_user, LogActions.DELETE_SAMPLE,
                                'Deleted sample: ' + str(deleted_sample.id))
             return Sample.from_orm(deleted_sample).dict(), 200
     else:
@@ -241,7 +241,7 @@ def submit_sample(access_allowed, current_user, item_id):
                 {'validation_status': ValidationTypes.Pending})
             models.db.session.commit()
             edited_sample = models.Sample.query.get(item_id)
-            models.create_log(current_user, LogActions.EDIT_SAMPLE,
+            create_log(current_user, LogActions.EDIT_SAMPLE,
                               'Edited sample: ' + str(edited_sample.id))
             return Sample.from_orm(edited_sample).dict(), 200
     else:
@@ -267,7 +267,7 @@ def accept_sample(access_allowed, current_user, item_id):
                 {'validation_status': ValidationTypes.Accepted})
             models.db.session.commit()
             edited_sample = models.Sample.query.get(item_id)
-            models.create_log(current_user, LogActions.PENDING_TO_VALID,
+            create_log(current_user, LogActions.PENDING_TO_VALID,
                               'Accepted sample: ' + str(edited_sample.id))
             return Sample.from_orm(edited_sample).dict(), 200
     else:
@@ -293,7 +293,7 @@ def reject_sample(access_allowed, current_user, item_id):
                 {'validation_status': ValidationTypes.Rejected})
             models.db.session.commit()
             edited_sample = models.Sample.query.get(item_id)
-            models.create_log(current_user, LogActions.PENDING_TO_REJECT,
+            create_log(current_user, LogActions.PENDING_TO_REJECT,
                               'Reject sample: ' + str(edited_sample.id))
             return Sample.from_orm(edited_sample).dict(), 200
     else:
