@@ -327,8 +327,9 @@ class CartridgeType(db.Model):
     # References to Foreign Objects
     machine_type_id: int = db.Column(
         db.Integer, db.ForeignKey('machine_type_table.id'))
-    analytes: List['Analyte'] = db.relationship(
-        'Analyte', secondary=cartridge_types_analytes_table)
+
+    # Foreign References to this Object
+    analytes: List['Analyte'] = db.relationship('Analyte', secondary=cartridge_types_analytes_table)
 
 
 class HealthyRange(db.Model):
@@ -355,6 +356,7 @@ class HealthyRange(db.Model):
     # References to Foreign Objects
     analyte_id: int = db.Column(db.Integer, db.ForeignKey('analyte_table.id'))
 
+    # Foreign References to this Object
     analyte = db.relationship('Analyte')
 
 
@@ -374,14 +376,21 @@ class Log(db.Model):
     """
     __tablename__ = 'log_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    role: Roles = db.Column(db.Enum(Roles))
     action: LogActions = db.Column(db.Enum(LogActions))
     logContent: str = db.Column(db.String(500))
     logTime: str = db.Column(db.DateTime, server_default=db.func.now())
+
+     # References to Foreign Objects
     user_id = db.Column(db.Integer, db.ForeignKey('user_table.id'))
-    # References to Foreign Objects
+    organization_id = db.Column(db.Integer, db.ForeignKey('organization_table.id'))
+
+    # Foreign References to this Object
     user = db.relationship('User')
 
-    def __init__(self, user, action, logContent):
+    def __init__(self, user, organization, role, action, logContent):
         self.user_id = user
+        self.organization_id = organization
+        self.role = role
         self.action = action
         self.logContent = logContent
