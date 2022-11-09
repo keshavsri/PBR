@@ -14,6 +14,7 @@ import { makeStyles } from "@mui/styles";
 import { DataViewProvider } from "../../../services/useDataView";
 import useAuth from "../../../services/useAuth";
 import ReviewSampleModal from "../ValidateData/ReviewSampleModal";
+import EditSampleModal from "../EditData/EditSampleModal";
 
 const useStyles = makeStyles({});
 
@@ -43,11 +44,11 @@ export default function DataView() {
 
   const [SavedToPendingVisibility, setSavedToPendingVisibility] =
     React.useState(false);
+  const [editSampleModalVisiblity, setEditSampleModalVisibility] =
+    React.useState(false);
 
   const openSavedToPendingVisibility = () => setSavedToPendingVisibility(true);
-
-  const closeSavedToPendingVisibility = () =>
-    setSavedToPendingVisibility(false);
+  const openEditSampleVisibility = () => setEditSampleModalVisibility(true);
 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
@@ -223,6 +224,10 @@ export default function DataView() {
     };
   }
 
+  const onEdit = () => {
+    openEditSampleVisibility();
+  };
+
   const onSubmit = () => {
     openSavedToPendingVisibility();
   };
@@ -315,68 +320,90 @@ export default function DataView() {
   }, [organization, currentCartridgeType]);
 
   return (
-    <DataViewProvider>
-      <Paper>
-        <EnhancedTable
-          headCells={headCellList}
+    <>
+      <DataViewProvider>
+        <Paper>
+          <EnhancedTable
+            headCells={headCellList}
+            rows={sampleList}
+            toolbarButtons={
+              <DVTableToolbar
+                filterPendingSamples={filterPendingSamples}
+                showOnlyPendingSamples={showOnlyPendingSamples}
+                turnPendingFilterOff={turnPendingFilterOff}
+                cartridgeTypes={cartridgeTypes}
+                organizations={organizations}
+                setCurrentOrganization={setOrganization}
+                currentOrganization={organization}
+                user={user}
+                currentCartridgeType={currentCartridgeType}
+                setCurrentCartridgeType={setCurrentCartridgeType}
+              />
+            }
+            selected={selected}
+            setSelected={setSelected}
+            setSelectedSamples={setSelectedSamples}
+            setPendingSamples={setPendingSamples}
+            onDelete={onDelete}
+            isSample={isSample}
+            setOpenReviewSampleModal={setOpenReviewSampleModal}
+            onSubmit={onSubmit}
+            onEdit={onEdit}
+          />
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12}>
+              {SavedToPendingVisibility ? (
+                <SavedToPendingModal
+                  selected={selected}
+                  submitAll={submitAll}
+                  submitOne={submitOne}
+                  rows={sampleList}
+                  selectedSamples={selectedSamples}
+                  setSelectedSamples={setSelectedSamples}
+                  SavedToPendingVisibility={SavedToPendingVisibility}
+                  setSavedToPendingVisibility={setSavedToPendingVisibility}
+                />
+              ) : null}
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12}>
+              {editSampleModalVisiblity ? (
+                <EditSampleModal
+                  selected={selected}
+                  submitAll={submitAll}
+                  submitOne={submitOne}
+                  rows={sampleList}
+                  selectedSamples={selectedSamples}
+                  setSelectedSamples={setSelectedSamples}
+                  editSampleModalVisiblity={editSampleModalVisiblity}
+                  setEditSampleModalVisibility={setEditSampleModalVisibility}
+                />
+              ) : null}
+            </Grid>
+          </Grid>
+        </Paper>
+
+        <DataViewFilterModal
+          setRowList={setSampleList}
+          setHeadCellList={setHeadCellList}
+          getData={getData}
           rows={sampleList}
-          toolbarButtons={
-            <DVTableToolbar
-              filterPendingSamples={filterPendingSamples}
-              showOnlyPendingSamples={showOnlyPendingSamples}
-              turnPendingFilterOff={turnPendingFilterOff}
-              cartridgeTypes={cartridgeTypes}
-              organizations={organizations}
-              setCurrentOrganization={setOrganization}
-              currentOrganization={organization}
-              user={user}
-              currentCartridgeType={currentCartridgeType}
-              setCurrentCartridgeType={setCurrentCartridgeType}
-            />
-          }
-          selected={selected}
-          setSelected={setSelected}
-          setSelectedSamples={setSelectedSamples}
-          setPendingSamples={setPendingSamples}
-          onDelete={onDelete}
-          isSample={isSample}
-          setOpenReviewSampleModal={setOpenReviewSampleModal}
-          onSubmit={onSubmit}
         />
 
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={12}>
-            {SavedToPendingVisibility ? (
-              <SavedToPendingModal
-                selected={selected}
-                submitAll={submitAll}
-                submitOne={submitOne}
-                rows={sampleList}
-                selectedSamples={selectedSamples}
-                setSelectedSamples={setSelectedSamples}
-                SavedToPendingVisibility={SavedToPendingVisibility}
-                setSavedToPendingVisibility={setSavedToPendingVisibility}
-              />
-            ) : null}
-          </Grid>
-        </Grid>
-      </Paper>
-      <DataViewFilterModal
-        setRowList={setSampleList}
-        setHeadCellList={setHeadCellList}
-        getData={getData}
-        rows={sampleList}
-      />
-      <DataViewSampleModal getData={getData} />
-      <ReviewSampleModal
-        openReviewSampleModal={openReviewSampleModal}
-        setOpenReviewSampleModal={setOpenReviewSampleModal}
-        pendingSamples={pendingSamples}
-        setPendingSamples={setPendingSamples}
-        acceptSample={acceptSample}
-        rejectSample={rejectSample}
-        turnPendingFilterOff={turnPendingFilterOff}
-      />
-    </DataViewProvider>
+        <DataViewSampleModal getData={getData} />
+        <ReviewSampleModal
+          openReviewSampleModal={openReviewSampleModal}
+          setOpenReviewSampleModal={setOpenReviewSampleModal}
+          pendingSamples={pendingSamples}
+          setPendingSamples={setPendingSamples}
+          acceptSample={acceptSample}
+          rejectSample={rejectSample}
+          turnPendingFilterOff={turnPendingFilterOff}
+        />
+      </DataViewProvider>
+    </>
   );
 }
