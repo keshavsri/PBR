@@ -39,11 +39,7 @@ def get_age_groups(access_allowed, current_user):
         return jsonify({'message': 'Role not allowed'}), 403
 
 
-<<<<<<< HEAD
 @enumBlueprint.route('/roles', methods=['GET'])
-=======
-@enumBlueprint.route('/role/', methods=['GET'])
->>>>>>> 85c3093 (New gender filter All)
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
 def get_roles(access_allowed, current_user):

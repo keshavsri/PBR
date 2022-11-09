@@ -35,7 +35,6 @@ def get_min_max_from_age_group(age_group: AgeGroup):
     else:
         return 141, 10000
 
-
 def reference_interval(data, method: HealthyRangeMethod):
     if method == HealthyRangeMethod.Standard:
         N = len(data)

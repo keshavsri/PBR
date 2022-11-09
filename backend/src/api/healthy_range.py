@@ -15,7 +15,6 @@ from flask import Blueprint, jsonify, request
 from src.enums import Species, BirdGenders, AgeGroup, LogActions, HealthyRangeMethod
 
 
-
 healthyRangeBlueprint = Blueprint('healthy-range', __name__)
 
 
