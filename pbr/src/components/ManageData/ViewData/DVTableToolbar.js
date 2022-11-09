@@ -88,10 +88,10 @@ export default function DVTableToolbar({
               setCurrentOrganization(e.target.value);
             }}
           >
-            {organizations.map((ct) => {
+            {organizations.map((org) => {
               return (
-                <MenuItem key={ct.id} value={ct}>
-                  {ct.name}
+                <MenuItem key={org.id} value={org}>
+                  {org.name}
                 </MenuItem>
               );
             })}
@@ -113,8 +113,8 @@ export default function DVTableToolbar({
         )}
 
         <Select
-          labelId="label-select-organization"
-          id="select-organizations"
+          labelId="label-select-cartridge-type"
+          id="select-cartridge-type"
           value={currentCartridgeType}
           onChange={(e) => {
             setCurrentCartridgeType(e.target.value);

@@ -30,11 +30,11 @@ export default function DataView() {
     React.useState(false);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
+  const [superAdmin, setSuperAdmin] = React.useState(0);
+
   const [isSample] = React.useState(true);
   const [openReviewSampleModal, setOpenReviewSampleModal] =
     React.useState(false);
-
-  const [organizationId, setOrganizationId] = React.useState(1);
 
   const [selectedSamples, setSelectedSamples] = React.useState([]);
   const [pendingSamples, setPendingSamples] = React.useState([]);
@@ -81,11 +81,31 @@ export default function DataView() {
     });
   };
 
+  const getRoles = async () => {
+    const response = await fetch(`/api/enum/roles/`, {
+      method: "GET",
+    }).then(checkResponseAuth);
+    const data = await response.json();
+    console.log("-------------");
+    console.log("data: ", data);
+    console.log("-------------");
+
+    setSuperAdmin(data["Super_Admin"]);
+
+    console.log("-------------");
+    console.log("admin: ", superAdmin);
+    console.log("-------------");
+  };
+
+  React.useEffect(() => {
+    getRoles();
+  }, []);
+
   const getOrganizations = async () => {
     let orgId = user.organization_id;
     console.log("getting organizations");
     console.log("user: ", user);
-    if (user.role === 0) {
+    if (user.role === superAdmin) {
       const response = await fetch(`/api/organization/`, {
         method: "GET",
       }).then(checkResponseAuth);
@@ -95,7 +115,7 @@ export default function DataView() {
       console.log("organizations: ", organizations);
     } else {
       console.log("user.organization_id: ", user.organization_id);
-      const response = await fetch(`/api//organization/${orgId}`, {
+      const response = await fetch(`/api/organization/${orgId}`, {
         method: "GET",
       });
       const data = await response.json();
@@ -301,6 +321,7 @@ export default function DataView() {
 
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
   React.useEffect(async () => {
+    await getRoles();
     await getCartridgeTypes();
     await getOrganizations();
 
