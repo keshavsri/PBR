@@ -46,7 +46,6 @@ export default function DataView() {
 
   const openSavedToPendingVisibility = () => setSavedToPendingVisibility(true);
 
-  console.log("SavedToPendingVisibility: ", SavedToPendingVisibility);
   const closeSavedToPendingVisibility = () =>
     setSavedToPendingVisibility(false);
 
@@ -86,15 +85,8 @@ export default function DataView() {
       method: "GET",
     }).then(checkResponseAuth);
     const data = await response.json();
-    console.log("-------------");
-    console.log("data: ", data);
-    console.log("-------------");
 
     setSuperAdmin(data["Super_Admin"]);
-
-    console.log("-------------");
-    console.log("admin: ", superAdmin);
-    console.log("-------------");
   };
 
   React.useEffect(() => {
@@ -103,8 +95,7 @@ export default function DataView() {
 
   const getOrganizations = async () => {
     let orgId = user.organization_id;
-    console.log("getting organizations");
-    console.log("user: ", user);
+
     if (user.role === superAdmin) {
       const response = await fetch(`/api/organization/`, {
         method: "GET",
@@ -112,14 +103,11 @@ export default function DataView() {
       const data = await response.json();
       setOrganizations(data);
       setOrganization(data[0]);
-      console.log("organizations: ", organizations);
     } else {
-      console.log("user.organization_id: ", user.organization_id);
       const response = await fetch(`/api/organization/${orgId}`, {
         method: "GET",
       });
       const data = await response.json();
-      console.log("data: ", data);
       setOrganization(data);
     }
   };
@@ -142,8 +130,6 @@ export default function DataView() {
   };
 
   const getData = async () => {
-    console.log("current cartridge type: ", currentCartridgeType.name);
-    console.log("current organization ", organization.id);
     getHeadCells();
     const uri = `/api/sample/org_cartridge_type?organization_id=${organization.id}&cartridge_type_id=${currentCartridgeType.id}`;
     await fetch(uri, { method: "GET" })
@@ -152,8 +138,6 @@ export default function DataView() {
       })
       .then(checkResponseAuth)
       .then((data) => {
-        console.log("current cartridge type: ", cartridgeTypes);
-        console.log(data);
         data.forEach((sample) => {
           sample.measurements.map((meas) => {
             sample[meas.analyte.abbreviation] = meas.value;
@@ -247,9 +231,7 @@ export default function DataView() {
     let path = `/api/sample/submit/`;
     let temp = path + id;
     await fetch(temp, { method: "PUT" })
-      .then((response) => {
-        console.log(response.json());
-      })
+      .then((response) => {})
       .then(() => {
         getData();
       });
@@ -262,9 +244,7 @@ export default function DataView() {
     selected.map(async (id, index) => {
       let temp = path + id;
       await fetch(temp, { method: "PUT" })
-        .then((response) => {
-          console.log(response.json());
-        })
+        .then((response) => {})
         .then(() => {
           getData();
         });
@@ -277,9 +257,7 @@ export default function DataView() {
 
     let temp = path + id;
     await fetch(temp, { method: "PUT" })
-      .then((response) => {
-        console.log(response.json());
-      })
+      .then((response) => {})
       .then(() => {
         getData();
       });
