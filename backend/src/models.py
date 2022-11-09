@@ -1,5 +1,5 @@
 from email.policy import default
-from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup
+from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup, HealthyRangeMethod
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Optional
@@ -330,6 +330,7 @@ class HealthyRange(db.Model):
     species: Species = db.Column(db.Enum(Species))
     gender: BirdGenders = db.Column(db.Enum(BirdGenders), nullable=True)
     age_group: AgeGroup = db.Column(db.Enum(AgeGroup))
+    method: HealthyRangeMethod = db.Column(db.Enum(HealthyRangeMethod))
     generated: datetime = db.Column(db.DateTime, server_default=db.func.now())
     current: bool = db.Column(db.Boolean, server_default="1")
 
