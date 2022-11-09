@@ -31,7 +31,6 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { sampleTypes, ageUnits } from "../../../models/enums";
 
-
 import CustomDialog from "../../CustomDialog";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
@@ -121,9 +120,9 @@ export default function DataViewSampleModal(props) {
     measurements: [],
   });
 
-    React.useEffect(() => {
+  React.useEffect(() => {
     getRoles();
-  }, [])
+  }, []);
 
   const getOrganizations = async () => {
     const response = await fetch(`/api/organization/`, {
@@ -181,79 +180,33 @@ export default function DataViewSampleModal(props) {
   const sampleMeasurements = () => {
     return (
       <>
-        <Accordion
-          defaultExpanded={true}
-          expanded={expanded === 1}
-          onChange={handleChange(1)}
-        >
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2bh-content"
-            id="panel2bh-header"
-          >
-            {" "}
-            <Typography variant="button" sx={{ width: "33%", flexShrink: 0 }}>
-              Manual Entry:
-            </Typography>
-          </AccordionSummary>
+        <Grid item xs={12}>
+          <br></br>
 
-          <AccordionDetails>
-            {cartridgeType.analytes &&
-              SampleDetails.measurements &&
-              SampleDetails.measurements.length > 0 &&
-              cartridgeType.analytes.map((a, index) => {
-                return (
-                  <>
-                    <TextField
-                      label={a.abbreviation}
-                      value={SampleDetails.measurements[index].value}
-                      onChange={(e) => {
-                        const measurements = SampleDetails.measurements;
-                        measurements[index].value = e.target.value;
-                        setSampleDetails((prevState) => {
-                          return { ...prevState, measurements: measurements };
-                        });
-                      }}
-                    />
-                  </>
-                );
-              })}
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion expanded={expanded === 2} onChange={handleChange(2)}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2bh-content"
-            id="panel2bh-header"
-          >
-            {" "}
-            <Typography variant="button" sx={{ width: "33%", flexShrink: 0 }}>
-              Via OCR:
-            </Typography>
-          </AccordionSummary>
-
-          <AccordionDetails>
-            <Typography variant="body2"> Coming Soon! </Typography>
-          </AccordionDetails>
-        </Accordion>
-
-        <Accordion expanded={expanded === 3} onChange={handleChange(3)}>
-          <AccordionSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls="panel2bh-content"
-            id="panel2bh-header"
-          >
-            {" "}
-            <Typography variant="button" sx={{ width: "33%", flexShrink: 0 }}>
-              Via File Upload:
-            </Typography>
-          </AccordionSummary>
-
-          <AccordionDetails>
-            <Typography variant="body2"> Coming Soon! </Typography>
-          </AccordionDetails>
-        </Accordion>
+          <Typography gutterBottom variant="button">
+            Sample Measurements
+          </Typography>
+        </Grid>
+        {cartridgeType.analytes &&
+          SampleDetails.measurements &&
+          SampleDetails.measurements.length > 0 &&
+          cartridgeType.analytes.map((a, index) => {
+            return (
+              <>
+                <TextField
+                  label={a.abbreviation}
+                  value={SampleDetails.measurements[index].value}
+                  onChange={(e) => {
+                    const measurements = SampleDetails.measurements;
+                    measurements[index].value = e.target.value;
+                    setSampleDetails((prevState) => {
+                      return { ...prevState, measurements: measurements };
+                    });
+                  }}
+                />
+              </>
+            );
+          })}
       </>
     );
   };
@@ -295,14 +248,12 @@ export default function DataViewSampleModal(props) {
       });
   };
 
-
-
   React.useEffect(async () => {
     if (sampleModalVisibility) {
       if (user.role === roles["Super_Admin"]) {
         await getOrganizations();
       } else {
-        setOrganization({id: user.organization_id});
+        setOrganization({ id: user.organization_id });
       }
 
       await getCartridgeTypes();
@@ -340,7 +291,7 @@ export default function DataViewSampleModal(props) {
     if (user.role === roles["Super_Admin"]) {
       setOrganization(organizations[0]);
     } else {
-      setOrganization({id: user.organization_id});
+      setOrganization({ id: user.organization_id });
     }
     setSource(sources[0]);
     setFlock(flocks[0]);
@@ -417,8 +368,22 @@ export default function DataViewSampleModal(props) {
         onClose={closeSampleModal}
       >
         <div style={modalStyle} className={classes.paper}>
-          <Card>
+          <Card
+            style={{
+              padding: "20px",
+            }}
+          >
             <>
+              <Typography gutterBottom variant="h3">
+                Add a New Sample
+              </Typography>
+
+              <Typography gutterBottom variant="button">
+                General Information
+              </Typography>
+
+              <br></br>
+
               <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={8}>
@@ -594,42 +559,44 @@ export default function DataViewSampleModal(props) {
                 </Grid>
               </Grid>
             </Box>
+            <br></br>
+            <br></br>
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={2} columns={16}>
+                <Grid item xs={8}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    style={{ width: 200 }}
+                    onClick={() => {
+                      closeSampleModal();
+                      resetSampleDetails();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </Grid>
+                <Grid item xs={8}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{ width: 200 }}
+                    onClick={() => {
+                      onSubmit();
+                    }}
+                  >
+                    Save
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
           </Card>
 
           <br></br>
 
-          <Grid item xs={12} sm={2}>
-            <Button
-              variant="contained"
-              color="secondary"
-              style={{
-                position: "static",
-                bottom: 50,
-              }}
-              onClick={() => {
-                closeSampleModal();
-                resetSampleDetails();
-              }}
-            >
-              Cancel
-            </Button>
-          </Grid>
+          <Grid item xs={12} sm={2}></Grid>
           <br></br>
-          <Grid item xs={12} sm={2}>
-            <Button
-              variant="contained"
-              style={{
-                position: "static",
-                bottom: 50,
-                left: 150,
-              }}
-              onClick={() => {
-                onSubmit();
-              }}
-            >
-              Save
-            </Button>
-          </Grid>
+          <Grid item xs={12} sm={2}></Grid>
           <br></br>
 
           <Grid>
