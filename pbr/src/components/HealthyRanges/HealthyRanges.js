@@ -48,6 +48,7 @@ export default function HealthyRanges() {
   const [speciesEnum, setSpeciesEnum] = React.useState({});
   const [genderEnum, setGenderEnum] = React.useState({});
   const [ageGroupEnum, setAgeGroupEnum] = React.useState({});
+  const [methodEnum, setMethodEnum] = React.useState({});
   const [roleEnum, setRoleEnum] = React.useState({});
   const [cartridgeTypeList, setCartridgeTypeList] = React.useState([]);
 
@@ -57,6 +58,7 @@ export default function HealthyRanges() {
   const [selectedSpecies, setSelectedSpecies] = React.useState();
   const [selectedGender, setSelectedGender] = React.useState();
   const [selectedAgeGroup, setSelectedAgeGroup] = React.useState();
+  const [selectedMethod, setSelectedMethod] = React.useState();
   const [seletedCartridgeType, setSelectedCartridgeType] = React.useState();
 
 
@@ -64,6 +66,7 @@ export default function HealthyRanges() {
     getSpecies();
     getGenders();
     getAgeGroups();
+    getMethods();
     getRoles();
     getCartridgeTypes();
   }, [])
@@ -136,6 +139,22 @@ export default function HealthyRanges() {
       });
   }
 
+  const getMethods = async () => {
+    await fetch(`api/enum/healthy-range-method/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      })
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        setMethodEnum(data);
+      });
+  }
+
   const getRoles = async () => {
     await fetch(`/api/enum/role/`, { 
       method: "GET",
@@ -173,7 +192,7 @@ export default function HealthyRanges() {
     console.log(selectedAgeGroup)
     console.log(selectedGender)
     console.log(seletedCartridgeType)
-    const uri = `/api/healthy-range?species=${selectedSpecies}&gender=${selectedGender}&age_group=${selectedAgeGroup}&cartridge_type_id=${seletedCartridgeType}`
+    const uri = `/api/healthy-range?species=${selectedSpecies}&gender=${selectedGender}&age_group=${selectedAgeGroup}&cartridge_type_id=${seletedCartridgeType}&method=${selectedMethod}`
     await fetch(uri, { 
       method: "GET",
       headers: {
@@ -208,7 +227,7 @@ export default function HealthyRanges() {
           </Grid>
         </Grid>
         <Grid container item spacing={2} xs={12} sm={12}>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={2}>
             <TextField
               fullWidth
               select
@@ -221,7 +240,7 @@ export default function HealthyRanges() {
               })}
             </TextField>
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={2}>
             <TextField
               fullWidth
               select
@@ -234,7 +253,7 @@ export default function HealthyRanges() {
               })}
             </TextField>
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={2}>
             <TextField
               fullWidth
               select
@@ -247,7 +266,7 @@ export default function HealthyRanges() {
               })}
             </TextField>
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={2}>
             <TextField
               fullWidth
               select
@@ -257,6 +276,19 @@ export default function HealthyRanges() {
             >
               {cartridgeTypeList.map((cartridgeType) => {
                 return <MenuItem key={cartridgeType.id} value={cartridgeType.id}>{cartridgeType.name}</MenuItem>
+              })}
+            </TextField>
+          </Grid>
+          <Grid item xs={12} sm={2}>
+            <TextField
+              fullWidth
+              select
+              label="Method"
+              value={selectedMethod}
+              onChange={e => setSelectedMethod(e.target.value)}
+            >
+              {Object.keys(methodEnum).map((key, index) => {
+                return <MenuItem key={index} value={key}>{methodEnum[key]}</MenuItem>
               })}
             </TextField>
           </Grid>

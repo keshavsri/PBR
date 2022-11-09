@@ -1,6 +1,6 @@
 from pydantic import BaseModel, constr
 from typing import Any, Optional, List
-from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup
+from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup, HealthyRangeMethod
 from datetime import datetime
 from src.models import *
 
@@ -185,6 +185,7 @@ class HealthyRange(PydanticModel):
     species: Species
     gender: Optional[BirdGenders]
     age_group: AgeGroup
+    method: HealthyRangeMethod
     generated: datetime
     current: bool
     analyte: Analyte
