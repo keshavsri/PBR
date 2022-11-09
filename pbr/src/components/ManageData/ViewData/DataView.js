@@ -4,7 +4,7 @@ import { Paper, Chip } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import SavedToPendingModal from "../ValidateData/SavedToPendingModal";
 
-import DataViewSampleModal from "../AddData/NewSampleModal";
+import DataViewSampleModal from "../AddData/SampleModal";
 import DataViewFilterModal from "./FilterModal";
 import DVTableToolbar from "./DVTableToolbar";
 
