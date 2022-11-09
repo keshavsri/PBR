@@ -415,7 +415,7 @@ export default function DataViewSampleModal(props) {
         icon={<SampleIcon />}
         title="Sample"
         subtitle="Add"
-        handleClose={closeSampleModal}
+        onClose={closeSampleModal}
       >
         <div style={modalStyle} className={classes.paper}>
           <Card>
