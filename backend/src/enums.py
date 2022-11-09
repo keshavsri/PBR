@@ -203,3 +203,6 @@ class LogActions(IntEnum):
     ADD_FLOCK = 901
     EDIT_FLOCK = 903
     DELETE_FLOCK = 904
+
+class HealthyRangeMethod(str, Enum):
+    Standard = "Standard"
