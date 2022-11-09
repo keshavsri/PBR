@@ -19,6 +19,8 @@ const useStyles = makeStyles({});
 
 export default function DataView() {
   const [sampleList, setSampleList] = React.useState([]);
+  const { checkResponseAuth, user } = useAuth();
+
   const [analytes, setAnalytes] = React.useState([]);
   const [currentCartridgeType, setCurrentCartridgeType] = React.useState({});
   const [cartridgeTypes, setCartridgeTypes] = React.useState([]);
@@ -36,6 +38,8 @@ export default function DataView() {
 
   const [selectedSamples, setSelectedSamples] = React.useState([]);
   const [pendingSamples, setPendingSamples] = React.useState([]);
+  const [organization, setOrganization] = React.useState({});
+  const [organizations, setOrganizations] = React.useState([]);
 
   const [SavedToPendingVisibility, setSavedToPendingVisibility] =
     React.useState(false);
@@ -45,8 +49,6 @@ export default function DataView() {
   console.log("SavedToPendingVisibility: ", SavedToPendingVisibility);
   const closeSavedToPendingVisibility = () =>
     setSavedToPendingVisibility(false);
-
-  const { checkResponseAuth } = useAuth();
 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
@@ -79,6 +81,29 @@ export default function DataView() {
     });
   };
 
+  const getOrganizations = async () => {
+    let orgId = user.organization_id;
+    console.log("getting organizations");
+    console.log("user: ", user);
+    if (user.role === 0) {
+      const response = await fetch(`/api/organization/`, {
+        method: "GET",
+      }).then(checkResponseAuth);
+      const data = await response.json();
+      setOrganizations(data);
+      setOrganization(data[0]);
+      console.log("organizations: ", organizations);
+    } else {
+      console.log("user.organization_id: ", user.organization_id);
+      const response = await fetch(`/api//organization/${orgId}`, {
+        method: "GET",
+      });
+      const data = await response.json();
+      console.log("data: ", data);
+      setOrganization(data);
+    }
+  };
+
   const turnPendingFilterOff = async () => {
     setShowOnlyPendingSamples(false);
     setSampleList(fullRowList);
@@ -97,8 +122,10 @@ export default function DataView() {
   };
 
   const getData = async () => {
+    console.log("current cartridge type: ", currentCartridgeType.name);
+    console.log("current organization ", organization.id);
     getHeadCells();
-    const uri = `/api/sample/org_cartridge_type?organization_id=${organizationId}&cartridge_type_id=${currentCartridgeType.id}`;
+    const uri = `/api/sample/org_cartridge_type?organization_id=${organization.id}&cartridge_type_id=${currentCartridgeType.id}`;
     await fetch(uri, { method: "GET" })
       .then((response) => {
         return response.json();
@@ -273,10 +300,20 @@ export default function DataView() {
   };
 
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
-  React.useEffect(() => {
-    getData();
-    //setSelected([]);
+  React.useEffect(async () => {
+    await getCartridgeTypes();
+    await getOrganizations();
+
+    await getData();
+
+    setSelected([]);
   }, []);
+
+  // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
+  React.useEffect(async () => {
+    setSelected([]);
+    await getData();
+  }, [organization, currentCartridgeType]);
 
   return (
     <DataViewProvider>
@@ -289,6 +326,13 @@ export default function DataView() {
               filterPendingSamples={filterPendingSamples}
               showOnlyPendingSamples={showOnlyPendingSamples}
               turnPendingFilterOff={turnPendingFilterOff}
+              cartridgeTypes={cartridgeTypes}
+              organizations={organizations}
+              setCurrentOrganization={setOrganization}
+              currentOrganization={organization}
+              user={user}
+              currentCartridgeType={currentCartridgeType}
+              setCurrentCartridgeType={setCurrentCartridgeType}
             />
           }
           selected={selected}
