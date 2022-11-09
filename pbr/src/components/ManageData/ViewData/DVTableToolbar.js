@@ -7,6 +7,7 @@ import {
   Button,
   Tooltip,
   IconButton,
+  TextField,
   Select,
   MenuItem,
 } from "@mui/material";
@@ -26,8 +27,12 @@ export default function DVTableToolbar({
   showOnlyPendingSamples,
   turnPendingFilterOff,
   selected,
+  organizations,
+  currentOrganization,
   currentCartridgeType,
+  user,
   setCurrentCartridgeType,
+  setCurrentOrganization,
   cartridgeTypes,
 }) {
   const {
@@ -67,6 +72,46 @@ export default function DVTableToolbar({
   return (
     <>
       <>
+        {user.role === 0 ? (
+          <Select
+            style={{
+              width: 500,
+              marginTop: 10,
+              marginBottom: 10,
+              marginleft: 20,
+              marginRight: 20,
+            }}
+            labelId="label-select-organization"
+            id="select-organizations"
+            value={currentOrganization}
+            onChange={(e) => {
+              setCurrentOrganization(e.target.value);
+            }}
+          >
+            {organizations.map((ct) => {
+              return (
+                <MenuItem key={ct.id} value={ct}>
+                  {ct.name}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        ) : (
+          <>
+            <TextField
+              style={{
+                width: 1000,
+                marginTop: 10,
+                marginBottom: 10,
+                marginleft: 20,
+                marginRight: 20,
+              }}
+              value={currentOrganization.name}
+              disabled
+            />
+          </>
+        )}
+
         <Select
           labelId="label-select-organization"
           id="select-organizations"
