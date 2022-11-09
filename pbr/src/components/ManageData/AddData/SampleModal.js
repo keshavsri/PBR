@@ -187,7 +187,8 @@ export default function DataViewSampleModal(props) {
             Sample Measurements
           </Typography>
         </Grid>
-        {cartridgeType.analytes &&
+        <Box>
+          {cartridgeType.analytes &&
           SampleDetails.measurements &&
           SampleDetails.measurements.length > 0 &&
           cartridgeType.analytes.map((a, index) => {
@@ -195,6 +196,7 @@ export default function DataViewSampleModal(props) {
               <>
                 <TextField
                   label={a.abbreviation}
+                  style={{ margin: 4 }}
                   value={SampleDetails.measurements[index].value}
                   onChange={(e) => {
                     const measurements = SampleDetails.measurements;
@@ -207,6 +209,7 @@ export default function DataViewSampleModal(props) {
               </>
             );
           })}
+        </Box>
       </>
     );
   };
