@@ -13,6 +13,6 @@ def create_log(current_user, action, logContent):
         action: The action that was performed
         logContent: A more readable version of the action with an ID or name of the affected object
     """
-    log = Log(current_user.id, action, logContent)
+    log = Log(current_user.id, current_user.organization_id, current_user.role, action, logContent)
     db.session.add(log)
     db.session.commit()
