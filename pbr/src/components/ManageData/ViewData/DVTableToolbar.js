@@ -34,32 +34,11 @@ export default function DVTableToolbar({
   setCurrentCartridgeType,
   setCurrentOrganization,
   cartridgeTypes,
+  roles
 }) {
   const {
-    samplePayload,
-    setSamplePayload,
-    generalDetails,
-    setGeneralDetails,
-    machineDetails,
-    setMachineDetails,
-    sampleModalVisibility,
-    sampleModalScreen,
-    setSampleModalScreen,
     openSampleModal,
-    closeSampleModal,
-    samplePrevAction,
-    sampleNextAction,
-    error,
-    setError,
-    restartSample,
-    timestamp,
-    setTimestamp,
-    generalFilterState,
-    setGeneralFilterState,
-    openFilterModal,
-    setOpenFilterModal,
     handleOpenFilterModal,
-    handleCloseFilterModal,
   } = useDataView();
   const classes = useStyles();
 
@@ -72,7 +51,7 @@ export default function DVTableToolbar({
   return (
     <>
       <>
-        {user.role === 0 ? (
+        {user.role === roles["Super_Admin"] ? (
           <Select
             style={{
               width: 500,

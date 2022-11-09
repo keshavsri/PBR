@@ -19,19 +19,9 @@ import {
   Autocomplete,
   FormControl,
 } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import SampleIcon from "@mui/icons-material/Science";
-import NextIcon from "@mui/icons-material/ArrowForwardIos";
-import PrevIcon from "@mui/icons-material/ArrowBackIos";
-import SubmitIcon from "@mui/icons-material/Publish";
 import { createFilterOptions } from "@mui/material/Autocomplete";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { sampleTypes, ageUnits } from "../../../models/enums";
-
-import CustomDialog from "../../CustomDialog";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
 
@@ -71,29 +61,16 @@ const useStyles = makeStyles((theme) => ({
 const filter = createFilterOptions();
 
 export default function DataViewSampleModal(props) {
-  const { getData } = props;
+  const { getData, roles } = props;
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
   useTheme();
 
   const {
     sampleModalVisibility,
-    sampleModalScreen,
     closeSampleModal,
-
-    samplePrevAction,
-    sampleNextAction,
-    error,
     setError,
-
-    restartSample,
-    timestamp,
-    machineDetails,
-    setSamplePayload,
-    setSampleValidationErrors,
-    sampleType,
     setSampleType,
-    sampleLoading,
     setSampleLoading,
   } = useDataView();
 
@@ -109,7 +86,6 @@ export default function DataViewSampleModal(props) {
   const [source, setSource] = React.useState({});
   const [organization, setOrganization] = React.useState({});
   const [expanded, setExpanded] = React.useState(true);
-  const [roles, setRoles] = React.useState({});
   const [errorSubmission, setErrorSubmission] = React.useState(false);
   const [SampleDetails, setSampleDetails] = React.useState({
     comments: "",
@@ -120,10 +96,6 @@ export default function DataViewSampleModal(props) {
     measurements: [],
   });
 
-  React.useEffect(() => {
-    getRoles();
-  }, []);
-
   const getOrganizations = async () => {
     const response = await fetch(`/api/organization/`, {
       method: "GET",
@@ -133,13 +105,7 @@ export default function DataViewSampleModal(props) {
     setOrganization(data[0]);
   };
 
-  const getRoles = async () => {
-    const response = await fetch(`/api/enum/roles/`, {
-      method: "GET",
-    }).then(checkResponseAuth);
-    const data = await response.json();
-    setRoles(data);
-  };
+
 
   const getFlocks = async () => {
     await fetch(`/api/flock/source/${source.id}`, {

@@ -30,7 +30,8 @@ export default function DataView() {
     React.useState(false);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
-  const [superAdmin, setSuperAdmin] = React.useState(0);
+  const [roles, setRoles] = React.useState([]);
+
 
   const [isSample] = React.useState(true);
   const [openReviewSampleModal, setOpenReviewSampleModal] =
@@ -85,18 +86,13 @@ export default function DataView() {
       method: "GET",
     }).then(checkResponseAuth);
     const data = await response.json();
-
-    setSuperAdmin(data["Super_Admin"]);
+    setRoles(data);
   };
-
-  React.useEffect(() => {
-    getRoles();
-  }, []);
 
   const getOrganizations = async () => {
     let orgId = user.organization_id;
 
-    if (user.role === superAdmin) {
+    if (user.role === roles["Super_Admin"]) {
       const response = await fetch(`/api/organization/`, {
         method: "GET",
       }).then(checkResponseAuth);
@@ -301,8 +297,6 @@ export default function DataView() {
   React.useEffect(async () => {
     await getRoles();
     await getCartridgeTypes();
-    await getOrganizations();
-
     await getData();
 
     setSelected([]);
@@ -313,6 +307,10 @@ export default function DataView() {
     setSelected([]);
     await getData();
   }, [organization, currentCartridgeType]);
+
+  React.useEffect(async () => {
+    await getOrganizations();
+  }, [roles]);
 
   return (
     <DataViewProvider>
@@ -332,6 +330,7 @@ export default function DataView() {
               user={user}
               currentCartridgeType={currentCartridgeType}
               setCurrentCartridgeType={setCurrentCartridgeType}
+              roles={roles}
             />
           }
           selected={selected}
@@ -367,7 +366,7 @@ export default function DataView() {
         getData={getData}
         rows={sampleList}
       />
-      <DataViewSampleModal getData={getData} />
+      <DataViewSampleModal getData={getData} roles={roles}/>
       <ReviewSampleModal
         openReviewSampleModal={openReviewSampleModal}
         setOpenReviewSampleModal={setOpenReviewSampleModal}
