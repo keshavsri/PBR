@@ -12,6 +12,7 @@ machineBlueprint = Blueprint('machine', __name__)
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
 def get_machines(access_allowed, current_user, given_org_id=None):
+
     """
     This function handles GET requests for all machines or all machines in a given organization.
     :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
@@ -21,25 +22,10 @@ def get_machines(access_allowed, current_user, given_org_id=None):
     """
 
     if access_allowed:
-        # response json is created here and gets returned at the end of the block for GET requests.
-        responseJSON = None
-        current_Organization = current_user.organization_id
-
-        if given_org_id:
-            if current_user.role == Roles.Super_Admin:
-                responseJSON = src.helpers.machine.get_machines_by_org(
-                    current_Organization)
-            elif current_user.organization_id == given_org_id:
-                responseJSON = src.helpers.machine.get_machines_by_org(
-                    current_Organization)
-            else:
-                responseJSON = jsonify({'message': 'Insufficient Permissions'})
-                return responseJSON, 401
         if given_org_id is None:
             return jsonify({'message': 'Organization ID must be specified'}), 400
         elif current_user.organization_id == given_org_id or current_user.role == Roles.Super_Admin:
-            machines = models.Machine.query.filter_by(
-                organization_id=given_org_id).all()
+            machines = models.Machine.query.filter_by(organization_id=given_org_id).all()
             response = [schemas.Machine.from_orm(m).dict() for m in machines]
             return jsonify(response), 200
         else:
