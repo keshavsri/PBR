@@ -208,7 +208,6 @@ def delete_sample(access_allowed, current_user, item_id):
     :return: The deleted sample.
     """
     if access_allowed:
-        print("Deleting sample with id: " + str(item_id), flush=True)
         if models.Sample.query.get(item_id) is None:
             return jsonify({'message': 'Sample cannot be found.'}), 407
         else:

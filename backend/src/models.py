@@ -161,9 +161,10 @@ class Sample(db.Model):
         is_deleted: boolean value for if the sample is deleted
         validation_status: validation status of the sample
         sample_type: type of the sample
+        rotor_lot_number: Rotor lot number of the cartridge used for this sample
         flock_id: Flock that the sample is testing
         machine_id: Machine that the sample is collected from
-        cartridge_id: Cartridge that is used for the sample
+        cartridge_type_id: Cartridge Type that is used for the sample
         measurements: list of measurement values for the sample
     """
 
@@ -248,7 +249,7 @@ class Analyte(db.Model):
       name: name of the Analyte
       abbreviation: abbreviation of the Analyte
       units: units of the Analyte
-      cartridge_type_id: CartridgeType
+      machine_type_id: MachineType associated with analyte. Needed for HealthyRange calculation
     """
 
     __tablename__ = 'analyte_table'
@@ -295,12 +296,6 @@ class MachineType(db.Model):
     __tablename__ = 'machine_type_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(120), unique=True, nullable=False)
-
-    # References to Foreign Objects
-    cartridge_type_id: int = db.Column(
-        db.Integer, db.ForeignKey('cartridge_type_table.id'))
-    organization_id: int = db.Column(
-        db.Integer, db.ForeignKey('organization_table.id'))
 
 
 class CartridgeType(db.Model):

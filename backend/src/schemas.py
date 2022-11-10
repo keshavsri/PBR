@@ -133,7 +133,7 @@ class Sample(PydanticModel):
         flock (Flock): The flock the sample is from, set as Optional to allow for creation of new samples without a flock
         flagged (bool): Whether the sample is flagged for review or not
         comments (str): The comments on the sample, set as Optional to allow for creation of new samples without comments
-        measurement_values (List[MeasurementValue]): The values of the measurements of the sample, set as Optional to allow for creation of new samples without measurements
+        measurements (List[measurements]): The values of the measurements of the sample, set as Optional to allow for creation of new samples without measurements
         timestamp_added (datetime): The timestamp the sample was added, set as Optional to allow for creation of new samples without a timestamp as it is set by the DB
         validation_status (ValidationStatus): The status of the sample, set as Optional to allow for creation of new samples without a validation status
         sample_type (SampleTypes): The type of the sample, set as Optional to allow for creation of new samples without a sample type
