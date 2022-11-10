@@ -1,4 +1,4 @@
-from src.helpers.healthy_range import determine_age_group, get_min_max_from_age_group, reference_interval
+from src.helpers.healthy_range import get_min_max_from_age_group, reference_interval
 from src.models import (
     HealthyRange as HealthyRangeORM,
     Organization as OrganizationORM,
