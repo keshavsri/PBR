@@ -1,9 +1,5 @@
 from pydantic import BaseModel, constr
-<<<<<<< HEAD
 from typing import Optional, List
-=======
-from typing import Any, Optional, List
->>>>>>> 90b5e9f (Extensibility for multiple Healthy Range methods)
 from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup, HealthyRangeMethod
 from datetime import datetime
 from src.models import *
