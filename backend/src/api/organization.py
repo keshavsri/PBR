@@ -39,7 +39,7 @@ def get_organizations(access_allowed, current_user):
         ret = []
         for organization in organizations:
             ret.append(Organization.from_orm(organization).dict())
-        return jsonify(ret)
+        return jsonify(ret), 200
     else:
         return jsonify({'message': 'Access denied'}), 403
 
@@ -128,7 +128,6 @@ def delete_organization(access_allowed, current_user, item_id):
 @allowed_roles([0])
 def post_organization(access_allowed, current_user):
     if access_allowed:
-        print("posting organization", flush=True)
         if models.Organization.query.filter_by(name=request.json.get('name')).first() is None:
             org: OrganizationORM = OrganizationORM()
             for name, value in Organization.parse_obj(request.json):
