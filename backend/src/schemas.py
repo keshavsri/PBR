@@ -68,10 +68,10 @@ class Source(PydanticModel):
     """
     id: Optional[int]
     name: constr(max_length=120)
-    street_address: constr(max_length=120)
-    city: constr(max_length=120)
-    state: States
-    zip: constr(regex=r'^[0-9]{5}(?:-[0-9]{4})?$')
+    street_address: Optional[constr(max_length=120)]
+    city: Optional[constr(max_length=120)]
+    state: Optional[States]
+    zip: Optional[constr(regex=r'^[0-9]{5}(?:-[0-9]{4})?$')]
     organization_id: int
 
 
@@ -93,8 +93,8 @@ class Flock(PydanticModel):
         timestamp_added (datetime): The timestamp the flock was added, set as Optional to allow for creation of new flocks without a timestamp as it is set by the DB
     """
     id: Optional[int]
-    name: str
-    strain: str
+    name: Optional[str]
+    strain: Optional[str]
     species: Species
     production_type: ProductionTypes
     gender: BirdGenders
