@@ -109,7 +109,7 @@ export default function DVTableToolbar({
         </Select>
       </>
 
-      <Tooltip title="Batch Import">
+      <Tooltip title="Generate Report for Sample(s)">
         <Button
           variant="contained"
           color="secondary"
@@ -122,14 +122,14 @@ export default function DVTableToolbar({
         </Button>
       </Tooltip>
 
-      <Tooltip title="Batch Import">
+      <Tooltip title="Filter Samples">
         <Button
           variant="contained"
           color="secondary"
           style={{ width: 275, marginTop: 10, marginBottom: 10 }}
           startIcon={<FilterListIcon />}
           sx={{ ml: 1 }}
-          onClick={handleOpenFilterModal}
+          // onClick={handleOpenFilterModal}
         >
           Filter Samples
         </Button>
