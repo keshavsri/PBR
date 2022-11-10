@@ -370,11 +370,8 @@ export default function DataView() {
               {editSampleModalVisiblity ? (
                 <EditSampleModal
                   selected={selected}
-                  submitAll={submitAll}
-                  submitOne={submitOne}
-                  rows={sampleList}
                   selectedSamples={selectedSamples}
-                  setSelectedSamples={setSelectedSamples}
+                  Organization={organization}
                   editSampleModalVisiblity={editSampleModalVisiblity}
                   setEditSampleModalVisibility={setEditSampleModalVisibility}
                 />
