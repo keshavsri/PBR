@@ -1,12 +1,16 @@
 from flask import request, Blueprint, jsonify
+import json
 from http import HTTPStatus
 from src.enums import LogActions, ValidationTypes, Roles
 from src.api.user import token_required, allowed_roles
 from src import models, schemas
 from src.helpers import sample as sample_helper
 from src.models import Sample as SampleORM
+from src.schemas import Sample
 from src.models import Measurement as MeasurementORM
 from sqlalchemy import text
+from src.helpers.log import create_log
+
 
 sampleBlueprint = Blueprint('sample', __name__)
 
@@ -47,55 +51,58 @@ def parse_machine_data():
 @sampleBlueprint.route('/', methods=['POST'])
 @token_required
 @allowed_roles([0, 1, 2, 3])
-def create_sample(current_user, access_allowed):
+def create_sample(access_allowed, current_user):
     """
     Creates a new sample, from a given sample json and returns the newly created sample.
     :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
     :param current_user: The user who is currently logged in. Check the decorator for more info.
     :param request.json: The sample json to create the sample from.
     :return: The newly created sample.
+
+
     """
 
     if access_allowed:
 
-        sample:SampleORM = SampleORM()
+        sample: SampleORM = SampleORM()
         for name, value in request.json.items():
             if name != 'measurements' and name != "is_deleted":
                 setattr(sample, name, value)
-                
+
         setattr(sample, "user_id", current_user.id)
         setattr(sample, "validation_status", ValidationTypes.Saved)
 
         models.db.session.add(sample)
         models.db.session.commit()
         models.db.session.refresh(sample)
-        
+
         # Update the list of measurements.
 
         measurements = []
         for measurement in request.json["measurements"]:
-            measurement_model:MeasurementORM = MeasurementORM()
+            measurement_model: MeasurementORM = MeasurementORM()
             for name, value in measurement.items():
                 setattr(measurement_model, name, value)
                 setattr(measurement_model, "sample_id", sample.id)
             measurements.append(measurement_model)
-        
+
         setattr(sample, "measurements", measurements)
 
         models.db.session.commit()
         models.db.session.refresh(sample)
 
-        return schemas.Sample.from_orm(sample).dict(), 201
+        create_log(current_user, LogActions.ADD_SAMPLE,
+                   'Added sample: ' + str(sample.id))
 
+        return Sample.from_orm(sample).dict(), 201
     else:
         return jsonify({'message': 'Role not allowed'}), 403
-    
 
 
-@sampleBlueprint.route('/org_cartrige_type', methods=['GET'])
+@sampleBlueprint.route('/org_cartridge_type', methods=['GET'])
 @token_required
-def get_samples_by_cartridge_type_id_and_org(current_user):
-
+@allowed_roles([0, 1, 2, 3, 4])
+def get_samples(access_allowed, current_user):
     """
     This function gets all samples for a specified cartridge type and organization.
     Allowed Roles check not needed for this since all users should be able to get samples
@@ -103,49 +110,53 @@ def get_samples_by_cartridge_type_id_and_org(current_user):
     :return: a json response containing all samples for the org and cartridge type
     """
 
-    # If user ins't superadmin, they should only be allowed to access samples in their org
-    if current_user.role != 0 and current_user.organization_id != request.args.get('organization_id'):
-        return jsonify({'message': 'Role not allowed'}), 403    
-		
-    else:
-        samples = []
-        with models.engine.connect() as connection:
+    if access_allowed:
 
-            sql_select_query = "sample_table sample, flock_table f, source_table source, organization_table o"
-            sql_where_query = """
-        	WHERE sample.flock_id = f.id 
-        	AND f.source_id = source.id 
-        	AND source.organization_id = :organization_id 
-        	AND sample.cartridge_type_id = :cartridge_type_id
-        	AND CASE WHEN sample.validation_status = "Saved" THEN sample.user_id = :current_user_id
-            	END
-        	"""
-            
-            # If user is a data collector, they should only see their samples 
-            if current_user.role == Roles.Data_Collector:
-                sql_where_query += "AND sample.user_id = :current_user_id"
+        # If user isn't superadmin, they should only be allowed to access samples in their org
+        if current_user.role != Roles.Super_Admin and str(current_user.organization_id) != request.args.get('organization_id'):
+            return jsonify({'message': 'Role not allowed'}), 403
 
-
-            sql_query = "SELECT sample.id FROM " + sql_select_query + sql_where_query
-            result = connection.execute(text(sql_query + ";"), {"org_id": request.args.get('organization_id'), "cartridge_type_id": request.args.get('cartridge_type_id'), "current_user_id": current_user.id})
-
-            for row in result:
-                sample = SampleORM.query.get(row.id)
-                samples.append(sample)
-                
-        results = []
-        for sample in samples:
-            measurements = MeasurementORM.query.filter_by(sample_id=sample.id).all()
-            setattr(sample, "measurements", measurements)
-            results.append(schemas.Sample.from_orm(sample).dict())
-
-
-        if not results:
-            return jsonify(results), 404
         else:
-            return jsonify(results), 200
-            
+            samples = []
+            with models.engine.connect() as connection:
 
+                sql_select_query = "sample_table sample, flock_table f, source_table source"
+                sql_where_query = """
+                WHERE sample.flock_id = f.id
+                AND f.source_id = source.id
+                AND sample.is_deleted = 0
+                AND source.organization_id = :organization_id
+                AND sample.cartridge_type_id = :cartridge_type_id
+                AND CASE 
+                        WHEN sample.validation_status = "Saved" 
+                            THEN sample.user_id = :current_user_id
+                        ELSE TRUE
+                    END
+                """
+
+                # If user is a data collector, they should only see their samples
+                if current_user.role == Roles.Data_Collector:
+                    sql_where_query += "AND sample.user_id = :current_user_id"
+
+                sql_query = "SELECT DISTINCT sample.id FROM " + sql_select_query + sql_where_query
+                result = connection.execute(text(sql_query + ";"), {"organization_id": request.args.get(
+                    'organization_id'), "cartridge_type_id": request.args.get('cartridge_type_id'), "current_user_id": current_user.id})
+
+                for row in result:
+                    sample = SampleORM.query.get(row.id)
+                    samples.append(sample)
+
+            results = []
+            for sample in samples:
+                measurements = MeasurementORM.query.filter_by(
+                    sample_id=sample.id).all()
+                setattr(sample, "measurements", measurements)
+                results.append(Sample.from_orm(sample).dict())
+
+            return jsonify(results), 200
+
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
 
 
 @sampleBlueprint.route('/<int:item_id>', methods=['PUT'])
@@ -157,18 +168,18 @@ def edit_sample(access_allowed, current_user, item_id):
         if old_sample is None:
             return jsonify({'message': 'Sample cannot be found.'}), 404
         else:
-            
+
             for name, value in request.json.items():
                 if name != 'measurements':
                     setattr(old_sample, name, value)
-            
-            measurements = request.json.pop('measurements')
+
+            new_measurements = request.json.pop('measurements')
 
             # Update the list of measurements.
 
             measurements = []
-            for measurement in measurements:
-                measurement_model:MeasurementORM = MeasurementORM()
+            for measurement in new_measurements:
+                measurement_model: MeasurementORM = MeasurementORM()
                 for name, value in measurement.items():
                     setattr(measurement_model, name, value)
                 measurements.append(measurement_model)
@@ -178,8 +189,9 @@ def edit_sample(access_allowed, current_user, item_id):
             models.db.session.commit()
 
             edited_sample = SampleORM.query.get(item_id)
-            models.createLog(current_user, LogActions.EDIT_SAMPLE, 'Edited sample: ' + str(edited_sample.id))
-            return schemas.Sample.from_orm(edited_sample).dict(), 200
+            create_log(current_user, LogActions.EDIT_SAMPLE,
+                       'Edited sample: ' + str(edited_sample.id))
+            return Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -197,14 +209,15 @@ def delete_sample(access_allowed, current_user, item_id):
     """
     if access_allowed:
         if models.Sample.query.get(item_id) is None:
-            return jsonify({'message': 'Sample cannot be found.'}), 404
+            return jsonify({'message': 'Sample cannot be found.'}), 407
         else:
             deleted_sample = models.Sample.query.get(item_id)
-            models.Sample.query.filter_by(id=item_id).update({'is_deleted': True})
+            models.Sample.query.filter_by(
+                id=item_id).update({'is_deleted': True})
             models.db.session.commit()
-            models.create_log(current_user, LogActions.DELETE_SAMPLE,
-                             'Deleted sample: ' + str(deleted_sample.id))
-            return schemas.Sample.from_orm(deleted_sample).dict(), 200
+            create_log(current_user, LogActions.DELETE_SAMPLE,
+                       'Deleted sample: ' + str(deleted_sample.id))
+            return Sample.from_orm(deleted_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
@@ -228,11 +241,12 @@ def submit_sample(access_allowed, current_user, item_id):
                 {'validation_status': ValidationTypes.Pending})
             models.db.session.commit()
             edited_sample = models.Sample.query.get(item_id)
-            models.create_log(current_user, LogActions.EDIT_SAMPLE,
-                             'Edited sample: ' + str(edited_sample.id))
-            return schemas.Sample.from_orm(edited_sample).dict(), 200
+            create_log(current_user, LogActions.EDIT_SAMPLE,
+                       'Submitted sample: ' + str(edited_sample.id))
+            return Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
+
 
 @sampleBlueprint.route('/accept/<int:item_id>', methods=['PUT'])
 @token_required
@@ -253,11 +267,12 @@ def accept_sample(access_allowed, current_user, item_id):
                 {'validation_status': ValidationTypes.Accepted})
             models.db.session.commit()
             edited_sample = models.Sample.query.get(item_id)
-            models.create_log(current_user, LogActions.PENDING_TO_VALID,
-                             'Accepted sample: ' + str(edited_sample.id))
-            return schemas.Sample.from_orm(edited_sample).dict(), 200
+            create_log(current_user, LogActions.PENDING_TO_VALID,
+                       'Accepted sample: ' + str(edited_sample.id))
+            return Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
+
 
 @sampleBlueprint.route('/reject/<int:item_id>', methods=['PUT'])
 @token_required
@@ -278,8 +293,8 @@ def reject_sample(access_allowed, current_user, item_id):
                 {'validation_status': ValidationTypes.Rejected})
             models.db.session.commit()
             edited_sample = models.Sample.query.get(item_id)
-            models.create_log(current_user, LogActions.PENDING_TO_REJECT,
-                             'Reject sample: ' + str(edited_sample.id))
-            return schemas.Sample.from_orm(edited_sample).dict(), 200
+            create_log(current_user, LogActions.PENDING_TO_REJECT,
+                       'Rejected sample: ' + str(edited_sample.id))
+            return Sample.from_orm(edited_sample).dict(), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

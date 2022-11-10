@@ -1,22 +1,18 @@
-import code
-from src.models import Organization
-from flask import request, Blueprint, jsonify, Response, make_response
+from flask import request, Blueprint, jsonify, make_response
 import bcrypt
 from datetime import datetime, timedelta, timezone
-import os
 import jwt
-import json
 from src.auth_token import Auth_Token
 from functools import wraps
-from src import models, helpers, schemas
+from src import models, schemas
 from src.enums import Roles, LogActions
+from src.helpers import log
 
 
 userBlueprint = Blueprint('user', __name__)
 
 
 def allowed_roles(roles):
-
     """
     Accepts a list of roles and returns true to the decorated function if the user has one of those roles, false otherwise
     :param roles:List[int]: the list of roles that are allowed to access the route
@@ -38,7 +34,8 @@ def allowed_roles(roles):
                 # PULL OUT DATA FROM TOKEN
                 data = Auth_Token.decode_token(token)
                 # GET AND RETURN CURRENT USER
-                current_user = models.User.query.filter_by(id=data["id"]).first()
+                current_user = models.User.query.filter_by(
+                    id=data["id"]).first()
                 for role in roles:
                     if current_user.role == 0 or int(current_user.role) is role:
                       allowed = True
@@ -55,7 +52,6 @@ def allowed_roles(roles):
 # decorator for verifying the JWT
 # Template from GeeksForGeeks: https://www.geeksforgeeks.org/using-jwt-for-user-authentication-in-flask/
 def token_required(f):
-
     """
     Decorator for authenticating the user via the JWT in the request header and returning the current user to the decorated function
     :return: User: the current user as a SQLAlchemy model
@@ -69,7 +65,7 @@ def token_required(f):
             token = request.cookies["pbr_token"]
         # return 401 if token is not passed
         if not token:
-            return jsonify({'message' : 'Token is missing!'}), 401
+            return jsonify({'message': 'Token is missing!'}), 401
         try:
             # PULL OUT DATA FROM TOKEN
             data = Auth_Token.decode_token(token)
@@ -77,7 +73,8 @@ def token_required(f):
             current_user = models.User.query.filter_by(id=data["id"]).first()
         except jwt.ExpiredSignatureError as error:
             data = Auth_Token.decode_token(token, verify_expiration=False)
-            current_user = models.User.query.filter_by(email=data["email"]).first()
+            current_user = models.User.query.filter_by(
+                email=data["email"]).first()
             ret_user = {
                 "email": current_user.email,
                 "firstname": current_user.first_name,
@@ -88,10 +85,10 @@ def token_required(f):
             return jsonify(ret_user), 419
         except Exception as error:
             return jsonify({
-                'message' : 'Token is invalid!'
+                'message': 'Token is invalid!'
             }), 401
         # returns the current logged in users contex to the routes
-        return  f(current_user, *args, **kwargs)
+        return f(current_user, *args, **kwargs)
     return decorated
 
 
@@ -109,12 +106,11 @@ def me(current_user):
         }
         return jsonify(ret_user), 200
     else:
-        return jsonify({"message":"Unauthorized"}), 401
+        return jsonify({"message": "Unauthorized"}), 401
 
 
 @userBlueprint.route('/login', methods=['POST'])
 def login():
-
     """
     Logs the current user in, getting email and password from payload
     If user doesn't exist, if fields are missing/invalid, incorrect password, return 401 
@@ -142,7 +138,8 @@ def login():
                 "id": dbUser.id
             }
             response = make_response(jsonify(ret_user), 200)
-            response.set_cookie(key="pbr_token", value=Auth_Token.create_token(dbUser), expires=datetime.now(tz=timezone.utc) + timedelta(days=1), secure=True, httponly = True, samesite="Strict")
+            response.set_cookie(key="pbr_token", value=Auth_Token.create_token(dbUser), expires=datetime.now(
+                tz=timezone.utc) + timedelta(days=1), secure=True, httponly=True, samesite="Strict")
             print("SUCCESS")
             return response
         else:
@@ -159,7 +156,8 @@ def logout():
         token = request.cookies['pbr_token']
         Auth_Token.invalidate_token(token)
     response = jsonify({"message": "Logged out."}), 200
-    response.set_cookie(key="pbr_token", value="", expires=datetime.now(tz=timezone.utc), secure=True, httponly = True, samesite="Strict")
+    response.set_cookie(key="pbr_token", value="", expires=datetime.now(
+        tz=timezone.utc), secure=True, httponly=True, samesite="Strict")
     return response
 
 
@@ -178,9 +176,10 @@ def register():
     if models.User.query.filter_by(email=data["email"]).first():
         print("USER ALREADY EXISTS.")
         models.db.session.rollback()
-        return jsonify({"message":"User Already Exists with this Email"}), 422
+        return jsonify({"message": "User Already Exists with this Email"}), 422
 
-    user_org = models.Organization.query.filter_by(organization_code=data["orgCode"]).first()
+    user_org = models.Organization.query.filter_by(
+        organization_code=data["orgCode"]).first()
 
     if not user_org:
         print("INVALID ORGANIZATION ID.")
@@ -189,7 +188,8 @@ def register():
 
     salt = bcrypt.gensalt()
     hashedPW = bcrypt.hashpw(data["password"].encode('utf8'), salt)
-    user = models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Guest, organization_id=user_org.id )
+    user = models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"],
+                       password=hashedPW.decode(), role=Roles.Guest, organization_id=user_org.id)
     models.db.session.add(user)
     models.db.session.commit()
     print("User was successfully added.")
@@ -200,20 +200,18 @@ def register():
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
 def get_users(access_allowed, current_user, org_id):
-
     """
     This function will return the users that are associated with the organization that the user is in.
-
     :param access_allowed: This is the access_allowed variable that is passed in from the token_required function.
     :param current_user: This is the current_user variable that is passed in from the token_required function.
     :param item_id: This is the id of the user that is passed in.
-
     :return: This function will return the users with the org id either attached to the user or one that is passed in.
     """
 
     if access_allowed:
         if current_user.organization_id == org_id or current_user.role == Roles.Super_Admin:
-            users = models.User.query.filter_by(organization_id=org_id, is_deleted=False)
+            users = models.User.query.filter_by(
+                organization_id=org_id, is_deleted=False)
             ret = {
                 "rows": [],
                 "types": []
@@ -232,14 +230,11 @@ def get_users(access_allowed, current_user, org_id):
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
 def get_user(access_allowed, current_user, user_id):
-
     """
     This function will return the user with a matching id.
-
     :param access_allowed: This is the access_allowed variable that is passed in from the token_required function.
     :param current_user: This is the current_user variable that is passed in from the token_required function.
     :param user_id: This is the id of the user that is passed in.
-
     :return: This function will return the user with the specified id.
     """
 
@@ -247,7 +242,8 @@ def get_user(access_allowed, current_user, user_id):
         if user_id is None:
             return jsonify({'message': 'User ID must be specified'}), 400
         else:
-            user = models.User.query.filter_by(id=user_id, is_deleted=False).first()
+            user = models.User.query.filter_by(
+                id=user_id, is_deleted=False).first()
             if user is None:
                 return jsonify({'message': 'User not found'}), 404
             else:
@@ -261,14 +257,11 @@ def get_user(access_allowed, current_user, user_id):
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
 def get_admin_organization(access_allowed, current_user, org_id):
-
     """
     This function will return the admin user that is associated with the organization id that is passed in.
-
     :param access_allowed: This is the access_allowed variable that is passed in from the token_required function.
     :param current_user: This is the current_user variable that is passed in from the token_required function.
     :param item_id: This is the id of the organization that is passed in.
-
     :return: This function will return the admin with the org id either attached to the user or one that is passed in.
     """
 
@@ -277,7 +270,8 @@ def get_admin_organization(access_allowed, current_user, org_id):
         responseJSON = None
         # if organization id exists then it will return the admin in the organization
         if org_id and current_user.role == Roles.Super_Admin or current_user.organization_id == org_id:
-            admin = models.User.query.filter_by(organization_id=org_id, role=Roles.Admin, is_deleted=False).first()
+            admin = models.User.query.filter_by(
+                organization_id=org_id, role=Roles.Admin, is_deleted=False).first()
         else:
             return jsonify({'message': 'Cannot get admin for another organization'}), 403
         # otherwise it will return a 404
@@ -295,14 +289,11 @@ def get_admin_organization(access_allowed, current_user, org_id):
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
 def update_user(access_allowed, current_user, user_id):
-
     """
     This function will edit a users information.
-
     :param access_allowed: This is the access_allowed variable that is passed in from the token_required function.
     :param current_user: This is the current_user variable that is passed in from the token_required function.
     :param item_id: This is the id of the user to be edited.
-
     :return: This function will return the edited user object as a dictionary.
     """
 
@@ -330,17 +321,18 @@ def update_user(access_allowed, current_user, user_id):
             # Should maybe allow password change on self edit
             edited_user.update(
                 {
-                    'id' : existing_user.id,
-                    'password' : existing_user.password,
-                    'organization_id' : existing_user.organization_id,
-                    'is_deleted' : existing_user.is_deleted
+                    'id': existing_user.id,
+                    'password': existing_user.password,
+                    'organization_id': existing_user.organization_id,
+                    'is_deleted': existing_user.is_deleted
                 }
             )
 
             # SQLAlchemy update and log action
-            models.User.query.filter_by(id=edited_user.get("id")).update(edited_user)
+            models.User.query.filter_by(
+                id=edited_user.get("id")).update(edited_user)
             models.db.session.commit()
-            log.create_log(current_user, LogActions.EDIT_USER, 'Edited user: ' + str(edited_user.get("id")))
+            log.create_log(current_user, LogActions.EDIT_USER,'Edited user: ' + str(edited_user.get("id")))
 
             # Return updated user object, retreived via db query (confirmation)
             updated_user = schemas.User.from_orm(
@@ -355,14 +347,11 @@ def update_user(access_allowed, current_user, user_id):
 @token_required
 @allowed_roles([0, 1])
 def delete_user(access_allowed, current_user, user_id):
-
     """
     Deletes a user from the organization
-
     :param access_allowed: boolean, whether the user has access to the route
     :param current_user: the user object of the user making the request
     :param user_id: the id of the user to delete
-
     :return: a json response with the user deleted
     """
 
@@ -379,8 +368,8 @@ def delete_user(access_allowed, current_user, user_id):
         else:
             user.is_deleted = True
             models.db.session.commit()
-            log.create_log(current_user, LogActions.DELETE_SOURCE, f'Deleted user: ${user.first_name} ${user.last_name} in organization: ${models.Organization.query.get(user.organization_id).name}')
+            log.create_log(current_user, LogActions.DELETE_SOURCE,
+                           f'Deleted user: ${user.first_name} ${user.last_name} in organization: ${models.Organization.query.get(user.organization_id).name}')
             return jsonify({'message': 'User deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
-

@@ -1,7 +1,7 @@
 from typing import List
 
 from src.models import db
-from src.schemas import Log
+from src.models import Log
 
 def create_log(current_user, action, logContent):
     """ This function creates a log entry.

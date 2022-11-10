@@ -1,7 +1,9 @@
 from pydantic import BaseModel, constr
-from src.enums import States, Species, ProductionTypes, BirdGenders, AgeUnits, AgeGroup, ValidationTypes, SampleTypes, Roles, LogActions
-from typing import List, Optional
+from typing import Optional, List
+from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup
 from datetime import datetime
+from src.models import *
+
 
 class PydanticModel(BaseModel):
     class Config:
@@ -12,7 +14,7 @@ class PydanticModel(BaseModel):
 class User(PydanticModel):
     id: int
     email: constr(max_length=120)
-    # password: constr(max_length=120)
+    password: constr(max_length=120)
     first_name: constr(max_length=120)
     last_name: constr(max_length=120)
     phone_number: Optional[constr(max_length=120)]
@@ -47,7 +49,7 @@ class Organization(PydanticModel):
     notes: Optional[constr(max_length=500)]
     organization_code: Optional[constr(regex=r'^[a-zA-Z0-9]{6}?$')]
     code_last_updated: Optional[datetime]
-    is_deleted: bool
+    is_deleted: Optional[bool]
 
 # Pydantic defines models with typed fields.
 
@@ -99,22 +101,26 @@ class Flock(PydanticModel):
     source_id: int
     birthday: Optional[datetime]
 
+
 class Batch(PydanticModel):
     id: Optional[int]
     name: str
 
+
 class Analyte(PydanticModel):
     id: Optional[int]
-    name: str
+    name: Optional[str]
     abbreviation: str
-    units: str
+    units: Optional[str]
     machine_type_id: int
+
 
 class Measurement(PydanticModel):
     id: Optional[int]
     value: Optional[float]
     sample_id: int
     analyte: Analyte
+
 
 class Sample(PydanticModel):
     """
@@ -126,7 +132,7 @@ class Sample(PydanticModel):
         flock_age_unit (AgeUnits): The unit of the flock age
         flock (Flock): The flock the sample is from, set as Optional to allow for creation of new samples without a flock
         comments (str): The comments on the sample, set as Optional to allow for creation of new samples without comments
-        measurements (List[Measurement]): The values of the measurements of the sample, set as Optional to allow for creation of new samples without measurements
+        measurements (List[Measurements]): The values of the measurements of the sample, set as Optional to allow for creation of new samples without measurements
         timestamp_added (datetime): The timestamp the sample was added, set as Optional to allow for creation of new samples without a timestamp as it is set by the DB
         validation_status (ValidationStatus): The status of the sample, set as Optional to allow for creation of new samples without a validation status
         sample_type (SampleTypes): The type of the sample, set as Optional to allow for creation of new samples without a sample type

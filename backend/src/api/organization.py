@@ -5,6 +5,8 @@ from src.schemas import Organization, Source
 from src.api.user import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
 from itsdangerous import json
+from src.helpers.log import create_log
+
 
 from src import models, schemas
 from src.enums import Roles, LogActions
@@ -21,7 +23,7 @@ organizationBlueprint = Blueprint('organization', __name__)
 @organizationBlueprint.route('/', methods=['GET'])
 @token_required
 @allowed_roles([0])
-def get_organizations(access_allowed):
+def get_organizations(access_allowed, current_user):
     """
     This function will return all the organizations in the database.
 
@@ -37,7 +39,7 @@ def get_organizations(access_allowed):
         ret = []
         for organization in organizations:
             ret.append(Organization.from_orm(organization).dict())
-        return json.dumps(ret), 200
+        return jsonify(ret), 200
     else:
         return jsonify({'message': 'Access denied'}), 403
 
@@ -91,7 +93,7 @@ def put_organization(access_allowed, current_user, item_id):
             editedOrganization_model = models.Organization.query.get(item_id)
             editedOrg = Organization.from_orm(editedOrganization_model).dict()
             # add log
-            # models.create_log(current_user, LogActions.EDIT_ORGANIZATION,'Edited Organization: ' + editedOrg.name)
+            create_log(current_user, LogActions.EDIT_ORGANIZATION,'Edited Organization: ' + editedOrg.name)
             return editedOrg, 200
 
     else:
@@ -114,7 +116,7 @@ def delete_organization(access_allowed, current_user, item_id):
                 id=item_id).update({'is_deleted': True})
             models.db.session.commit()
         # add log here
-        # models.create_log(current_user, LogActions.DELETE_ORGANIZATION,'Deleted organization with id: ' + str(deleted_organization.name))
+        create_log(current_user, LogActions.DELETE_ORGANIZATION,'Deleted organization ' + str(deleted_organization.name))
         return jsonify({'message': 'Organization deleted'}), 200
 
     else:
@@ -122,6 +124,8 @@ def delete_organization(access_allowed, current_user, item_id):
 
 
 @organizationBlueprint.route('/', methods=['POST'])
+@token_required
+@allowed_roles([0])
 def post_organization(access_allowed, current_user):
     if access_allowed:
         if models.Organization.query.filter_by(name=request.json.get('name')).first() is None:
@@ -143,11 +147,14 @@ def post_organization(access_allowed, current_user):
                 organization_code = randint(100000, 999999)
 
             org.organization_code = organization_code
-            org.code_last_updated = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            org.code_last_updated = datetime.now()
 
             models.db.session.add(org)
             models.db.session.commit()
             models.db.session.refresh(org)
+
+            create_log(current_user, LogActions.ADD_ORGANIZATION,'Added organization: ' + str(org.name))
+
             # add log here after merging
             return schemas.Organization.from_orm(org).dict(), 201
         else:

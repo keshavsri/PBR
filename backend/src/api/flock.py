@@ -8,9 +8,9 @@ from src.helpers.log import create_log
 
 flockBlueprint = Blueprint('flock', __name__)
 
-@flockBlueprint.route('/organization/<int:org_id>', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2, 3, 4])
+@flockBlueprint.route('/organization/<int:org_id>', methods=['GET'])
 def get_flocks_by_organization(access_allowed, current_user, org_id):
 
     """
@@ -24,11 +24,11 @@ def get_flocks_by_organization(access_allowed, current_user, org_id):
 
     if access_allowed:
         if current_user.role == Roles.Super_Admin or current_user.organization_id == org_id:
-            sql_text = db.text("SELECT f.* FROM flock_table f, source_table s, organization_table o WHERE f.source_id = s.id AND s.organization_id = :org_id;")
+            sql_text = db.text("SELECT f.* FROM flock_table f JOIN source_table s ON f.source_id = s.id AND s.organization_id = :org_id;")
             with engine.connect() as connection:
                 flocks_models = connection.execute(sql_text, {"org_id": org_id})
-            flocks = [Flock.from_orm(flock).dict() for flock in flocks_models]
-            return jsonify(flocks), 200
+                flocks = [Flock.from_orm(flock).dict() for flock in flocks_models]
+                return jsonify(flocks), 200
         else:
             return jsonify({'message': 'Insufficient Permissions'}), 401
     else:
@@ -36,7 +36,7 @@ def get_flocks_by_organization(access_allowed, current_user, org_id):
 
 @flockBlueprint.route('/source/<int:source_id>', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2, 3, 4])
 def get_flocks_by_source(access_allowed, current_user, source_id):
 
     """
@@ -63,7 +63,7 @@ def get_flocks_by_source(access_allowed, current_user, source_id):
 
 @flockBlueprint.route('/<int:item_id>', methods=['GET'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2, 3, 4])
 def get_flock(access_allowed, current_user, item_id):
     """
     This function handles the GET request for a specific flock.

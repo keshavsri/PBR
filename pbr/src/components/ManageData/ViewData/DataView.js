@@ -18,28 +18,37 @@ import ReviewSampleModal from "../ValidateData/ReviewSampleModal";
 const useStyles = makeStyles({});
 
 export default function DataView() {
-  const [rowList, setRowList] = React.useState([]);
+  const [sampleList, setSampleList] = React.useState([]);
+  const { checkResponseAuth, user } = useAuth();
+
+  const [analytes, setAnalytes] = React.useState([]);
+  const [currentCartridgeType, setCurrentCartridgeType] = React.useState({});
+  const [cartridgeTypes, setCartridgeTypes] = React.useState([]);
   const [pendingRowList, setPendingRowList] = React.useState([]);
   const [fullRowList, setFullRowList] = React.useState([]);
   const [showOnlyPendingSamples, setShowOnlyPendingSamples] =
     React.useState(false);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
+  const [roles, setRoles] = React.useState([]);
+
+
   const [isSample] = React.useState(true);
   const [openReviewSampleModal, setOpenReviewSampleModal] =
     React.useState(false);
 
   const [selectedSamples, setSelectedSamples] = React.useState([]);
   const [pendingSamples, setPendingSamples] = React.useState([]);
+  const [organization, setOrganization] = React.useState({});
+  const [organizations, setOrganizations] = React.useState([]);
 
   const [SavedToPendingVisibility, setSavedToPendingVisibility] =
     React.useState(false);
 
   const openSavedToPendingVisibility = () => setSavedToPendingVisibility(true);
+
   const closeSavedToPendingVisibility = () =>
     setSavedToPendingVisibility(false);
-
-  const { checkResponseAuth } = useAuth();
 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
@@ -72,38 +81,83 @@ export default function DataView() {
     });
   };
 
+  const getRoles = async () => {
+    const response = await fetch(`/api/enum/roles/`, {
+      method: "GET",
+    }).then(checkResponseAuth);
+    const data = await response.json();
+    setRoles(data);
+  };
+
+  const getOrganizations = async () => {
+    let orgId = user.organization_id;
+
+    if (user.role === roles["Super_Admin"]) {
+      const response = await fetch(`/api/organization/`, {
+        method: "GET",
+      }).then(checkResponseAuth);
+      const data = await response.json();
+      setOrganizations(data);
+      setOrganization(data[0]);
+    } else {
+      const response = await fetch(`/api/organization/${orgId}`, {
+        method: "GET",
+      });
+      const data = await response.json();
+      setOrganization(data);
+    }
+  };
+
   const turnPendingFilterOff = async () => {
     setShowOnlyPendingSamples(false);
-    setRowList(fullRowList);
+    setSampleList(fullRowList);
     setPendingRowList([]);
   };
 
   const filterPendingSamples = async () => {
-    rowList.map((row) => {
+    sampleList.map((row) => {
       if (row.validation_status == "Pending") {
         pendingRowList.push(row);
       }
     });
-    setFullRowList(rowList);
-    setRowList(pendingRowList);
+    setFullRowList(sampleList);
+    setSampleList(pendingRowList);
     setShowOnlyPendingSamples(true);
   };
 
   const getData = async () => {
-    await fetch(`/api/sample/`, { method: "GET" })
+    getHeadCells();
+    const uri = `/api/sample/org_cartridge_type?organization_id=${organization.id}&cartridge_type_id=${currentCartridgeType.id}`;
+    await fetch(uri, { method: "GET" })
       .then((response) => {
         return response.json();
       })
       .then(checkResponseAuth)
       .then((data) => {
-        denestMachineData(data.rows);
-        assignRowHtml(data.rows);
-        setRowList(data.rows);
-        getHeadCells(data.types);
+        data.forEach((sample) => {
+          sample.measurements.map((meas) => {
+            sample[meas.analyte.abbreviation] = meas.value;
+          });
+          sample["flock_name"] = sample.flock.name;
+        });
+        setSampleList(data);
+        assignRowHtml(data);
       });
   };
 
-  const getHeadCells = (types) => {
+  const getCartridgeTypes = async () => {
+    await fetch(`api/cartridge-type`)
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        setCartridgeTypes(data);
+        setCurrentCartridgeType(data[0]);
+      });
+  };
+
+  const getHeadCells = () => {
     const headCells = [
       {
         id: "id",
@@ -114,72 +168,34 @@ export default function DataView() {
       {
         id: "buttons",
       },
+
       {
-        id: "flock.id",
-        numeric: false,
-        disablePadding: true,
-        label: "Flock ID",
-      },
-      {
-        id: "flock.name",
+        id: "flock_name",
         numeric: false,
         disablePadding: true,
         label: "Flock Name",
       },
+
       {
-        id: "flock.source_name",
-        numeric: false,
-        disablePadding: true,
-        label: "Source",
-      },
-      {
-        id: "flock.production_type",
-        numeric: false,
-        disablePadding: true,
-        label: "Production Type",
-      },
-      {
-        id: "timestamp_added",
-        numeric: false,
-        disablePadding: true,
-        label: "Date Entered",
-      },
-      {
-        id: "flock_age_combined",
+        id: "flock_age",
         numeric: false,
         disablePadding: true,
         label: "Flock Age",
       },
-      {
-        id: "flock.gender",
-        numeric: false,
-        disablePadding: true,
-        label: "Gender",
-      },
+
       {
         id: "validation_status",
         numeric: false,
         disablePadding: true,
         label: "Status",
       },
-      {
-        id: "sample_type",
-        numeric: false,
-        disablePadding: true,
-        label: "Sample Type",
-      },
     ];
-
-    addApiColumnNamesToHeadCells(types, headCells);
-    setHeadCellList(headCells);
-  };
-
-  const addApiColumnNamesToHeadCells = (headCellNamesFromAPI, headCells) => {
-    headCellNamesFromAPI.map((machine) => {
-      machine.data.map((point, index) => {
-        headCells.push(createHeadCell(point.type, machine.machineName, index));
+    if (currentCartridgeType) {
+      currentCartridgeType.analytes.forEach((analyte, index) => {
+        headCells.push(createHeadCell(analyte, "", index));
       });
-    });
+    }
+    setHeadCellList(headCells);
   };
 
   function createHeadCell(point, machineName, index) {
@@ -195,48 +211,23 @@ export default function DataView() {
     return {
       machineName: machineName,
       name: point.name,
-      id: "measurement." + point.id,
+      id: point.abbreviation,
       numeric: false,
       disablePadding: true,
       label: headerLabel,
       sublabel: "" + machineName,
     };
   }
-  const denestMachineData = (rows) => {
-    rows.map((row, index) => {
-      row["flock_age_combined"] = "" + row.flock_age + " " + row.flock_age_unit;
-      row.measurement_values.map((m, index2) => {
-        let temp = "measurement." + m.measurement_id;
-        row[temp] = m.value;
-        if (m.measurement.measurementtype.units) {
-          row[temp] += ` ${m.measurement.measurementtype.units}`;
-        }
-      });
-      Object.keys(row.flock).map((key) => {
-        let temp = "flock." + key;
-        row[temp] = row.flock[key];
-        if (key == "source_id") {
-          row.organization.sources.map((source) => {
-            if (source["id"] == row.flock["id"])
-              row["flock.source_name"] = source["name"];
-          });
-        }
-      });
-    });
-  };
 
   const onSubmit = () => {
     openSavedToPendingVisibility();
   };
 
   const submitOne = async (id) => {
-    let path = `/api/sample/datapoint/submit/`;
-
+    let path = `/api/sample/submit/`;
     let temp = path + id;
     await fetch(temp, { method: "PUT" })
-      .then((response) => {
-        console.log(response.json());
-      })
+      .then((response) => {})
       .then(() => {
         getData();
       });
@@ -244,16 +235,12 @@ export default function DataView() {
     setSelected([]);
   };
 
-  console.log("Selected samples From Data View: ", selectedSamples);
-
   const submitAll = async () => {
-    let path = `/api/sample/datapoint/submit/`;
+    let path = `/api/sample/submit/`;
     selected.map(async (id, index) => {
       let temp = path + id;
       await fetch(temp, { method: "PUT" })
-        .then((response) => {
-          console.log(response.json());
-        })
+        .then((response) => {})
         .then(() => {
           getData();
         });
@@ -262,13 +249,11 @@ export default function DataView() {
   };
 
   const acceptSample = async (id) => {
-    let path = `/api/sample/datapoint/accept/`;
+    let path = `/api/sample/accept/`;
 
     let temp = path + id;
     await fetch(temp, { method: "PUT" })
-      .then((response) => {
-        console.log(response.json());
-      })
+      .then((response) => {})
       .then(() => {
         getData();
       });
@@ -277,7 +262,7 @@ export default function DataView() {
   };
 
   const rejectSample = async (id) => {
-    let path = `/api/sample/datapoint/reject/`;
+    let path = `/api/sample/reject/`;
 
     let temp = path + id;
     await fetch(temp, { method: "PUT" })
@@ -292,13 +277,11 @@ export default function DataView() {
   };
 
   const onDelete = async () => {
-    let path = `/api/sample/datapoint/`;
+    let path = `/api/sample/`;
     selected.map(async (id, index) => {
       let temp = path + id;
       await fetch(temp, { method: "DELETE" })
-        .then((response) => {
-          // return response.json();
-        })
+        .then((response) => {})
         .then(() => {
           getData();
         });
@@ -311,22 +294,43 @@ export default function DataView() {
   };
 
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
-  React.useEffect(() => {
-    getData();
-    //setSelected([]);
+  React.useEffect(async () => {
+    await getRoles();
+    await getCartridgeTypes();
+    await getData();
+
+    setSelected([]);
   }, []);
+
+  // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
+  React.useEffect(async () => {
+    setSelected([]);
+    await getData();
+  }, [organization, currentCartridgeType]);
+
+  React.useEffect(async () => {
+    await getOrganizations();
+  }, [roles]);
 
   return (
     <DataViewProvider>
       <Paper>
         <EnhancedTable
           headCells={headCellList}
-          rows={rowList}
+          rows={sampleList}
           toolbarButtons={
             <DVTableToolbar
               filterPendingSamples={filterPendingSamples}
               showOnlyPendingSamples={showOnlyPendingSamples}
               turnPendingFilterOff={turnPendingFilterOff}
+              cartridgeTypes={cartridgeTypes}
+              organizations={organizations}
+              setCurrentOrganization={setOrganization}
+              currentOrganization={organization}
+              user={user}
+              currentCartridgeType={currentCartridgeType}
+              setCurrentCartridgeType={setCurrentCartridgeType}
+              roles={roles}
             />
           }
           selected={selected}
@@ -337,7 +341,7 @@ export default function DataView() {
           isSample={isSample}
           setOpenReviewSampleModal={setOpenReviewSampleModal}
           onSubmit={onSubmit}
-        ></EnhancedTable>
+        />
 
         <Grid container spacing={2}>
           <Grid item xs={12} sm={12}>
@@ -346,7 +350,7 @@ export default function DataView() {
                 selected={selected}
                 submitAll={submitAll}
                 submitOne={submitOne}
-                rows={rowList}
+                rows={sampleList}
                 selectedSamples={selectedSamples}
                 setSelectedSamples={setSelectedSamples}
                 SavedToPendingVisibility={SavedToPendingVisibility}
@@ -357,12 +361,12 @@ export default function DataView() {
         </Grid>
       </Paper>
       <DataViewFilterModal
-        setRowList={setRowList}
+        setRowList={setSampleList}
         setHeadCellList={setHeadCellList}
         getData={getData}
-        rows={rowList}
+        rows={sampleList}
       />
-      <DataViewSampleModal getData={getData} />
+      <DataViewSampleModal getData={getData} roles={roles}/>
       <ReviewSampleModal
         openReviewSampleModal={openReviewSampleModal}
         setOpenReviewSampleModal={setOpenReviewSampleModal}
