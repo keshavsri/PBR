@@ -296,22 +296,6 @@ class MachineType(db.Model):
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(120), unique=True, nullable=False)
 
-
-class Cartridge(db.Model):
-
-    """
-    This table represents a Cartridge object used to measure a sample
-    Attributes:
-        id: Primary Key
-        rotor_lot_number: The rotor lot number of the cartridge
-        cartridge_type_id: CartridgeType
-        organization_id: Foreign Key to Organization
-    """
-
-    __tablename__ = 'cartridge_table'
-    id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    rotor_lot_number: str = db.Column(db.String(120))
-
     # References to Foreign Objects
     cartridge_type_id: int = db.Column(
         db.Integer, db.ForeignKey('cartridge_type_table.id'))
@@ -329,7 +313,8 @@ class CartridgeType(db.Model):
         db.Integer, db.ForeignKey('machine_type_table.id'))
 
     # Foreign References to this Object
-    analytes: List['Analyte'] = db.relationship('Analyte', secondary=cartridge_types_analytes_table)
+    analytes: List['Analyte'] = db.relationship(
+        'Analyte', secondary=cartridge_types_analytes_table)
 
 
 class HealthyRange(db.Model):
@@ -381,9 +366,10 @@ class Log(db.Model):
     logContent: str = db.Column(db.String(500))
     logTime: str = db.Column(db.DateTime, server_default=db.func.now())
 
-     # References to Foreign Objects
+    # References to Foreign Objects
     user_id = db.Column(db.Integer, db.ForeignKey('user_table.id'))
-    organization_id = db.Column(db.Integer, db.ForeignKey('organization_table.id'))
+    organization_id = db.Column(
+        db.Integer, db.ForeignKey('organization_table.id'))
 
     # Foreign References to this Object
     user = db.relationship('User')
