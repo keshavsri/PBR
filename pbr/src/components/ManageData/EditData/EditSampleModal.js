@@ -1,11 +1,6 @@
 import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
 import {
   Typography,
   Grid,
@@ -51,39 +46,16 @@ export default function EditSampleModal(props) {
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
 
-  const [expanded, setExpanded] = React.useState(false);
   const [errorSubmission, setErrorSubmission] = React.useState(false);
-
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
 
   useTheme();
 
   const {
     selectedSamples,
-    submitAll,
-    submitOne,
     editSampleModalVisiblity,
     setEditSampleModalVisibility,
-    setSelectedSamples,
+    Organization,
   } = props;
-
-  const removeFromSelected = (sample) => {
-    let newSelected = selectedSamples.filter((s) => s !== sample);
-    setSelectedSamples(newSelected);
-    if (newSelected.length === 0) {
-      setEditSampleModalVisibility(false);
-    }
-  };
-
-  const onSubmitOne = async (sample) => {
-    console.log("submitting one");
-    await submitOne(sample.id);
-    removeFromSelected(sample);
-    listSamples();
-    setErrorSubmission(false);
-  };
 
   const editSample = () => {
     console.log("submitting eidted Sample");
@@ -113,13 +85,14 @@ export default function EditSampleModal(props) {
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid container direction="row" alignItems="center" spacing={3}>
-            {/* <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  label="Organization"
-                  value={sample.organization.name}
-                />
-              </Grid> */}
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="Organization"
+                value={Organization.name}
+                disabled
+              />
+            </Grid>
 
             <Grid item xs>
               <TextField label="Flock" value={sample.flock.name} />
