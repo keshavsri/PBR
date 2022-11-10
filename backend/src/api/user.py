@@ -1,14 +1,10 @@
-import code
-from src.models import Organization
-from flask import request, Blueprint, jsonify, Response, make_response
+from flask import request, Blueprint, jsonify, make_response
 import bcrypt
 from datetime import datetime, timedelta, timezone
-import os
 import jwt
-import json
 from src.auth_token import Auth_Token
 from functools import wraps
-from src import models, helpers, schemas
+from src import models, schemas
 from src.enums import Roles, LogActions
 from src.helpers import log
 
@@ -336,8 +332,7 @@ def update_user(access_allowed, current_user, user_id):
             models.User.query.filter_by(
                 id=edited_user.get("id")).update(edited_user)
             models.db.session.commit()
-            # log.create_log(current_user, LogActions.EDIT_USER,
-            #                'Edited user: ' + str(edited_user.get("id")))
+            log.create_log(current_user, LogActions.EDIT_USER,'Edited user: ' + str(edited_user.get("id")))
 
             # Return updated user object, retreived via db query (confirmation)
             updated_user = schemas.User.from_orm(

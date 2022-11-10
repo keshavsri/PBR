@@ -173,12 +173,12 @@ def edit_sample(access_allowed, current_user, item_id):
                 if name != 'measurements':
                     setattr(old_sample, name, value)
 
-            oldMeasurements = request.json.pop('measurements')
+            new_measurements = request.json.pop('measurements')
 
             # Update the list of measurements.
 
             measurements = []
-            for measurement in measurements:
+            for measurement in new_measurements:
                 measurement_model: MeasurementORM = MeasurementORM()
                 for name, value in measurement.items():
                     setattr(measurement_model, name, value)
