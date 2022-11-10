@@ -5,7 +5,6 @@ from src import models, schemas
 from src.enums import Roles, LogActions
 from src.helpers import log
 
-from src.helpers import machine
 machineBlueprint = Blueprint('machine', __name__)
 
 
@@ -28,9 +27,11 @@ def get_machines(access_allowed, current_user, given_org_id=None):
 
         if given_org_id:
             if current_user.role == Roles.Super_Admin:
-                responseJSON = src.helpers.machine.get_machines_by_org(current_Organization)
+                responseJSON = src.helpers.machine.get_machines_by_org(
+                    current_Organization)
             elif current_user.organization_id == given_org_id:
-                responseJSON = src.helpers.machine.get_machines_by_org(current_Organization)
+                responseJSON = src.helpers.machine.get_machines_by_org(
+                    current_Organization)
             else:
                 responseJSON = jsonify({'message': 'Insufficient Permissions'})
                 return responseJSON, 401
@@ -100,15 +101,16 @@ def create_machine(access_allowed, current_user):
             return jsonify(schemas.Machine.from_orm(added_machine).dict()), 201
         else:
             return jsonify(
-                        {
-                            'message': 'Machine already exists',
-                            "existing machine": schemas.Machine.from_orm(
-                                models.Machine.query.filter_by(
-                                    serial_number=request.json.get('serial_number')
-                                ).first()
-                            ).dict()
-                        }
-                    ), 409 
+                {
+                    'message': 'Machine already exists',
+                    "existing machine": schemas.Machine.from_orm(
+                        models.Machine.query.filter_by(
+                            serial_number=request.json.get(
+                                'serial_number')
+                        ).first()
+                    ).dict()
+                }
+            ), 409
     return jsonify({'message': 'Role not allowed'}), 403
 
 
@@ -170,7 +172,8 @@ def delete_machine(access_allowed, current_user, item_id):
             machine = models.Machine.query.get(item_id)
             models.db.session.delete(machine)
             models.db.session.commit()
-            log.create_log(current_user, LogActions.DELETE_MACHINE, 'Deleted Machine: ' + machine.serial_number)
+            log.create_log(current_user, LogActions.DELETE_MACHINE,
+                           'Deleted Machine: ' + machine.serial_number)
             return jsonify({'message': 'Machine deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
