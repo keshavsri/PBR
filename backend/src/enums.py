@@ -77,6 +77,11 @@ class AgeUnits(str, Enum):
     Months = "Months"
     Years = "Years"
 
+class AgeGroup(str, Enum):
+    Brooder = "Brooder (1-5 days)"
+    Growing = "Growing (1-12 weeks)"
+    Prelay = "Pre-lay (12-20 weeks)"
+    Lay = "Lay (20+ weeks)"
 
 class ValidationTypes(str, Enum):
     Saved = "Saved"
@@ -95,6 +100,32 @@ class SampleTypes(str, Enum):
 class Species(str, Enum):
     Turkey = "Turkey"
     Chicken = "Chicken"
+
+class ChickenStrain(str, Enum):
+    Ross_308 = "Ross 308"
+    Ross_708 = "Ross 708"
+    Ross_308_AP = "Ross 308 AP"
+    Ranger_Premium = "Ranger Premium"
+    Ranger_Classic = "Ranger Classic"
+    Ranger_Gold = "Ranger Gold"
+    Cobb500 = "Cobb500"
+    Cobb700 = "Cobb700"
+    Arbor_Acres_Plus = "Arbor Acres Plus"
+    Hubbard = "Hubbard"
+    Brown = "Brown"
+    LSL = "LSL"
+    Sandy = "Sandy"
+    Silver = "Silver"
+    Tradition = "Tradition"
+    White = "White"
+
+class TurkeyStrain(str, Enum):
+    Nicholas_Select = "Nicholas Select"
+    BUT_6 = "BUT 6"
+    Converter = "Converter"
+    Grade_Maker = "Grade Maker"
+    Optima = "Optima"
+    ConverterNOVO = "ConverterNOVO"
 
 
 class ProductionTypes(str, Enum):

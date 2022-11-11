@@ -11,7 +11,7 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from unittest import mock
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-from src import Models
+from src import models
 from src.enums import Roles
 from src.auth_token import Auth_Token, BLACKLIST
 
@@ -51,7 +51,7 @@ def test_create_token():
         role = Roles.Admin,
     )
     data=temp
-    user = Models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
+    user = models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
     token_data = {
             "email": user.email,
             "id": user.id,
@@ -80,7 +80,7 @@ def test_blacklist_token():
         role = Roles.Admin,
     )
     data=temp
-    user = Models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
+    user = models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
     token_data = {
             "email": user.email,
             "id": user.id,
@@ -108,7 +108,7 @@ def test_blacklist_and_decode_token():
         role = Roles.Admin,
     )
     data=temp
-    user = Models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
+    user = models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
     token_data = {
             "email": user.email,
             "id": user.id,
@@ -136,7 +136,7 @@ def test_decode_expired_token():
         role = Roles.Admin,
     )
     data=temp
-    user = Models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
+    user = models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
     token_data = {
             "email": user.email,
             "id": user.id,
@@ -164,7 +164,7 @@ def test_replace_token():
         role = Roles.Admin,
     )
     data=temp
-    user = Models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
+    user = models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
     token_data = {
             "email": user.email,
             "id": user.id,

@@ -1,6 +1,9 @@
-from src.Models import *
+from src.models import *
 from src import app
 import sys
+import traceback
+from sqlalchemy.sql import text
+
 import bcrypt
 
 if len(sys.argv) != 3:
@@ -25,7 +28,6 @@ else:
                 zip="27606",
                 organization_code="123456"
             )
-
             db.session.add(ncsu_org)
             db.session.commit()
 
@@ -44,7 +46,6 @@ else:
 
             db.session.add(super_admin_user)
             db.session.commit()
-
             # Create a Source
             lake_wheeler_source = Source(
                 id=1,
@@ -52,21 +53,13 @@ else:
                 street_address="4201 Inwood Road",
                 city="Raleigh",
                 state="NC",
-                zip="27603"
+                zip="27603",
+                organization_id=1
             )
 
             db.session.add(lake_wheeler_source)
             db.session.commit()
 
-            # Link Source with Organization
-            lakewheeler_ncsu = OrganizationSource(
-                organization_id=1,
-                source_id=1
-            )
-
-            db.session.add(lakewheeler_ncsu)
-            db.session.commit()
-            
             # Create a Test Flock 
             test_flock = Flock(
                 id=1,
@@ -75,8 +68,7 @@ else:
                 species="Chicken",
                 gender="Male",
                 production_type="Meat",
-                source_id=1,
-                organization_id=1
+                source_id=1
             )
 
             db.session.add(test_flock)
@@ -98,12 +90,11 @@ else:
 
             db.session.add(vetscan_machinetype)
             db.session.commit()
-
             # Create Machines from Machine Types for NCSU
             ncsu_istat= Machine(
                 id=1,
                 serial_number=123456,
-                machinetype_id=1,
+                machine_type_id=1,
                 organization_id=1
             )
 
@@ -113,7 +104,7 @@ else:
             ncsu_vetscan= Machine(
                 id=2,
                 serial_number=654321,
-                machinetype_id=2,
+                machine_type_id=2,
                 organization_id=1
             )
 
@@ -121,308 +112,370 @@ else:
             db.session.commit()
 
             # Load in Measurement Types 
-            mt1 = MeasurementType(
+            mt1 = Analyte(
                 id=1,
                 abbreviation="AST",
                 units="U/L",
-                required=0,
-                general=0
+                machine_type_id=2,
+                name="Aspartate Aminotransferase"
+
             )
             db.session.add(mt1)
 
-            mt2 = MeasurementType(
+            mt2 = Analyte(
                 id=2,
                 abbreviation="BA",
                 units="umol/L",
-                required=0,
-                general=0
+                machine_type_id=2,
+                name="Bile Acid"
             )
             db.session.add(mt2)
 
-            mt3 = MeasurementType(
+            mt3 = Analyte(
                 id=3,
                 abbreviation="CK",
                 units="U/L",
-                required=0,
-                general=0
+                machine_type_id=2,
+                name="Creatinine Kinase"
             )
             db.session.add(mt3)
 
-            mt4 = MeasurementType(
+            mt4 = Analyte(
                 id=4,
                 abbreviation="UA",
                 units="mg/dL",
-                required=0,
-                general=0
+                machine_type_id=2,
+                name="Uric Acid"
             )
             db.session.add(mt4)
 
-            mt5 = MeasurementType(
+            mt5 = Analyte(
                 id=5,
                 name="Glucose",
                 abbreviation="GLU",
                 units="mg/dL",
-                required=0,
-                general=0
+                machine_type_id=2
+
+
             )
             db.session.add(mt5)
 
-            mt6 = MeasurementType(
+            mt6 = Analyte(
                 id=6,
-                name="Total Calcium",
-                abbreviation="CA",
-                units="mg/dL",
-                required=0,
-                general=0
-            )
-            db.session.add(mt6)
-
-            mt7 = MeasurementType(
-                id=7,
                 name="Phosphorus",
                 abbreviation="PHOS",
                 units="mg/dL",
-                required=0,
-                general=0
+                machine_type_id=2
+            )
+            db.session.add(mt6)
+
+            mt7 = Analyte(
+                id=7,
+                name="Total Calcium",
+                abbreviation="CA",
+                units="mg/dL",
+                machine_type_id=2,
             )
             db.session.add(mt7)
 
-            mt8 = MeasurementType(
+            mt8 = Analyte(
                 id=8,
                 name="Total Protein",
                 abbreviation="TP",
                 units="g/dL",
-                required=0,
-                general=0
+                machine_type_id=2
             )
             db.session.add(mt8)
-            
-            mt9 = MeasurementType(
+
+            mt9 = Analyte(
                 id=9,
                 name="Albumen",
                 abbreviation="ALB",
                 units="g/dL",
-                required=0,
-                general=0
+                machine_type_id=2
             )
             db.session.add(mt9)
 
-            mt10 = MeasurementType(
+            mt10 = Analyte(
                 id=10,
                 name="Globulin",
                 abbreviation="GLOB",
                 units="g/dL",
-                required=0,
-                general=0
+                machine_type_id=2
+
             )
             db.session.add(mt10)
 
-            mt11 = MeasurementType(
+            mt11 = Analyte(
                 id=11,
                 name="Potassium",
                 abbreviation="K+",
                 units="mmol/L",
-                required=0,
-                general=0
+                machine_type_id=2
+
+
             )
             db.session.add(mt11)
 
-            mt12 = MeasurementType(
+            mt12 = Analyte(
                 id=12,
                 name="Sodium",
                 abbreviation="NA+",
                 units="mmol/L",
-                required=0,
-                general=0
+                machine_type_id=2
+
             )
             db.session.add(mt12)
 
-            mt13 = MeasurementType(
+            mt13 = Analyte(
                 id=13,
-                abbreviation="RQC",
-                required=0,
-                general=0
+                name="Sodium",
+                abbreviation="Na",
+                units="mmol/L",
+                machine_type_id=1
+
             )
             db.session.add(mt13)
 
-            mt14 = MeasurementType(
+            mt14 = Analyte(
                 id=14,
-                abbreviation="QC",
-                required=0,
-                general=0
+                name="Potassium",
+                abbreviation="K",
+                units="mmol/L",
+                machine_type_id=1
+
             )
             db.session.add(mt14)
 
-            mt15 = MeasurementType(
+            mt15 = Analyte(
                 id=15,
-                abbreviation="HEM",
-                required=0,
-                general=0
+                name="Ionized Calcium",
+                abbreviation="iCa",
+                units="mmol/L",
+                machine_type_id=1
+
             )
             db.session.add(mt15)
 
-            mt16 = MeasurementType(
+            mt16 = Analyte(
                 id=16,
-                abbreviation="LIP",
-                required=0,
-                general=0
+                name="Hematocrit",
+                abbreviation="Hct",
+                units="%PCV",
+                machine_type_id=1
+
             )
             db.session.add(mt16)
 
-            mt17 = MeasurementType(
+            mt17 = Analyte(
                 id=17,
-                abbreviation="ICT",
-                required=0,
-                general=0
+                name="Hemoglobin",
+                abbreviation="Hgb",
+                units="mmol/L",
+                machine_type_id=1
+
             )
             db.session.add(mt17)
 
-            mt18 = MeasurementType(
+            mt18 = Analyte(
                 id=18,
-                name="Rotor Lot Number",
-                required=0,
-                general=1
+                abbreviation="pH",
+                machine_type_id=1,
+                name="pH"
+
             )
             db.session.add(mt18)
 
-            mt19 = MeasurementType(
+
+            mt19 = Analyte(
                 id=19,
-                name="Patient ID",
-                required=0,
-                general=1
+                abbreviation="PO2",
+                machine_type_id=1,
+                units="mmol/L",
+                name="PO2"
+
             )
             db.session.add(mt19)
 
-            mt20 = MeasurementType(
+            mt20 = Analyte(
                 id=20,
-                abbreviation="pH",
-                required=0,
-                general=0
+                abbreviation="TCO2",
+                machine_type_id=1,
+                units="mmol/L",
+                name="TCO2"
+
             )
             db.session.add(mt20)
 
-            mt21 = MeasurementType(
+            mt21 = Analyte(
                 id=21,
-                abbreviation="pCO2",
-                required=0,
-                general=0
+                abbreviation="HCO3",
+                machine_type_id=1,
+                units="mmol/L",
+                name="HCO3"
+
             )
             db.session.add(mt21)
 
-            mt22 = MeasurementType(
+            mt22 = Analyte(
                 id=22,
-                abbreviation="pO2",
-                required=0,
-                general=0
+                name="Base Excess",
+                abbreviation="BE",
+                machine_type_id=1,
+                units="mmol/L"
+
             )
             db.session.add(mt22)
 
-            mt23 = MeasurementType(
+            mt23 = Analyte(
                 id=23,
-                abbreviation="BE",
-                required=0,
-                general=0
+                abbreviation="sO2",
+                machine_type_id=1,
+                units="%",
+                name="sO2"
+
             )
             db.session.add(mt23)
 
-            mt24 = MeasurementType(
+            mt24 = Analyte(
                 id=24,
-                abbreviation="HCO3",
-                required=0,
-                general=0
+                name="Chloride",
+                abbreviation="Cl",
+                machine_type_id=1,
+                units="mmol/L"
+
             )
             db.session.add(mt24)
 
-            mt25 = MeasurementType(
+            mt25 = Analyte(
                 id=25,
-                abbreviation="tCO2",
-                required=0,
-                general=0
+                name="Anion Gap",
+                abbreviation="Cl",
+                machine_type_id=1,
+                units="mmol/L"
+
             )
             db.session.add(mt25)
 
-            mt26 = MeasurementType(
+            mt26 = Analyte(
                 id=26,
-                abbreviation="sO2",
-                required=0,
-                general=0
+                name="BUN/Urea",
+                abbreviation="BUN/Urea",
+                machine_type_id=1,
+                units="mg/dL"
+
             )
             db.session.add(mt26)
 
-            mt27 = MeasurementType(
+            mt27 = Analyte(
                 id=27,
-                abbreviation="Na",
-                required=0,
-                general=0
+                name="Urea Nitrogen",
+                abbreviation="BUN",
+                machine_type_id=1,
+                units="mmol/L"
+
             )
             db.session.add(mt27)
 
-            mt28 = MeasurementType(
+            mt28 = Analyte(
                 id=28,
-                abbreviation="K",
-                required=0,
-                general=0
+                name="Creatinine",
+                abbreviation="Crea",
+                machine_type_id=1,
+                units="umol/L"
+
             )
             db.session.add(mt28)
 
-            mt29 = MeasurementType(
+            mt29 = Analyte(
                 id=29,
-                abbreviation="iCa",
-                required=0,
-                general=0
+                abbreviation="PCO2",
+                name="PCO2",
+                machine_type_id=1,
+                units="mmol/L"
+
             )
             db.session.add(mt29)
 
-            mt30 = MeasurementType(
+            mt30 = Analyte(
                 id=30,
+                name="Glucose",
                 abbreviation="Glu",
-                required=0,
-                general=0
+                machine_type_id=1,
+                units="mmol/L"
+
             )
             db.session.add(mt30)
-
-            mt31 = MeasurementType(
-                id=31,
-                abbreviation="Hct",
-                required=0,
-                general=0
-            )
-            db.session.add(mt31)
-
-            mt32 = MeasurementType(
-                id=32,
-                abbreviation="Hb",
-                required=0,
-                general=0
-            )
-            db.session.add(mt32)
-
-            mt33 = MeasurementType(
-                id=33,
-                name="iStat Number",
-                required=0,
-                general=1
-            )
-            db.session.add(mt33)
             db.session.commit()
-            
+
+            c1 = CartridgeType(
+                id=1,
+                machine_type_id=2,
+                name="VetScan - Avian/Reptilian Profile Plus Cartridge",
+            )
+            db.session.add(c1)
+            db.session.commit()
+
+            c2 = CartridgeType(
+                id=2,
+                machine_type_id=1,
+                name="i-STAT - EG7+ Test Cartridge",
+            )
+            db.session.add(c2)
+            db.session.commit()
+
+            c3 = CartridgeType(
+                id=3,
+                machine_type_id=1,
+                name="i-STAT - EC8+ Test Cartridge",
+            )
+            db.session.add(c3)
+            db.session.commit()
+
+            c4 = CartridgeType(
+                id=4,
+                machine_type_id=1,
+                name="i-STAT - CG8+ Test Cartridge",
+            )
+            db.session.add(c4)
+            db.session.commit()
+
+            c5 = CartridgeType(
+                id=5,
+                machine_type_id=1,
+                name="i-STAT Chem 8+ Test Cartridge",
+            )
+            db.session.add(c5)
+            db.session.commit()
+
             # Link Measurement Types to Machines
-            for i in range(1, 20):
-                db.session.add(
-                    Measurement(
-                        machine_id=2,
-                        measurementtype_id=i
-                    )
-                )
-            for i in range(20, 34):
-                db.session.add(
-                    Measurement(
-                        machine_id=1,
-                        measurementtype_id=i
-                    )
-                )
+            for i in range(1, 13):
+                child = Analyte.query.get(i)
+                c1.analytes.append(child)
+
+            c2_analytes = {13, 14, 15, 16, 17, 18, 20, 21, 22, 23, 29 }
+            for i in c2_analytes:
+                child = Analyte.query.get(i)
+                c2.analytes.append(child)
+
+            c3_analytes = { 13, 14, 16, 17, 18, 20, 21, 22, 24, 25, 26, 27, 29, 30 }
+            for i in c3_analytes:
+                child = Analyte.query.get(i)
+                c3.analytes.append(child)
+
+            c4_analytes = {13, 14, 15,16, 17, 18, 19, 20, 21, 22, 23, 29, 30}
+            for i in c4_analytes:
+                child = Analyte.query.get(i)
+                c4.analytes.append(child)
+
+            c5_analytes = {13, 14, 15, 16, 17, 20, 24, 26, 27, 28, 30 }
+            for i in c5_analytes:
+                child = Analyte.query.get(i)
+                c5.analytes.append(child)
+
             db.session.commit()
             print("Done!")
-        except:
+        except Exception as e:
+            traceback.print_exc()
             print("Could not finish import. Drop all tables and start again.")
 
