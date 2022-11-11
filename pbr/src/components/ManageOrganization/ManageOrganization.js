@@ -66,8 +66,6 @@ export default function OrganizationView() {
       });
   };
 
-  console.log(organizations);
-
   const renderToolbar = () => {
     if (user.role === 0) {
       return (

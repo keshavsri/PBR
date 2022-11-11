@@ -82,7 +82,6 @@ export default function SavedToPendingModal(props) {
   };
 
   const onSubmitOne = async (sample) => {
-    console.log("submitting one");
     await submitOne(sample.id);
     removeFromSelected(sample);
     listSamples();
@@ -255,7 +254,6 @@ export default function SavedToPendingModal(props) {
             <Button
               variant="contained"
               onClick={() => {
-                console.log("submitting sample");
                 onSubmitOne(sample);
               }}
             >

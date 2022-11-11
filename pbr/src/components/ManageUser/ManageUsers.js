@@ -47,10 +47,8 @@ export default function ManageUsers() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         assignRowHtml(data.rows);
         setRowList(data.rows);
-        console.log(rowList);
       })
       .catch((error) => {
         console.log(error);
@@ -85,7 +83,6 @@ export default function ManageUsers() {
   };
 
   const editUser = async (editedUser) => {
-    console.log("sending request for edit user");
     await fetch(`/api/user/${selected[0]}`, {
       method: "PUT",
       body: JSON.stringify(editedUser),
@@ -124,8 +121,6 @@ export default function ManageUsers() {
 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
-      console.log(row.id);
-      console.log(user.role);
       row.role_id = row.role;
       row.role = roleMap[Number(row.role)];
       row.deletable = isDeletable(row);
@@ -133,8 +128,6 @@ export default function ManageUsers() {
   };
 
   const isDeletable = (row) => {
-    console.log(user.id, row.id);
-    console.log(user.id === row.id);
     if (user.role < row.role_id && user.role != 3) {
       return true;
     } else if (user.id === row.id) {

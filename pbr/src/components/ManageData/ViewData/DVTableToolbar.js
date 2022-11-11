@@ -44,9 +44,6 @@ export default function DVTableToolbar({
 
   useTheme();
 
-  const selectedLength = async () => {
-    console.log(selected.length);
-  };
 
   return (
     <>
