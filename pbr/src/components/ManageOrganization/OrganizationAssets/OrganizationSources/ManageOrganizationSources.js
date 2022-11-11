@@ -2,25 +2,29 @@ import React from "react";
 
 import { Paper, Button, Tooltip, IconButton, Chip, Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import useAuth from "../../../services/useAuth";
-import EnhancedTable from "../../EnhancedTable/EnhancedTable";
+import useAuth from "../../../../services/useAuth";
+import EnhancedTable from "../../../EnhancedTable/EnhancedTable";
+import AddOrganizationSources from "./AddOrganizationSources";
 
-export default function ManageOrganizationFlocks({
+
+export default function ManageOrganizationSources({
   organization
 }) {
   const { checkResponseAuth, user } = useAuth();
-  const [flocks, setFlocks] = React.useState([]);
+  const [sources, setSources] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
+  const [openAddOrganizationSourceModal, setOpenAddOrganizationSourceModal] =
+  React.useState(false);
 
   React.useEffect(async () => {
-    await getFlocks();
+    await getSources();
 
     getHeadCells();
   }, []);
 
-  const getFlocks = async () => {
-    await fetch(`/api/flock/organization/${organization.id}`, {
+  const getSources = async () => {
+    await fetch(`/api/source/organization/${organization.id}`, {
       method: "GET",
     })
       .then(checkResponseAuth)
@@ -28,7 +32,7 @@ export default function ManageOrganizationFlocks({
         return response.json();
       })
       .then((data) => {
-        setFlocks(data);
+        setSources(data)
         assignRowHtml(data);
       });
   };
@@ -45,41 +49,29 @@ export default function ManageOrganizationFlocks({
         label: "Name",
       },
       {
-        id: "strain",
+        id: "street_address",
         numeric: false,
         disablePadding: true,
-        label: "Strain",
+        label: "Street Address",
       },
       {
-        id: "species",
+        id: "city",
         numeric: false,
         disablePadding: true,
-        label: "Species",
+        label: "City",
       },
       {
-        id: "production_type",
+        id: "state",
         numeric: false,
         disablePadding: true,
-        label: "Production Type",
+        label: "State",
       },
       {
-        id: "gender",
+        id: "zip",
         numeric: false,
         disablePadding: true,
-        label: "Gender",
+        label: "Zip Code",
       },
-      {
-        id: "birthday",
-        numeric: false,
-        disablePadding: true,
-        label: "Birthday",
-      },
-      {
-        id: "source_name",
-        numeric: false,
-        disablePadding: true,
-        label: "Source",
-      }
     ];
     setHeadCellList(headCells);
   };
@@ -91,25 +83,36 @@ export default function ManageOrganizationFlocks({
           <Chip label={row.status} color="primary" size="small" />
         </>
       );
-      row.birthday = new Date(row.birthday).toLocaleString(
-        "en-US",
-        {
-          timeZone: "America/New_York",
-        }
-      );
     });
+  };
+
+  const handleOpenAddOrganizationSourcesModal = () => {
+    setOpenAddOrganizationSourceModal(true);
   };
 
   return (
     <>
       <Paper>
         <Grid item sm={12}>
-          <Typography variant="h1" align="center">Flocks</Typography>
+          <Typography variant="h1" align="center">Sources</Typography>
         </Grid>
+
+        <Grid item xs={12} sm={3}>
+          <Button variant="contained" onClick={handleOpenAddOrganizationSourcesModal}>Create New Source</Button>
+        </Grid>
+
+        <Grid item xs={12} sm={12}>
+            <AddOrganizationSources
+              getSources={getSources}
+              openAddOrganizationSourceModal={openAddOrganizationSourceModal}
+              setOpenAddOrganizationSourceModal={setOpenAddOrganizationSourceModal}
+              organization={organization}
+            />
+          </Grid>
 
         <EnhancedTable
           headCells={headCellList}
-          rows={flocks}
+          rows={sources}
           selected={selected}
           setSelected={setSelected}
         ></EnhancedTable>

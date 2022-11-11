@@ -2,25 +2,25 @@ import React from "react";
 
 import { Paper, Button, Tooltip, IconButton, Chip, Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import useAuth from "../../../services/useAuth";
-import EnhancedTable from "../../EnhancedTable/EnhancedTable";
+import useAuth from "../../../../services/useAuth";
+import EnhancedTable from "../../../EnhancedTable/EnhancedTable";
 
-export default function ManageOrganizationMachines({
+export default function ManageOrganizationFlocks({
   organization
 }) {
   const { checkResponseAuth, user } = useAuth();
-  const [machines, setMachines] = React.useState([]);
+  const [flocks, setFlocks] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
 
   React.useEffect(async () => {
-    await getMachines();
+    await getFlocks();
 
     getHeadCells();
   }, []);
 
-  const getMachines = async () => {
-    await fetch(`/api/machine/organization/${organization.id}`, {
+  const getFlocks = async () => {
+    await fetch(`/api/flock/organization/${organization.id}`, {
       method: "GET",
     })
       .then(checkResponseAuth)
@@ -28,11 +28,10 @@ export default function ManageOrganizationMachines({
         return response.json();
       })
       .then((data) => {
-        setMachines(data)
+        setFlocks(data);
         assignRowHtml(data);
       });
   };
-
 
   const getHeadCells = () => {
     const headCells = [
@@ -40,16 +39,46 @@ export default function ManageOrganizationMachines({
         id: "buttons",
       },
       {
-        id: "serial_number",
+        id: "name",
         numeric: false,
         disablePadding: true,
-        label: "Serial Number",
+        label: "Name",
       },
       {
-        id: "machine_type_name",
+        id: "strain",
         numeric: false,
         disablePadding: true,
-        label: "Machine Type",
+        label: "Strain",
+      },
+      {
+        id: "species",
+        numeric: false,
+        disablePadding: true,
+        label: "Species",
+      },
+      {
+        id: "production_type",
+        numeric: false,
+        disablePadding: true,
+        label: "Production Type",
+      },
+      {
+        id: "gender",
+        numeric: false,
+        disablePadding: true,
+        label: "Gender",
+      },
+      {
+        id: "birthday",
+        numeric: false,
+        disablePadding: true,
+        label: "Birthday",
+      },
+      {
+        id: "source_name",
+        numeric: false,
+        disablePadding: true,
+        label: "Source",
       }
     ];
     setHeadCellList(headCells);
@@ -62,6 +91,12 @@ export default function ManageOrganizationMachines({
           <Chip label={row.status} color="primary" size="small" />
         </>
       );
+      row.birthday = new Date(row.birthday).toLocaleString(
+        "en-US",
+        {
+          timeZone: "America/New_York",
+        }
+      );
     });
   };
 
@@ -69,12 +104,12 @@ export default function ManageOrganizationMachines({
     <>
       <Paper>
         <Grid item sm={12}>
-          <Typography variant="h1" align="center">Machines</Typography>
+          <Typography variant="h1" align="center">Flocks</Typography>
         </Grid>
 
         <EnhancedTable
           headCells={headCellList}
-          rows={machines}
+          rows={flocks}
           selected={selected}
           setSelected={setSelected}
         ></EnhancedTable>

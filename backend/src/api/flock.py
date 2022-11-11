@@ -25,7 +25,7 @@ def get_flocks_by_organization(access_allowed, current_user, org_id):
 
     if access_allowed:
         if current_user.role == Roles.Super_Admin or current_user.organization_id == org_id:
-            sql_text = db.text("SELECT f.* FROM flock_table f JOIN source_table s ON f.source_id = s.id AND s.organization_id = :org_id;")
+            sql_text = db.text("SELECT f.* FROM flock_table f JOIN source_table s ON f.source_id = s.id AND s.organization_id = :org_id AND s.is_deleted = 0;")
             with engine.connect() as connection:
                 flocks_models = connection.execute(sql_text, {"org_id": org_id})
                 response = []
@@ -56,7 +56,7 @@ def get_flocks_by_source(access_allowed, current_user, source_id):
     if access_allowed:
         source = SourceORM.query.get(source_id)
         if current_user.role == Roles.Super_Admin or current_user.organization_id == source.organization_id:
-            flocks_models = FlockORM.query.filter_by(source_id=source_id).all()
+            flocks_models = FlockORM.query.filter_by(source_id=source_id, is_deleted=False).all()
             flocks = [Flock.from_orm(flock).dict() for flock in flocks_models]
             return jsonify(flocks), 200
         else:
@@ -79,7 +79,7 @@ def get_flock(access_allowed, current_user, item_id):
     :return: A specific flock if it exists, a 404 not found otherwise.
     """
     if access_allowed:
-        sql_text = db.text("SELECT s.organization_id FROM flock_table f, source_table s WHERE f.source_id = s.id;")
+        sql_text = db.text("SELECT s.organization_id FROM flock_table f, source_table s WHERE f.source_id = s.id AND is_deleted = 0;")
         with engine.connect() as connection:
             flock_organization_id = connection.execute(sql_text)
         if current_user.role == Roles.Super_Admin or flock_organization_id == current_user.organization_id:
