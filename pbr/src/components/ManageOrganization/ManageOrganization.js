@@ -2,10 +2,14 @@ import * as React from "react";
 
 import EditOrganization from "./EditOrganization";
 import OrganizationDetails from "./OrganizationDetails";
-import AdminContact from "./AdminContact";
+import AdminContact from "./OrganizationDetails/AdminContact";
 import Toolbar from "./Toolbar";
-import OrganizationCode from "./OrganizationCode";
+import OrganizationCode from "./OrganizationDetails/OrganizationCode";
 import AddOrganization from "./AddOrganization";
+import ManageOrganizationSources from "./OrganizationAssets/ManageOrganizationSources";
+import ManageOrganizationFlocks from "./OrganizationAssets/ManageOrganizationFlocks";
+import ManageOrganizationMachines from "./OrganizationAssets/ManageOrganizationMachines";
+
 
 import { Box, Typography, Grid, Card } from "@mui/material";
 
@@ -116,7 +120,9 @@ export default function OrganizationView() {
                     userRole={user.role}
                   />
                 )}
+
               </Grid>
+
               <Grid container item xs={12} sm={6} spacing={2}>
                 <Grid item xs={12} sm={12}>
                   <OrganizationCode
@@ -127,6 +133,31 @@ export default function OrganizationView() {
                   <AdminContact adminContact={adminContact} />
                 </Grid>
               </Grid>
+
+              <Grid container item xs={12} sm={12} spacing={2}>
+                <Grid item xs={12} sm={12}>
+                    <ManageOrganizationSources
+                      organization={organization}
+                    />
+                  </Grid>
+              </Grid>
+
+              <Grid container item xs={12} sm={12} spacing={2}>
+                <Grid item xs={12} sm={12}>
+                    <ManageOrganizationFlocks
+                      organization={organization}
+                    />
+                  </Grid>
+              </Grid>
+
+              <Grid container item xs={12} sm={12} spacing={2}>
+                <Grid item xs={12} sm={12}>
+                    <ManageOrganizationMachines
+                      organization={organization}
+                    />
+                  </Grid>
+              </Grid>
+
             </>
           ) : null}
         </Grid>

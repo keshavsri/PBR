@@ -285,6 +285,9 @@ class Machine(db.Model):
     organization_id: int = db.Column(
         db.Integer, db.ForeignKey('organization_table.id'))
 
+    # Foreign References to this Object
+    machine_type = db.relationship('MachineType')
+
 
 class MachineType(db.Model):
     """ This table stores the machine types.

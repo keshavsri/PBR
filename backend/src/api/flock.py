@@ -8,9 +8,10 @@ from src.helpers.log import create_log
 
 flockBlueprint = Blueprint('flock', __name__)
 
+
+@flockBlueprint.route('/organization/<int:org_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
-@flockBlueprint.route('/organization/<int:org_id>', methods=['GET'])
 def get_flocks_by_organization(access_allowed, current_user, org_id):
 
     """
@@ -27,8 +28,12 @@ def get_flocks_by_organization(access_allowed, current_user, org_id):
             sql_text = db.text("SELECT f.* FROM flock_table f JOIN source_table s ON f.source_id = s.id AND s.organization_id = :org_id;")
             with engine.connect() as connection:
                 flocks_models = connection.execute(sql_text, {"org_id": org_id})
-                flocks = [Flock.from_orm(flock).dict() for flock in flocks_models]
-                return jsonify(flocks), 200
+                response = []
+                for flock in flocks_models:
+                    schema_flock = Flock.from_orm(flock).dict()
+                    schema_flock.update({"source_name": SourceORM.query.get(flock.source_id).name})
+                    response.append(schema_flock)
+                return jsonify(response), 200
         else:
             return jsonify({'message': 'Insufficient Permissions'}), 401
     else:

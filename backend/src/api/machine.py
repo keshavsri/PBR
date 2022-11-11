@@ -26,7 +26,14 @@ def get_machines(access_allowed, current_user, given_org_id=None):
             return jsonify({'message': 'Organization ID must be specified'}), 400
         elif current_user.organization_id == given_org_id or current_user.role == Roles.Super_Admin:
             machines = models.Machine.query.filter_by(organization_id=given_org_id).all()
-            response = [schemas.Machine.from_orm(m).dict() for m in machines]
+
+            response = []
+            for machine in machines:
+                schema_machine = schemas.Machine.from_orm(machine).dict()
+                schema_machine.update({"machine_type_name": machine.machine_type.name})
+                response.append(schema_machine)
+
+            #response = [schemas.Machine.from_orm(m).dict() for m in machines]
             return jsonify(response), 200
         else:
             return jsonify({'message': 'Insufficient permissions'}), 401
