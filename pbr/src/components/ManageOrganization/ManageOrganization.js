@@ -6,9 +6,9 @@ import AdminContact from "./OrganizationDetails/AdminContact";
 import Toolbar from "./Toolbar";
 import OrganizationCode from "./OrganizationDetails/OrganizationCode";
 import AddOrganization from "./AddOrganization";
-import ManageOrganizationSources from "./OrganizationAssets/ManageOrganizationSources";
-import ManageOrganizationFlocks from "./OrganizationAssets/ManageOrganizationFlocks";
-import ManageOrganizationMachines from "./OrganizationAssets/ManageOrganizationMachines";
+import ManageOrganizationSources from "./OrganizationAssets/OrganizationSources/ManageOrganizationSources";
+import ManageOrganizationFlocks from "./OrganizationAssets/OrganizationFlocks/ManageOrganizationFlocks";
+import ManageOrganizationMachines from "./OrganizationAssets/OrganizationMachines/ManageOrganizationMachines";
 
 
 import { Box, Typography, Grid, Card } from "@mui/material";

@@ -2,25 +2,25 @@ import React from "react";
 
 import { Paper, Button, Tooltip, IconButton, Chip, Box, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import useAuth from "../../../services/useAuth";
-import EnhancedTable from "../../EnhancedTable/EnhancedTable";
+import useAuth from "../../../../services/useAuth";
+import EnhancedTable from "../../../EnhancedTable/EnhancedTable";
 
-export default function ManageOrganizationSources({
+export default function ManageOrganizationMachines({
   organization
 }) {
   const { checkResponseAuth, user } = useAuth();
-  const [sources, setSources] = React.useState([]);
+  const [machines, setMachines] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
 
   React.useEffect(async () => {
-    await getSources();
+    await getMachines();
 
     getHeadCells();
   }, []);
 
-  const getSources = async () => {
-    await fetch(`/api/source/organization/${organization.id}`, {
+  const getMachines = async () => {
+    await fetch(`/api/machine/organization/${organization.id}`, {
       method: "GET",
     })
       .then(checkResponseAuth)
@@ -28,10 +28,11 @@ export default function ManageOrganizationSources({
         return response.json();
       })
       .then((data) => {
-        setSources(data)
+        setMachines(data)
         assignRowHtml(data);
       });
   };
+
 
   const getHeadCells = () => {
     const headCells = [
@@ -39,35 +40,17 @@ export default function ManageOrganizationSources({
         id: "buttons",
       },
       {
-        id: "name",
+        id: "serial_number",
         numeric: false,
         disablePadding: true,
-        label: "Name",
+        label: "Serial Number",
       },
       {
-        id: "street_address",
+        id: "machine_type_name",
         numeric: false,
         disablePadding: true,
-        label: "Street Address",
-      },
-      {
-        id: "city",
-        numeric: false,
-        disablePadding: true,
-        label: "City",
-      },
-      {
-        id: "state",
-        numeric: false,
-        disablePadding: true,
-        label: "State",
-      },
-      {
-        id: "zip",
-        numeric: false,
-        disablePadding: true,
-        label: "Zip Code",
-      },
+        label: "Machine Type",
+      }
     ];
     setHeadCellList(headCells);
   };
@@ -86,12 +69,12 @@ export default function ManageOrganizationSources({
     <>
       <Paper>
         <Grid item sm={12}>
-          <Typography variant="h1" align="center">Sources</Typography>
+          <Typography variant="h1" align="center">Machines</Typography>
         </Grid>
 
         <EnhancedTable
           headCells={headCellList}
-          rows={sources}
+          rows={machines}
           selected={selected}
           setSelected={setSelected}
         ></EnhancedTable>

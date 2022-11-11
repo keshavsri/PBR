@@ -27,7 +27,7 @@ def get_source(access_allowed, item_id):
         source_model = SourceORM.query.get(item_id)
         source = Source.from_orm(source_model).dict()
         # otherwise it will return all the organizations in the database
-        if source is None:
+        if source is None or source.is_deleted == True:
             responseJSON = jsonify({'message': 'No records found'})
             return responseJSON, 404
         else:
@@ -43,7 +43,7 @@ def get_source(access_allowed, item_id):
 def get_sources(access_allowed):
 
     if access_allowed:
-        sources = SourceORM.query.all()
+        sources = SourceORM.query.filter_by(is_deleted=False).all()
         ret = []
         for source in sources:
             ret.append(Source.from_orm(source).dict())
@@ -59,7 +59,7 @@ def get_sources(access_allowed):
 def get_sources_by_organization(access_allowed, current_user, org_id):
     if access_allowed:
         if current_user.organization_id == org_id or current_user.role == Roles.Super_Admin:
-            sources = SourceORM.query.filter_by(organization_id=org_id).all()
+            sources = SourceORM.query.filter_by(organization_id=org_id, is_deleted=False).all()
             ret = []
             for source in sources:
                 ret.append(Source.from_orm(source).dict())
