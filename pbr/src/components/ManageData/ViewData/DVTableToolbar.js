@@ -20,6 +20,9 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import SampleIcon from "@mui/icons-material/Science";
 import useDataView from "../../../services/useDataView";
 
+import ReportPDF from "../../Report/ReportPDF";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+
 const useStyles = makeStyles({});
 
 export default function DVTableToolbar({
@@ -107,16 +110,21 @@ export default function DVTableToolbar({
       </>
 
       <Tooltip title="Generate Report for Sample(s)">
-        <Button
-          variant="contained"
-          color="secondary"
-          style={{ width: 275, marginTop: 10, marginBottom: 10 }}
-          startIcon={<ReportIcon />}
-          sx={{ ml: 1 }}
-          // onClick={}
-        >
-          Generate Report
-        </Button>
+        <PDFDownloadLink document={<ReportPDF />} fileName="report.pdf" sx={{ width: 275, marginTop: 10, marginBottom: 10 }}>
+          {({ blob, url, loading, error }) => 
+            (
+              <Button
+                variant="contained"
+                color="secondary"
+                style={{ width: 275, marginTop: 10, marginBottom: 10 }}
+                startIcon={<ReportIcon />}
+                sx={{ ml: 1 }}
+              >
+                Generate Report
+              </Button>
+            )}
+        </PDFDownloadLink>
+
       </Tooltip>
 
       <Tooltip title="Filter Samples">
