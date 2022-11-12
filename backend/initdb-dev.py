@@ -3,6 +3,8 @@ from src import app
 import sys
 import traceback
 from sqlalchemy.sql import text
+from sqlalchemy import MetaData
+
 
 import bcrypt
 
@@ -11,6 +13,13 @@ if len(sys.argv) != 3:
 else:
     with app.app_context():
         """Initializes the database."""
+        engine = create_engine(os.environ.get("DATABASE_URL"))
+        db.create_all()
+        if db.session:
+            meta = db.metadata
+            for table in reversed(meta.sorted_tables):
+                db.session.execute(table.delete())
+            db.session.commit()
 
         print("Creating database tables...")
         db.create_all()

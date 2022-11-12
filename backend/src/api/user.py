@@ -121,9 +121,9 @@ def login():
     """
 
     content_type = request.headers.get('Content-Type')
+    data = {}
     if (content_type == 'application/json'):
         data = request.json
-    print(data)
     if data["email"] and data["password"]:
         data["email"] = data["email"].lower()
         print(data["email"])
@@ -197,7 +197,8 @@ def register():
     models.db.session.add(user)
     models.db.session.commit()
     print("User was successfully added.")
-    return jsonify({"message": 'Success'}), 200
+    response = schemas.User.from_orm(user).dict()
+    return jsonify(response), 200
 
 
 @userBlueprint.route('/organization/<int:org_id>', methods=['GET'])
