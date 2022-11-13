@@ -333,16 +333,16 @@
 332,turkey,Select Genetics,SGMN,17-Mar-21,29,w,breeder,female,TRUE,Water & Feed top dress with vit D & Ca
 333,turkey,Select Genetics,SGMN,17-Mar-21,29,w,breeder,female,TRUE,Water & Feed top dress with vit D & Ca
 334,turkey,Select Genetics,SGMN,17-Mar-21,29,w,breeder,female,TRUE,Water & Feed top dress with vit D & Ca
-335,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
-336,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
-337,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
-338,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
-339,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
-340,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
-341,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
-342,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
-343,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
-344,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+335,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+336,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+337,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+338,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+339,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+340,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+341,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+342,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+343,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
+344,turkey,Select Genetics,SGMN,25-Mar-21,30,w,breeder,female,TRUE, not top dressed with ca
 345,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
 346,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
 347,turkey,Select Genetics,SGNC,25-Mar-21,28,w,breeder,female,TRUE,
@@ -669,27 +669,9 @@
 668,chicken,Barred Rock,WA 12,25-Jul-16,7,m,"BYP, layer",female,TRUE,
 669,chicken,not reported,WA 12,25-Jul-16,7,m,"BYP, layer",female,TRUE,
 670,chicken,Australorp,WA 12,25-Jul-16,5,y,"BYP, layer",female,TRUE,
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 671,chicken,Salmon Faverolle,WA 13,26-Jul-16,1,y,"BYP, layer",female,TRUE,
 672,chicken,Salmon Faverolle,WA 13,26-Jul-16,1,y,"BYP, layer",female,TRUE,
 673,chicken,Americana,WA 13,26-Jul-16,1,y,"BYP, layer",female,TRUE,
-=======
-671,chicken,Salmon Faverolle,WA 13,26-Jul-16,,y,"BYP, layer",female,TRUE,
-672,chicken,Salmon Faverolle,WA 13,26-Jul-16,,y,"BYP, layer",female,TRUE,
-673,chicken,Americana,WA 13,26-Jul-16,,y,"BYP, layer",female,TRUE,
->>>>>>> 11ad4b1 (Adding in samples from access db, untested)
-=======
-671,chicken,Salmon Faverolle,WA 13,26-Jul-16,1,y,"BYP, layer",female,TRUE,
-672,chicken,Salmon Faverolle,WA 13,26-Jul-16,1,y,"BYP, layer",female,TRUE,
-673,chicken,Americana,WA 13,26-Jul-16,1,y,"BYP, layer",female,TRUE,
->>>>>>> 90b3217 (Init Vetscan data,)
-=======
-671,chicken,Salmon Faverolle,WA 13,26-Jul-16,1,y,"BYP, layer",female,TRUE,
-672,chicken,Salmon Faverolle,WA 13,26-Jul-16,1,y,"BYP, layer",female,TRUE,
-673,chicken,Americana,WA 13,26-Jul-16,1,y,"BYP, layer",female,TRUE,
->>>>>>> 1bc88ae26826a1691bb3948fb02d79b866fce27a
 674,chicken,not reported,WA 14,26-Jul-16,2,y,"BYP, layer",female,TRUE,
 675,chicken,not reported,WA 14,26-Jul-16,2,y,"BYP, layer",female,TRUE,
 676,chicken,not reported,WA 14,26-Jul-16,2,y,"BYP, layer",female,TRUE,
