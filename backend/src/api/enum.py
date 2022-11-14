@@ -9,7 +9,7 @@ from src.enums import Species, BirdGenders, AgeGroup, Roles
 enumBlueprint = Blueprint('enum', __name__)
 
 
-@enumBlueprint.route('/species/', methods=['GET'])
+@enumBlueprint.route('/species', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
 def get_species(access_allowed, current_user):
@@ -19,7 +19,7 @@ def get_species(access_allowed, current_user):
         return jsonify({'message': 'Role not allowed'}), 403
 
 
-@enumBlueprint.route('/gender/', methods=['GET'])
+@enumBlueprint.route('/gender', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
 def get_genders(access_allowed, current_user):
@@ -29,7 +29,7 @@ def get_genders(access_allowed, current_user):
         return jsonify({'message': 'Role not allowed'}), 403
 
 
-@enumBlueprint.route('/age/', methods=['GET'])
+@enumBlueprint.route('/age', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
 def get_age_groups(access_allowed, current_user):
@@ -39,7 +39,7 @@ def get_age_groups(access_allowed, current_user):
         return jsonify({'message': 'Role not allowed'}), 403
 
 
-@enumBlueprint.route('/roles/', methods=['GET'])
+@enumBlueprint.route('/roles', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
 def get_roles(access_allowed, current_user):

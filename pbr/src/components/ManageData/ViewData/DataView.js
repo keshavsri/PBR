@@ -82,7 +82,7 @@ export default function DataView() {
   };
 
   const getRoles = async () => {
-    const response = await fetch(`/api/enum/roles/`, {
+    const response = await fetch(`/api/enum/roles`, {
       method: "GET",
     }).then(checkResponseAuth);
     const data = await response.json();
