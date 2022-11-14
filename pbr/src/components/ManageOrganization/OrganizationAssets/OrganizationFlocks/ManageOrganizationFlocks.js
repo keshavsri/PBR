@@ -15,8 +15,7 @@ export default function ManageOrganizationFlocks({
   const [flocks, setFlocks] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
-  const [openAddOrganizationFlockModal, setOpenAddOrganizationFlockModal] =
-  React.useState(false);
+  const [openAddOrganizationFlockModal, setOpenAddOrganizationFlockModal] = React.useState(false);
 
   React.useEffect(async () => {
     await getFlocks();

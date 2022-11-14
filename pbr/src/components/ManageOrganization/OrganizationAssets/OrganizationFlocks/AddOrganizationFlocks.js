@@ -70,7 +70,7 @@ export default function AddOrganizationFlocks({
 
     const [errorToggle, setErrorToggle] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState("");
-    const requiredFields = ["name", "strain", "species", "production_type", "gender", "birthday"]
+    const requiredFields = ["name", "strain", "species", "production_type", "gender", "source"]
     const [species, setSpecies] = React.useState([]);
     const [selectedSpecies, setSelectedSpecies] = React.useState("");
     const [strains, setStrains] = React.useState([]);
@@ -95,19 +95,12 @@ export default function AddOrganizationFlocks({
       
       if (prop == "species") {
         setSelectedSpecies(event.target.value);
-        setFlockDetails({
-          ...flockDetails,
-          [prop]: event.target.value,
-        });
-      }
-      else {
-        setFlockDetails({
-          ...flockDetails,
-          [prop]: event.target.value,
-        });
       }
 
-      console.log(flockDetails)
+      setFlockDetails({
+        ...flockDetails,
+        [prop]: event.target.value,
+      });
     };
 
     const clearFlockDetails = () => {
@@ -121,6 +114,11 @@ export default function AddOrganizationFlocks({
       })
     };
 
+    const closeAddFlockModal = () => {
+      setOpenAddOrganizationFlockModal(false);
+      setErrorToggle(false);
+      clearFlockDetails();
+    };
 
     let onSubmit = async () => {
 
@@ -167,9 +165,7 @@ export default function AddOrganizationFlocks({
             return
           } else {
             getFlocks();
-            setOpenAddOrganizationFlockModal(false);
-            clearFlockDetails();
-            setErrorToggle(false);
+            closeAddFlockModal();
             return response.json();
           }
         })
@@ -215,7 +211,7 @@ export default function AddOrganizationFlocks({
         aria-describedby="Modal used for adding an organization's flock to the application"
         open={openAddOrganizationFlockModal}
         onClose={() => {
-          setOpenAddOrganizationFlockModal(false);
+         closeAddFlockModal();
         }}
       >
         <div style={modalStyle} className={classes.paper}>
@@ -341,9 +337,7 @@ export default function AddOrganizationFlocks({
             <Grid item xs={12} sm={2}>
               <Button
                 onClick={() => {
-                  setOpenAddOrganizationFlockModal(false);
-                  setErrorToggle(false);
-                  clearFlockDetails();
+                  closeAddFlockModal();
                 }}
               >
                 Cancel

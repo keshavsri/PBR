@@ -1,6 +1,5 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
-import {states} from '../../../../models/enums'
 
 
 import {
@@ -45,12 +44,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-// Start of Add Organization's Sources Functionality
+// Start of Add Organization's Machines Functionality
 
-export default function AddOrganizationSources({
-    getSources,
-    openAddOrganizationSourceModal,
-    setOpenAddOrganizationSourceModal,
+export default function AddOrganizationMachines({
+    getMachines,
+    openAddOrganizationMachineModal,
+    setOpenAddOrganizationMachineModal,
     organization
   }) {
 
@@ -59,44 +58,41 @@ export default function AddOrganizationSources({
     useTheme();
     const { checkResponseAuth } = useAuth();
 
-    const [sourceDetails, setSourceDetails] = React.useState({
-      name: "",
-      street_address: "",
-      city: "",
-      state: "",
-      zip: "",
-      organization_id: null
+    const [machineDetails, setMachineDetails] = React.useState({
+      serial_number: "",
+      machine_type: "",
     });
+    const [machineTypes, setMachineTypes] = React.useState([]);
+
 
     const [errorToggle, setErrorToggle] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState("");
-    const requiredFields = ["name", "street_address", "city", "state", "zip"]
+    const requiredFields = ["serial_number", "machine_type"]
 
-    const handleSourceDetailsChange = (prop) => (event) => {    
-      setSourceDetails({
-        ...sourceDetails,
+    React.useEffect(async () => {
+      await getMachineTypes();
+    }, [])
+
+    const handleMachineDetailsChange = (prop) => (event) => {    
+      setMachineDetails({
+        ...machineDetails,
         [prop]: event.target.value,
       });
     };
 
-    const clearSourceDetails = () => {
-      setSourceDetails({
-        name: "",
-        street_address: "",
-        city: "",
-        state: "",
-        zip: "",
-        organization_id: null
+    const clearMachineDetails = () => {
+      setMachineDetails({
+        serial_number: "",
+        machine_type: "",
       })
     };
-
 
     let onSubmit = async () => {
 
       let error = false;
 
       requiredFields.forEach(field => {
-        if(sourceDetails[field] === "") {
+        if(machineDetails[field] === "") {
           error = true;
           setErrorToggle(true)
           setErrorMessage("Required fields * cannot be empty.")
@@ -108,18 +104,15 @@ export default function AddOrganizationSources({
 
       let payload = {
 
-        // Source Parameters
+        // Machine Parameters
 
-        name: sourceDetails.name,
-        street_address: sourceDetails.street_address,
-        city: sourceDetails.city,
-        state: sourceDetails.state,
-        zip: sourceDetails.zip,
+        serial_number: machineDetails.serial_number,
+        machine_type_id: machineDetails.machine_type.id,
         organization_id: organization.id
       };
       
-      // API Call for POST Source
-      await fetch(`/api/source/`, {
+      // API Call for POST Machine
+      await fetch(`/api/machine/`, {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
@@ -130,30 +123,38 @@ export default function AddOrganizationSources({
         .then((response) => {
           if (!response.ok) {
             setErrorToggle(true)
-            setErrorMessage("Unable to create source.")
+            setErrorMessage("Unable to create machine.")
             return
           } else {
-            getSources();
-            closeAddSourceModal();
+            getMachines();
+            closeAddMachineModal();
             return response.json();
           }
         })
     };
 
-    const closeAddSourceModal = () => {
-      setOpenAddOrganizationSourceModal(false);
+    const getMachineTypes = async () => {
+      const response = await fetch(`/api/machine-type/`, {
+        method: "GET",
+      }).then(checkResponseAuth);
+      const data = await response.json();
+      setMachineTypes(data);
+    };
+
+    const closeAddMachineModal = () => {
+      setOpenAddOrganizationMachineModal(false);
       setErrorToggle(false);
-      clearSourceDetails();
+      clearMachineDetails();
     };
 
     return (
 
       <Modal
-        aria-labelledby="Add Organization Source Modal"
-        aria-describedby="Modal used for adding an organization's source to the application"
-        open={openAddOrganizationSourceModal}
+        aria-labelledby="Add Organization Machine Modal"
+        aria-describedby="Modal used for adding an organization's machine to the application"
+        open={openAddOrganizationMachineModal}
         onClose={() => {
-          closeAddSourceModal();
+          closeAddMachineModal();
         }}
       >
         <div style={modalStyle} className={classes.paper}>
@@ -162,7 +163,7 @@ export default function AddOrganizationSources({
 
 
             <Grid item xs={12} sm={12}>
-              <Typography gutterBottom variant="h4">Add Source</Typography>
+              <Typography gutterBottom variant="h4">Add Machine</Typography>
             </Grid>
 
 
@@ -170,63 +171,27 @@ export default function AddOrganizationSources({
               <TextField
                 required
                 fullWidth
-                label="Name"
-                value={sourceDetails.name}
-                onChange={handleSourceDetailsChange("name")}
-                error = {sourceDetails.name === "" ? true : false}
+                label="Serial Number"
+                value={machineDetails.serial_number}
+                onChange={handleMachineDetailsChange("serial_number")}
+                error = {machineDetails.name === "" ? true : false}
               />
             </Grid>
 
 
             <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                label="Street"
-                value={sourceDetails.street_address}
-                onChange={handleSourceDetailsChange("street_address")}
-                error = {sourceDetails.street_address === "" ? true : false}
-              />
-            </Grid>
-
-
-            <Grid item xs={12} sm={4}>
-              <TextField
-                required
-                fullWidth
-                label="City"
-                value={sourceDetails.city}
-                onChange={handleSourceDetailsChange("city")}
-                error = {sourceDetails.city === "" ? true : false}
-              />
-            </Grid>
-
-
-            <Grid item xs={12} sm={4}>
               <TextField
                 required
                 fullWidth
                 select
-                label="State"
-                value={sourceDetails.state}
-                onChange={handleSourceDetailsChange('state')}
+                label="Machine Type"
+                value={machineDetails.machine_type}
+                onChange={handleMachineDetailsChange("machine_type")}
               >
-                {Object.values(states).map((value) => {
-                  return <MenuItem value={value}>{value}</MenuItem>
+                {Object.values(machineTypes).map((machine_type) => {
+                  return <MenuItem value={machine_type}>{machine_type.name}</MenuItem>
                 })}
               </TextField>
-            </Grid>
-
-
-            <Grid item xs={12} sm={4}>
-              <TextField
-                required
-                fullWidth
-                label="Zip"
-                value={sourceDetails.zip}
-                onChange={handleSourceDetailsChange("zip")}
-                error = {sourceDetails.zip === "" ? true : false}
-              />
             </Grid>
 
             {errorToggle ? 
@@ -241,7 +206,7 @@ export default function AddOrganizationSources({
             <Grid item xs={12} sm={2}>
               <Button
                 onClick={() => {
-                  closeAddSourceModal();
+                  closeAddMachineModal();
                 }}
               >
                 Cancel

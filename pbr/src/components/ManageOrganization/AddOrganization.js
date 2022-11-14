@@ -91,6 +91,14 @@ export default function AddOrganization({
       })
     };
 
+    const closeAddOrganizationModal = () => {
+      setOpenAddOrganizationModal(false);
+      clearOrganizationDetails();
+      setErrorToggle(false);
+    };
+
+
+
 
     let onSubmit = async () => {
 
@@ -141,9 +149,7 @@ export default function AddOrganization({
           } else {
             successfulPost = true;
             getOrganizations();
-            setOpenAddOrganizationModal(false);
-            clearOrganizationDetails();
-            setErrorToggle(false);
+            closeAddOrganizationModal();
             return response.json();
           }
         })
@@ -163,7 +169,7 @@ export default function AddOrganization({
         aria-describedby="Modal used for adding an organization to the application"
         open={openAddOrganizationModal}
         onClose={() => {
-          setOpenAddOrganizationModal(false);
+          closeAddOrganizationModal();
         }}
       >
         <div style={modalStyle} className={classes.paper}>
@@ -261,9 +267,7 @@ export default function AddOrganization({
             <Grid item xs={12} sm={2}>
               <Button
                 onClick={() => {
-                  setOpenAddOrganizationModal(false);
-                  setErrorToggle(false);
-                  clearOrganizationDetails();
+                  closeAddOrganizationModal();
                 }}
               >
                 Cancel

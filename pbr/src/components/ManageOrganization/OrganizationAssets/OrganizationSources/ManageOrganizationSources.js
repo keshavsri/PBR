@@ -15,8 +15,7 @@ export default function ManageOrganizationSources({
   const { checkResponseAuth, user } = useAuth();
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
-  const [openAddOrganizationSourceModal, setOpenAddOrganizationSourceModal] =
-  React.useState(false);
+  const [openAddOrganizationSourceModal, setOpenAddOrganizationSourceModal] = React.useState(false);
 
   React.useEffect(async () => {
     await getSources();
