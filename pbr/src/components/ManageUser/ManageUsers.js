@@ -42,15 +42,13 @@ export default function ManageUsers() {
     if (user.role === 0) {
       orgId = organization;
     }
-    await fetch(`/api/user/organization/${orgId}`, { method: "GET", })
+    await fetch(`/api/user/organization/${orgId}`, { method: "GET" })
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         assignRowHtml(data.rows);
         setRowList(data.rows);
-        console.log(rowList);
       })
       .catch((error) => {
         console.log(error);
@@ -85,10 +83,11 @@ export default function ManageUsers() {
   };
 
   const editUser = async (editedUser) => {
-    await fetch(`/api/user/${selected[0]}`,
-          { method: "PUT",
-            body: JSON.stringify(editedUser),
-            headers: {"Content-Type" : "application/json"}})
+    await fetch(`/api/user/${selected[0]}`, {
+      method: "PUT",
+      body: JSON.stringify(editedUser),
+      headers: { "Content-Type": "application/json" },
+    })
       .then((response) => {
         return response.json();
       })
@@ -122,8 +121,6 @@ export default function ManageUsers() {
 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
-      console.log(row.id);
-      console.log(user.role);
       row.role_id = row.role;
       row.role = roleMap[Number(row.role)];
       row.deletable = isDeletable(row);
@@ -131,8 +128,6 @@ export default function ManageUsers() {
   };
 
   const isDeletable = (row) => {
-    console.log(user.id, row.id);
-    console.log(user.id === row.id);
     if (user.role < row.role_id && user.role != 3) {
       return true;
     } else if (user.id === row.id) {
