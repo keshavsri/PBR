@@ -96,7 +96,7 @@ class ValidationTypes(str, Enum):
 class SampleTypes(str, Enum):
     # Known Healthy
     Surveillance = "Surveillance"
-    # Unkown
+    # Unknown
     Diagnostic = "Diagnostic"
 
 
