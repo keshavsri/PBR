@@ -333,6 +333,7 @@ export default function DataView() {
                 setCurrentOrganization={setOrganization}
                 currentOrganization={organization}
                 user={user}
+                roles={roles}
                 currentCartridgeType={currentCartridgeType}
                 setCurrentCartridgeType={setCurrentCartridgeType}
               />
@@ -370,62 +371,17 @@ export default function DataView() {
               {editSampleModalVisiblity ? (
                 <EditSampleModal
                   selected={selected}
-                  selectedSamples={selectedSamples}
+                  SampleToEdit={selectedSamples[0]}
                   Organization={organization}
                   editSampleModalVisiblity={editSampleModalVisiblity}
                   setEditSampleModalVisibility={setEditSampleModalVisibility}
+                  roles={roles}
                 />
               ) : null}
             </Grid>
           </Grid>
         </Paper>
 
-        <DataViewFilterModal
-          setRowList={setSampleList}
-          setHeadCellList={setHeadCellList}
-          getData={getData}
-          rows={sampleList}
-          toolbarButtons={
-            <DVTableToolbar
-              filterPendingSamples={filterPendingSamples}
-              showOnlyPendingSamples={showOnlyPendingSamples}
-              turnPendingFilterOff={turnPendingFilterOff}
-              cartridgeTypes={cartridgeTypes}
-              organizations={organizations}
-              setCurrentOrganization={setOrganization}
-              currentOrganization={organization}
-              user={user}
-              currentCartridgeType={currentCartridgeType}
-              setCurrentCartridgeType={setCurrentCartridgeType}
-              roles={roles}
-            />
-          }
-          selected={selected}
-          setSelected={setSelected}
-          setSelectedSamples={setSelectedSamples}
-          setPendingSamples={setPendingSamples}
-          onDelete={onDelete}
-          isSample={isSample}
-          setOpenReviewSampleModal={setOpenReviewSampleModal}
-          onSubmit={onSubmit}
-        />
-
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={12}>
-            {SavedToPendingVisibility ? (
-              <SavedToPendingModal
-                selected={selected}
-                submitAll={submitAll}
-                submitOne={submitOne}
-                rows={sampleList}
-                selectedSamples={selectedSamples}
-                setSelectedSamples={setSelectedSamples}
-                SavedToPendingVisibility={SavedToPendingVisibility}
-                setSavedToPendingVisibility={setSavedToPendingVisibility}
-              />
-            ) : null}
-          </Grid>
-        </Grid>
         <DataViewFilterModal
           setRowList={setSampleList}
           setHeadCellList={setHeadCellList}
