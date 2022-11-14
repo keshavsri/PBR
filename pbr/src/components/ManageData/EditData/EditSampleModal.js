@@ -52,6 +52,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function EditSampleModal(props) {
+  const {
+    selected,
+    SampleToEdit,
+    editSampleModalVisiblity,
+    setEditSampleModalVisibility,
+    Organization,
+    roles,
+    getData,
+    currentCartridgeType,
+    setSelectedSamples,
+    selectedSamples,
+    setSelected,
+  } = props;
+
   const classes = useStyles();
 
   const { checkResponseAuth, user } = useAuth();
@@ -60,7 +74,6 @@ export default function EditSampleModal(props) {
 
   const [flocks, setFlocks] = React.useState([]);
   const [flock, setFlock] = React.useState({});
-  const [flockInput, setFlockInput] = React.useState("");
 
   const [sources, setSources] = React.useState([]);
   const [source, setSource] = React.useState({});
@@ -68,30 +81,72 @@ export default function EditSampleModal(props) {
   const [organization, setOrganization] = React.useState({});
   const [organizations, setOrganizations] = React.useState([]);
 
+  const [cartridgeType, setCartridgeType] = React.useState({});
+  const [cartridgeTypes, setCartridgeTypes] = React.useState([]);
+
   const [errorSubmission, setErrorSubmission] = React.useState(false);
+
   const [SampleDetails, setSampleDetails] = React.useState({
-    comments: "",
-    flock_age: null,
-    flock_age_unit: null,
-    batch_id: null,
+    comments: SampleToEdit.comments,
+    sample_type: SampleToEdit.sample_type,
+    flock_age: SampleToEdit.flock_age,
+    flock_age_unit: SampleToEdit.flock_age_unit,
     measurements: [],
   });
 
   useTheme();
 
-  const {
-    SampleToEdit,
-    editSampleModalVisiblity,
-    setEditSampleModalVisibility,
-    Organization,
-    roles,
-  } = props;
+  const passMesearments = () => {
+    let values = [];
+    SampleToEdit.measurements.forEach((measurement) => {
+      values.push({
+        analyte_id: measurement.analyte.id,
+        value: measurement.value,
+      });
+    });
 
-  const [sampleType, setSampleType] = React.useState(SampleToEdit.sample_type);
-  const [ageUnit, seAgeUnit] = React.useState(SampleToEdit.flock_age_unit);
+    return values;
+  };
 
-  const editSample = () => {
-    console.log("submitting eidted Sample");
+  const editSample = async () => {
+    console.log("submmited Payload");
+    let newMeasurements = passMesearments();
+
+    let payload = {
+      comments: SampleDetails.comments,
+      sample_type: SampleDetails.sample_type,
+      flock_age: SampleDetails.flock_age,
+      flock_age_unit: SampleDetails.flock_age_unit,
+      organization_id: organization.id,
+      flock_id: flock.id,
+      measurements: newMeasurements,
+    };
+
+    console.log(payload);
+    await fetch(`/api/sample/${SampleToEdit.id}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        console.log(response);
+        if (!response.ok) {
+          setErrorSubmission(true);
+        } else {
+          setEditSampleModalVisibility(false);
+          setSelected([]);
+          getData();
+          return response.json();
+        }
+      });
+  };
+
+  const removeFromSelected = (sample) => {
+    let newSelected = selectedSamples.filter((s) => s !== sample);
+    setSelectedSamples(newSelected);
   };
 
   const handleSampleDetailsChange = (prop) => (event) => {
@@ -101,17 +156,35 @@ export default function EditSampleModal(props) {
     });
   };
 
-  const fillMachineData = (sample) => {
-    return sample.measurements.map((measurement) => (
-      <Grid item xs={12} sm={6}>
-        <TextField
-          label={measurement.analyte.abbreviation}
-          value={measurement.value}
-        />
-      </Grid>
-    ));
+  const sampleMeasurements = () => {
+    return (
+      <>
+        <Box style={{ margin: "25px" }}>
+          {cartridgeType.analytes &&
+            SampleDetails.measurements &&
+            SampleDetails.measurements.length > 0 &&
+            cartridgeType.analytes.map((a, index) => {
+              return (
+                <>
+                  <TextField
+                    label={a.abbreviation}
+                    style={{ margin: 4 }}
+                    value={SampleDetails.measurements[index].value}
+                    onChange={(e) => {
+                      const measurements = SampleDetails.measurements;
+                      measurements[index].value = e.target.value;
+                      setSampleDetails((prevState) => {
+                        return { ...prevState, measurements: measurements };
+                      });
+                    }}
+                  />
+                </>
+              );
+            })}
+        </Box>
+      </>
+    );
   };
-
 
   const getFlocks = async () => {
     await fetch(`/api/flock/source/${source.id}`, {
@@ -144,6 +217,29 @@ export default function EditSampleModal(props) {
       });
   };
 
+  const getCartridgeTypes = async () => {
+    console.log("getting cartridge types");
+    console.log(SampleToEdit);
+    await fetch(`/api/cartridge-type`)
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        setCartridgeTypes(data);
+        setCartridgeType(
+          data.filter((c) => c.id === currentCartridgeType.id)[0]
+        );
+
+        setSampleDetails((prevState) => {
+          return {
+            ...prevState,
+            measurements: SampleToEdit.measurements,
+          };
+        });
+      });
+  };
+
   const getOrganizations = async () => {
     const response = await fetch(`/api/organization/`, {
       method: "GET",
@@ -161,7 +257,7 @@ export default function EditSampleModal(props) {
         setOrganization({ id: user.organization_id });
       }
 
-      // await getCartridgeTypes();
+      await getCartridgeTypes();
     }
   }, [editSampleModalVisiblity]);
 
@@ -172,7 +268,10 @@ export default function EditSampleModal(props) {
   }, [organization]);
 
   const clearSampleType = () => {
-    setSampleType("");
+    setSampleDetails({
+      ...SampleDetails,
+      ["sample_type"]: null,
+    });
   };
 
   React.useEffect(async () => {
@@ -181,8 +280,7 @@ export default function EditSampleModal(props) {
     }
   }, [source]);
 
-  const listSamples = () => {
-    console.log(SampleToEdit);
+  const selectedSample = () => {
     return (
       <>
         <Grid item xs={12} sm={12}>
@@ -264,49 +362,69 @@ export default function EditSampleModal(props) {
               </Select>
             </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <InputLabel id="label-select-organization">Species</InputLabel>
-              <TextField value={flock.species} disabled />
-            </Grid>
+            {flock !== undefined ? (
+              <>
+                {" "}
+                <Grid item xs={12} sm={6}>
+                  <InputLabel id="label-select-organization">
+                    Species
+                  </InputLabel>
+                  <TextField value={flock.species} disabled />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <InputLabel id="label-select-organization">
+                    Production Type
+                  </InputLabel>
+                  <TextField value={flock.production_type} disabled />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <InputLabel id="label-select-organization">Strain</InputLabel>
+                  <TextField value={flock.strain} disabled />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <InputLabel id="label-select-organization">Gender</InputLabel>
+                  <TextField value={flock.gender} disabled />
+                </Grid>
+              </>
+            ) : (
+              <Typography style={{ color: "red", margin: "25px" }}>
+                <br /> There are no flocks associated with the selected source{" "}
+                <br />
+                <br />
+              </Typography>
+            )}
 
-            <Grid item xs={12} sm={6}>
-              <InputLabel id="label-select-organization">
-                Production Type
-              </InputLabel>
-              <TextField value={flock.production_type} disabled />
-            </Grid>
+            <br></br>
+            <br></br>
+            <br></br>
 
-            <Grid item xs={12} sm={6}>
-              <InputLabel id="label-select-organization">Strain</InputLabel>
-              <TextField value={flock.strain} disabled />
-            </Grid>
+            <Grid container direction="row" alignItems="center" spacing={3}>
+              <Grid item xs={12} sm={6} style={{ margin: "25px" }}>
+                <TextField
+                  label="Age"
+                  value={SampleDetails.flock_age}
+                  onChange={handleSampleDetailsChange("flock_age")}
+                />
+              </Grid>
 
-            <Grid item xs={12} sm={6}>
-              <InputLabel id="label-select-organization">Gender</InputLabel>
-              <TextField value={flock.gender} disabled />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField label="Age" value={SampleToEdit.flock_age} />
-            </Grid>
-
-            <Grid item xs={4}>
-              <FormControl sx={{ width: "100%" }} required>
-                <InputLabel>D/W/M/Y</InputLabel>
-                <Select
-                  value={ageUnit}
-                  label="D/W/M/Y *"
-                  onChange={handleSampleDetailsChange("flock_age_unit")}
-                >
-                  {Object.values(ageUnits).map((unit, index) => {
-                    return (
-                      <MenuItem value={unit} key={index}>
-                        {unit}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
-              </FormControl>
+              <Grid item xs={4}>
+                <FormControl sx={{ width: "100%" }} style={{ margin: "25px" }}>
+                  <InputLabel>D/W/M/Y</InputLabel>
+                  <Select
+                    value={SampleDetails.flock_age_unit}
+                    label="D/W/M/Y *"
+                    onChange={handleSampleDetailsChange("flock_age_unit")}
+                  >
+                    {Object.values(ageUnits).map((unit, index) => {
+                      return (
+                        <MenuItem value={unit} key={index}>
+                          {unit}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
+              </Grid>
             </Grid>
           </Grid>
         </Box>
@@ -324,7 +442,7 @@ export default function EditSampleModal(props) {
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid container direction="row" alignItems="center" spacing={3}>
-            {fillMachineData(SampleToEdit)}
+            {sampleMeasurements()}
           </Grid>
         </Box>
         <br />
@@ -334,14 +452,17 @@ export default function EditSampleModal(props) {
             Categorize This Sample:
           </Typography>
 
-          <RadioGroup value={sampleType} onChange={setSampleType}>
+          <RadioGroup
+            value={SampleDetails.sample_type}
+            onChange={handleSampleDetailsChange("sample_type")}
+          >
             <FormControlLabel
-              value="Surveillance"
+              value={sampleTypes.SURVEILLANCE}
               label={`${sampleTypes.SURVEILLANCE} Sample (Healthy)`}
               control={<Radio />}
             />
             <FormControlLabel
-              value="Diagnostic"
+              value={sampleTypes.DIAGNOSTIC}
               label={`${sampleTypes.DIAGNOSTIC} Sample (Sick)`}
               control={<Radio />}
             />
@@ -357,16 +478,16 @@ export default function EditSampleModal(props) {
           )}
         </Grid>
 
-        <Grid item xs={12} sm={12}>
-          <Typography gutterBottom variant="h5">
-            {" "}
-            Comments{" "}
-          </Typography>
-          <br />
-        </Grid>
+        <br />
+        <br />
 
         <Grid item xs={12} sm={12}>
-          <TextField fullWidth label="Comments" value={SampleToEdit.comments} />
+          <TextField
+            fullWidth
+            label="Comments"
+            value={SampleDetails.comments}
+            onChange={handleSampleDetailsChange("comments")}
+          />
         </Grid>
 
         <br />
@@ -421,7 +542,7 @@ export default function EditSampleModal(props) {
             </Grid>
 
             <Grid item xs={12} sm={12}>
-              {listSamples()}
+              {selectedSample()}
             </Grid>
           </Grid>
         </Card>
