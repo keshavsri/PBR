@@ -34,7 +34,6 @@ export default function ManageOrganizationFlocks({
       })
       .then((data) => {
         setFlocks(data);
-        console.log(flocks);
         assignRowHtml(data);
       });
   };
@@ -129,7 +128,7 @@ export default function ManageOrganizationFlocks({
               organization={organization}
               sources={sources}
               //Remove this later when I figure out how to input birthday
-              birthday={"sfdf"}
+              birthday_old={"sfdf"}
             />
           </Grid>
 

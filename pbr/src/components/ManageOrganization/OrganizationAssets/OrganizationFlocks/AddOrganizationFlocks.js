@@ -1,7 +1,7 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
-import {states} from '../../../../models/enums'
-
+import { LocalizationProvider, DateTimePicker } from '@mui/lab'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
 
 import {
   Typography,
@@ -12,7 +12,6 @@ import {
   Alert,
   Modal,
   MenuItem,
-  DateTimePicker
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import useAuth from "../../../../services/useAuth";
@@ -52,9 +51,7 @@ export default function AddOrganizationFlocks({
     getFlocks,
     openAddOrganizationFlockModal,
     setOpenAddOrganizationFlockModal,
-    organization,
     sources,
-    birthday
   }) {
 
     const classes = useStyles();
@@ -68,7 +65,7 @@ export default function AddOrganizationFlocks({
       species: "",
       production_type: "",
       gender: "",
-      birthday: birthday
+      source: "",
     });
 
     const [errorToggle, setErrorToggle] = React.useState(false);
@@ -79,22 +76,38 @@ export default function AddOrganizationFlocks({
     const [strains, setStrains] = React.useState([]);
     const [productionTypes, setProductionTypes] = React.useState([]);
     const [genders, setGenders] = React.useState([]);
-
+    const [birthday, setBirthday] = React.useState("");
 
     
     React.useEffect(async () => {
       await getSpecies();
-      await getStrains();
       await getProductionTypes();
       await getGenders();
+      setBirthday(new Date().toJSON());
     }, [])
 
+    React.useEffect(async () => {
+      await getStrains();
+    }, [selectedSpecies])
 
-    const handleFlockDetailsChange = (prop) => (event) => {    
-      setFlockDetails({
-        ...flockDetails,
-        [prop]: event.target.value,
-      });
+
+    const handleFlockDetailsChange = (prop) => (event) => {  
+      
+      if (prop == "species") {
+        setSelectedSpecies(event.target.value);
+        setFlockDetails({
+          ...flockDetails,
+          [prop]: event.target.value,
+        });
+      }
+      else {
+        setFlockDetails({
+          ...flockDetails,
+          [prop]: event.target.value,
+        });
+      }
+
+      console.log(flockDetails)
     };
 
     const clearFlockDetails = () => {
@@ -104,7 +117,7 @@ export default function AddOrganizationFlocks({
         species: "",
         production_type: "",
         gender: "",
-        birthday: birthday
+        source: "",
       })
     };
 
@@ -133,6 +146,7 @@ export default function AddOrganizationFlocks({
         species: flockDetails.species,
         production_type: flockDetails.production_type,
         gender: flockDetails.gender,
+        source_id: flockDetails.source.id,
         birthday: birthday
       };
       
@@ -162,18 +176,16 @@ export default function AddOrganizationFlocks({
     };
 
     const getSpecies = async () => {
-      const response = await fetch(`/api/enum/species/`, {
+      const response = await fetch(`/api/enum/species`, {
         method: "GET",
       }).then(checkResponseAuth);
       const data = await response.json();
       setSpecies(Object.values(data));
-      setSelectedSpecies(species[0])
+      setSelectedSpecies(Object.values(data)[0])
     };
 
     const getStrains = async () => {
-      console.log("Selected Species is:")
-      console.log(selectedSpecies)
-      const response = await fetch(`/api/enum/strain/Turkey`, {
+      const response = await fetch(`/api/enum/strain/${selectedSpecies}`, {
         method: "GET",
       }).then(checkResponseAuth);
       const data = await response.json();
@@ -237,8 +249,8 @@ export default function AddOrganizationFlocks({
                 value={flockDetails.species}
                 onChange={handleFlockDetailsChange('species')}
               >
-                {Object.values(species).map((value) => {
-                  return <MenuItem value={value}>{value}</MenuItem>
+                {Object.values(species).map((species) => {
+                  return <MenuItem value={species}>{species}</MenuItem>
                 })}
               </TextField>
             </Grid>
@@ -252,8 +264,8 @@ export default function AddOrganizationFlocks({
                 value={flockDetails.s}
                 onChange={handleFlockDetailsChange('strain')}
               >
-                {Object.values(strains).map((value) => {
-                  return <MenuItem value={value}>{value}</MenuItem>
+                {Object.values(strains).map((strain) => {
+                  return <MenuItem value={strain}>{strain}</MenuItem>
                 })}
               </TextField>
             </Grid>
@@ -268,12 +280,11 @@ export default function AddOrganizationFlocks({
                 value={flockDetails.production_type}
                 onChange={handleFlockDetailsChange('production_type')}
               >
-                {Object.values(productionTypes).map((value) => {
-                  return <MenuItem value={value}>{value}</MenuItem>
+                {Object.values(productionTypes).map((prodType) => {
+                  return <MenuItem value={prodType}>{prodType}</MenuItem>
                 })}
               </TextField>
             </Grid>
-
 
             <Grid item xs={12} sm={6}>
               <TextField
@@ -284,22 +295,38 @@ export default function AddOrganizationFlocks({
                 value={flockDetails.gender}
                 onChange={handleFlockDetailsChange('gender')}
               >
-                {Object.values(genders).map((value) => {
-                  return <MenuItem value={value}>{value}</MenuItem>
+                {Object.values(genders).map((gender) => {
+                  return <MenuItem value={gender}>{gender}</MenuItem>
                 })}
               </TextField>
             </Grid>
 
-
-            <Grid item xs={12} sm={4}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 required
                 fullWidth
-                label="Zip"
-                value={flockDetails.zip}
-                onChange={handleFlockDetailsChange("zip")}
-                error = {flockDetails.zip === "" ? true : false}
-              />
+                select
+                label="Source"
+                value={sources}
+                onChange={handleFlockDetailsChange('source')}
+              >
+                {Object.values(sources).map((source) => {
+                  return <MenuItem value={source}>{source.name}</MenuItem>
+                })}
+              </TextField>
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DateTimePicker
+                  renderInput={(props) => <TextField {...props} />}
+                  label="Birthday"
+                  value={birthday}
+                  onChange={(newValue) => {
+                    setBirthday(newValue);
+                  }}
+                />
+              </LocalizationProvider>
             </Grid>
 
             {errorToggle ? 
