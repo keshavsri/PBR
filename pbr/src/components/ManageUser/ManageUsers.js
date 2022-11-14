@@ -42,7 +42,7 @@ export default function ManageUsers() {
     if (user.role === 0) {
       orgId = organization;
     }
-    await fetch(`/api/user/organization/${orgId}`, { method: "GET", })
+    await fetch(`/api/user/organization/${orgId}`, { method: "GET" })
       .then((response) => {
         return response.json();
       })
