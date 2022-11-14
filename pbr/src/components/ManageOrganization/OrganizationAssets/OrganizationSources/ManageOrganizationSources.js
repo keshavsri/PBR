@@ -8,10 +8,11 @@ import AddOrganizationSources from "./AddOrganizationSources";
 
 
 export default function ManageOrganizationSources({
-  organization
+  organization,
+  sources,
+  setSources
 }) {
   const { checkResponseAuth, user } = useAuth();
-  const [sources, setSources] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
   const [openAddOrganizationSourceModal, setOpenAddOrganizationSourceModal] =

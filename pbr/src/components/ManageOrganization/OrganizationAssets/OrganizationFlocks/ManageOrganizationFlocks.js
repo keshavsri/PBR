@@ -4,14 +4,19 @@ import { Paper, Button, Tooltip, IconButton, Chip, Box, Typography } from "@mui/
 import Grid from "@mui/material/Grid";
 import useAuth from "../../../../services/useAuth";
 import EnhancedTable from "../../../EnhancedTable/EnhancedTable";
+import AddOrganizationFlocks from "./AddOrganizationFlocks";
+
 
 export default function ManageOrganizationFlocks({
-  organization
+  organization,
+  sources
 }) {
   const { checkResponseAuth, user } = useAuth();
   const [flocks, setFlocks] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
+  const [openAddOrganizationFlockModal, setOpenAddOrganizationFlockModal] =
+  React.useState(false);
 
   React.useEffect(async () => {
     await getFlocks();
@@ -29,6 +34,7 @@ export default function ManageOrganizationFlocks({
       })
       .then((data) => {
         setFlocks(data);
+        console.log(flocks);
         assignRowHtml(data);
       });
   };
@@ -100,12 +106,32 @@ export default function ManageOrganizationFlocks({
     });
   };
 
+  const handleOpenAddOrganizationFlocksModal = () => {
+    setOpenAddOrganizationFlockModal(true);
+  };
+
   return (
     <>
       <Paper>
         <Grid item sm={12}>
           <Typography variant="h1" align="center">Flocks</Typography>
         </Grid>
+
+        <Grid item xs={12} sm={3}>
+          <Button variant="contained" onClick={handleOpenAddOrganizationFlocksModal}>Create New Flock</Button>
+        </Grid>
+
+        <Grid item xs={12} sm={12}>
+            <AddOrganizationFlocks
+              getFlocks={getFlocks}
+              openAddOrganizationFlockModal={openAddOrganizationFlockModal}
+              setOpenAddOrganizationFlockModal={setOpenAddOrganizationFlockModal}
+              organization={organization}
+              sources={sources}
+              //Remove this later when I figure out how to input birthday
+              birthday={"sfdf"}
+            />
+          </Grid>
 
         <EnhancedTable
           headCells={headCellList}

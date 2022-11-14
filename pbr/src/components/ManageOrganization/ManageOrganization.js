@@ -23,6 +23,8 @@ export default function OrganizationView() {
   const [openAddOrganizationModal, setOpenAddOrganizationModal] =
     React.useState(false);
   const [editing, setEditing] = React.useState(false);
+  const [sources, setSources] = React.useState([]);
+
 
   React.useEffect(() => {
     if (user.role == 0) {
@@ -138,6 +140,8 @@ export default function OrganizationView() {
                 <Grid item xs={12} sm={12}>
                     <ManageOrganizationSources
                       organization={organization}
+                      sources={sources}
+                      setSources={setSources}
                     />
                   </Grid>
               </Grid>
@@ -146,6 +150,7 @@ export default function OrganizationView() {
                 <Grid item xs={12} sm={12}>
                     <ManageOrganizationFlocks
                       organization={organization}
+                      sources={sources}
                     />
                   </Grid>
               </Grid>
