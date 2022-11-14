@@ -134,6 +134,7 @@ export default function DataView() {
       })
       .then(checkResponseAuth)
       .then((data) => {
+        console.log(data);
         data.forEach((sample) => {
           sample.measurements.map((meas) => {
             sample[meas.analyte.abbreviation] = meas.value;
@@ -376,6 +377,11 @@ export default function DataView() {
                   editSampleModalVisiblity={editSampleModalVisiblity}
                   setEditSampleModalVisibility={setEditSampleModalVisibility}
                   roles={roles}
+                  getData={getData}
+                  currentCartridgeType={currentCartridgeType}
+                  setSelectedSamples={setSelectedSamples}
+                  selectedSamples={selectedSamples}
+                  setSelected={setSelected}
                 />
               ) : null}
             </Grid>

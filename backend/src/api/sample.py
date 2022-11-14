@@ -145,7 +145,7 @@ def get_samples(access_allowed, current_user):
                 for row in result:
                     sample = SampleORM.query.get(row.id)
                     samples.append(sample)
-
+            
             results = []
             for sample in samples:
                 measurements = MeasurementORM.query.filter_by(
@@ -160,21 +160,20 @@ def get_samples(access_allowed, current_user):
 
 
 @sampleBlueprint.route('/<int:item_id>', methods=['PUT'])
-@token_required
-@allowed_roles([0, 1, 2, 3])
-def edit_sample(access_allowed, current_user, item_id):
-    if access_allowed:
-        old_sample = SampleORM.query.get(item_id)
-        if old_sample is None:
-            return jsonify({'message': 'Sample cannot be found.'}), 404
-        else:
+# @token_required
+# @allowed_roles([0, 1, 2, 3])
+def edit_sample(item_id):
 
-            for name, value in request.json.items():
-                if name != 'measurements':
-                    setattr(old_sample, name, value)
+    old_sample = SampleORM.query.get(item_id)
+    if old_sample is None:
+        return jsonify({'message': 'Sample cannot be found.'}), 404
+    else:
+        for name, value in request.json.items():
+            if name != 'measurements':
+                setattr(old_sample, name, value)
 
+        if (request.json.__contains__("measurements")):
             new_measurements = request.json.pop('measurements')
-
             # Update the list of measurements.
 
             measurements = []
@@ -183,17 +182,14 @@ def edit_sample(access_allowed, current_user, item_id):
                 for name, value in measurement.items():
                     setattr(measurement_model, name, value)
                 measurements.append(measurement_model)
+                setattr(old_sample, "measurements", measurements)
 
-            setattr(old_sample, "measurements", measurements)
+        models.db.session.commit()
 
-            models.db.session.commit()
-
-            edited_sample = SampleORM.query.get(item_id)
-            create_log(current_user, LogActions.EDIT_SAMPLE,
-                       'Edited sample: ' + str(edited_sample.id))
-            return Sample.from_orm(edited_sample).dict(), 200
-    else:
-        return jsonify({'message': 'Role not allowed'}), 403
+        edited_sample = SampleORM.query.get(item_id)
+        # create_log(current_user, LogActions.EDIT_SAMPLE,
+        #            'Edited sample: ' + str(edited_sample.id))
+        return Sample.from_orm(edited_sample).dict(), 200
 
 
 @sampleBlueprint.route('/<int:item_id>', methods=['DELETE'])
