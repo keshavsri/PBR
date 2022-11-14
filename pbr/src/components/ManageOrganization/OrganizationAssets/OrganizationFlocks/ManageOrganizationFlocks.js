@@ -125,10 +125,7 @@ export default function ManageOrganizationFlocks({
               getFlocks={getFlocks}
               openAddOrganizationFlockModal={openAddOrganizationFlockModal}
               setOpenAddOrganizationFlockModal={setOpenAddOrganizationFlockModal}
-              organization={organization}
               sources={sources}
-              //Remove this later when I figure out how to input birthday
-              birthday_old={"sfdf"}
             />
           </Grid>
 
