@@ -156,7 +156,7 @@ export default function HealthyRanges() {
   }
 
   const getRoles = async () => {
-    await fetch(`/api/enum/role/`, { 
+    await fetch(`/api/enum/roles/`, { 
       method: "GET",
       headers: {
         "Content-Type": "application/json",
