@@ -64,6 +64,7 @@ export default function EditSampleModal(props) {
     setSelectedSamples,
     selectedSamples,
     setSelected,
+    currentOrganization,
   } = props;
 
   const classes = useStyles();
@@ -122,7 +123,6 @@ export default function EditSampleModal(props) {
       measurements: newMeasurements,
     };
 
-    console.log(payload);
     await fetch(`/api/sample/${SampleToEdit.id}`, {
       method: "PUT",
       body: JSON.stringify(payload),
@@ -218,7 +218,6 @@ export default function EditSampleModal(props) {
   };
 
   const getCartridgeTypes = async () => {
-    console.log("getting cartridge types");
     console.log(SampleToEdit);
     await fetch(`/api/cartridge-type`)
       .then((response) => {
@@ -281,20 +280,20 @@ export default function EditSampleModal(props) {
   }, [source]);
 
   const selectedSample = () => {
+    console.log("selectedSamples");
+    console.log(currentOrganization);
     return (
       <>
         <Grid item xs={12} sm={12}>
-          <Typography gutterBottom variant="h5">
-            {" "}
-            General{" "}
+          <Typography gutterBottom variant="button">
+            General Information
           </Typography>
         </Grid>
-        <br />
 
         <Box sx={{ flexGrow: 1 }}>
-          <Grid container direction="row" alignItems="center" spacing={3}>
-            <Grid item xs={4}>
-              {user.role === roles["Super_Admin"] && (
+          <Grid container spacing={2} style={{ padding: "25px" }}>
+            <Grid item xs={8}>
+              {user.role === roles["Super_Admin"] ? (
                 <>
                   <InputLabel id="label-select-organization">
                     Organization
@@ -317,7 +316,29 @@ export default function EditSampleModal(props) {
                     })}
                   </Select>
                 </>
+              ) : (
+                <>
+                  <InputLabel id="label-select-organization">
+                    Organization
+                  </InputLabel>
+                  <TextField
+                    value={currentOrganization.name}
+                    style={{ width: "300px" }}
+                    disabled
+                  />
+                </>
               )}
+            </Grid>
+
+            <Grid item xs={4}>
+              <InputLabel id="label-select-organization">
+                Cartridge Type
+              </InputLabel>
+              <TextField
+                value={cartridgeType.name}
+                disabled
+                style={{ width: "300px" }}
+              />
             </Grid>
 
             <Grid item xs={8}>
@@ -341,7 +362,7 @@ export default function EditSampleModal(props) {
               </Select>
             </Grid>
 
-            <Grid item xs={8}>
+            <Grid item xs={4}>
               <InputLabel id="label-select-organization">Source</InputLabel>
               <Select
                 labelId="label-select-source"
@@ -361,91 +382,97 @@ export default function EditSampleModal(props) {
                 })}
               </Select>
             </Grid>
+          </Grid>
 
-            {flock !== undefined ? (
-              <>
-                {" "}
-                <Grid item xs={12} sm={6}>
+          {flock !== undefined ? (
+            <>
+              <Grid container spacing={2} style={{ padding: "25px" }}>
+                <Grid item xs={8}>
                   <InputLabel id="label-select-organization">
                     Species
                   </InputLabel>
                   <TextField value={flock.species} disabled />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={4}>
                   <InputLabel id="label-select-organization">
                     Production Type
                   </InputLabel>
                   <TextField value={flock.production_type} disabled />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={8}>
                   <InputLabel id="label-select-organization">Strain</InputLabel>
                   <TextField value={flock.strain} disabled />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={4}>
                   <InputLabel id="label-select-organization">Gender</InputLabel>
                   <TextField value={flock.gender} disabled />
                 </Grid>
-              </>
-            ) : (
-              <Typography style={{ color: "red", margin: "25px" }}>
-                <br /> There are no flocks associated with the selected source{" "}
-                <br />
-                <br />
-              </Typography>
-            )}
-
-            <br></br>
-            <br></br>
-            <br></br>
-
-            <Grid container direction="row" alignItems="center" spacing={3}>
-              <Grid item xs={12} sm={6} style={{ margin: "25px" }}>
-                <TextField
-                  label="Age"
-                  value={SampleDetails.flock_age}
-                  onChange={handleSampleDetailsChange("flock_age")}
-                />
               </Grid>
+            </>
+          ) : (
+            <Typography
+              gutterBottom
+              variant="button"
+              style={{ color: "red", padding: "25px" }}
+            >
+              There are no flocks associated with the selected source{" "}
+            </Typography>
+          )}
 
-              <Grid item xs={4}>
-                <FormControl sx={{ width: "100%" }} style={{ margin: "25px" }}>
-                  <InputLabel>D/W/M/Y</InputLabel>
-                  <Select
-                    value={SampleDetails.flock_age_unit}
-                    label="D/W/M/Y *"
-                    onChange={handleSampleDetailsChange("flock_age_unit")}
-                  >
-                    {Object.values(ageUnits).map((unit, index) => {
-                      return (
-                        <MenuItem value={unit} key={index}>
-                          {unit}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </Grid>
+          <Grid
+            container
+            direction="row"
+            alignItems="center"
+            spacing={2}
+            style={{ padding: "25px" }}
+          >
+            <Grid item xs={8}>
+              <TextField
+                label="Age"
+                value={SampleDetails.flock_age}
+                onChange={handleSampleDetailsChange("flock_age")}
+              />
+            </Grid>
+
+            <Grid item xs={4}>
+              <FormControl sx={{ width: "100%" }}>
+                <InputLabel>D/W/M/Y</InputLabel>
+                <Select
+                  value={SampleDetails.flock_age_unit}
+                  label="D/W/M/Y *"
+                  onChange={handleSampleDetailsChange("flock_age_unit")}
+                >
+                  {Object.values(ageUnits).map((unit, index) => {
+                    return (
+                      <MenuItem value={unit} key={index}>
+                        {unit}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
             </Grid>
           </Grid>
         </Box>
 
-        <br />
-
         <Grid item xs={12} sm={12}>
-          <Typography gutterBottom variant="h5">
+          <Typography gutterBottom variant="button">
             {" "}
             Measurements{" "}
           </Typography>
-
-          <br />
         </Grid>
 
         <Box sx={{ flexGrow: 1 }}>
-          <Grid container direction="row" alignItems="center" spacing={3}>
+          <Grid
+            container
+            direction="row"
+            alignItems="center"
+            spacing={3}
+            style={{ padding: "25px" }}
+          >
             {sampleMeasurements()}
           </Grid>
         </Box>
-        <br />
 
         <Grid className={classes.container}>
           <Typography gutterBottom variant="button">
@@ -455,6 +482,7 @@ export default function EditSampleModal(props) {
           <RadioGroup
             value={SampleDetails.sample_type}
             onChange={handleSampleDetailsChange("sample_type")}
+            style={{ marginLeft: "25px" }}
           >
             <FormControlLabel
               value={sampleTypes.SURVEILLANCE}
@@ -472,17 +500,21 @@ export default function EditSampleModal(props) {
               sx={{ mt: "0.5rem", ml: "-0.25rem" }}
               size="small"
               onClick={clearSampleType}
+              style={{ marginLeft: "25px" }}
             >
               Clear Selection
             </Button>
           )}
         </Grid>
 
-        <br />
-        <br />
+        <Typography gutterBottom variant="button" style={{ marginTop: "25px" }}>
+          Comments:
+        </Typography>
 
-        <Grid item xs={12} sm={12}>
+        <Grid item xs={12} sm={12} style={{ padding: "25px" }}>
           <TextField
+            multiline
+            rows={4}
             fullWidth
             label="Comments"
             value={SampleDetails.comments}
@@ -548,7 +580,6 @@ export default function EditSampleModal(props) {
         </Card>
 
         <Grid>
-          <br />
           {errorSubmission ? (
             <Typography
               gutterBottom
@@ -558,6 +589,7 @@ export default function EditSampleModal(props) {
                 position: "absolute",
                 bottom: 50,
                 left: 280,
+                padding: "15px",
               }}
             >
               The Machine Data associated to the sample is incomplete.
