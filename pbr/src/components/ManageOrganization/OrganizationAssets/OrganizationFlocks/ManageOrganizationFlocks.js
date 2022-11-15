@@ -9,7 +9,8 @@ import AddOrganizationFlocks from "./AddOrganizationFlocks";
 
 export default function ManageOrganizationFlocks({
   organization,
-  sources
+  sources,
+  roles
 }) {
   const { checkResponseAuth, user } = useAuth();
   const [flocks, setFlocks] = React.useState([]);
@@ -108,6 +109,27 @@ export default function ManageOrganizationFlocks({
     setOpenAddOrganizationFlockModal(true);
   };
 
+  const deleteFlock = async (deletedFlockId) => {
+    await fetch(`/api/flock/${deletedFlockId}`, { method: "DELETE" })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {})
+      .catch((error) => {
+        console.log(error);
+      });
+    await getFlocks();
+  };
+
+  const onDelete = async () => {
+    if (user.role === roles["Super_Admin"] || user.role === roles["Admin"]) {
+      selected.map((deletedFlockId) => {
+        deleteFlock(deletedFlockId);
+      });
+      setSelected([]);
+    }
+  };
+
   return (
     <>
       <Paper>
@@ -131,6 +153,7 @@ export default function ManageOrganizationFlocks({
         <EnhancedTable
           headCells={headCellList}
           rows={flocks}
+          onDelete={onDelete}
           selected={selected}
           setSelected={setSelected}
         ></EnhancedTable>

@@ -6,9 +6,9 @@ import useAuth from "../../../../services/useAuth";
 import EnhancedTable from "../../../EnhancedTable/EnhancedTable";
 import AddOrganizationMachines from "./AddOrganizationMachines";
 
-
 export default function ManageOrganizationMachines({
-  organization
+  organization,
+  roles
 }) {
   const { checkResponseAuth, user } = useAuth();
   const [machines, setMachines] = React.useState([]);
@@ -72,14 +72,35 @@ export default function ManageOrganizationMachines({
     setOpenAddOrganizationMachineModal(true);
   };
 
+  const deleteMachine = async (deletedMachineId) => {
+    await fetch(`/api/machine/${deletedMachineId}`, { method: "DELETE" })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {})
+      .catch((error) => {
+        console.log(error);
+      });
+    await getMachines();
+  };
+
+  const onDelete = async () => {
+    if (user.role === roles["Super_Admin"] || user.role === roles["Admin"]) {
+      selected.map((deletedMachineId) => {
+        deleteMachine(deletedMachineId);
+      });
+      setSelected([]);
+    }
+  };
+
   return (
     <>
       <Paper>
-        <Grid item sm={12}>
+        <Grid item xs={12} sm={12}>
           <Typography variant="h1" align="center">Machines</Typography>
         </Grid>
 
-        <Grid item xs={12} sm={3}>
+        <Grid item xs={12} sm={12}>
           <Button variant="contained" onClick={handleOpenAddOrganizationMachinesModal}>Create New Machine</Button>
         </Grid>
 
@@ -95,6 +116,16 @@ export default function ManageOrganizationMachines({
         <EnhancedTable
           headCells={headCellList}
           rows={machines}
+          toolbarButtons={
+          <>
+            <Button
+              variant="contained"
+              onClick={() => console.log("hi")}
+            >
+              Console Log Hi
+            </Button>
+          </>}
+          onDelete={onDelete}
           selected={selected}
           setSelected={setSelected}
         ></EnhancedTable>

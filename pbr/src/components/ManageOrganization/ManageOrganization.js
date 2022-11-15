@@ -24,9 +24,13 @@ export default function OrganizationView() {
     React.useState(false);
   const [editing, setEditing] = React.useState(false);
   const [sources, setSources] = React.useState([]);
+  const [roles, setRoles] = React.useState([]);
 
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
+    await getRoles();
+
+    // Doing roles["Super_Admin"] doesn't work here -> Needs to be fixed
     if (user.role == 0) {
       getOrganizations();
     } else {
@@ -34,6 +38,14 @@ export default function OrganizationView() {
       getAdminContact(user.organization_id);
     }
   }, []);
+
+  const getRoles = async () => {
+    const response = await fetch(`/api/enum/roles`, {
+      method: "GET",
+    }).then(checkResponseAuth);
+    const data = await response.json();
+    setRoles(data);
+  };
 
   const getAdminContact = async (orgId) => {
     await fetch(`/api/user/admin/${orgId}`, { method: "GET" })
@@ -142,6 +154,7 @@ export default function OrganizationView() {
                       organization={organization}
                       sources={sources}
                       setSources={setSources}
+                      roles={roles}
                     />
                   </Grid>
               </Grid>
@@ -151,6 +164,7 @@ export default function OrganizationView() {
                     <ManageOrganizationFlocks
                       organization={organization}
                       sources={sources}
+                      roles={roles}
                     />
                   </Grid>
               </Grid>
@@ -159,6 +173,7 @@ export default function OrganizationView() {
                 <Grid item xs={12} sm={12}>
                     <ManageOrganizationMachines
                       organization={organization}
+                      roles={roles}
                     />
                   </Grid>
               </Grid>

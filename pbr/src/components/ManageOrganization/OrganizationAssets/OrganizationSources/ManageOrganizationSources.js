@@ -10,7 +10,8 @@ import AddOrganizationSources from "./AddOrganizationSources";
 export default function ManageOrganizationSources({
   organization,
   sources,
-  setSources
+  setSources,
+  roles
 }) {
   const { checkResponseAuth, user } = useAuth();
   const [headCellList, setHeadCellList] = React.useState([]);
@@ -90,6 +91,27 @@ export default function ManageOrganizationSources({
     setOpenAddOrganizationSourceModal(true);
   };
 
+  const deleteSource = async (deletedSourceId) => {
+    await fetch(`/api/source/${deletedSourceId}`, { method: "DELETE" })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {})
+      .catch((error) => {
+        console.log(error);
+      });
+    await getSources();
+  };
+
+  const onDelete = async () => {
+    if (user.role === roles["Super_Admin"] || user.role === roles["Admin"]) {
+      selected.map((deletedSourceId) => {
+        deleteSource(deletedSourceId);
+      });
+      setSelected([]);
+    }
+  };
+
   return (
     <>
       <Paper>
@@ -113,6 +135,7 @@ export default function ManageOrganizationSources({
         <EnhancedTable
           headCells={headCellList}
           rows={sources}
+          onDelete={onDelete}
           selected={selected}
           setSelected={setSelected}
         ></EnhancedTable>
