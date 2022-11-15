@@ -25,15 +25,6 @@ def client(app):
         return app.test_client()
 
 
-
-
-# def test_send_request1(client):
-#     # API
-#     # GET http://127.0.0.1:3005/api/
-#
-#
-
-
 def test_post_organization(client):
     # Post Organization
     # POST http://127.0.0.1:3005/api/organization/
@@ -64,9 +55,9 @@ def test_post_organization(client):
 
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
-#
-#
-#
+
+
+
 def test_put_organization(client):
     # Put Organization
     # PUT http://127.0.0.1:3005/api/organization/2
@@ -91,7 +82,7 @@ def test_put_organization(client):
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
 
-#
+
 def test_get_organizations(client):
     # Get Organizations
     # GET http://127.0.0.1:3005/api/organization/
@@ -107,7 +98,7 @@ def test_get_organizations(client):
         assert response.status_code == 200
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
-#
+
 
 def test_get_organization(client):
     # Get Organization

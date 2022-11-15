@@ -90,8 +90,6 @@ def test_create_sample(client):
     # POST http://127.0.0.1:3005/api/machine/
 
     try:
-
-
         response = client.post(
             "/api/user/login",
             json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
@@ -155,8 +153,6 @@ def test_submit_sample(client):
     # POST http://127.0.0.1:3005/api/machine/
 
     try:
-
-
         response = client.post(
             "/api/user/login",
             json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
@@ -180,8 +176,6 @@ def test_accept_sample(client):
     # POST http://127.0.0.1:3005/api/machine/
 
     try:
-
-
         response = client.post(
             "/api/user/login",
             json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
@@ -211,8 +205,6 @@ def test_reject_sample(client):
     # POST http://127.0.0.1:3005/api/machine/
 
     try:
-
-
         response = client.post(
             "/api/user/login",
             json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)

@@ -159,7 +159,7 @@ def logout():
     if 'pbr_token' in request.cookies:
         token = request.cookies['pbr_token']
         Auth_Token.invalidate_token(token)
-    response = jsonify({"message": "Logged out."}), 200
+    response = make_response(jsonify({"message": "Logged out."}), 200)
     response.set_cookie(key="pbr_token", value="", expires=datetime.now(
         tz=timezone.utc), secure=True, httponly=True, samesite="Strict")
     return response

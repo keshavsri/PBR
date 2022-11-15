@@ -25,8 +25,6 @@ def client(app):
         return app.test_client()
 
 
-
-
 def test_post_machine(client):
     # Post Machine
     # POST http://127.0.0.1:3005/api/machine/
@@ -46,9 +44,9 @@ def test_post_machine(client):
         assert response.status_code == 201
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
-#
-#
-#
+
+
+
 def test_edit_machine(client):
     # Edit Machine
     # PUT http://127.0.0.1:3005/api/machine/1
@@ -68,8 +66,8 @@ def test_edit_machine(client):
         assert response.status_code == 200
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
-#
-#
+
+
 def test_get_machine(client):
     # Get Machine
     # GET http://127.0.0.1:3005/api/machine/3

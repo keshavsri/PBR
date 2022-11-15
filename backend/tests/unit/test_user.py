@@ -56,27 +56,7 @@ def test_get_users(client):
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
 
-# def test_delete_user(client):
-#     # Request
-#     # DELETE http://127.0.0.1:3005/api/user/<int:id>
-#
-#     try:
-#         response = client.post(
-#             "/api/user/login",
-#             json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
-#         response = requests.delete(
-#             url="http://127.0.0.1:3005/api/user/2",
-#             headers={
-#                 "Cookie": "pbr_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFiaGlydWRAbmNzdS5lZHUiLCJpZCI6MSwicm9sZSI6MCwiaWF0IjoxNjUwMTgyMjk2LCJuYmYiOjE2NTAxODIyOTYsImV4cCI6MTY1MDE4NTg5Nn0.bqJ8igRVPDZNeQVZE7JDnsDk6e6rScIDrhqRc8V_1iM",
-#             },
-#         )
-#         assert response.status_code == 404
-#         print('Response HTTP Response Body: {content}'.format(
-#             content=response.content))
-#     except requests.exceptions.RequestException:
-#         print('HTTP Request failed')
-#
-#
+
 def test_edit_user(client):
     # Request
     # PUT http://127.0.0.1:3005/api/user/<int:id>
@@ -86,9 +66,15 @@ def test_edit_user(client):
             "/api/user/login",
             json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
         assert response.status_code == 200
+
+        response = client.get(
+            "/api/user/me",
+        )
+        user_response = json.loads(response.get_data(as_text=True))
         response = client.put(
-            "/api/user/1",
+            f'/api/user/{user_response["id"]}',
             json={
+                "id": 1,
                 "email": "pbrsuperadmin@ncsu.edu",
                 "first_name": "Super Admin",
                 "last_name": "PBR",
@@ -122,11 +108,25 @@ def test_signup_user(client):
         )
         assert response.status_code == 200
 
+        response = client.post(
+            "/api/user/login",
+            json={'email': 'jjboike@ncsu.edu', 'password': 'password'}, follow_redirects=True)
+        assert response.status_code == 200
         user_response = json.loads(response.get_data(as_text=True))
         print(user_response, flush=True)
         response = client.get(
             f'/api/user/{user_response["id"]}'
         )
+        assert response.status_code == 200
+
+        response = client.post(
+            f'/api/user/logout'
+        )
+        assert response.status_code == 200
+
+        response = client.post(
+            "/api/user/login",
+            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
         assert response.status_code == 200
         response = client.delete(
             f'/api/user/{user_response["id"]}'

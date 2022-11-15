@@ -49,8 +49,8 @@ def test_post_flock(client):
         assert response.status_code == 201
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
-#
-#
+
+
 def test_duplicate_flock(client):
     # Post Flock Duplicate
     # POST http://127.0.0.1:3005/api/flock/
@@ -74,8 +74,8 @@ def test_duplicate_flock(client):
         assert response.status_code == 409
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
-#
-#
+
+
 def test_get_flock(client):
     # Get Flock
     # GET http://127.0.0.1:3005/api/flock/id/3
@@ -90,28 +90,7 @@ def test_get_flock(client):
         assert response.status_code == 200
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
-#
-#
-#
-# def test_get_duplicate_flock(client):
-#     # Get Flock Duplicate
-#     # GET http://127.0.0.1:3005/api/flock/
-#
-#     try:
-#         response = client.get(
-#             url="http://127.0.0.1:3005/api/flock/",
-#             headers={
-#                 "Cookie": "pbr_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImFiaGlydWRAbmNzdS5lZHUiLCJpZCI6MSwicm9sZSI6MCwiaWF0IjoxNjQ5NDc5MzkzLCJuYmYiOjE2NDk0NzkzOTMsImV4cCI6MTY0OTQ4Mjk5M30.p1J34Lh6OKIZNf6WJRbDkrB4EskncXAE6SMigEhj9ZE",
-#             },
-#         )
-#         assert response.status_code == 200
-#         print('Response HTTP Response Body: {content}'.format(
-#             content=response.content))
-#     except requests.exceptions.RequestException:
-#         print('HTTP Request failed')
-#
-#
-#
+
 def test_edit_flock(client):
     # Edit Flock
     # PUT http://127.0.0.1:3005/api/flock/2
