@@ -303,7 +303,7 @@ export default function AddOrganizationFlocks({
                 fullWidth
                 select
                 label="Source"
-                value={sources}
+                value={flockDetails.source}
                 onChange={handleFlockDetailsChange('source')}
               >
                 {Object.values(sources).map((source) => {
