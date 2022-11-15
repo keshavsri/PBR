@@ -382,6 +382,7 @@ export default function DataView() {
                   setSelectedSamples={setSelectedSamples}
                   selectedSamples={selectedSamples}
                   setSelected={setSelected}
+                  currentOrganization={organization}
                 />
               ) : null}
             </Grid>
