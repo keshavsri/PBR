@@ -86,8 +86,17 @@ export default function OrganizationView() {
       });
   };
 
+  const isDeletable = () => {
+    if (user.role == roles["Super_Admin"] || user.role == roles["Admin"]) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const assignRowHtml = (rows) => {
     rows.map((row) => {
+      row.deletable = isDeletable();
       row.status = (
         <>
           <Chip label={row.status} color="primary" size="small" />
@@ -98,6 +107,7 @@ export default function OrganizationView() {
 
   const assignRowHtmlFlock = (rows) => {
     rows.map((row) => {
+      row.deletable = isDeletable();
       row.status = (
         <>
           <Chip label={row.status} color="primary" size="small" />
