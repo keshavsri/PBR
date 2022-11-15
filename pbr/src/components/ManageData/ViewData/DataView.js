@@ -196,6 +196,8 @@ export default function DataView() {
         headCells.push(createHeadCell(analyte, "", index));
       });
     }
+
+    headCells.push({id:"comments", numeric: false, disablePadding: true, label: "Comments"});
     setHeadCellList(headCells);
   };
 
@@ -400,7 +402,9 @@ export default function DataView() {
           openReviewSampleModal={openReviewSampleModal}
           setOpenReviewSampleModal={setOpenReviewSampleModal}
           pendingSamples={pendingSamples}
+          // modifiedSamples={pendingSamples}
           setPendingSamples={setPendingSamples}
+          // setModifiedSamples={setPendingSamples}
           acceptSample={acceptSample}
           rejectSample={rejectSample}
           turnPendingFilterOff={turnPendingFilterOff}

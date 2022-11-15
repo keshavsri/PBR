@@ -144,10 +144,7 @@ export default function EditSampleModal(props) {
       });
   };
 
-  const removeFromSelected = (sample) => {
-    let newSelected = selectedSamples.filter((s) => s !== sample);
-    setSelectedSamples(newSelected);
-  };
+
 
   const handleSampleDetailsChange = (prop) => (event) => {
     setSampleDetails({
