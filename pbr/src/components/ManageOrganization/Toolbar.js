@@ -16,10 +16,16 @@ export default function Toolbar({
   setOrganization,
   organizations,
   getAdminContact,
+  getSources,
+  getFlocks,
+  getMachines,
   setOpenAddOrganizationModal
 }) {
   const organizationSelected = event => {
     setOrganization(organizations.find(org => org.id == event.target.value))
+    getSources(organizations.find(org => org.id == event.target.value));
+    getFlocks(organizations.find(org => org.id == event.target.value));
+    getMachines(organizations.find(org => org.id == event.target.value));
     getAdminContact(event.target.value)
   }
 

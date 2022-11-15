@@ -10,7 +10,7 @@ import AddOrganizationSources from "./AddOrganizationSources";
 export default function ManageOrganizationSources({
   organization,
   sources,
-  setSources,
+  getSources,
   roles
 }) {
   const { checkResponseAuth, user } = useAuth();
@@ -19,24 +19,10 @@ export default function ManageOrganizationSources({
   const [openAddOrganizationSourceModal, setOpenAddOrganizationSourceModal] = React.useState(false);
 
   React.useEffect(async () => {
-    await getSources();
+    await getSources(organization);
 
     getHeadCells();
   }, []);
-
-  const getSources = async () => {
-    await fetch(`/api/source/organization/${organization.id}`, {
-      method: "GET",
-    })
-      .then(checkResponseAuth)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setSources(data)
-        assignRowHtml(data);
-      });
-  };
 
   const getHeadCells = () => {
     const headCells = [
@@ -75,16 +61,6 @@ export default function ManageOrganizationSources({
       },
     ];
     setHeadCellList(headCells);
-  };
-
-  const assignRowHtml = (rows) => {
-    rows.map((row) => {
-      row.status = (
-        <>
-          <Chip label={row.status} color="primary" size="small" />
-        </>
-      );
-    });
   };
 
   const handleOpenAddOrganizationSourcesModal = () => {

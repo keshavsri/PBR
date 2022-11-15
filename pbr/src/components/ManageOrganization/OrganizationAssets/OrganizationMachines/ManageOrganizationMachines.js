@@ -8,34 +8,20 @@ import AddOrganizationMachines from "./AddOrganizationMachines";
 
 export default function ManageOrganizationMachines({
   organization,
+  machines,
+  getMachines,
   roles
 }) {
   const { checkResponseAuth, user } = useAuth();
-  const [machines, setMachines] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
   const [openAddOrganizationMachineModal, setOpenAddOrganizationMachineModal] = React.useState(false);
 
   React.useEffect(async () => {
-    await getMachines();
+    await getMachines(organization);
 
     getHeadCells();
   }, []);
-
-  const getMachines = async () => {
-    await fetch(`/api/machine/organization/${organization.id}`, {
-      method: "GET",
-    })
-      .then(checkResponseAuth)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setMachines(data)
-        assignRowHtml(data);
-      });
-  };
-
 
   const getHeadCells = () => {
     const headCells = [
@@ -56,16 +42,6 @@ export default function ManageOrganizationMachines({
       }
     ];
     setHeadCellList(headCells);
-  };
-
-  const assignRowHtml = (rows) => {
-    rows.map((row) => {
-      row.status = (
-        <>
-          <Chip label={row.status} color="primary" size="small" />
-        </>
-      );
-    });
   };
 
   const handleOpenAddOrganizationMachinesModal = () => {

@@ -9,34 +9,21 @@ import AddOrganizationFlocks from "./AddOrganizationFlocks";
 
 export default function ManageOrganizationFlocks({
   organization,
+  flocks,
+  getFlocks,
   sources,
   roles
 }) {
   const { checkResponseAuth, user } = useAuth();
-  const [flocks, setFlocks] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
   const [openAddOrganizationFlockModal, setOpenAddOrganizationFlockModal] = React.useState(false);
 
   React.useEffect(async () => {
-    await getFlocks();
+    await getFlocks(organization);
 
     getHeadCells();
   }, []);
-
-  const getFlocks = async () => {
-    await fetch(`/api/flock/organization/${organization.id}`, {
-      method: "GET",
-    })
-      .then(checkResponseAuth)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setFlocks(data);
-        assignRowHtml(data);
-      });
-  };
 
   const getHeadCells = () => {
     const headCells = [
@@ -87,22 +74,6 @@ export default function ManageOrganizationFlocks({
       }
     ];
     setHeadCellList(headCells);
-  };
-
-  const assignRowHtml = (rows) => {
-    rows.map((row) => {
-      row.status = (
-        <>
-          <Chip label={row.status} color="primary" size="small" />
-        </>
-      );
-      row.birthday = new Date(row.birthday).toLocaleString(
-        "en-US",
-        {
-          timeZone: "America/New_York",
-        }
-      );
-    });
   };
 
   const handleOpenAddOrganizationFlocksModal = () => {

@@ -11,7 +11,7 @@ import ManageOrganizationFlocks from "./OrganizationAssets/OrganizationFlocks/Ma
 import ManageOrganizationMachines from "./OrganizationAssets/OrganizationMachines/ManageOrganizationMachines";
 
 
-import { Box, Typography, Grid, Card } from "@mui/material";
+import { Box, Typography, Grid, Card, Chip } from "@mui/material";
 
 import useAuth from "../../services/useAuth";
 
@@ -24,6 +24,8 @@ export default function OrganizationView() {
     React.useState(false);
   const [editing, setEditing] = React.useState(false);
   const [sources, setSources] = React.useState([]);
+  const [flocks, setFlocks] = React.useState([]);
+  const [machines, setMachines] = React.useState([]);
   const [roles, setRoles] = React.useState([]);
 
 
@@ -84,14 +86,86 @@ export default function OrganizationView() {
       });
   };
 
+  const assignRowHtml = (rows) => {
+    rows.map((row) => {
+      row.status = (
+        <>
+          <Chip label={row.status} color="primary" size="small" />
+        </>
+      );
+    });
+  };
+
+  const assignRowHtmlFlock = (rows) => {
+    rows.map((row) => {
+      row.status = (
+        <>
+          <Chip label={row.status} color="primary" size="small" />
+        </>
+      );
+      row.birthday = new Date(row.birthday).toLocaleString(
+        "en-US",
+        {
+          timeZone: "America/New_York",
+        }
+      );
+    });
+  };
+
+
+  const getSources = async (organization) => {
+    await fetch(`/api/source/organization/${organization.id}`, {
+      method: "GET",
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setSources(data)
+        assignRowHtml(data);
+      });
+  };
+
+  const getFlocks = async (organization) => {
+    await fetch(`/api/flock/organization/${organization.id}`, {
+      method: "GET",
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setFlocks(data);
+        assignRowHtmlFlock(data);
+      });
+  };
+
+  const getMachines = async (organization) => {
+    await fetch(`/api/machine/organization/${organization.id}`, {
+      method: "GET",
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setMachines(data)
+        assignRowHtml(data);
+      });
+  };
+
   const renderToolbar = () => {
-    if (user.role === 0) {
+    if (user.role === roles["Super_Admin"]) {
       return (
         <Toolbar
           organization={organization}
           setOrganization={setOrganization}
           organizations={organizations}
           getAdminContact={getAdminContact}
+          getSources={getSources}
+          getFlocks={getFlocks}
+          getMachines={getMachines}
           setOpenAddOrganizationModal={setOpenAddOrganizationModal}
         />
       );
@@ -153,6 +227,7 @@ export default function OrganizationView() {
                     <ManageOrganizationSources
                       organization={organization}
                       sources={sources}
+                      getSources={getSources}
                       setSources={setSources}
                       roles={roles}
                     />
@@ -163,6 +238,9 @@ export default function OrganizationView() {
                 <Grid item xs={12} sm={12}>
                     <ManageOrganizationFlocks
                       organization={organization}
+                      flocks={flocks}
+                      getFlocks={getFlocks}
+                      setFlocks={setFlocks}
                       sources={sources}
                       roles={roles}
                     />
@@ -173,6 +251,8 @@ export default function OrganizationView() {
                 <Grid item xs={12} sm={12}>
                     <ManageOrganizationMachines
                       organization={organization}
+                      machines={machines}
+                      getMachines={getMachines}
                       roles={roles}
                     />
                   </Grid>
