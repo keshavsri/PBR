@@ -24,14 +24,23 @@ def client(app):
     with app.test_request_context():
         return app.test_client()
 
+
+@pytest.fixture(autouse=True)
+def run_before_and_after_tests(client):
+    """Fixture to execute asserts before and after a test is run"""
+    response = client.post(
+        "/api/user/login",
+        json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
+    assert response.status_code == 200
+    yield # this is where the testing happens
+
+    # Teardown : fill with any logic you want
+
 def test_request_log(client):
     # Request
     # GET http://127.0.0.1:3005/api/log/
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
         response = client.get(
             "http://127.0.0.1:3005/api/log/user/1",
         )

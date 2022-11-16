@@ -24,6 +24,16 @@ def client(app):
     with app.test_request_context():
         return app.test_client()
 
+@pytest.fixture(autouse=True)
+def run_before_and_after_tests(client):
+    """Fixture to execute asserts before and after a test is run"""
+    response = client.post(
+        "/api/user/login",
+        json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
+    assert response.status_code == 200
+    yield # this is where the testing happens
+
+    # Teardown : fill with any logic you want
 
 
 def test_request_me(client):
@@ -31,9 +41,7 @@ def test_request_me(client):
     # GET http://127.0.0.1:3005/api/user/me
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
+
         response = client.get(
             "/api/user/me",
         )
@@ -46,9 +54,6 @@ def test_get_users(client):
     # GET http://127.0.0.1:3005/api/user/users/<int:org_id>
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
         response = client.get(
             "http://127.0.0.1:3005/api/user/organization/1"
         )
@@ -62,11 +67,6 @@ def test_edit_user(client):
     # PUT http://127.0.0.1:3005/api/user/<int:id>
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
-        assert response.status_code == 200
-
         response = client.get(
             "/api/user/me",
         )
@@ -113,7 +113,6 @@ def test_signup_user(client):
             json={'email': 'jjboike@ncsu.edu', 'password': 'password'}, follow_redirects=True)
         assert response.status_code == 200
         user_response = json.loads(response.get_data(as_text=True))
-        print(user_response, flush=True)
         response = client.get(
             f'/api/user/{user_response["id"]}'
         )

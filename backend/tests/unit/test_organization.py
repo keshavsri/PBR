@@ -25,15 +25,22 @@ def client(app):
         return app.test_client()
 
 
+@pytest.fixture(autouse=True)
+def run_before_and_after_tests(client):
+    """Fixture to execute asserts before and after a test is run"""
+    response = client.post(
+        "/api/user/login",
+        json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
+    assert response.status_code == 200
+    yield # this is where the testing happens
+
+    # Teardown : fill with any logic you want
+
 def test_post_organization(client):
     # Post Organization
     # POST http://127.0.0.1:3005/api/organization/
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
-        assert response.status_code == 200
         response = client.post(
             "/api/organization/",
             json={
@@ -63,10 +70,6 @@ def test_put_organization(client):
     # PUT http://127.0.0.1:3005/api/organization/2
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
-        assert response.status_code == 200
         response = client.put(
             "/api/organization/1",
             json={
@@ -88,10 +91,6 @@ def test_get_organizations(client):
     # GET http://127.0.0.1:3005/api/organization/
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
-        assert response.status_code == 200
         response = client.get(
             "/api/organization/"
         )
@@ -105,10 +104,6 @@ def test_get_organization(client):
     # GET http://127.0.0.1:3005/api/organization/1
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
-        assert response.status_code == 200
         response = client.get(
             "/api/organization/1"
         )

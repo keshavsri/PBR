@@ -93,8 +93,6 @@ def put_organization(access_allowed, current_user, item_id):
             editedOrganization_model = models.Organization.query.get(item_id)
             editedOrg = Organization.from_orm(editedOrganization_model).dict()
             # add log
-            print(json.dumps(editedOrg), flush=True)
-            print(editedOrg["name"])
             create_log(current_user, LogActions.EDIT_ORGANIZATION,'Edited Organization: ' + editedOrg["name"])
             return editedOrg, 200
 

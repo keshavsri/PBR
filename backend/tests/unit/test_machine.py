@@ -25,14 +25,23 @@ def client(app):
         return app.test_client()
 
 
+@pytest.fixture(autouse=True)
+def run_before_and_after_tests(client):
+    """Fixture to execute asserts before and after a test is run"""
+    response = client.post(
+        "/api/user/login",
+        json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
+    assert response.status_code == 200
+    yield # this is where the testing happens
+
+    # Teardown : fill with any logic you want
+
+
 def test_post_machine(client):
     # Post Machine
     # POST http://127.0.0.1:3005/api/machine/
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
         response = client.post(
             "/api/machine/",
             json={
@@ -52,9 +61,6 @@ def test_edit_machine(client):
     # PUT http://127.0.0.1:3005/api/machine/1
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
         response = client.put(
             "http://127.0.0.1:3005/api/machine/1",
             json={
@@ -73,9 +79,6 @@ def test_get_machine(client):
     # GET http://127.0.0.1:3005/api/machine/3
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
         response = client.get(
             "/api/machine/1"
         )

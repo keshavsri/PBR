@@ -24,6 +24,16 @@ def client(app):
     with app.test_request_context():
         return app.test_client()
 
+@pytest.fixture(autouse=True)
+def run_before_and_after_tests(client):
+    """Fixture to execute asserts before and after a test is run"""
+    response = client.post(
+        "/api/user/login",
+        json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
+    assert response.status_code == 200
+    yield # this is where the testing happens
+
+    # Teardown : fill with any logic you want
 
 sample_payload = {
     "comments": "Sample 1",
@@ -91,9 +101,6 @@ def test_create_sample(client):
 
     try:
         response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
-        response = client.post(
             "/api/sample/",
             json=sample_payload
         )
@@ -112,9 +119,6 @@ def test_get_samples(client):
     # GET http://127.0.0.1:3005/api/machine/3
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
         response = client.get(
             "/api/sample/org_cartridge_type?organization_id=1&cartridge_type_id=1"
         )
@@ -128,17 +132,12 @@ def test_edit_sample(client):
     # PUT http://127.0.0.1:3005/api/machine/1
 
     try:
-
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
         response = client.post(
             "/api/sample/",
             json=sample_payload
         )
         sample_payload["measurements"][0]["value"] = 2
         sample = json.loads(response.get_data(as_text=True))
-        print(sample, flush=True)
         response = client.put(
             f'api/sample/{sample["id"]}',
             json=sample_payload
@@ -153,9 +152,6 @@ def test_submit_sample(client):
     # POST http://127.0.0.1:3005/api/machine/
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
         response = client.post(
             "/api/sample/",
             json=sample_payload
@@ -176,9 +172,6 @@ def test_accept_sample(client):
     # POST http://127.0.0.1:3005/api/machine/
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
         response = client.post(
             "/api/sample/",
             json=sample_payload
@@ -205,9 +198,6 @@ def test_reject_sample(client):
     # POST http://127.0.0.1:3005/api/machine/
 
     try:
-        response = client.post(
-            "/api/user/login",
-            json={'email': 'pbrsuperadmin@ncsu.edu', 'password': 'C0ck@D00dleD00'}, follow_redirects=True)
         response = client.post(
             "/api/sample/",
             json=sample_payload
