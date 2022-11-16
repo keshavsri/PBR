@@ -30,8 +30,6 @@ def get_flocks_by_organization(access_allowed, current_user, org_id):
                 flocks_models = connection.execute(sql_text, {"org_id": org_id})
                 response = []
                 for flock in flocks_models:
-                    print("=============================", flush=True)
-                    print(flock, flush=True)
                     schema_flock = Flock.from_orm(flock).dict()
                     schema_flock.update({"source_name": SourceORM.query.get(flock.source_id).name})
                     response.append(schema_flock)

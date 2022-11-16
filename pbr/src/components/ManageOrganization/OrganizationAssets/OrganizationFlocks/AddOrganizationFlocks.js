@@ -159,7 +159,6 @@ export default function AddOrganizationFlocks({
         })
         .then(checkResponseAuth)
         .then((response) => {
-          console.log(response);
           if (!response.ok) {
             setErrorToggle(true)
             setErrorMessage("Unable to create flock.")

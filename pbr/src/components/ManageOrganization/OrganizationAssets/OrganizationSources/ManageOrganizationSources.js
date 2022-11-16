@@ -82,8 +82,6 @@ export default function ManageOrganizationSources({
   const onDelete = async () => {
     if (user.role === roles["Super_Admin"] || user.role === roles["Admin"]) {
       selected.map((deletedSourceId) => {
-        console.log("ID of source being selected");
-        console.log(deletedSourceId);
         deleteSource(deletedSourceId);
       });
       setSelected([]);

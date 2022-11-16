@@ -118,8 +118,6 @@ export default function AddOrganization({
         return;
       }
 
-      console.log(`Creating new Organization`);
-
       let payload = {
 
         // Organization Parameters
@@ -144,7 +142,6 @@ export default function AddOrganization({
         })
         .then(checkResponseAuth)
         .then((response) => {
-          console.log(response);
           if (!response.ok) {
             setErrorToggle(true)
             setErrorMessage("Unable to create organization.")
