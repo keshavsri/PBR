@@ -23,9 +23,9 @@ export default function Toolbar({
 }) {
   const organizationSelected = event => {
     setOrganization(organizations.find(org => org.id == event.target.value))
-    getSources(organizations.find(org => org.id == event.target.value));
-    getFlocks(organizations.find(org => org.id == event.target.value));
-    getMachines(organizations.find(org => org.id == event.target.value));
+    getSources(event.target.value);
+    getFlocks(event.target.value);
+    getMachines(event.target.value);
     getAdminContact(event.target.value)
   }
 

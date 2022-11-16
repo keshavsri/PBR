@@ -18,7 +18,7 @@ export default function ManageOrganizationMachines({
   const [openAddOrganizationMachineModal, setOpenAddOrganizationMachineModal] = React.useState(false);
 
   React.useEffect(async () => {
-    await getMachines(organization);
+    await getMachines(organization.id);
 
     getHeadCells();
   }, []);
@@ -57,7 +57,7 @@ export default function ManageOrganizationMachines({
       .catch((error) => {
         console.log(error);
       });
-    await getMachines(organization);
+    await getMachines(organization.id);
   };
 
   const onDelete = async () => {

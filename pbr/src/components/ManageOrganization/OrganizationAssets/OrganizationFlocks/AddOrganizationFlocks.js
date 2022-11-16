@@ -164,7 +164,7 @@ export default function AddOrganizationFlocks({
             setErrorMessage("Unable to create flock.")
             return
           } else {
-            getFlocks(organization);
+            getFlocks(organization.id);
             closeAddFlockModal();
             return response.json();
           }

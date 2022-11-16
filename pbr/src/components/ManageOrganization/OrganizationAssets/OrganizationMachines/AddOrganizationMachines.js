@@ -126,7 +126,7 @@ export default function AddOrganizationMachines({
             setErrorMessage("Unable to create machine.")
             return
           } else {
-            getMachines(organization);
+            getMachines(organization.id);
             closeAddMachineModal();
             return response.json();
           }

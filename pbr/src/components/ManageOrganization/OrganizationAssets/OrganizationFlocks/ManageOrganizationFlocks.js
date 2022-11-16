@@ -20,7 +20,7 @@ export default function ManageOrganizationFlocks({
   const [openAddOrganizationFlockModal, setOpenAddOrganizationFlockModal] = React.useState(false);
 
   React.useEffect(async () => {
-    await getFlocks(organization);
+    await getFlocks(organization.id);
 
     getHeadCells();
   }, []);
@@ -89,7 +89,7 @@ export default function ManageOrganizationFlocks({
       .catch((error) => {
         console.log(error);
       });
-    await getFlocks(organization);
+    await getFlocks(organization.id);
   };
 
   const onDelete = async () => {

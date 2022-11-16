@@ -123,8 +123,8 @@ export default function OrganizationView() {
   };
 
 
-  const getSources = async (organization) => {
-    await fetch(`/api/source/organization/${organization.id}`, {
+  const getSources = async (id) => {
+    await fetch(`/api/source/organization/${id}`, {
       method: "GET",
     })
       .then(checkResponseAuth)
@@ -137,8 +137,8 @@ export default function OrganizationView() {
       });
   };
 
-  const getFlocks = async (organization) => {
-    await fetch(`/api/flock/organization/${organization.id}`, {
+  const getFlocks = async (id) => {
+    await fetch(`/api/flock/organization/${id}`, {
       method: "GET",
     })
       .then(checkResponseAuth)
@@ -151,8 +151,8 @@ export default function OrganizationView() {
       });
   };
 
-  const getMachines = async (organization) => {
-    await fetch(`/api/machine/organization/${organization.id}`, {
+  const getMachines = async (id) => {
+    await fetch(`/api/machine/organization/${id}`, {
       method: "GET",
     })
       .then(checkResponseAuth)

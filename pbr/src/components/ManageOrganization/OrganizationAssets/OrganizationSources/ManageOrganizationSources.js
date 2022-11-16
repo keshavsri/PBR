@@ -20,7 +20,7 @@ export default function ManageOrganizationSources({
   const [openAddOrganizationSourceModal, setOpenAddOrganizationSourceModal] = React.useState(false);
 
   React.useEffect(async () => {
-    await getSources(organization);
+    await (getSources.id);
 
     getHeadCells();
   }, []);
@@ -77,8 +77,8 @@ export default function ManageOrganizationSources({
       .catch((error) => {
         console.log(error);
       });
-    await getSources(organization);
-    await getFlocks(organization);
+    await getSources(organization.id);
+    await getFlocks(organization.id);
   };
 
   const onDelete = async () => {

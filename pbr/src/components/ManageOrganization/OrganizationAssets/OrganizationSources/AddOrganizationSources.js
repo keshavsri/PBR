@@ -133,7 +133,7 @@ export default function AddOrganizationSources({
             setErrorMessage("Unable to create source.")
             return
           } else {
-            getSources(organization);
+            getSources(organization.id);
             closeAddSourceModal();
             return response.json();
           }
