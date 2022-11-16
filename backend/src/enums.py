@@ -132,7 +132,7 @@ class ProductionTypes(str, Enum):
     Meat = "Meat"
     Layer = "Layer"
     Breeder = "Breeder"
-    Broiler_Breeder = "Broiler Breeder"
+    Broiler = "Broiler"
     BYP = "BYP"
 
 
