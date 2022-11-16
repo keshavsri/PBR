@@ -483,7 +483,7 @@ else:
                 c5.analytes.append(child)
 
             db.session.commit()
-            print("Done!")
+            print("Migrating existing data...")
         except Exception as e:
             traceback.print_exc()
             print("Could not finish import. Drop all tables and start again.")
