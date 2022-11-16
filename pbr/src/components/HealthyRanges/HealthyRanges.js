@@ -88,7 +88,7 @@ export default function HealthyRanges() {
 
 
   const getSpecies = async () => {
-    await fetch(`/api/enum/species/`, { 
+    await fetch(`/api/enum/species`, { 
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -104,7 +104,7 @@ export default function HealthyRanges() {
   }
 
   const getGenders = async () => {
-    await fetch(`/api/enum/gender/`, { 
+    await fetch(`/api/enum/gender`, { 
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -124,7 +124,7 @@ export default function HealthyRanges() {
 
 
   const getAgeGroups = async () => {
-    await fetch(`/api/enum/age/`, { 
+    await fetch(`/api/enum/age`, { 
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -140,7 +140,7 @@ export default function HealthyRanges() {
   }
 
   const getMethods = async () => {
-    await fetch(`api/enum/healthy-range-method/`, {
+    await fetch(`api/enum/healthy-range-method`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -156,7 +156,7 @@ export default function HealthyRanges() {
   }
 
   const getRoles = async () => {
-    await fetch(`/api/enum/roles/`, { 
+    await fetch(`/api/enum/roles`, { 
       method: "GET",
       headers: {
         "Content-Type": "application/json",
