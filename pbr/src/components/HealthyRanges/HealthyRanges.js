@@ -188,10 +188,6 @@ export default function HealthyRanges() {
   }
 
   const getHealthyRanges = async () => {
-    console.log(selectedSpecies)
-    console.log(selectedAgeGroup)
-    console.log(selectedGender)
-    console.log(seletedCartridgeType)
     const uri = `/api/healthy-range?species=${selectedSpecies}&gender=${selectedGender}&age_group=${selectedAgeGroup}&cartridge_type_id=${seletedCartridgeType}&method=${selectedMethod}`
     await fetch(uri, { 
       method: "GET",
@@ -206,7 +202,6 @@ export default function HealthyRanges() {
       .then((data) => {
         setHealthyRanges(data);
         setNoHealthyRanges(data.length === 0);
-        console.log(data);
       });
   }
 
