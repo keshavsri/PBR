@@ -117,9 +117,9 @@ def login():
     """
 
     content_type = request.headers.get('Content-Type')
+    data = {}
     if (content_type == 'application/json'):
         data = request.json
-    print(data)
     if data["email"] and data["password"]:
         data["email"] = data["email"].lower()
         print(data["email"])
@@ -155,7 +155,7 @@ def logout():
     if 'pbr_token' in request.cookies:
         token = request.cookies['pbr_token']
         Auth_Token.invalidate_token(token)
-    response = jsonify({"message": "Logged out."}), 200
+    response = make_response(jsonify({"message": "Logged out."}), 200)
     response.set_cookie(key="pbr_token", value="", expires=datetime.now(
         tz=timezone.utc), secure=True, httponly=True, samesite="Strict")
     return response
@@ -193,7 +193,8 @@ def register():
     models.db.session.add(user)
     models.db.session.commit()
     print("User was successfully added.")
-    return jsonify({"message": 'Success'}), 200
+    response = schemas.User.from_orm(user).dict()
+    return jsonify(response), 200
 
 
 @userBlueprint.route('/organization/<int:org_id>', methods=['GET'])
