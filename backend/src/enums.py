@@ -77,11 +77,13 @@ class AgeUnits(str, Enum):
     Months = "Months"
     Years = "Years"
 
+
 class AgeGroup(str, Enum):
-    Brooder = "Brooder (1-5 days)"
-    Growing = "Growing (1-12 weeks)"
-    Prelay = "Pre-lay (12-20 weeks)"
-    Lay = "Lay (20+ weeks)"
+    Brooder = "Brooder"
+    Growing = "Growing"
+    Prelay = "Prelay"
+    Lay = "Lay"
+
 
 class ValidationTypes(str, Enum):
     Saved = "Saved"
@@ -91,15 +93,16 @@ class ValidationTypes(str, Enum):
 
 
 class SampleTypes(str, Enum):
-    # Healthy
+    # Known Healthy
     Surveillance = "Surveillance"
-    # Unhealthy
+    # Unknown
     Diagnostic = "Diagnostic"
 
 
 class Species(str, Enum):
     Turkey = "Turkey"
     Chicken = "Chicken"
+
 
 class ChickenStrain(str, Enum):
     Ross_308 = "Ross 308"
@@ -118,6 +121,7 @@ class ChickenStrain(str, Enum):
     Silver = "Silver"
     Tradition = "Tradition"
     White = "White"
+
 
 class TurkeyStrain(str, Enum):
     Nicholas_Select = "Nicholas Select"
@@ -171,6 +175,8 @@ class LogActions(IntEnum):
     
     # Report
     GENERATE_REPORT = 401
+    GENERATE_HEALTHY_RANGES = 411
+    REGENERATE_HEALTHY_RANGES = 412
     
     # Settings
     EDIT_ACCOUNT = 503
@@ -197,3 +203,6 @@ class LogActions(IntEnum):
     ADD_FLOCK = 901
     EDIT_FLOCK = 903
     DELETE_FLOCK = 904
+
+class HealthyRangeMethod(str, Enum):
+    Standard = "Standard"
