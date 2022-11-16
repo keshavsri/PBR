@@ -84,13 +84,11 @@ export default function ReviewSampleModal({
   };
 
   const editSample = async (sample) => {
-    console.log("submmited Payload");
 
     let payload = {
       comments: pendingSamples.find((s) => s.id === sample.id).comments,
     };
 
-    console.log(payload);
 
     await fetch(`/api/sample/${sample.id}`, {
       method: "PUT",
@@ -101,7 +99,6 @@ export default function ReviewSampleModal({
     })
       .then(checkResponseAuth)
       .then((response) => {
-        console.log(response);
         if (!response.ok) {
         } else {
           return response.json();
@@ -132,7 +129,6 @@ export default function ReviewSampleModal({
   };
 
   const listPendingSamples = () => {
-    console.log("M samples", pendingSamples);
     return pendingSamples.map((sample) => (
       <Accordion
         expanded={expanded === sample.id}
