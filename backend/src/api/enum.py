@@ -4,7 +4,7 @@ import json
 from src.api.user import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
 from src import models, schemas
-from src.enums import Species, BirdGenders, AgeGroup, Roles
+from src.enums import Species, BirdGenders, AgeGroup, Roles, HealthyRangeMethod
 
 enumBlueprint = Blueprint('enum', __name__)
 
@@ -45,5 +45,14 @@ def get_age_groups(access_allowed, current_user):
 def get_roles(access_allowed, current_user):
     if access_allowed:
         return jsonify({item.name: item.value for item in Roles})
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+
+@enumBlueprint.route('/healthy-range-method/', methods=['GET'])
+@token_required
+@allowed_roles([0, 1, 2, 3, 4])
+def get_healthy_range_methods(access_allowed, current_user):
+    if access_allowed:
+        return jsonify({item.name: item.value for item in HealthyRangeMethod})
     else:
         return jsonify({'message': 'Role not allowed'}), 403

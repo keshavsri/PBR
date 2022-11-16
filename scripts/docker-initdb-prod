@@ -2,9 +2,10 @@
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-echo "====> Starting Database Migrations"
+echo "====> Starting database initialization"
 source $SCRIPT_DIR/setenv.sh
 echo "Running: docker exec backend python3 initdb.py $DEFAULT_SU_EMAIL $DEFAULT_SU_PASSWORD"
 docker exec backend python3 initdb-prod.py $DEFAULT_SU_EMAIL $DEFAULT_SU_PASSWORD
-echo "==> Database initialized."
+# docker exec backend python3 initdb-data.py
+echo "====> Database initialized."
 
