@@ -1,14 +1,12 @@
 from src.models import *
 from src import app
-from sqlalchemy import text
-
 import sys
-import bcrypt
 import traceback
 from sqlalchemy.sql import text
 from sqlalchemy import MetaData
 
 
+import bcrypt
 
 if len(sys.argv) != 3:
     print("Invalid number of Arguments! Usage: initdb su_username su_password")
@@ -26,7 +24,7 @@ else:
         print("Creating database tables...")
         db.create_all()
 
-        print("Initializing default values...")
+        print("Initializing database with data...")
 
         try:
             # Create an Organization
@@ -459,7 +457,6 @@ else:
             db.session.add(c5)
             db.session.commit()
 
-
             # Link Measurement Types to Machines
             for i in range(1, 13):
                 child = Analyte.query.get(i)
@@ -486,9 +483,7 @@ else:
                 c5.analytes.append(child)
 
             db.session.commit()
-            print("Migrating existing data...")
-
+            print("Done!")
         except Exception as e:
             traceback.print_exc()
-            print("Error: Drop all tables and start again.")
-
+            print("Could not finish import. Drop all tables and start again.")

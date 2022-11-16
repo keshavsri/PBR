@@ -12,7 +12,7 @@ else:
         print("Creating database tables...")
         db.create_all()
 
-        print("Initializing default values...")
+        print("Initializing database with data...")
 
         try:
             # Create an Organization
@@ -385,9 +385,6 @@ else:
                     )
                 )
             db.session.commit()
-            print("Migrating existing data...")
-
-        except Exception as e:
-            traceback.print_exc()
-            print("Error: Drop all tables and start again.")
-
+            print("Done!")
+        except:
+            print("Could not finish import. Drop all tables and start again.")
