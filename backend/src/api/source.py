@@ -122,6 +122,13 @@ def delete_source(access_allowed, current_user, item_id):
 
             models.Source.query.filter_by(id=item_id).update({'is_deleted': True})
             models.db.session.commit()
+
+            # Mark all associated flocks as deleted
+            flocks = models.Flock.query.filter_by(source_id=id).all()
+            for flock in flocks:
+                flock.update({'is_deleted': True})
+                models.db.session.commit()
+
             return jsonify({'message': 'Source deleted successfully'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

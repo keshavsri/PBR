@@ -25,7 +25,7 @@ def get_flocks_by_organization(access_allowed, current_user, org_id):
 
     if access_allowed:
         if current_user.role == Roles.Super_Admin or current_user.organization_id == org_id:
-            sql_text = db.text("SELECT f.* FROM flock_table f JOIN source_table s ON f.source_id = s.id AND s.organization_id = :org_id AND s.is_deleted = 0;")
+            sql_text = db.text("SELECT f.* FROM flock_table f JOIN source_table s ON f.source_id = s.id AND s.organization_id = :org_id AND f.is_deleted = 0 AND s.is_deleted = 0;")
             with engine.connect() as connection:
                 flocks_models = connection.execute(sql_text, {"org_id": org_id})
                 response = []

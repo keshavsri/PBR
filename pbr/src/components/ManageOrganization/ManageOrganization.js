@@ -239,6 +239,7 @@ export default function OrganizationView() {
                       sources={sources}
                       getSources={getSources}
                       setSources={setSources}
+                      getFlocks={getFlocks}
                       roles={roles}
                     />
                   </Grid>

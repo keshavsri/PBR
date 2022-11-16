@@ -11,6 +11,7 @@ export default function ManageOrganizationSources({
   organization,
   sources,
   getSources,
+  getFlocks,
   roles
 }) {
   const { checkResponseAuth, user } = useAuth();
@@ -77,6 +78,7 @@ export default function ManageOrganizationSources({
         console.log(error);
       });
     await getSources(organization);
+    await getFlocks(organization);
   };
 
   const onDelete = async () => {
