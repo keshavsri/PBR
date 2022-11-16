@@ -280,6 +280,9 @@ export default function OrganizationView() {
               setOpenAddOrganizationModal={setOpenAddOrganizationModal}
               setOrganization={setOrganization}
               getAdminContact={getAdminContact}
+              getSources={getSources}
+              getFlocks={getFlocks}
+              getMachines={getMachines}
             />
           </Grid>
         </Grid>

@@ -57,7 +57,7 @@ export default function ManageOrganizationMachines({
       .catch((error) => {
         console.log(error);
       });
-    await getMachines();
+    await getMachines(organization);
   };
 
   const onDelete = async () => {
@@ -92,15 +92,6 @@ export default function ManageOrganizationMachines({
         <EnhancedTable
           headCells={headCellList}
           rows={machines}
-          toolbarButtons={
-          <>
-            <Button
-              variant="contained"
-              onClick={() => console.log("hi")}
-            >
-              Console Log Hi
-            </Button>
-          </>}
           onDelete={onDelete}
           selected={selected}
           setSelected={setSelected}

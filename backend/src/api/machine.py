@@ -25,7 +25,7 @@ def get_machines(access_allowed, current_user, given_org_id=None):
         if given_org_id is None:
             return jsonify({'message': 'Organization ID must be specified'}), 400
         elif current_user.organization_id == given_org_id or current_user.role == Roles.Super_Admin:
-            machines = models.Machine.query.filter_by(organization_id=given_org_id).all()
+            machines = models.Machine.query.filter_by(organization_id=given_org_id, is_deleted=False).all()
 
             response = []
             for machine in machines:
@@ -57,7 +57,7 @@ def get_machine(access_allowed, current_user, item_id=None):
         if item_id is None:
             return jsonify({'message': 'Machine ID must be specified'}), 400
         else:
-            machine = models.Machine.query.filter_by(id=item_id).first()
+            machine = models.Machine.query.filter_by(id=item_id, is_deleted=False).first()
             if machine is None:
                 return jsonify({'message': 'Machine not found'}), 404
             else:
@@ -162,11 +162,12 @@ def delete_machine(access_allowed, current_user, item_id):
         if models.Machine.query.filter_by(id=item_id).first() is None:
             return jsonify({'message': 'Machine does not exist'}), 404
         else:
-            machine = models.Machine.query.get(item_id)
-            models.db.session.delete(machine)
+            deleted_machine = models.Machine.query.get(item_id)
+            models.Machine.query.filter_by(
+                id=item_id).update({'is_deleted': True})
             models.db.session.commit()
             log.create_log(current_user, LogActions.DELETE_MACHINE,
-                           'Deleted Machine: ' + machine.serial_number)
+                           'Deleted Machine: ' + deleted_machine.serial_number)
             return jsonify({'message': 'Machine deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

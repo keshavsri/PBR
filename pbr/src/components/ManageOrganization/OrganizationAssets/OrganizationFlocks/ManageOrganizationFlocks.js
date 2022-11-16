@@ -89,7 +89,7 @@ export default function ManageOrganizationFlocks({
       .catch((error) => {
         console.log(error);
       });
-    await getFlocks();
+    await getFlocks(organization);
   };
 
   const onDelete = async () => {
@@ -118,6 +118,7 @@ export default function ManageOrganizationFlocks({
               openAddOrganizationFlockModal={openAddOrganizationFlockModal}
               setOpenAddOrganizationFlockModal={setOpenAddOrganizationFlockModal}
               sources={sources}
+              organization={organization}
             />
           </Grid>
 

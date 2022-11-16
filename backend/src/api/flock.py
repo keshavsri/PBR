@@ -30,6 +30,8 @@ def get_flocks_by_organization(access_allowed, current_user, org_id):
                 flocks_models = connection.execute(sql_text, {"org_id": org_id})
                 response = []
                 for flock in flocks_models:
+                    print("=============================", flush=True)
+                    print(flock, flush=True)
                     schema_flock = Flock.from_orm(flock).dict()
                     schema_flock.update({"source_name": SourceORM.query.get(flock.source_id).name})
                     response.append(schema_flock)
@@ -172,10 +174,11 @@ def delete_flock(access_allowed, current_user, item_id):
         if FlockORM.query.get(item_id) is None:
             return jsonify({'message': 'Flock does not exist'}), 404
         else:
-            flock = FlockORM.query.get(item_id)
-            setattr(flock, 'is_deleted', 1)
+            deleted_flock = FlockORM.query.get(item_id)
+            FlockORM.query.filter_by(
+                id=item_id).update({'is_deleted': True})
             db.session.commit()
-            create_log(current_user, LogActions.DELETE_FLOCK, 'Deleted Flock: ' + flock.name)
+            create_log(current_user, LogActions.DELETE_FLOCK, 'Deleted Flock: ' + deleted_flock.name)
             return jsonify({'message': 'Flock deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403

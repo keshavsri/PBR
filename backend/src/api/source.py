@@ -33,7 +33,7 @@ def get_source(access_allowed, item_id):
         else:
             return jsonify(source), 200
     else:
-        return jsonify({'message': 'Access denied'}), 403
+        return jsonify({'message': 'Role not allowed'}), 403
 
 
 # return all sources in the database
@@ -49,7 +49,7 @@ def get_sources(access_allowed):
             ret.append(Source.from_orm(source).dict())
         return json.dumps(ret), 200
     else:
-        return jsonify({'message': 'Access denied'}), 403
+        return jsonify({'message': 'Role not allowed'}), 403
 
 
 # return all the sources for a specific organization
@@ -65,7 +65,7 @@ def get_sources_by_organization(access_allowed, current_user, org_id):
                 ret.append(Source.from_orm(source).dict())
             return json.dumps(ret), 200
     else:
-        return jsonify({'message': 'Access denied'}), 403
+        return jsonify({'message': 'Role not allowed'}), 403
 
 
 # create a new source
@@ -93,26 +93,35 @@ def create_source(access_allowed, current_user):
 @sourceBlueprint.route('/<int:item_id>', methods=['PUT'])
 @token_required
 @allowed_roles([0, 1, 2])
-def update_source(item_id):
-    source = models.Source.query.get(item_id)
-    if source is None:
-        return jsonify({'message': 'Source not found'}), 404
+def update_source(access_allowed, current_user, item_id):
+
+    if access_allowed:
+        source = models.Source.query.get(item_id)
+        if source is None:
+            return jsonify({'message': 'Source not found'}), 404
+        else:
+            models.Source.query.filter_by(id=item_id).update(request.json)
+            models.db.session.commit()
+            return jsonify({'message': 'Source updated successfully'}), 200
     else:
-        models.Source.query.filter_by(id=item_id).update(request.json)
-        models.db.session.commit()
-        return jsonify({'message': 'Source updated successfully'}), 200
+        return jsonify({'message': 'Role not allowed'}), 403
+
 
 
 # delete a source
 @sourceBlueprint.route('/<int:item_id>', methods=['DELETE'])
 @token_required
 @allowed_roles([0])
-def delete_source(item_id):
-    source = models.Source.query.get(item_id)
-    if source is None:
-        return jsonify({'message': 'Source not found'}), 404
-    else:
+def delete_source(access_allowed, current_user, item_id):
 
-        models.Source.query.filter_by(id=item_id).update({'is_deleted': True})
-        models.db.session.commit()
-        return jsonify({'message': 'Source deleted successfully'}), 200
+    if access_allowed:
+        source = models.Source.query.get(item_id)
+        if source is None:
+            return jsonify({'message': 'Source not found'}), 404
+        else:
+
+            models.Source.query.filter_by(id=item_id).update({'is_deleted': True})
+            models.db.session.commit()
+            return jsonify({'message': 'Source deleted successfully'}), 200
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403

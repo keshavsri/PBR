@@ -52,7 +52,10 @@ export default function AddOrganization({
     openAddOrganizationModal,
     setOpenAddOrganizationModal,
     setOrganization,
-    getAdminContact
+    getAdminContact,
+    getSources,
+    getFlocks,
+    getMachines
   }) {
 
     const classes = useStyles();
@@ -157,6 +160,9 @@ export default function AddOrganization({
           if (successfulPost) {
             setOrganization(data);
             getAdminContact(data.id);
+            getSources(data);
+            getFlocks(data);
+            getMachines(data);
           }
         });
 

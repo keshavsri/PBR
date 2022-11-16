@@ -52,6 +52,7 @@ export default function AddOrganizationFlocks({
     openAddOrganizationFlockModal,
     setOpenAddOrganizationFlockModal,
     sources,
+    organization
   }) {
 
     const classes = useStyles();
@@ -164,7 +165,7 @@ export default function AddOrganizationFlocks({
             setErrorMessage("Unable to create flock.")
             return
           } else {
-            getFlocks();
+            getFlocks(organization);
             closeAddFlockModal();
             return response.json();
           }
