@@ -385,6 +385,6 @@ else:
                     )
                 )
             db.session.commit()
-            print("Done!")
+            print("Migrating existing data...")
         except:
             print("Could not finish import. Drop all tables and start again.")
