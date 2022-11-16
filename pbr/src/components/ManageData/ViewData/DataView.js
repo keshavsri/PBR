@@ -185,6 +185,14 @@ export default function DataView() {
       },
 
       {
+        id:"flock_age_unit",
+        numeric: false,
+        disablePadding: true,
+        label: "Flock Age Unit",
+
+      },
+
+      {
         id: "validation_status",
         numeric: false,
         disablePadding: true,
