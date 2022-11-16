@@ -53,7 +53,7 @@ def post_healthy_ranges(access_allowed, current_user):
                                         THEN s.flock_age * 30 BETWEEN :min_age AND :max_age
                                     WHEN s.flock_age_unit = "Years"
                                         THEN s.flock_age * 365 BETWEEN :min_age AND :max_age
-                                    END;
+                                    END
                         """
 
                         sql_args = {
@@ -63,7 +63,7 @@ def post_healthy_ranges(access_allowed, current_user):
                             'max_age' : max_age
                         }
 
-                        sql_text = db.text(query)
+                        sql_text = db.text(query + ";")
 
                         response = None
                         with engine.connect() as connection:
@@ -95,8 +95,7 @@ def post_healthy_ranges(access_allowed, current_user):
                             if gender != BirdGenders.Male and gender != BirdGenders.Female:
                                 continue
 
-                            query += "AND f.gender = :gender;"
-                            sql_text = db.text(query)
+                            sql_text = db.text(query + "AND f.gender = :gender;")
                             sql_args.update({'gender' : gender})
 
                             response = None
