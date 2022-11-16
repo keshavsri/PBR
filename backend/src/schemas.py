@@ -99,6 +99,7 @@ class Flock(PydanticModel):
     production_type: ProductionTypes
     gender: BirdGenders
     source_id: int
+    source_name: Optional[str]
     birthday: Optional[datetime]
 
 
@@ -149,16 +150,17 @@ class Sample(PydanticModel):
     timestamp_added: Optional[datetime]
 
 
-class Machine(PydanticModel):
-    id: Optional[int]
-    serial_number: str
-    machine_type_id: int
-    organization_id: int
-
-
 class MachineType(PydanticModel):
     id: Optional[int]
     name: str
+
+
+class Machine(PydanticModel):
+    id: Optional[int]
+    serial_number: str
+    machine_type_name: Optional[str]
+    machine_type_id: int
+    organization_id: int
 
 
 class CartridgeType(PydanticModel):

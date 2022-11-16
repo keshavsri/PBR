@@ -1,6 +1,6 @@
 import React from "react";
 import { useTheme } from "@mui/material/styles";
-import {states} from '../../models/enums'
+import {states} from '../../../../models/enums'
 
 
 import {
@@ -14,7 +14,7 @@ import {
   MenuItem
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import useAuth from "../../services/useAuth";
+import useAuth from "../../../../services/useAuth";
 
 
 function getModalStyle() {
@@ -45,17 +45,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-// Start of Add Organization Functionality
+// Start of Add Organization's Sources Functionality
 
-export default function AddOrganization({
-    getOrganizations,
-    openAddOrganizationModal,
-    setOpenAddOrganizationModal,
-    setOrganization,
-    getAdminContact,
+export default function AddOrganizationSources({
     getSources,
-    getFlocks,
-    getMachines
+    openAddOrganizationSourceModal,
+    setOpenAddOrganizationSourceModal,
+    organization
   }) {
 
     const classes = useStyles();
@@ -63,44 +59,36 @@ export default function AddOrganization({
     useTheme();
     const { checkResponseAuth } = useAuth();
 
-    const [organizationDetails, setOrganizationDetails] = React.useState({
+    const [sourceDetails, setSourceDetails] = React.useState({
       name: "",
       street_address: "",
       city: "",
       state: "",
       zip: "",
-      notes: ""
+      organization_id: null
     });
 
     const [errorToggle, setErrorToggle] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState("");
     const requiredFields = ["name", "street_address", "city", "state", "zip"]
 
-    const handleOrganizationDetailsChange = (prop) => (event) => {    
-      setOrganizationDetails({
-        ...organizationDetails,
+    const handleSourceDetailsChange = (prop) => (event) => {    
+      setSourceDetails({
+        ...sourceDetails,
         [prop]: event.target.value,
       });
     };
 
-    const clearOrganizationDetails = () => {
-      setOrganizationDetails({
+    const clearSourceDetails = () => {
+      setSourceDetails({
         name: "",
         street_address: "",
         city: "",
         state: "",
         zip: "",
-        notes: ""
+        organization_id: null
       })
     };
-
-    const closeAddOrganizationModal = () => {
-      setOpenAddOrganizationModal(false);
-      clearOrganizationDetails();
-      setErrorToggle(false);
-    };
-
-
 
 
     let onSubmit = async () => {
@@ -108,7 +96,7 @@ export default function AddOrganization({
       let error = false;
 
       requiredFields.forEach(field => {
-        if(organizationDetails[field] === "") {
+        if(sourceDetails[field] === "") {
           error = true;
           setErrorToggle(true)
           setErrorMessage("Required fields * cannot be empty.")
@@ -120,20 +108,18 @@ export default function AddOrganization({
 
       let payload = {
 
-        // Organization Parameters
+        // Source Parameters
 
-        name: organizationDetails.name,
-        street_address: organizationDetails.street_address,
-        city: organizationDetails.city,
-        state: organizationDetails.state,
-        zip: organizationDetails.zip,
-        notes: organizationDetails.notes
-
+        name: sourceDetails.name,
+        street_address: sourceDetails.street_address,
+        city: sourceDetails.city,
+        state: sourceDetails.state,
+        zip: sourceDetails.zip,
+        organization_id: organization.id
       };
       
-      // API Call for POST Organization
-      let successfulPost = false
-      await fetch(`/api/organization/`, {
+      // API Call for POST Source
+      await fetch(`/api/source/`, {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
@@ -144,35 +130,30 @@ export default function AddOrganization({
         .then((response) => {
           if (!response.ok) {
             setErrorToggle(true)
-            setErrorMessage("Unable to create organization.")
+            setErrorMessage("Unable to create source.")
             return
           } else {
-            successfulPost = true;
-            getOrganizations();
-            closeAddOrganizationModal();
+            getSources(organization.id);
+            closeAddSourceModal();
             return response.json();
           }
         })
-        .then((data) => {
-          if (successfulPost) {
-            setOrganization(data);
-            getAdminContact(data.id);
-            getSources(data);
-            getFlocks(data);
-            getMachines(data);
-          }
-        });
+    };
 
+    const closeAddSourceModal = () => {
+      setOpenAddOrganizationSourceModal(false);
+      setErrorToggle(false);
+      clearSourceDetails();
     };
 
     return (
 
       <Modal
-        aria-labelledby="Add Organization Modal"
-        aria-describedby="Modal used for adding an organization to the application"
-        open={openAddOrganizationModal}
+        aria-labelledby="Add Organization Source Modal"
+        aria-describedby="Modal used for adding an organization's source to the application"
+        open={openAddOrganizationSourceModal}
         onClose={() => {
-          closeAddOrganizationModal();
+          closeAddSourceModal();
         }}
       >
         <div style={modalStyle} className={classes.paper}>
@@ -181,7 +162,7 @@ export default function AddOrganization({
 
 
             <Grid item xs={12} sm={12}>
-              <Typography gutterBottom variant="h4">Add Organization</Typography>
+              <Typography gutterBottom variant="h4">Add Source</Typography>
             </Grid>
 
 
@@ -190,9 +171,9 @@ export default function AddOrganization({
                 required
                 fullWidth
                 label="Name"
-                value={organizationDetails.name}
-                onChange={handleOrganizationDetailsChange("name")}
-                error = {organizationDetails.name === "" ? true : false}
+                value={sourceDetails.name}
+                onChange={handleSourceDetailsChange("name")}
+                error = {sourceDetails.name === "" ? true : false}
               />
             </Grid>
 
@@ -202,9 +183,9 @@ export default function AddOrganization({
                 required
                 fullWidth
                 label="Street"
-                value={organizationDetails.street_address}
-                onChange={handleOrganizationDetailsChange("street_address")}
-                error = {organizationDetails.street_address === "" ? true : false}
+                value={sourceDetails.street_address}
+                onChange={handleSourceDetailsChange("street_address")}
+                error = {sourceDetails.street_address === "" ? true : false}
               />
             </Grid>
 
@@ -214,9 +195,9 @@ export default function AddOrganization({
                 required
                 fullWidth
                 label="City"
-                value={organizationDetails.city}
-                onChange={handleOrganizationDetailsChange("city")}
-                error = {organizationDetails.city === "" ? true : false}
+                value={sourceDetails.city}
+                onChange={handleSourceDetailsChange("city")}
+                error = {sourceDetails.city === "" ? true : false}
               />
             </Grid>
 
@@ -227,8 +208,8 @@ export default function AddOrganization({
                 fullWidth
                 select
                 label="State"
-                value={organizationDetails.state}
-                onChange={handleOrganizationDetailsChange('state')}
+                value={sourceDetails.state}
+                onChange={handleSourceDetailsChange('state')}
               >
                 {Object.values(states).map((value) => {
                   return <MenuItem value={value}>{value}</MenuItem>
@@ -242,19 +223,9 @@ export default function AddOrganization({
                 required
                 fullWidth
                 label="Zip"
-                value={organizationDetails.zip}
-                onChange={handleOrganizationDetailsChange("zip")}
-                error = {organizationDetails.zip === "" ? true : false}
-              />
-            </Grid>
-
-
-            <Grid item xs={12} sm={12}>
-              <TextField
-                fullWidth
-                label="Notes"
-                value={organizationDetails.notes}
-                onChange={handleOrganizationDetailsChange("notes")}
+                value={sourceDetails.zip}
+                onChange={handleSourceDetailsChange("zip")}
+                error = {sourceDetails.zip === "" ? true : false}
               />
             </Grid>
 
@@ -270,7 +241,7 @@ export default function AddOrganization({
             <Grid item xs={12} sm={2}>
               <Button
                 onClick={() => {
-                  closeAddOrganizationModal();
+                  closeAddSourceModal();
                 }}
               >
                 Cancel

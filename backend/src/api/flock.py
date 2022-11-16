@@ -8,9 +8,10 @@ from src.helpers.log import create_log
 
 flockBlueprint = Blueprint('flock', __name__)
 
+
+@flockBlueprint.route('/organization/<int:org_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
-@flockBlueprint.route('/organization/<int:org_id>', methods=['GET'])
 def get_flocks_by_organization(access_allowed, current_user, org_id):
 
     """
@@ -24,11 +25,15 @@ def get_flocks_by_organization(access_allowed, current_user, org_id):
 
     if access_allowed:
         if current_user.role == Roles.Super_Admin or current_user.organization_id == org_id:
-            sql_text = db.text("SELECT f.* FROM flock_table f JOIN source_table s ON f.source_id = s.id AND s.organization_id = :org_id;")
+            sql_text = db.text("SELECT f.* FROM flock_table f JOIN source_table s ON f.source_id = s.id AND s.organization_id = :org_id AND f.is_deleted = 0 AND s.is_deleted = 0;")
             with engine.connect() as connection:
                 flocks_models = connection.execute(sql_text, {"org_id": org_id})
-                flocks = [Flock.from_orm(flock).dict() for flock in flocks_models]
-                return jsonify(flocks), 200
+                response = []
+                for flock in flocks_models:
+                    schema_flock = Flock.from_orm(flock).dict()
+                    schema_flock.update({"source_name": SourceORM.query.get(flock.source_id).name})
+                    response.append(schema_flock)
+                return jsonify(response), 200
         else:
             return jsonify({'message': 'Insufficient Permissions'}), 401
     else:
@@ -51,7 +56,7 @@ def get_flocks_by_source(access_allowed, current_user, source_id):
     if access_allowed:
         source = SourceORM.query.get(source_id)
         if current_user.role == Roles.Super_Admin or current_user.organization_id == source.organization_id:
-            flocks_models = FlockORM.query.filter_by(source_id=source_id).all()
+            flocks_models = FlockORM.query.filter_by(source_id=source_id, is_deleted=False).all()
             flocks = [Flock.from_orm(flock).dict() for flock in flocks_models]
             return jsonify(flocks), 200
         else:
@@ -74,7 +79,7 @@ def get_flock(access_allowed, current_user, item_id):
     :return: A specific flock if it exists, a 404 not found otherwise.
     """
     if access_allowed:
-        sql_text = db.text("SELECT s.organization_id FROM flock_table f, source_table s WHERE f.source_id = s.id;")
+        sql_text = db.text("SELECT s.organization_id FROM flock_table f, source_table s WHERE f.source_id = s.id AND is_deleted = 0;")
         with engine.connect() as connection:
             flock_organization_id = connection.execute(sql_text)
         if current_user.role == Roles.Super_Admin or flock_organization_id == current_user.organization_id:
@@ -167,10 +172,11 @@ def delete_flock(access_allowed, current_user, item_id):
         if FlockORM.query.get(item_id) is None:
             return jsonify({'message': 'Flock does not exist'}), 404
         else:
-            flock = FlockORM.query.get(item_id)
-            setattr(flock, 'is_deleted', 1)
+            deleted_flock = FlockORM.query.get(item_id)
+            FlockORM.query.filter_by(
+                id=item_id).update({'is_deleted': True})
             db.session.commit()
-            create_log(current_user, LogActions.DELETE_FLOCK, 'Deleted Flock: ' + flock.name)
+            create_log(current_user, LogActions.DELETE_FLOCK, 'Deleted Flock: ' + deleted_flock.name)
             return jsonify({'message': 'Flock deleted'}), 200
     else:
         return jsonify({'message': 'Role not allowed'}), 403
