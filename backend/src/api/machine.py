@@ -88,7 +88,7 @@ def create_machine(access_allowed, current_user):
             models.db.session.commit()
             models.db.session.refresh(new_machine)
             log.create_log(current_user, LogActions.ADD_MACHINE,
-                           'Created new Machine: ' + new_machine.serial_number)
+                           'Created new Machine: ' + str(new_machine.serial_number))
             added_machine = models.Machine.query.filter_by(
                 serial_number=new_machine.serial_number).first()
             return jsonify(schemas.Machine.from_orm(added_machine).dict()), 201
