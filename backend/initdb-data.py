@@ -24,11 +24,10 @@ def determine_flock_age_unit(val):
         return AgeUnits.Years
 
 
-def insert_records(df, abbrvs ,machine_type_id):
+def insert_records(df, abbrvs, cartridge_type_id, machine_type_id):
     for row in df.itertuples():
         user = User.query.get(1)
         organization = Organization.query.get(1)
-        cartridge_type = CartridgeType.query.filter_by(machine_type_id=machine_type_id).first()
 
         source = Source.query.filter_by(name=row.source).first()
         if source is None:
@@ -58,7 +57,7 @@ def insert_records(df, abbrvs ,machine_type_id):
             sample_type = row.sample_type,
             user_id = user.id,
             flock_id = flock.id,
-            # cartridge_type_id = cartridge_type.id
+            cartridge_type_id = cartridge_type_id
         )
         db.session.add(sample)
         db.session.commit()
@@ -116,13 +115,10 @@ vetscan_df = vetscan_df.where(pd.notnull(vetscan_df), None)
 
 # DB Session begins
 with app.app_context():
-    try:
-        # Inserting sources, flocks, and samples (vetscan)
-        vetscan_analyte_abbrvs = ["AST","BA","CK","UA","GLU","CA","PHOS","TP","ALB","GLOB","K+","NA+"]
-        insert_records(vetscan_df, vetscan_analyte_abbrvs, 2)
+    # Inserting sources, flocks, and samples (vetscan)
+    vetscan_analyte_abbrvs = ["AST","BA","CK","UA","GLU","CA","PHOS","TP","ALB","GLOB","K+","NA+"]
+    insert_records(vetscan_df, vetscan_analyte_abbrvs, 1, 2)
 
-        # Inserting sources, flocks, and samples (istat)
-        istat_analyte_abbrvs = ["pH", "PCO2", "PO2", "BE", "HCO3", "TCO2", "sO2", "Na", "K", "iCa", "Glu", "Hct", "Hgb"]
-        insert_records(istat_df, istat_analyte_abbrvs, 1)
-    except:
-        print("Error: Drop all tables and start again.")
+    # Inserting sources, flocks, and samples (istat)
+    istat_analyte_abbrvs = ["pH", "PCO2", "PO2", "BE", "HCO3", "TCO2", "sO2", "Na", "K", "iCa", "Glu", "Hct", "Hgb"]
+    insert_records(istat_df, istat_analyte_abbrvs, 2, 1)
