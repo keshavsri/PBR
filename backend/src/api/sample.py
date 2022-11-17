@@ -12,6 +12,7 @@ from sqlalchemy import text
 from src.helpers.log import create_log
 
 
+
 sampleBlueprint = Blueprint('sample', __name__)
 
 

@@ -24,6 +24,7 @@ import { createFilterOptions } from "@mui/material/Autocomplete";
 import { sampleTypes, ageUnits } from "../../../models/enums";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 import useAuth from "../../../services/useAuth";
 import useDataView from "../../../services/useDataView";
@@ -95,6 +96,8 @@ export default function DataViewSampleModal(props) {
     batch_id: null,
     measurements: [],
   });
+  const [selectedFile, setSelectedFile] = React.useState();
+  const [isFilePicked, setIsFilePicked] = React.useState(false);
 
   const getOrganizations = async () => {
     const response = await fetch(`/api/organization/`, {
@@ -161,6 +164,7 @@ export default function DataViewSampleModal(props) {
             return (
               <>
                 <TextField
+                  InputLabelProps={{ shrink: true }}
                   label={a.abbreviation}
                   style={{ margin: 4 }}
                   value={SampleDetails.measurements[index].value}
@@ -240,6 +244,11 @@ export default function DataViewSampleModal(props) {
       await getFlocks();
     }
   }, [source]);
+
+  React.useEffect(async () => {
+    console.log("selected new file");
+    await onFileUpload();
+  }, [selectedFile]);
 
   function handleFlockInputChange(event, value) {
     setFlockInput(value);
@@ -326,6 +335,59 @@ export default function DataViewSampleModal(props) {
 
     console.log("new measurements", SampleDetails.measurements);
   };
+
+  const onFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+    setIsFilePicked(true);
+    console.log(event.target.files[0])
+  };
+
+  const onFileUpload = () => {
+    const formData = new FormData();
+
+    formData.append('file', selectedFile);
+    fetch(
+      'api/sample/parse',
+      {
+        method: "POST",
+        body: formData
+      }
+      )
+    .then(checkResponseAuth)
+    .then((response) => {
+      console.log(response);
+      return response.json();
+    })
+    .then((json) => {
+      const formMeasurements = [...SampleDetails.measurements];
+      const fileMeasurements = json.data.measurements;
+      const abbrevToMeasurements = {};
+      formMeasurements.forEach((measurement) => {
+        measurement.value = null;
+      })
+
+      cartridgeType.analytes.forEach((analyte) => {
+        abbrevToMeasurements[analyte.abbreviation] = formMeasurements.find((measurement) => measurement.analyte_id === analyte.id);
+      })
+
+      console.log(abbrevToMeasurements);
+
+      fileMeasurements.forEach((fileMeasurement) => {
+        const measurement = abbrevToMeasurements[fileMeasurement.key];
+        if (measurement) {
+          measurement.value = Number(fileMeasurement.value);
+        }
+
+      })
+
+      console.log(formMeasurements);
+
+      setSampleDetails((prevState) => {
+        return { ...prevState, measurements: formMeasurements };
+      });
+    });
+  };
+
 
   return (
     <>
@@ -479,6 +541,19 @@ export default function DataViewSampleModal(props) {
                   </FormControl>
                 </Grid>
               </Grid>
+            </Box>
+
+            <br/>
+            <Box>
+              <Button  component={"label"} variant={'contained'}>
+                <Typography>
+                  Upload measurements from a file
+                </Typography>
+                <UploadFileIcon/>
+                <input onChange={onFileChange} type={"file"} hidden/>
+              </Button>
+
+
             </Box>
 
             <Grid>{sampleMeasurements()}</Grid>
