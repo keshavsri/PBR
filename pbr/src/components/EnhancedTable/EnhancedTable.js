@@ -131,26 +131,33 @@ export default function EnhancedTable(props) {
       let newSelecteds = rows.filter((n) => n.deletable).map((n) => n.id);
 
       setSelected(newSelecteds);
-      setPendingFlag(newSelecteds);
 
-      for (let i = 0; i < rows.length; i++) {
-        if (rows[i].validation_status != "Saved") {
-          setSavedFlag(false);
-          break;
+      // Sample only 
+
+      if (isSample) {
+        setPendingFlag(newSelecteds);
+
+        for (let i = 0; i < rows.length; i++) {
+          if (rows[i].validation_status != "Saved") {
+            setSavedFlag(false);
+            break;
+          }
         }
-      }
 
-      for (let i = 0; i < rows.length; i++) {
-        if (rows[i].validation_status != "Pending") {
-          setPendingFlag(false);
-          break;
+        for (let i = 0; i < rows.length; i++) {
+          if (rows[i].validation_status != "Pending") {
+            setPendingFlag(false);
+            break;
+          }
         }
+
+        if (pendingFlag) {
+          setPendingSamples(rows);
+        }
+        setSelectedSamples(rows);
       }
 
-      if (pendingFlag) {
-        setPendingSamples(rows);
-      }
-      setSelectedSamples(rows);
+      
 
       return;
     }
@@ -183,37 +190,43 @@ export default function EnhancedTable(props) {
 
     setSelected(newSelected);
 
-    for (let i = 0; i < rows.length; i++) {
-      for (let j = 0; j < newSelected.length; j++) {
-        if (newSelected[j] === rows[i].id) {
-          if (selectedSamples.indexOf(rows[i]) === -1) {
-            selectedSamples.push(rows[i]);
-            pendingSamples.push(rows[i]);
+    // Sample only logic
+
+
+    if (isSample) {
+      for (let i = 0; i < rows.length; i++) {
+        for (let j = 0; j < newSelected.length; j++) {
+          if (newSelected[j] === rows[i].id) {
+            if (selectedSamples.indexOf(rows[i]) === -1) {
+              selectedSamples.push(rows[i]);
+              pendingSamples.push(rows[i]);
+            }
           }
         }
       }
-    }
-
-    if (selectedSamples.length > 0) {
-      for (let i = 0; i < selectedSamples.length; i++) {
-        if (selectedSamples[i].validation_status != "Saved") {
-          setSavedFlag(false);
+  
+      if (selectedSamples.length > 0) {
+        for (let i = 0; i < selectedSamples.length; i++) {
+          if (selectedSamples[i].validation_status != "Saved") {
+            setSavedFlag(false);
+          }
+  
+          setSelectedSamples(selectedSamples);
         }
-
-        setSelectedSamples(selectedSamples);
+      }
+  
+      if (pendingSamples.length > 0) {
+        for (let i = 0; i < pendingSamples.length; i++) {
+          if (pendingSamples[i].validation_status != "Pending") {
+            setPendingFlag(false);
+            break;
+          }
+  
+          setPendingSamples(pendingSamples);
+        }
       }
     }
-
-    if (pendingSamples.length > 0) {
-      for (let i = 0; i < pendingSamples.length; i++) {
-        if (pendingSamples[i].validation_status != "Pending") {
-          setPendingFlag(false);
-          break;
-        }
-
-        setPendingSamples(pendingSamples);
-      }
-    }
+    
   };
 
   const handleChangePage = (event, newPage) => {

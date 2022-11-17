@@ -103,7 +103,7 @@ export default function EnhancedTableToolbar(props) {
         <></>
       )}
 
-      {numSelected > 0 && savedFlag == true ? (
+      {numSelected > 0 && isSample && savedFlag == true ? (
         <Tooltip title="Submit">
           <IconButton sx={{ ml: 1 }} onClick={onSubmit}>
             <ArrowUpwardIcon />
