@@ -94,6 +94,7 @@ export default function EnhancedTable(props) {
     onEdit,
     isSample,
     setOpenReviewSampleModal,
+    selectedSample,
   } = props;
 
   const [order, setOrder] = React.useState("");
@@ -197,7 +198,6 @@ export default function EnhancedTable(props) {
       for (let i = 0; i < selectedSamples.length; i++) {
         if (selectedSamples[i].validation_status != "Saved") {
           setSavedFlag(false);
-          break;
         }
 
         setSelectedSamples(selectedSamples);
@@ -252,6 +252,7 @@ export default function EnhancedTable(props) {
       <Box sx={{ width: "100%" }}>
         <EnhancedTableToolbar
           numSelected={selected.length}
+          selectedSample={selectedSample}
           toolbarButtons={toolbarButtons}
           onEdit={onEdit}
           savedFlag={savedFlag}
@@ -322,21 +323,24 @@ export default function EnhancedTable(props) {
                             {row[headCell.id]}
                           </StyledTableCell>
                         );
-                        })
-                      }
+                      })}
                     </StyledTableRow>
                   );
 
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-              {/* {rowComponents} */}
+                  {
+                    emptyRows > 0 && (
+                      <TableRow
+                        style={{
+                          height: (dense ? 33 : 53) * emptyRows,
+                        }}
+                      >
+                        <TableCell colSpan={6} />
+                      </TableRow>
+                    );
+                  }
+                  {
+                    /* {rowComponents} */
+                  }
                 })}
             </TableBody>
           </Table>
