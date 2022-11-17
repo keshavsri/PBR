@@ -45,10 +45,12 @@ export default function EnhancedTableToolbar(props) {
     pendingFlag,
     isSample,
     setOpenReviewSampleModal,
+    selectedSample,
   } = props;
   let classes = useStyles();
 
   const { user } = useAuth();
+
 
   const handleOpenReviewSampleModal = () => {
     setOpenReviewSampleModal(true);
@@ -89,7 +91,9 @@ export default function EnhancedTableToolbar(props) {
 
       {numSelected === 0 ? toolbarButtons : <></>}
 
-      {numSelected === 1 && savedFlag == true ? (
+      {numSelected === 1 &&
+      (selectedSample === undefined ||
+        selectedSample.validation_status === "Saved") ? (
         <Tooltip title="Edit">
           <IconButton sx={{ ml: 1 }} onClick={onEdit}>
             <EditIcon />

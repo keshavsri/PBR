@@ -81,6 +81,7 @@ export default function DataView() {
     });
   };
 
+
   const getRoles = async () => {
     const response = await fetch(`/api/enum/roles`, {
       method: "GET",
@@ -134,7 +135,6 @@ export default function DataView() {
       })
       .then(checkResponseAuth)
       .then((data) => {
-        console.log(data);
         data.forEach((sample) => {
           sample.measurements.map((meas) => {
             sample[meas.analyte.abbreviation] = meas.value;
@@ -185,11 +185,10 @@ export default function DataView() {
       },
 
       {
-        id:"flock_age_unit",
+        id: "flock_age_unit",
         numeric: false,
         disablePadding: true,
         label: "Flock Age Unit",
-
       },
 
       {
@@ -205,7 +204,12 @@ export default function DataView() {
       });
     }
 
-    headCells.push({id:"comments", numeric: false, disablePadding: true, label: "Comments"});
+    headCells.push({
+      id: "comments",
+      numeric: false,
+      disablePadding: true,
+      label: "Comments",
+    });
     setHeadCellList(headCells);
   };
 
@@ -358,6 +362,7 @@ export default function DataView() {
             setOpenReviewSampleModal={setOpenReviewSampleModal}
             onSubmit={onSubmit}
             onEdit={onEdit}
+            selectedSample={selectedSamples[0]}
           />
 
           <Grid container spacing={2}>
