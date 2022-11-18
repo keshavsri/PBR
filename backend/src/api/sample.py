@@ -184,7 +184,7 @@ def edit_sample(access_allowed, current_user, item_id):
                     for name, value in measurement.items():
                         setattr(measurement_model, name, value)
                     measurements.append(measurement_model)
-                    setattr(old_sample, "measurements", measurements)
+                setattr(old_sample, "measurements", measurements)
 
             models.db.session.commit()
 

@@ -150,7 +150,7 @@ export default function DVTableToolbar({
         </Button>
       </Tooltip>
       {showOnlyPendingSamples ? (
-        <Tooltip title="Show Pending Samples">
+        <Tooltip title="Show All Samples">
           <Button
             style={{ width: 1600, marginTop: 10, marginBottom: 10 }}
             variant="contained"
@@ -190,7 +190,7 @@ export default function DVTableToolbar({
             }
             sx={{ ml: 1 }}
           >
-            Pending Samples
+            Show Pending Samples
           </Button>
         </Tooltip>
       )}
