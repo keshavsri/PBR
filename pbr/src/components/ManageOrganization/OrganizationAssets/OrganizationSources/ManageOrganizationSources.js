@@ -93,9 +93,6 @@ export default function ManageOrganizationSources({
   return (
     <>
       <Paper>
-        <Grid item sm={12}>
-          <Typography variant="h1" align="center">Sources</Typography>
-        </Grid>
 
         <Grid item xs={12} sm={3}>
           <Button variant="contained" onClick={handleOpenAddOrganizationSourcesModal}>Create New Source</Button>
