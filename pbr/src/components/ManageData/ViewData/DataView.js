@@ -81,7 +81,6 @@ export default function DataView() {
     });
   };
 
-
   const getRoles = async () => {
     const response = await fetch(`/api/enum/roles`, {
       method: "GET",
@@ -388,7 +387,6 @@ export default function DataView() {
                 <EditSampleModal
                   selected={selected}
                   SampleToEdit={selectedSamples[0]}
-                  Organization={organization}
                   editSampleModalVisiblity={editSampleModalVisiblity}
                   setEditSampleModalVisibility={setEditSampleModalVisibility}
                   roles={roles}
@@ -415,9 +413,7 @@ export default function DataView() {
           openReviewSampleModal={openReviewSampleModal}
           setOpenReviewSampleModal={setOpenReviewSampleModal}
           pendingSamples={pendingSamples}
-          // modifiedSamples={pendingSamples}
           setPendingSamples={setPendingSamples}
-          // setModifiedSamples={setPendingSamples}
           acceptSample={acceptSample}
           rejectSample={rejectSample}
           turnPendingFilterOff={turnPendingFilterOff}

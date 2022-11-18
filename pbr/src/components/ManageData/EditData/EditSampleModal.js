@@ -53,16 +53,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function EditSampleModal(props) {
   const {
-    selected,
     SampleToEdit,
     editSampleModalVisiblity,
     setEditSampleModalVisibility,
-    Organization,
     roles,
     getData,
     currentCartridgeType,
-    setSelectedSamples,
-    selectedSamples,
     setSelected,
     currentOrganization,
   } = props;
@@ -110,7 +106,6 @@ export default function EditSampleModal(props) {
   };
 
   const editSample = async () => {
-    console.log("submmited Payload");
     let newMeasurements = passMesearments();
 
     let payload = {
@@ -132,7 +127,6 @@ export default function EditSampleModal(props) {
     })
       .then(checkResponseAuth)
       .then((response) => {
-        console.log(response);
         if (!response.ok) {
           setErrorSubmission(true);
         } else {
@@ -143,8 +137,6 @@ export default function EditSampleModal(props) {
         }
       });
   };
-
-
 
   const handleSampleDetailsChange = (prop) => (event) => {
     setSampleDetails({
@@ -215,7 +207,6 @@ export default function EditSampleModal(props) {
   };
 
   const getCartridgeTypes = async () => {
-    console.log(SampleToEdit);
     await fetch(`/api/cartridge-type`)
       .then((response) => {
         return response.json();
@@ -242,7 +233,7 @@ export default function EditSampleModal(props) {
     }).then(checkResponseAuth);
     const data = await response.json();
     setOrganizations(data);
-    setOrganization(data.filter((org) => org.id === Organization.id)[0]);
+    setOrganization(data.filter((org) => org.id === currentOrganization.id)[0]);
   };
 
   React.useEffect(async () => {
@@ -277,8 +268,6 @@ export default function EditSampleModal(props) {
   }, [source]);
 
   const selectedSample = () => {
-    console.log("selectedSamples");
-    console.log(currentOrganization);
     return (
       <>
         <Grid item xs={12} sm={12}>
@@ -301,6 +290,7 @@ export default function EditSampleModal(props) {
                     value={organization}
                     label="Source"
                     onChange={(e) => {
+                      setFlocks([]);
                       setOrganization(e.target.value);
                     }}
                   >

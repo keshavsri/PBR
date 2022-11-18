@@ -76,12 +76,6 @@ function generateRows() {
 
 export default function EnhancedTable(props) {
   const {
-    openFilterModal,
-    openSampleAddModal,
-    handleOpenFilterModal,
-    handleOpenSampleAddModal,
-    handleCloseFilterModal,
-    handleCloseSampleAddModal,
     rows,
     headCells,
     toolbarButtons,
