@@ -1,4 +1,5 @@
 import * as React from "react";
+
 import { useRef } from "react";
 
 import {
@@ -8,6 +9,7 @@ import {
   Typography,
   Button,
 } from "@mui/material";
+
 import Grid from "@mui/material/Grid";
 import SavedToPendingModal from "../ValidateData/SavedToPendingModal";
 
@@ -183,24 +185,13 @@ export default function DataView() {
   const getCartridgeTypes = async () => {
     await fetch(`api/cartridge-type`)
       .then((response) => {
+        setLoading(false);
         return response.json();
       })
       .then(checkResponseAuth)
       .then((data) => {
-<<<<<<< HEAD
         setCartridgeTypes(data);
         setCurrentCartridgeType(data[0]);
-=======
-        console.log(data);
-        data.forEach((sample) => {
-          sample.measurements.map((meas) => {
-            sample[meas.analyte.abbreviation] = meas.value;
-          });
-          sample["flock_name"] = sample.flock.name;
-        });
-        setSampleList(data);
-        assignRowHtml(data);
->>>>>>> fixed merge conflicts
       });
   };
 
@@ -273,11 +264,6 @@ export default function DataView() {
         label: "Rotor Lot Number",
       },
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> fixed merge conflicts
       {
         id: "validation_status",
         numeric: false,
@@ -452,6 +438,7 @@ export default function DataView() {
                 <Typography variant="h6">Loading...</Typography>
               </Grid>
               <Button onClick={() => cancelGetData()}>Stop Loading</Button>
+
             </Grid>
           ) : (
             <EnhancedTable
@@ -483,6 +470,7 @@ export default function DataView() {
               onEdit={onEdit}
               selectedSample={selectedSamples[0]}
               setReportModalVisibility={setReportModalVisibility}
+
             />
           )}
 

@@ -16,6 +16,7 @@ import {
   Alert,
   IconButton,
   Popover
+
 } from "@mui/material";
 
 import CircularProgress from "@mui/material/CircularProgress";
@@ -29,6 +30,7 @@ import { tableCellClasses } from "@mui/material/TableCell";
 
 import CalculateIcon from "@mui/icons-material/Calculate";
 import InfoIcon from '@mui/icons-material/Info';
+
 
 import useAuth from "../../services/useAuth";
 
@@ -262,6 +264,11 @@ export default function HealthyRanges() {
   const popoverOpen = Boolean(anchorEl);
   const popoverId = popoverOpen ? 'simple-popover' : undefined;
 
+  React.useEffect(() => {
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, []);
 
   return (
     <Paper>
@@ -432,7 +439,7 @@ export default function HealthyRanges() {
                 }}
               >
                 <div>
-                  <Typography sx={{ pt: 2, pl: 2, pr: 2, pb: 1 }} variant="h6">Healthy Ranges are claculated using the data in the system that match the selected criteria.</Typography>
+                  <Typography sx={{ pt: 2, pl: 2, pr: 2, pb: 1 }} variant="h6">Healthy Ranges are calculated using the data in the system that match the selected criteria.</Typography>
                   <Typography sx={{ pl: 2, pr: 2}} variant="h5">Gender</Typography>
                   <Typography sx={{ pl: 2, pr: 2, pb: 1 }}>Male, Female, or All. The All option uses all sample data whose Gender is Male, Female, Mixed, or Unknown.</Typography>
                   <Typography sx={{ pl: 2, pr: 2 }} variant="h5">Age</Typography>
@@ -448,7 +455,7 @@ export default function HealthyRanges() {
                   <Typography sx={{ pl: 2, pr: 2, pb: 1 }}>Lay: `{'>'}`215 days</Typography>
                   <Typography sx={{ pl: 2, pr: 2 }} variant="h5">Method</Typography>
                   <Typography sx={{ pl: 2, pr: 2, fontStyle: 'italic' }}>The statistical method used to calculate the ranges.</Typography>
-                  <Typography sx={{ pl: 2, pr: 2, pb: 2 }}>Standard: 95% reference interval. Assumes data distribussion is Gaussian.</Typography>
+                  <Typography sx={{ pl: 2, pr: 2, pb: 2 }}>Standard: 95% reference interval. Assumes data distribution is Gaussian.</Typography>
 
                 </div>
               </Popover>
