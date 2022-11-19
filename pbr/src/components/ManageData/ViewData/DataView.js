@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Paper, Chip } from "@mui/material";
+import { Paper, Chip, CircularProgress, Typography } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import SavedToPendingModal from "../ValidateData/SavedToPendingModal";
 
@@ -49,6 +49,8 @@ export default function DataView() {
 
   const openSavedToPendingVisibility = () => setSavedToPendingVisibility(true);
   const openEditSampleVisibility = () => setEditSampleModalVisibility(true);
+
+  const [loading, setLoading] = React.useState(false);
 
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
@@ -130,6 +132,7 @@ export default function DataView() {
     const uri = `/api/sample/org_cartridge_type?organization_id=${organization.id}&cartridge_type_id=${currentCartridgeType.id}`;
     await fetch(uri, { method: "GET" })
       .then((response) => {
+        setLoading(false);
         return response.json();
       })
       .then(checkResponseAuth)
@@ -268,6 +271,7 @@ export default function DataView() {
     await fetch(temp, { method: "PUT" })
       .then((response) => {})
       .then(() => {
+        setLoading(true);
         getData();
       });
 
@@ -281,6 +285,7 @@ export default function DataView() {
       await fetch(temp, { method: "PUT" })
         .then((response) => {})
         .then(() => {
+          setLoading(true);
           getData();
         });
     });
@@ -294,6 +299,7 @@ export default function DataView() {
     await fetch(temp, { method: "PUT" })
       .then((response) => {})
       .then(() => {
+        setLoading(true);
         getData();
       });
 
@@ -309,6 +315,7 @@ export default function DataView() {
         console.log(response.json());
       })
       .then(() => {
+        setLoading(true);
         getData();
       });
 
@@ -322,6 +329,7 @@ export default function DataView() {
       await fetch(temp, { method: "DELETE" })
         .then((response) => {})
         .then(() => {
+          setLoading(true);
           getData();
         });
     });
@@ -343,6 +351,10 @@ export default function DataView() {
 
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
   React.useEffect(async () => {
+    setLoading(true);
+    // setTimeout(() => {
+    //   setLoading(false);
+    // }, 8000);
     setSelected([]);
     await getData();
   }, [organization, currentCartridgeType]);
@@ -359,34 +371,54 @@ export default function DataView() {
     <>
       <DataViewProvider>
         <Paper>
-          <EnhancedTable
-            headCells={headCellList}
-            rows={sampleList}
-            toolbarButtons={
-              <DVTableToolbar
-                filterPendingSamples={filterPendingSamples}
-                showOnlyPendingSamples={showOnlyPendingSamples}
-                turnPendingFilterOff={turnPendingFilterOff}
-                cartridgeTypes={cartridgeTypes}
-                organizations={organizations}
-                setCurrentOrganization={setOrganization}
-                currentOrganization={organization}
-                user={user}
-                roles={roles}
-                currentCartridgeType={currentCartridgeType}
-                setCurrentCartridgeType={setCurrentCartridgeType}
-              />
-            }
-            selected={selected}
-            setSelected={setSelected}
-            setSelectedSamples={setSelectedSamples}
-            onDelete={onDelete}
-            isSample={isSample}
-            setOpenReviewSampleModal={setOpenReviewSampleModal}
-            onSubmit={onSubmit}
-            onEdit={onEdit}
-            selectedSample={selectedSamples[0]}
-          />
+          {loading ? (
+            <Grid
+              container
+              direction="column"
+              display="flex"
+              justify="center"
+              alignItems="center"
+              style={{ padding: "25px", border: "3px solid black" }}
+            >
+              <Grid item>
+                <CircularProgress />
+              </Grid>
+
+              <Grid item>
+                <Typography variant="h6">Loading...</Typography>
+              </Grid>
+            </Grid>
+          ) : (
+            <EnhancedTable
+              headCells={headCellList}
+              rows={sampleList}
+              toolbarButtons={
+                <DVTableToolbar
+                  filterPendingSamples={filterPendingSamples}
+                  showOnlyPendingSamples={showOnlyPendingSamples}
+                  turnPendingFilterOff={turnPendingFilterOff}
+                  cartridgeTypes={cartridgeTypes}
+                  organizations={organizations}
+                  setCurrentOrganization={setOrganization}
+                  currentOrganization={organization}
+                  user={user}
+                  roles={roles}
+                  currentCartridgeType={currentCartridgeType}
+                  setCurrentCartridgeType={setCurrentCartridgeType}
+                />
+              }
+              selected={selected}
+              setSelected={setSelected}
+              setSelectedSamples={setSelectedSamples}
+              setPendingSamples={setPendingSamples}
+              onDelete={onDelete}
+              isSample={isSample}
+              setOpenReviewSampleModal={setOpenReviewSampleModal}
+              onSubmit={onSubmit}
+              onEdit={onEdit}
+              selectedSample={selectedSamples[0]}
+            />
+          )}
 
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>
