@@ -181,6 +181,13 @@ export default function DataView() {
         label: "ID",
       },
       {
+        id: "timestamp_added",
+        numeric: false,
+        disablePadding: true,
+        label: "Date Added",
+      },
+
+      {
         id: "buttons",
       },
 
