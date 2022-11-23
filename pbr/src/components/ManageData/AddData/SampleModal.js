@@ -92,6 +92,7 @@ export default function DataViewSampleModal(props) {
   const [flockInput, setFlockInput] = React.useState("");
   const [source, setSource] = React.useState({});
   const [organization, setOrganization] = React.useState({});
+  const [expanded, setExpanded] = React.useState(true);
   const [SampleDetails, setSampleDetails] = React.useState({
     comments: "",
     flock_age: null,
@@ -155,7 +156,12 @@ export default function DataViewSampleModal(props) {
     setErrorSubmissionMessages([]);
 
 
-  };
+  const [errorSubmission, setErrorSubmission] = React.useState(false);
+  const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
+    []
+  );
+
+
 
   const getOrganizations = async () => {
     const response = await fetch(`/api/organization/`, {
@@ -317,15 +323,18 @@ export default function DataViewSampleModal(props) {
       valid = false;
     }
 
-    for (let i = 0; i < SampleDetails.measurements.length; i++) {
-      if (
-        isNaN(SampleDetails.measurements[i].value) &&
-        SampleDetails.measurements[i].value != null
-      ) {
-        errors.push("Sample measurements must be numbers");
+
+    SampleDetails.measurements.forEach((measurement) => {
+      if (isNaN(measurement.value) && measurement.value != "") {
+        let err =
+          "Measurement for" +
+          " " +
+          measurement.analyte.abbreviation +
+          " must be a number";
+        errors.push(err);
         valid = false;
       }
-    }
+    });
 
     if (valid === false) {
       setErrorSubmissionMessages(errors);
@@ -828,10 +837,13 @@ export default function DataViewSampleModal(props) {
                     color: "red",
                   }}
                 >
-                  <ListItem>
-                    <ErrorIcon />
-                    <ListItemText primary=" Fix Error before saving Sample" />
-                  </ListItem>
+                  Fix Error before saving Sample:
+                  {errorSubmissionMessages.map((message) => (
+                    <ListItem>
+                      <ErrorIcon />
+                      <ListItemText primary={message} />
+                    </ListItem>
+                  ))}
                 </Typography>
               ) : null}
             </Box>
