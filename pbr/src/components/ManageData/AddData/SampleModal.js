@@ -189,17 +189,27 @@ export default function DataViewSampleModal(props) {
           </Typography>
         </Grid>
         <Box>
-          {analytes &&
-          analytes.length > 0 &&
-          measurements &&
-          measurements.length > 0 &&
-          analytes.map((a, index) => {
-            const measurement = measurements.find((meas) => meas.analyte_id === a.id);
-            return (
-              renderMeasurement(measurement, a)
-            );
-
-          })}
+          {cartridgeType.analytes &&
+            SampleDetails.measurements &&
+            SampleDetails.measurements.length > 0 &&
+            cartridgeType.analytes.map((a, index) => {
+              return (
+                <>
+                  <TextField
+                    label={a.abbreviation}
+                    style={{ margin: 4 }}
+                    value={SampleDetails.measurements[index].value}
+                    onChange={(e) => {
+                      const measurements = SampleDetails.measurements;
+                      measurements[index].value = e.target.value;
+                      setSampleDetails((prevState) => {
+                        return { ...prevState, measurements: measurements };
+                      });
+                    }}
+                  />
+                </>
+              );
+            })}
         </Box>
       </>
     );
@@ -286,6 +296,19 @@ export default function DataViewSampleModal(props) {
   function handleFlockChange(event, value) {
     setFlock(value);
   }
+
+  const validateSample = () => {
+    console.log("validating sample");
+    console.log(SampleDetails);
+    let valid = true;
+
+    if (isNaN(SampleDetails.flock_age) && SampleDetails.flock_age != "") {
+      setAgeError(true);
+      valid = false;
+    }
+
+    return valid;
+  };
 
   const resetSampleDetails = () => {
     setSampleDetails({
@@ -493,10 +516,11 @@ export default function DataViewSampleModal(props) {
               <Grid container spacing={2}>
                 <Grid item xs={8}>
                   <TextField
+                    error={ageError}
                     label="Age *"
                     value={SampleDetails.flock_age}
-                    type="number"
                     onChange={handleSampleDetailsChange("flock_age")}
+                    helperText={ageError ? "Flock age is number only" : ""}
                   />
                 </Grid>
                 <Grid item xs={4}>
@@ -622,7 +646,11 @@ export default function DataViewSampleModal(props) {
                     color="primary"
                     style={{ width: 200 }}
                     onClick={() => {
-                      onSubmit();
+                      if (validateSample()) {
+                        onSubmit();
+                      } else {
+                        setErrorSubmission(true);
+                      }
                     }}
                   >
                     Save

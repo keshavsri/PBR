@@ -89,6 +89,8 @@ export default function EditSampleModal(props) {
     []
   );
 
+  const [ageError, setAgeError] = React.useState(false);
+
   const [SampleDetails, setSampleDetails] = React.useState({
     comments: SampleToEdit.comments,
     sample_type: SampleToEdit.sample_type,
@@ -134,8 +136,6 @@ export default function EditSampleModal(props) {
       .then(checkResponseAuth)
       .then((response) => {
         if (!response.ok) {
-          console.log("Editing Error");
-          console.log(response);
           setErrorSubmission(true);
         } else {
           setEditSampleModalVisibility(false);
@@ -245,12 +245,19 @@ export default function EditSampleModal(props) {
   };
 
   const validateSample = () => {
+    console.log("validating sample");
+    console.log(SampleDetails);
     let errors = [];
     let valid = true;
     setErrorSubmission(false);
 
+    if (isNaN(SampleDetails.flock_age) && SampleDetails.flock_age != "") {
+      errors.push("Flock age is number only");
+      setAgeError(true);
+      valid = false;
+    }
+
     SampleDetails.measurements.forEach((measurement) => {
-      console.log("value: " + measurement.value, isNaN(measurement.value));
       if (isNaN(measurement.value) && measurement.value != "") {
         let err =
           "Measurement for" +
@@ -448,9 +455,11 @@ export default function EditSampleModal(props) {
           >
             <Grid item xs={8}>
               <TextField
+                error={ageError}
                 label="Age"
                 value={SampleDetails.flock_age}
                 onChange={handleSampleDetailsChange("flock_age")}
+                helperText={ageError ? "Flock age is number only" : ""}
               />
             </Grid>
 
