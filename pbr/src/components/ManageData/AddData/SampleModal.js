@@ -2,9 +2,7 @@ import * as React from "react";
 
 import {
   Button,
-  Stack,
   Box,
-  CircularProgress,
   Grid,
   Select,
   MenuItem,
@@ -18,8 +16,12 @@ import {
   RadioGroup,
   Autocomplete,
   FormControl,
+  ListItemText,
+  ListItem,
 } from "@mui/material";
 import SampleIcon from "@mui/icons-material/Science";
+import ErrorIcon from "@mui/icons-material/Error";
+
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import { sampleTypes, ageUnits } from "../../../models/enums";
 import { makeStyles } from "@mui/styles";
@@ -71,6 +73,7 @@ export default function DataViewSampleModal(props) {
     closeSampleModal,
     setError,
     setSampleType,
+    setSampleModalVisibility,
     setSampleLoading,
   } = useDataView();
 
@@ -88,7 +91,6 @@ export default function DataViewSampleModal(props) {
   const [source, setSource] = React.useState({});
   const [organization, setOrganization] = React.useState({});
   const [expanded, setExpanded] = React.useState(true);
-  const [errorSubmission, setErrorSubmission] = React.useState(false);
   const [SampleDetails, setSampleDetails] = React.useState({
     comments: "",
     flock_age: null,
@@ -131,6 +133,17 @@ export default function DataViewSampleModal(props) {
     await sampleMeasurements();
   }, [cartridgeType]);
 
+  const [errorSubmission, setErrorSubmission] = React.useState(false);
+  const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
+    []
+  );
+
+  const closeModal = () => {
+    setErrorSubmission(false);
+    resetSampleDetails();
+    setErrorSubmissionMessages([]);
+    setSampleModalVisibility(false);
+  };
 
   const getOrganizations = async () => {
     const response = await fetch(`/api/organization/`, {
@@ -196,9 +209,19 @@ export default function DataViewSampleModal(props) {
               return (
                 <>
                   <TextField
+                    error={
+                      isNaN(SampleDetails.measurements[index].value) &&
+                      SampleDetails.measurements[index].value !== ""
+                    }
                     label={a.abbreviation}
                     style={{ margin: 4 }}
                     value={SampleDetails.measurements[index].value}
+                    helperText={
+                      isNaN(SampleDetails.measurements[index].value) &&
+                      SampleDetails.measurements[index].value !== ""
+                        ? "Please enter a number"
+                        : ""
+                    }
                     onChange={(e) => {
                       const measurements = SampleDetails.measurements;
                       measurements[index].value = e.target.value;
@@ -301,10 +324,32 @@ export default function DataViewSampleModal(props) {
     console.log("validating sample");
     console.log(SampleDetails);
     let valid = true;
+    let errors = [];
 
-    if (isNaN(SampleDetails.flock_age) && SampleDetails.flock_age != "") {
-      setAgeError(true);
+    if (
+      (isNaN(SampleDetails.flock_age) && SampleDetails.flock_age != null) ||
+      (!isNaN(SampleDetails.flock_age) &&
+        SampleDetails.flock_age <= 0 &&
+        SampleDetails.flock_age != null)
+    ) {
+      errors.push("Flock age is positive number only");
       valid = false;
+    }
+
+    SampleDetails.measurements.forEach((measurement) => {
+      if (isNaN(measurement.value) && measurement.value != "") {
+        let err =
+          "Measurement for" +
+          " " +
+          measurement.analyte.abbreviation +
+          " must be a number";
+        errors.push(err);
+        valid = false;
+      }
+    });
+
+    if (valid === false) {
+      setErrorSubmissionMessages(errors);
     }
 
     return valid;
@@ -398,7 +443,7 @@ export default function DataViewSampleModal(props) {
         icon={<SampleIcon />}
         title="Sample"
         subtitle="Add"
-        onClose={closeSampleModal}
+        onClose={closeModal}
       >
         <div style={modalStyle} className={classes.paper}>
           <Card
@@ -516,11 +561,25 @@ export default function DataViewSampleModal(props) {
               <Grid container spacing={2}>
                 <Grid item xs={8}>
                   <TextField
-                    error={ageError}
+                    error={
+                      (isNaN(SampleDetails.flock_age) &&
+                        SampleDetails.flock_age != null) ||
+                      (!isNaN(SampleDetails.flock_age) &&
+                        SampleDetails.flock_age <= 0 &&
+                        SampleDetails.flock_age != null)
+                    }
                     label="Age *"
                     value={SampleDetails.flock_age}
                     onChange={handleSampleDetailsChange("flock_age")}
-                    helperText={ageError ? "Flock age is number only" : ""}
+                    helperText={
+                      (isNaN(SampleDetails.flock_age) &&
+                        SampleDetails.flock_age != null) ||
+                      (!isNaN(SampleDetails.flock_age) &&
+                        SampleDetails.flock_age <= 0 &&
+                        SampleDetails.flock_age != null)
+                        ? "Age must be positive number"
+                        : ""
+                    }
                   />
                 </Grid>
                 <Grid item xs={4}>
@@ -633,8 +692,7 @@ export default function DataViewSampleModal(props) {
                     color="secondary"
                     style={{ width: 200 }}
                     onClick={() => {
-                      closeSampleModal();
-                      resetSampleDetails();
+                      closeModal();
                     }}
                   >
                     Cancel
@@ -658,32 +716,27 @@ export default function DataViewSampleModal(props) {
                 </Grid>
               </Grid>
             </Box>
+
+            <Box sx={{ flexGrow: 1 }} style={{ padding: "15px" }}>
+              {errorSubmission ? (
+                <Typography
+                  gutterBottom
+                  variant="button"
+                  style={{
+                    color: "red",
+                  }}
+                >
+                  Fix Error before saving Sample:
+                  {errorSubmissionMessages.map((message) => (
+                    <ListItem>
+                      <ErrorIcon />
+                      <ListItemText primary={message} />
+                    </ListItem>
+                  ))}
+                </Typography>
+              ) : null}
+            </Box>
           </Card>
-
-          <br></br>
-
-          <Grid item xs={12} sm={2}></Grid>
-          <br></br>
-          <Grid item xs={12} sm={2}></Grid>
-          <br></br>
-
-          <Grid>
-            <br />
-            {errorSubmission ? (
-              <Typography
-                gutterBottom
-                variant="button"
-                style={{
-                  color: "red",
-                  position: "relative",
-                  // bottom: 50,
-                  // left: 280,
-                }}
-              >
-                Sample has missing fields.
-              </Typography>
-            ) : null}
-          </Grid>
         </div>
       </Modal>
     </>

@@ -155,6 +155,7 @@ function useCreateDataView() {
     sampleValidationErrors,
     setSampleValidationErrors,
     sampleType,
+    setSampleModalVisibility,
     setSampleType,
     sampleLoading,
     setSampleLoading,
