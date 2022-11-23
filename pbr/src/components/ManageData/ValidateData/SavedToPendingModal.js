@@ -400,7 +400,7 @@ export default function SavedToPendingModal(props) {
                   color: "red",
                 }}
               >
-                Fix Error before Submitting:
+                Fix Errors before Submitting
                 {submitAllErrors.map((message) => (
                   <ListItem>
                     <ErrorIcon />
