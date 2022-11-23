@@ -89,6 +89,8 @@ export default function EditSampleModal(props) {
     []
   );
 
+  const [ageError, setAgeError] = React.useState(false);
+
   const [SampleDetails, setSampleDetails] = React.useState({
     comments: SampleToEdit.comments,
     sample_type: SampleToEdit.sample_type,
