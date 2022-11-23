@@ -291,7 +291,6 @@ export default function SavedToPendingModal(props) {
             <Button
               variant="contained"
               onClick={() => {
-                console.log("submitting one sample");
                 if (validateSample(sample)) {
                   onSubmitOne(sample);
                 } else {
@@ -352,7 +351,6 @@ export default function SavedToPendingModal(props) {
                     let valid = true;
                     setSubmitAllErrors([]);
 
-                    console.log("submitting all samples");
 
                     selectedSamples.forEach((sample) => {
                       if (!validateSample(sample)) {
@@ -365,7 +363,6 @@ export default function SavedToPendingModal(props) {
                       onSubmitAll();
                     }
 
-                    console.log("all errors", submitAllErrors);
                   }}
                 >
                   Submit All
