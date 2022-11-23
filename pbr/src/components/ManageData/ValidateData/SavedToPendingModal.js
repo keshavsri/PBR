@@ -98,12 +98,6 @@ export default function SavedToPendingModal(props) {
     setErrorSubmission(false);
   };
 
-  const setErrorMessage = (error) => {
-    let newErrorMessages = errorSubmissionMessages;
-    newErrorMessages.push(error);
-    setErrorSubmissionMessages(newErrorMessages);
-  };
-
   const validateSample = (sample) => {
     let errors = [];
     console.log("Validating sample", sample.id);
@@ -118,12 +112,44 @@ export default function SavedToPendingModal(props) {
       setSubmitAllErrors((submitAllErrors) => [...submitAllErrors, err]);
       valid = false;
     }
+
+    if (sample.flock_age <= 0) {
+      let err =
+        "Sample " + sample.id + ": " + "Flock age cannot be negative or zero";
+      errors.push(err);
+      setSubmitAllErrors((submitAllErrors) => [...submitAllErrors, err]);
+      valid = false;
+    }
+
     if (sample.flock_age_unit === null) {
       let err = "Sample " + sample.id + ": " + "Flock age unit is required";
       errors.push(err);
       setSubmitAllErrors((submitAllErrors) => [...submitAllErrors, err]);
       valid = false;
     }
+
+    if (sample.sample_type === null) {
+      let err = "Sample " + sample.id + ": " + "Sample type is required";
+      errors.push(err);
+      setSubmitAllErrors((submitAllErrors) => [...submitAllErrors, err]);
+      valid = false;
+    }
+
+    sample.measurements.forEach((measurement) => {
+      if (measurement.value === null) {
+        let err =
+          "Sample " +
+          sample.id +
+          ": " +
+          "Measurement for" +
+          " " +
+          measurement.analyte.abbreviation +
+          " is required";
+        errors.push(err);
+        setSubmitAllErrors((submitAllErrors) => [...submitAllErrors, err]);
+        valid = false;
+      }
+    });
 
     if (valid === false) {
       setErrorSubmissionMessages(errors);

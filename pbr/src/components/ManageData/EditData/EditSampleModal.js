@@ -2,6 +2,7 @@ import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import useAuth from "../../../services/useAuth";
 import { sampleTypes, ageUnits } from "../../../models/enums";
+import ErrorIcon from "@mui/icons-material/Error";
 
 import {
   Typography,
@@ -18,6 +19,8 @@ import {
   Select,
   MenuItem,
   Modal,
+  ListItemText,
+  ListItem,
 } from "@mui/material";
 
 import { makeStyles } from "@mui/styles";
@@ -82,6 +85,9 @@ export default function EditSampleModal(props) {
   const [cartridgeTypes, setCartridgeTypes] = React.useState([]);
 
   const [errorSubmission, setErrorSubmission] = React.useState(false);
+  const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
+    []
+  );
 
   const [SampleDetails, setSampleDetails] = React.useState({
     comments: SampleToEdit.comments,
@@ -128,6 +134,8 @@ export default function EditSampleModal(props) {
       .then(checkResponseAuth)
       .then((response) => {
         if (!response.ok) {
+          console.log("Editing Error");
+          console.log(response);
           setErrorSubmission(true);
         } else {
           setEditSampleModalVisibility(false);
@@ -234,6 +242,31 @@ export default function EditSampleModal(props) {
     const data = await response.json();
     setOrganizations(data);
     setOrganization(data.filter((org) => org.id === currentOrganization.id)[0]);
+  };
+
+  const validateSample = () => {
+    let errors = [];
+    let valid = true;
+    setErrorSubmission(false);
+
+    SampleDetails.measurements.forEach((measurement) => {
+      console.log("value: " + measurement.value, isNaN(measurement.value));
+      if (isNaN(measurement.value) && measurement.value != "") {
+        let err =
+          "Measurement for" +
+          " " +
+          measurement.analyte.abbreviation +
+          " must be a number";
+        errors.push(err);
+        valid = false;
+      }
+    });
+
+    if (valid === false) {
+      setErrorSubmissionMessages(errors);
+    }
+
+    return valid;
   };
 
   React.useEffect(async () => {
@@ -473,12 +506,12 @@ export default function EditSampleModal(props) {
           >
             <FormControlLabel
               value={sampleTypes.SURVEILLANCE}
-              label={`${sampleTypes.SURVEILLANCE} Sample (Healthy)`}
+              label={`${sampleTypes.SURVEILLANCE} Sample`}
               control={<Radio />}
             />
             <FormControlLabel
               value={sampleTypes.DIAGNOSTIC}
-              label={`${sampleTypes.DIAGNOSTIC} Sample (Sick)`}
+              label={`${sampleTypes.DIAGNOSTIC} Sample`}
               control={<Radio />}
             />
           </RadioGroup>
@@ -531,7 +564,12 @@ export default function EditSampleModal(props) {
                 color="primary"
                 style={{ width: 200 }}
                 onClick={() => {
-                  editSample();
+                  if (validateSample()) {
+                    editSample();
+                    setEditSampleModalVisibility(false);
+                  } else {
+                    setErrorSubmission(true);
+                  }
                 }}
               >
                 Save
@@ -566,23 +604,25 @@ export default function EditSampleModal(props) {
           </Grid>
         </Card>
 
-        <Grid>
+        <Box sx={{ flexGrow: 1 }} style={{ padding: "15px" }}>
           {errorSubmission ? (
             <Typography
               gutterBottom
               variant="button"
               style={{
                 color: "red",
-                position: "absolute",
-                bottom: 50,
-                left: 280,
-                padding: "15px",
               }}
             >
-              The Machine Data associated to the sample is incomplete.
+              Fix Error before saving Sample:
+              {errorSubmissionMessages.map((message) => (
+                <ListItem>
+                  <ErrorIcon />
+                  <ListItemText primary={message} />
+                </ListItem>
+              ))}
             </Typography>
           ) : null}
-        </Grid>
+        </Box>
       </div>
     </Modal>
   );
