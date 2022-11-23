@@ -89,8 +89,6 @@ export default function EditSampleModal(props) {
     []
   );
 
-  const [ageError, setAgeError] = React.useState(false);
-
   const [SampleDetails, setSampleDetails] = React.useState({
     comments: SampleToEdit.comments,
     sample_type: SampleToEdit.sample_type,
@@ -164,9 +162,19 @@ export default function EditSampleModal(props) {
               return (
                 <>
                   <TextField
+                    error={
+                      isNaN(SampleDetails.measurements[index].value) &&
+                      SampleDetails.measurements[index].value != ""
+                    }
                     label={a.abbreviation}
                     style={{ margin: 4 }}
                     value={SampleDetails.measurements[index].value}
+                    helperText={
+                      isNaN(SampleDetails.measurements[index].value) &&
+                      SampleDetails.measurements[index].value !== ""
+                        ? "Please enter a number"
+                        : ""
+                    }
                     onChange={(e) => {
                       const measurements = SampleDetails.measurements;
                       measurements[index].value = e.target.value;
@@ -251,9 +259,13 @@ export default function EditSampleModal(props) {
     let valid = true;
     setErrorSubmission(false);
 
-    if (isNaN(SampleDetails.flock_age) && SampleDetails.flock_age != "") {
+    if (
+      (isNaN(SampleDetails.flock_age) && SampleDetails.flock_age != null) ||
+      (!isNaN(SampleDetails.flock_age) &&
+        SampleDetails.flock_age <= 0 &&
+        SampleDetails.flock_age != null)
+    ) {
       errors.push("Flock age is number only");
-      setAgeError(true);
       valid = false;
     }
 
@@ -455,11 +467,25 @@ export default function EditSampleModal(props) {
           >
             <Grid item xs={8}>
               <TextField
-                error={ageError}
+                error={
+                  (isNaN(SampleDetails.flock_age) &&
+                    SampleDetails.flock_age != null) ||
+                  (!isNaN(SampleDetails.flock_age) &&
+                    SampleDetails.flock_age <= 0 &&
+                    SampleDetails.flock_age != null)
+                }
                 label="Age"
                 value={SampleDetails.flock_age}
                 onChange={handleSampleDetailsChange("flock_age")}
-                helperText={ageError ? "Flock age is number only" : ""}
+                helperText={
+                  (isNaN(SampleDetails.flock_age) &&
+                    SampleDetails.flock_age != null) ||
+                  (!isNaN(SampleDetails.flock_age) &&
+                    SampleDetails.flock_age <= 0 &&
+                    SampleDetails.flock_age != null)
+                    ? "Age must be positive number"
+                    : ""
+                }
               />
             </Grid>
 
@@ -622,13 +648,17 @@ export default function EditSampleModal(props) {
                 color: "red",
               }}
             >
-              Fix Error before saving Sample:
-              {errorSubmissionMessages.map((message) => (
+              <ListItem>
+                <ErrorIcon />
+                <ListItemText primary="   Fix Error before saving Sample" />
+              </ListItem>
+
+              {/* {errorSubmissionMessages.map((message) => (
                 <ListItem>
                   <ErrorIcon />
                   <ListItemText primary={message} />
                 </ListItem>
-              ))}
+              ))} */}
             </Typography>
           ) : null}
         </Box>
