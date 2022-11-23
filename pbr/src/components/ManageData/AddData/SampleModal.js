@@ -90,7 +90,6 @@ export default function DataViewSampleModal(props) {
   const [flockInput, setFlockInput] = React.useState("");
   const [source, setSource] = React.useState({});
   const [organization, setOrganization] = React.useState({});
-  const [expanded, setExpanded] = React.useState(true);
   const [SampleDetails, setSampleDetails] = React.useState({
     comments: "",
     flock_age: null,
@@ -178,16 +177,8 @@ export default function DataViewSampleModal(props) {
     });
   };
 
-  const handleSampleTypeChange = (event) => {
-    setSampleType(event.target.value);
-  };
-
   const clearSampleType = () => {
     setSampleType("");
-  };
-
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
   };
 
   const sampleMeasurements = () => {
@@ -336,20 +327,21 @@ export default function DataViewSampleModal(props) {
       valid = false;
     }
 
-    SampleDetails.measurements.forEach((measurement) => {
-      if (isNaN(measurement.value) && measurement.value != "") {
-        let err =
-          "Measurement for" +
-          " " +
-          measurement.analyte.abbreviation +
-          " must be a number";
-        errors.push(err);
+    for (let i = 0; i < SampleDetails.measurements.length; i++) {
+      if (
+        isNaN(SampleDetails.measurements[i].value) &&
+        SampleDetails.measurements[i].value != null
+      ) {
+        errors.push("Sample measurements must be numbers");
         valid = false;
       }
-    });
+    }
 
     if (valid === false) {
+      console.log(errors);
       setErrorSubmissionMessages(errors);
+    } else {
+      console.log("valid");
     }
 
     return valid;
@@ -731,13 +723,10 @@ export default function DataViewSampleModal(props) {
                     color: "red",
                   }}
                 >
-                  Fix Error before saving Sample:
-                  {errorSubmissionMessages.map((message) => (
-                    <ListItem>
-                      <ErrorIcon />
-                      <ListItemText primary={message} />
-                    </ListItem>
-                  ))}
+                  <ListItem>
+                    <ErrorIcon />
+                    <ListItemText primary=" Fix Error before saving Sample" />
+                  </ListItem>
                 </Typography>
               ) : null}
             </Box>
