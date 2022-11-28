@@ -35,7 +35,7 @@ def get_organizations(access_allowed, current_user):
     """
 
     if access_allowed:
-        organizations = OrganizationORM.query.all()
+        organizations = OrganizationORM.query.filter_by(is_deleted=False).all()
         ret = []
         for organization in organizations:
             ret.append(Organization.from_orm(organization).dict())
@@ -62,7 +62,7 @@ def get_organization(access_allowed, current_user, item_id):
 
     if access_allowed:
         if current_user.organization_id == item_id or current_user.role == Roles.Super_Admin:
-            org_model = OrganizationORM.query.get(item_id)
+            org_model = OrganizationORM.query.filter_by(is_deleted=False).first()
             if org_model is not None:
                 org = Organization.from_orm(org_model).dict()
 
@@ -107,7 +107,7 @@ def delete_organization(access_allowed, current_user, item_id):
     if access_allowed:
         org_model = OrganizationORM.query.get(item_id)
         # check if the organization exists in the database if it does then update the organization
-        if org_model is None:
+        if org_model is None or org_model.is_deleted == True:
             return jsonify({'message': 'Organization does not exist'}), 404
         else:
             deleted_organization = models.Organization.query.filter_by(

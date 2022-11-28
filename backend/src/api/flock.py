@@ -79,7 +79,7 @@ def get_flock(access_allowed, current_user, item_id):
     :return: A specific flock if it exists, a 404 not found otherwise.
     """
     if access_allowed:
-        sql_text = db.text("SELECT s.organization_id FROM flock_table f, source_table s WHERE f.source_id = s.id AND is_deleted = 0;")
+        sql_text = db.text("SELECT s.organization_id FROM flock_table f, source_table s WHERE f.source_id = s.id AND f.is_deleted = 0 AND s.is_deleted = 0;")
         with engine.connect() as connection:
             flock_organization_id = connection.execute(sql_text)
         if current_user.role == Roles.Super_Admin or flock_organization_id == current_user.organization_id:
