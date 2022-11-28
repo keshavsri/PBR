@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import useAuth from "../../../services/useAuth";
 
 import {
   Typography,
@@ -50,6 +51,8 @@ export default function ReviewSampleModal({
   setOpenReviewSampleModal,
   pendingSamples,
   setPendingSamples,
+  // setModifiedSamples,
+  // modifiedSamples,
   acceptSample,
   rejectSample,
   turnPendingFilterOff,
@@ -58,6 +61,7 @@ export default function ReviewSampleModal({
   const [modalStyle] = React.useState(getModalStyle);
   useTheme();
   const [expanded, setExpanded] = React.useState(false);
+  const { checkResponseAuth, user } = useAuth();
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -71,28 +75,45 @@ export default function ReviewSampleModal({
     }
   };
 
-  const IstatORVescan = (sample) => {
-    if (sample.measurement_values.length === 13) {
-      return (
-        <Typography gutterBottom variant="body1">
-          Istat Data:
-        </Typography>
-      );
-    } else if (sample.measurement_values.length === 17) {
-      return (
-        <Typography gutterBottom variant="body1">
-          VetScan Data:
-        </Typography>
-      );
-    }
-  };
-
   const onAcceptSample = async (id) => {
     await acceptSample(id);
   };
 
   const onRejectSample = async (id) => {
     await rejectSample(id);
+  };
+
+  const editSample = async (sample) => {
+
+    let payload = {
+      comments: pendingSamples.find((s) => s.id === sample.id).comments,
+    };
+
+
+    await fetch(`/api/sample/${sample.id}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        if (!response.ok) {
+        } else {
+          return response.json();
+        }
+      });
+  };
+
+  const handleSampleDetailsChange = (prop) => (event) => {
+    let newModifiedSamples = pendingSamples.map((sample) => {
+      if (sample.id === expanded) {
+        sample.comments = event.target.value;
+      }
+      return sample;
+    });
+    setPendingSamples(newModifiedSamples);
   };
 
   const fillMachineData = (sample) => {
@@ -232,20 +253,27 @@ export default function ReviewSampleModal({
             </Typography>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
-            <TextField
-              fullWidth
-              label="Comments"
-              value={sample.comments}
-              disabled
-            />
-          </Grid>
+          {pendingSamples.length > 0 ? (
+            <Grid item xs={12} sm={12}>
+              <TextField
+                fullWidth
+                label="Comments"
+                value={
+                  pendingSamples.find(
+                    (modifiedSample) => modifiedSample.id === sample.id
+                  ).comments
+                }
+                onChange={handleSampleDetailsChange("comments")}
+              />
+            </Grid>
+          ) : null}
 
           <Grid container spacing={2} sx={{ padding: "15px" }}>
             <Grid item xs={12} sm={2}>
               <Button
                 variant="contained"
                 onClick={() => {
+                  editSample(sample);
                   onAcceptSample(sample.id);
                   turnPendingFilterOff();
                   removeFromPending(sample);
@@ -258,6 +286,7 @@ export default function ReviewSampleModal({
               <Button
                 variant="contained"
                 onClick={() => {
+                  editSample(sample);
                   onRejectSample(sample.id);
                   turnPendingFilterOff();
                   removeFromPending(sample);

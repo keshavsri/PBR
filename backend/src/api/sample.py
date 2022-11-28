@@ -163,28 +163,28 @@ def get_samples(access_allowed, current_user):
 @token_required
 @allowed_roles([0, 1, 2, 3])
 def edit_sample(access_allowed, current_user, item_id):
+
     if access_allowed:
+
         old_sample = SampleORM.query.get(item_id)
         if old_sample is None:
             return jsonify({'message': 'Sample cannot be found.'}), 404
         else:
-
             for name, value in request.json.items():
                 if name != 'measurements':
                     setattr(old_sample, name, value)
 
-            new_measurements = request.json.pop('measurements')
+            if (request.json.__contains__("measurements")):
+                new_measurements = request.json.pop('measurements')
+                # Update the list of measurements.
 
-            # Update the list of measurements.
-
-            measurements = []
-            for measurement in new_measurements:
-                measurement_model: MeasurementORM = MeasurementORM()
-                for name, value in measurement.items():
-                    setattr(measurement_model, name, value)
-                measurements.append(measurement_model)
-
-            setattr(old_sample, "measurements", measurements)
+                measurements = []
+                for measurement in new_measurements:
+                    measurement_model: MeasurementORM = MeasurementORM()
+                    for name, value in measurement.items():
+                        setattr(measurement_model, name, value)
+                    measurements.append(measurement_model)
+                setattr(old_sample, "measurements", measurements)
 
             models.db.session.commit()
 
