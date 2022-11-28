@@ -84,6 +84,7 @@ export default function HealthyRanges() {
   };
 
   const handleButtonClick = () => {
+    generateHealthyRanges();
     if (!loading) {
       setSuccess(false);
       setLoading(true);
