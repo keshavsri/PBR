@@ -53,7 +53,17 @@ export default function DataView() {
   const [loading, setLoading] = React.useState(false);
 
   const assignRowHtml = (rows) => {
-    rows.map((row, index) => {
+    rows.map((row) => {
+      let newDate = row;
+      newDate.timestamp_added = new Date(row.timestamp_added).toLocaleString();
+      // remove seconds from date
+      let seconds = ":" + newDate.timestamp_added.slice(-5, -3);
+      // remove comma from date
+      newDate.timestamp_added = newDate.timestamp_added.replace(",", "");
+      newDate.timestamp_added = newDate.timestamp_added.replace(seconds, "");
+
+      setSampleList((sampleList) => [...sampleList, newDate]);
+
       row.status = (
         // NEED TO ADD CONDITIONAL FOR COLOR
         <>
@@ -72,12 +82,7 @@ export default function DataView() {
       //     </IconButton>
       //   </>
       // );
-      row.timestamp_added = new Date(row.timestamp_added).toLocaleString(
-        "en-US",
-        {
-          timeZone: "America/New_York",
-        }
-      );
+
       // TEMPORARY
       row.deletable = true;
     });
@@ -128,6 +133,7 @@ export default function DataView() {
   };
 
   const getData = async () => {
+    setSampleList([]);
     getHeadCells();
     const uri = `/api/sample/org_cartridge_type?organization_id=${organization.id}&cartridge_type_id=${currentCartridgeType.id}`;
     await fetch(uri, { method: "GET" })
@@ -144,7 +150,7 @@ export default function DataView() {
           });
           sample["flock_name"] = sample.flock.name;
         });
-        setSampleList(data);
+
         assignRowHtml(data);
       });
   };
