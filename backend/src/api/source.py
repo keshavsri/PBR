@@ -27,7 +27,7 @@ def get_source(access_allowed, item_id):
         source_model = SourceORM.query.get(item_id)
         source = Source.from_orm(source_model).dict()
         # otherwise it will return all the organizations in the database
-        if source is None or source.is_deleted == True:
+        if source is None or source_model.is_deleted == True:
             responseJSON = jsonify({'message': 'No records found'})
             return responseJSON, 404
         else:
