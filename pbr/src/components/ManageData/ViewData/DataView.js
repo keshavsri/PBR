@@ -1,6 +1,13 @@
 import * as React from "react";
+import { useRef } from "react";
 
-import { Paper, Chip, CircularProgress, Typography } from "@mui/material";
+import {
+  Paper,
+  Chip,
+  CircularProgress,
+  Typography,
+  Button,
+} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import SavedToPendingModal from "../ValidateData/SavedToPendingModal";
 
@@ -52,17 +59,19 @@ export default function DataView() {
 
   const [loading, setLoading] = React.useState(false);
 
+  const abortController = useRef(null);
+
   const assignRowHtml = (rows) => {
     rows.map((row) => {
-      let newDate = row;
-      newDate.timestamp_added = new Date(row.timestamp_added).toLocaleString();
-      // remove seconds from date
-      let seconds = ":" + newDate.timestamp_added.slice(-5, -3);
-      // remove comma from date
-      newDate.timestamp_added = newDate.timestamp_added.replace(",", "");
-      newDate.timestamp_added = newDate.timestamp_added.replace(seconds, "");
+      // let newDate = row;
+      // newDate.timestamp_added = new Date(row.timestamp_added).toLocaleString();
+      // // remove seconds from date
+      // let seconds = ":" + newDate.timestamp_added.slice(-5, -3);
+      // // remove comma from date
+      // newDate.timestamp_added = newDate.timestamp_added.replace(",", "");
+      // newDate.timestamp_added = newDate.timestamp_added.replace(seconds, "");
 
-      setSampleList((sampleList) => [...sampleList, newDate]);
+      // setSampleList((sampleList) => [...sampleList, newDate]);
 
       row.status = (
         // NEED TO ADD CONDITIONAL FOR COLOR
@@ -151,8 +160,36 @@ export default function DataView() {
           sample["flock_name"] = sample.flock.name;
         });
 
-        assignRowHtml(data);
+    const promise = new Promise(async (resolve) => {
+      setLoading(true);
+      abortController.current = new AbortController();
+      const uri = `/api/sample/org_cartridge_type?organization_id=${organization.id}&cartridge_type_id=${currentCartridgeType.id}`;
+      const response = await fetch(uri, {
+        signal: abortController.current.signal,
+        method: "GET",
       });
+
+      const data = await response.json();
+      data.forEach((sample) => {
+        sample.measurements.map((meas) => {
+          sample[meas.analyte.abbreviation] = meas.value;
+        });
+        sample["flock_name"] = sample.flock.name;
+      });
+      setLoading(false);
+      setSampleList(data);
+      assignRowHtml(data);
+      resolve(data);
+    });
+
+    return promise;
+  };
+
+  const cancelGetData = () => {
+    if (abortController.current) {
+      abortController.current.abort();
+      setLoading(false);
+    }
   };
 
   const getCartridgeTypes = async () => {
@@ -400,6 +437,7 @@ export default function DataView() {
               <Grid item>
                 <Typography variant="h6">Loading...</Typography>
               </Grid>
+              <Button onClick={() => cancelGetData()}>Stop Loading</Button>
             </Grid>
           ) : (
             <EnhancedTable
