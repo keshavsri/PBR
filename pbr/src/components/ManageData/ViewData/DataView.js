@@ -76,7 +76,7 @@ export default function DataView() {
       newDate.timestamp_added = newDate.timestamp_added.replace(",", "");
       newDate.timestamp_added = newDate.timestamp_added.replace(seconds, "");
 
-      setSampleList((sampleList) => [...sampleList, newDate]);
+      // setSampleList((sampleList) => [...sampleList, newDate]);
 
       row.status = (
         // NEED TO ADD CONDITIONAL FOR COLOR
