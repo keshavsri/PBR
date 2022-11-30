@@ -454,7 +454,30 @@ export default function DataViewSampleModal(props) {
       });
   };
 
-  const handleAnalytes = () => {
+  const deleteSample = async () => {
+    console.log("deleting sample");
+    await fetch(`/api/sample/permanent/${createdSample}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        if (!response.ok) {
+          setError({
+            title: `${response.status} - ${response.statusText}`,
+            description: `There was an error while deleting the sample. Try again.`,
+          });
+        } else {
+          
+          resetSampleDetails();
+          getData();
+        }
+      });
+  };
+
+  const handleAnalytes = (e) => {
     console.log("changing analytes");
     const { analytes } = cartridgeType;
     const measurements = analytes.map((analyte) => ({
@@ -734,6 +757,7 @@ export default function DataViewSampleModal(props) {
                     color="secondary"
                     style={{ width: 200 }}
                     onClick={() => {
+                      deleteSample();
                       closeModal();
                     }}
                   >
