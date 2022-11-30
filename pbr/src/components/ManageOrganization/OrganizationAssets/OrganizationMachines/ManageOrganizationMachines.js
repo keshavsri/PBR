@@ -72,9 +72,6 @@ export default function ManageOrganizationMachines({
   return (
     <>
       <Paper>
-        <Grid item xs={12} sm={12}>
-          <Typography variant="h1" align="center">Machines</Typography>
-        </Grid>
 
         <Grid item xs={12} sm={12}>
           <Button variant="contained" onClick={handleOpenAddOrganizationMachinesModal}>Create New Machine</Button>

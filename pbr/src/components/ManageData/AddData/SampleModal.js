@@ -105,8 +105,6 @@ export default function DataViewSampleModal(props) {
     setOrganization(data[0]);
   };
 
-
-
   const getFlocks = async () => {
     await fetch(`/api/flock/source/${source.id}`, {
       method: "GET",
@@ -494,12 +492,12 @@ export default function DataViewSampleModal(props) {
               >
                 <FormControlLabel
                   value={sampleTypes.SURVEILLANCE}
-                  label={`${sampleTypes.SURVEILLANCE} Sample (Healthy)`}
+                  label={`${sampleTypes.SURVEILLANCE} Sample`}
                   control={<Radio />}
                 />
                 <FormControlLabel
                   value={sampleTypes.DIAGNOSTIC}
-                  label={`${sampleTypes.DIAGNOSTIC} Sample (Sick)`}
+                  label={`${sampleTypes.DIAGNOSTIC} Sample`}
                   control={<Radio />}
                 />
               </RadioGroup>

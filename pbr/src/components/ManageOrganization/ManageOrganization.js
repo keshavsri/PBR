@@ -12,6 +12,10 @@ import ManageOrganizationMachines from "./OrganizationAssets/OrganizationMachine
 
 
 import { Box, Typography, Grid, Card, Chip } from "@mui/material";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import useAuth from "../../services/useAuth";
 
@@ -27,7 +31,6 @@ export default function OrganizationView() {
   const [flocks, setFlocks] = React.useState([]);
   const [machines, setMachines] = React.useState([]);
   const [roles, setRoles] = React.useState([]);
-
 
   React.useEffect(async () => {
     await getRoles();
@@ -232,41 +235,77 @@ export default function OrganizationView() {
                 </Grid>
               </Grid>
 
-              <Grid container item xs={12} sm={12} spacing={2}>
+              <Grid container item xs={12} sm={12} spacing={2}> 
                 <Grid item xs={12} sm={12}>
-                    <ManageOrganizationSources
-                      organization={organization}
-                      sources={sources}
-                      getSources={getSources}
-                      setSources={setSources}
-                      getFlocks={getFlocks}
-                      roles={roles}
-                    />
-                  </Grid>
+                  <Accordion>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <Typography variant="h4">Sources</Typography>
+                    </AccordionSummary>
+
+                    <AccordionDetails>
+                      <ManageOrganizationSources
+                          organization={organization}
+                          sources={sources}
+                          getSources={getSources}
+                          setSources={setSources}
+                          getFlocks={getFlocks}
+                          roles={roles}
+                        />
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
               </Grid>
 
-              <Grid container item xs={12} sm={12} spacing={2}>
+              <Grid container item xs={12} sm={12} spacing={2}> 
                 <Grid item xs={12} sm={12}>
-                    <ManageOrganizationFlocks
-                      organization={organization}
-                      flocks={flocks}
-                      getFlocks={getFlocks}
-                      setFlocks={setFlocks}
-                      sources={sources}
-                      roles={roles}
-                    />
-                  </Grid>
+                  <Accordion>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <Typography variant="h4">Flocks</Typography>
+                    </AccordionSummary>
+
+                    <AccordionDetails>
+                      <ManageOrganizationFlocks
+                            organization={organization}
+                            flocks={flocks}
+                            getFlocks={getFlocks}
+                            setFlocks={setFlocks}
+                            sources={sources}
+                            roles={roles}
+                          />
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
               </Grid>
 
-              <Grid container item xs={12} sm={12} spacing={2}>
+              <Grid container item xs={12} sm={12} spacing={2}> 
                 <Grid item xs={12} sm={12}>
-                    <ManageOrganizationMachines
-                      organization={organization}
-                      machines={machines}
-                      getMachines={getMachines}
-                      roles={roles}
-                    />
-                  </Grid>
+                  <Accordion>
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      aria-controls="panel1a-content"
+                      id="panel1a-header"
+                    >
+                      <Typography variant="h4">Machines</Typography>
+                    </AccordionSummary>
+
+                    <AccordionDetails>
+                      <ManageOrganizationMachines
+                          organization={organization}
+                          machines={machines}
+                          getMachines={getMachines}
+                          roles={roles}
+                        />
+                    </AccordionDetails>
+                  </Accordion>
+                </Grid>
               </Grid>
 
             </>
