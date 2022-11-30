@@ -18,9 +18,13 @@ import {
   FormControl,
   ListItemText,
   ListItem,
+  CircularProgress,
 } from "@mui/material";
 import SampleIcon from "@mui/icons-material/Science";
 import ErrorIcon from "@mui/icons-material/Error";
+
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
 
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import { sampleTypes, ageUnits } from "../../../models/enums";
@@ -70,7 +74,6 @@ export default function DataViewSampleModal(props) {
 
   const {
     sampleModalVisibility,
-    closeSampleModal,
     setError,
     setSampleType,
     setSampleModalVisibility,
@@ -130,16 +133,18 @@ export default function DataViewSampleModal(props) {
     await sampleMeasurements();
   }, [cartridgeType]);
 
-  const [errorSubmission, setErrorSubmission] = React.useState(false);
-  const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
-    []
-  );
+  const [loading, setLoading] = React.useState(false);
+
+  const [createdSample, setCreatedSample] = React.useState(null);
 
   const closeModal = () => {
+    onSampleChange();
+    getData();
     setErrorSubmission(false);
     resetSampleDetails();
     setErrorSubmissionMessages([]);
     setSampleModalVisibility(false);
+    setCreatedSample(null);
   };
 
   const getOrganizations = async () => {
@@ -281,10 +286,6 @@ export default function DataViewSampleModal(props) {
     setFlockInput(value);
   }
 
-  function handleFlockChange(event, value) {
-    setFlock(value);
-  }
-
   const validateSample = () => {
     console.log("validating sample");
     console.log(SampleDetails);
@@ -340,6 +341,66 @@ export default function DataViewSampleModal(props) {
     setCartridgeType(cartridgeTypes[0]);
   };
 
+  const passMesearments = () => {
+    let values = [];
+    SampleDetails.measurements.forEach((measurement) => {
+      values.push({
+        analyte_id: measurement.analyte.id,
+        value: measurement.value,
+      });
+    });
+
+    return values;
+  };
+
+  if (sampleModalVisibility) {
+    document.onclick = function (event) {
+      if (event === undefined) event = window.event;
+
+      onSampleChange();
+    };
+  }
+
+  const onSampleChange = async () => {
+    console.log("on sample change");
+    setLoading(true);
+
+    console.log(SampleDetails);
+    console.log("updated measurements");
+
+    let payload = {
+      cartridge_type_id: cartridgeType.id,
+      comments: SampleDetails.comments,
+      sample_type: SampleDetails.sample_type,
+      flock_age: SampleDetails.flock_age,
+      flock_age_unit: SampleDetails.flock_age_unit,
+      organization_id: organization.id,
+      flock_id: flock.id,
+      measurements: SampleDetails.measurements,
+    };
+
+    await fetch(`/api/sample/${createdSample}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        if (!response.ok) {
+          console.log("error");
+          // setErrorSubmission(true);
+        } else {
+          console.log("success");
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
+          return response.json();
+        }
+      });
+  };
+
   let onSubmit = async () => {
     const newSampleDetails = SampleDetails;
     const measurements = newSampleDetails.measurements;
@@ -382,11 +443,14 @@ export default function DataViewSampleModal(props) {
             description: `There was an error while uploading the sample. Try again.`,
           });
         } else {
-          closeSampleModal();
-          resetSampleDetails();
+          // closeSampleModal();
+          // resetSampleDetails();
           getData();
           return response.json();
         }
+      })
+      .then((data) => {
+        setCreatedSample(data.id);
       });
   };
 
@@ -402,6 +466,10 @@ export default function DataViewSampleModal(props) {
       measurements: measurements,
     });
   };
+
+  const [focused, setFocused] = React.useState(false);
+  const onFocus = () => setFocused(true);
+  const onBlur = () => setFocused(false);
 
   return (
     <>
@@ -535,6 +603,8 @@ export default function DataViewSampleModal(props) {
                         SampleDetails.flock_age <= 0 &&
                         SampleDetails.flock_age != null)
                     }
+                    onFocus={onFocus}
+                    onBlur={onBlur}
                     label="Age *"
                     value={SampleDetails.flock_age}
                     onChange={handleSampleDetailsChange("flock_age")}
@@ -670,21 +740,44 @@ export default function DataViewSampleModal(props) {
                     Cancel
                   </Button>
                 </Grid>
+
                 <Grid item xs={8}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    style={{ width: 200 }}
-                    onClick={() => {
-                      if (validateSample()) {
-                        onSubmit();
-                      } else {
-                        setErrorSubmission(true);
-                      }
-                    }}
-                  >
-                    Save
-                  </Button>
+                  {loading ? (
+                    <LoadingButton
+                      loading
+                      loadingPosition="start"
+                      startIcon={<SaveIcon />}
+                      variant="outlined"
+                      style={{ width: 200, border: "1px solid red" }}
+                      color="primary"
+                    >
+                      <Typography
+                        gutterBottom
+                        variant="button"
+                        style={{
+                          color: "red",
+                        }}
+                      >
+                        {" "}
+                        Saving ...
+                      </Typography>
+                    </LoadingButton>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      style={{ width: 200 }}
+                      onClick={() => {
+                        if (validateSample()) {
+                          onSampleChange();
+                        } else {
+                          setErrorSubmission(true);
+                        }
+                      }}
+                    >
+                      Save
+                    </Button>
+                  )}
                 </Grid>
               </Grid>
             </Box>
