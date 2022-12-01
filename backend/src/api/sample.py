@@ -127,8 +127,8 @@ def get_samples(access_allowed, current_user):
                 AND sample.is_deleted = 0
                 AND source.organization_id = :organization_id
                 AND sample.cartridge_type_id = :cartridge_type_id
-                AND CASE 
-                        WHEN sample.validation_status = "Saved" 
+                AND CASE
+                        WHEN sample.validation_status = "Saved"
                             THEN sample.user_id = :current_user_id
                         ELSE TRUE
                     END
@@ -170,29 +170,30 @@ def delete_sample_permanently(access_allowed, current_user, sample_id):
     :param current_user: The user who is currently logged in. Check the decorator for more info.
     :param sample_id: The id of the sample to delete
     :return: A json response containing a message
+
+
     """
 
     if access_allowed:
 
         sample = SampleORM.query.get(sample_id)
-        sampleMeasurements = MeasurementORM.query.filter_by(
-            sample_id=sample_id).all()
 
         if sample is None:
             return jsonify({'message': 'Sample not found'}), 404
-        print("deleting sample", flush=True)
-        sql_query_measurements = "DELETE FROM measurement_table WHERE sample_id = :sample_id"
-        sql_query_sample = "DELETE FROM sample_table WHERE id = :sample_id"
-        result_1 = models.engine.connect().execute(
-            text(sql_query_measurements), {"sample_id": sample_id})
-        if (result_1.rowcount != 0):
-            result_1 = models.engine.connect().execute(
-                text(sql_query_sample), {"id": sample_id})
+
+        if sample.user_id != current_user.id and current_user.role != Roles.Super_Admin:
+            return jsonify({'message': 'Role not allowed'}), 403
+
+        # Delete the sample
+        MeasurementORM.query.filter_by(sample_id=sample_id).delete()
+        SampleORM.query.filter_by(id=sample_id).delete()
+        models.db.session.commit()
 
         create_log(current_user, LogActions.DELETE_SAMPLE,
                    'Deleted sample: ' + str(sample.id))
 
         return jsonify({'message': 'Sample deleted'}), 200
+
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
