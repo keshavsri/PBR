@@ -62,6 +62,8 @@ export default function DataView() {
   const abortController = useRef(null);
 
   const assignRowHtml = (rows) => {
+    setSampleList([]);
+
     rows.map((row) => {
       row.measurements.map((meas) => {
         row[meas.analyte.abbreviation] = meas.value;
