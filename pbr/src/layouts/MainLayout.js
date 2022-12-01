@@ -198,7 +198,6 @@ export default function MainLayout(props) {
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
-  const [currentPage, setCurrentPage] = React.useState(pageData[0][0]);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { user, logout, recredentialize, setRecredentialize } = AuthConsumer();
 
@@ -223,12 +222,6 @@ export default function MainLayout(props) {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-
-  // console.log(location.pathname);
-  // let page = pageData.find((page) => page.path === location.pathname);
-  // console.log(page);
-  // setCurrentPage(page);
-  // console.log(currentPage);
 
   return (
     <Box sx={{ display: "flex" }}>
