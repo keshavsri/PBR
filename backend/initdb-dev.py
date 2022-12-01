@@ -84,6 +84,7 @@ with app.app_context():
     )
     db.session.add(source)
     db.session.commit()
+    db.session.refresh(source)
 
     # Create a Test Flock 
     flock = Flock(
@@ -93,7 +94,7 @@ with app.app_context():
         gender="Male",
         production_type="Meat",
         birthday="2006-07-24 00:00:00",
-        source_id=org.id
+        source_id=source.id
     )
     db.session.add(flock)
     db.session.commit()
