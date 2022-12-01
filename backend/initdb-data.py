@@ -1,5 +1,5 @@
 from src.models import User, Organization, Source, Flock, Sample, Measurement, Analyte, CartridgeType, db
-from src.enums import AgeUnits, ValidationTypes, SampleTypes
+from src.enums import AgeUnits, ValidationTypes, SampleTypes, States
 from src import app
 from datetime import datetime, timedelta
 import pandas as pd
@@ -39,26 +39,51 @@ def determine_age_in_days(age_val, age_unit):
 def insert_records(df, abbrvs, cartridge_type_id, machine_type_id):
     for row in df.itertuples():
 
-        source = Source.query.filter_by(name=row.source).first()
+        source_zip = None
+        if not math.isnan(getattr(row, 'zip')):
+            source_zip = row.zip
+
+        source_name = ""
+        if row.source_name is None:
+            source_name = row.source
+        else:
+            source_name = row.source_name
+
+        source = Source.query.filter_by(name=source_name).first()
         if source is None:
             source = Source(
-                name = row.source,
+                name = source_name,
+                street_address = row.street_address,
+                city = row.city,
+                state = row.state.replace(" ", ""),
+                zip = source_zip,
                 organization_id = 1
             )
-        db.session.add(source)
-        db.session.commit()
-        db.session.refresh(source)
+            db.session.add(source)
+            db.session.commit()
+            db.session.refresh(source)
 
-        flock = Flock(
-            species = row.species,
-            gender = row.gender,
-            production_type = row.production_type,
-            birthday = datetime.strptime(row.date_tested, "%d-%b-%y") - timedelta(days=determine_age_in_days(row.age, row.age_unit)),
-            source_id = source.id
-        )
-        db.session.add(flock)
-        db.session.commit()
-        db.session.refresh(flock)
+        flock_name = ""
+        if row.flock_name is None:
+            flock_name = row.gender + row.species + row.strain + row.production_type
+            flock_name = flock_name.replace(" ", "")
+        else:
+            flock_name = row.flock_name
+
+        flock = Flock.query.filter_by(name=flock_name).first()
+        if flock is None:
+            flock = Flock(
+                name = flock_name,
+                species = row.species,
+                strain = row.strain,
+                gender = row.gender,
+                production_type = row.production_type,
+                birthday = datetime.strptime(row.date_tested, "%d-%b-%y") - timedelta(days=determine_age_in_days(row.age, row.age_unit)),
+                source_id = source.id
+            )
+            db.session.add(flock)
+            db.session.commit()
+            db.session.refresh(flock)
 
         sample = Sample(
             comments = row.comments,
@@ -95,20 +120,22 @@ bird_df = pd.read_csv("initdb_bird.csv", engine="python")
 istat_df = pd.read_csv("initdb_istat.csv", engine="python")
 vetscan_df = pd.read_csv("initdb_vetscan.csv", engine="python")
 
-
 # Wrangling I
 bird_df["gender"] = bird_df.gender.apply(capitalize)
-# bird_df["strain"] = bird_df.strain.apply(capitalize)
+bird_df["strain"] = bird_df.strain.apply(capitalize)
 bird_df["species"] = bird_df.species.apply(capitalize)
 bird_df["age_unit"] = bird_df.age_unit.apply(capitalize)
 bird_df["production_type"] = bird_df.production_type.apply(capitalize)
 bird_df["sample_type"] = bird_df.healthy.apply(determine_sample_type)
 
+bird_df = bird_df[bird_df['age'].notna()]
 bird_df = bird_df.drop(columns=["healthy"])
 istat_df = istat_df.drop(columns=["ID"])
 vetscan_df = vetscan_df.drop(columns=["ID"])
 
 bird_df = bird_df.replace("Not Reported", "Unknown")
+bird_df = bird_df.replace("Not Recorded", "Unknown")
+bird_df = bird_df.replace("Select Genetis", "Select Genetics")
 bird_df = bird_df.replace("Broiler Breeder", "Broiler")
 bird_df = bird_df.replace("Byp, Layer", "BYP")
 bird_df = bird_df.rename(columns={"bird_ID" : "flock_ID"})
