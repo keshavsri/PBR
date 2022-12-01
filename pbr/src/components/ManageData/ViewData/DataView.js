@@ -63,15 +63,20 @@ export default function DataView() {
 
   const assignRowHtml = (rows) => {
     rows.map((row) => {
-      // let newDate = row;
-      // newDate.timestamp_added = new Date(row.timestamp_added).toLocaleString();
-      // // remove seconds from date
-      // let seconds = ":" + newDate.timestamp_added.slice(-5, -3);
-      // // remove comma from date
-      // newDate.timestamp_added = newDate.timestamp_added.replace(",", "");
-      // newDate.timestamp_added = newDate.timestamp_added.replace(seconds, "");
+      row.measurements.map((meas) => {
+        row[meas.analyte.abbreviation] = meas.value;
+      });
+      row["flock_name"] = row.flock.name;
 
-      // setSampleList((sampleList) => [...sampleList, newDate]);
+      let newDate = row;
+      newDate.timestamp_added = new Date(row.timestamp_added).toLocaleString();
+      // remove seconds from date
+      let seconds = ":" + newDate.timestamp_added.slice(-5, -3);
+      // remove comma from date
+      newDate.timestamp_added = newDate.timestamp_added.replace(",", "");
+      newDate.timestamp_added = newDate.timestamp_added.replace(seconds, "");
+
+      setSampleList((sampleList) => [...sampleList, newDate]);
 
       row.status = (
         // NEED TO ADD CONDITIONAL FOR COLOR
@@ -170,15 +175,10 @@ export default function DataView() {
       });
 
       const data = await response.json();
-      data.forEach((sample) => {
-        sample.measurements.map((meas) => {
-          sample[meas.analyte.abbreviation] = meas.value;
-        });
-        sample["flock_name"] = sample.flock.name;
-      });
-      setLoading(false);
-      setSampleList(data);
+
+      // setSampleList(data);
       assignRowHtml(data);
+      setLoading(false);
       resolve(data);
     });
 
