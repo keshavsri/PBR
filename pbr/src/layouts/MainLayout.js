@@ -56,11 +56,6 @@ const pageData = [
       ),
     },
     {
-      path: "/generate-reports",
-      title: "Generate Reports",
-      icon: <ReportsIcon />,
-    },
-    {
       path: "/healthy-ranges",
       title: "Healthy Ranges",
       icon: <HealthyRangesIcon />
@@ -197,6 +192,7 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MainLayout(props) {
+  const { title, icon } = props
   const theme = useTheme();
   useStyles();
   const location = useLocation();
@@ -251,7 +247,7 @@ export default function MainLayout(props) {
           >
             <MenuIcon />
           </IconButton>
-          {currentPage.icon}
+          {icon}
           <Typography
             variant="h5"
             noWrap
@@ -263,7 +259,7 @@ export default function MainLayout(props) {
               flexGrow: 1,
             }}
           >
-            {currentPage.title}
+            {title}
           </Typography>
         </Toolbar>
       </AppBar>
