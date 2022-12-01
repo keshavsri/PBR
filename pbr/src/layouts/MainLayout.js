@@ -56,11 +56,6 @@ const pageData = [
       ),
     },
     {
-      path: "/generate-reports",
-      title: "Generate Reports",
-      icon: <ReportsIcon />,
-    },
-    {
       path: "/healthy-ranges",
       title: "Healthy Ranges",
       icon: <HealthyRangesIcon />
@@ -197,12 +192,12 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MainLayout(props) {
+  const { title, icon } = props
   const theme = useTheme();
   useStyles();
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
-  const [currentPage, setCurrentPage] = React.useState(pageData[0][0]);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { user, logout, recredentialize, setRecredentialize } = AuthConsumer();
 
@@ -228,12 +223,6 @@ export default function MainLayout(props) {
     setAnchorElUser(null);
   };
 
-  // console.log(location.pathname);
-  // let page = pageData.find((page) => page.path === location.pathname);
-  // console.log(page);
-  // setCurrentPage(page);
-  // console.log(currentPage);
-
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -251,7 +240,7 @@ export default function MainLayout(props) {
           >
             <MenuIcon />
           </IconButton>
-          {currentPage.icon}
+          {icon}
           <Typography
             variant="h5"
             noWrap
@@ -263,7 +252,7 @@ export default function MainLayout(props) {
               flexGrow: 1,
             }}
           >
-            {currentPage.title}
+            {title}
           </Typography>
         </Toolbar>
       </AppBar>
