@@ -23,21 +23,20 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import SettingsIcon from "@mui/icons-material/Settings";
 
 function RequireAuth({ children }) {
-  const { user, recredentialize } = useAuth();
-  const location = useLocation();
-  console.log("requireauth");
-  return user || recredentialize ? (
-    children
-  ) : (
-    <Navigate to="/login" replace state={{ path: location.pathname }} />
-  );
+  const { user, recredentialize, logout } = useAuth();
+  if (!user || recredentialize) {
+    logout()
+    return (<Navigate to="/login" replace/>)
+  }
+  else {
+    return (children)
+  }
 }
 
 function NonAuth({ children }) {
-  const { user } = useAuth();
+  const { user, recredentialize } = useAuth();
   const location = useLocation();
-  console.log("nonauth");
-  return user ? (
+  return user && !recredentialize ? (
     <Navigate to="/data-view" replace state={{ path: location.pathname }} />
   ) : (
     children
