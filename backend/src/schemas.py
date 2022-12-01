@@ -144,6 +144,7 @@ class Sample(PydanticModel):
     flock_age_unit: Optional[AgeUnits]
     flock: Optional[Flock]
     comments: Optional[str]
+    rotor_lot_number: Optional[str]
     measurements: Optional[List[Measurement]]
     validation_status: Optional[ValidationTypes]
     sample_type: Optional[SampleTypes]

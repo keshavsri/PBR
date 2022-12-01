@@ -81,6 +81,8 @@ export default function DataViewSampleModal(props) {
   const [sources, setSources] = React.useState([]);
   const [cartridgeTypes, setCartridgeTypes] = React.useState([]);
   const [cartridgeType, setCartridgeType] = React.useState({});
+  const [machines, setMachines] = React.useState([]);
+  const [machine, setMachine] = React.useState({});
   const [flock, setFlock] = React.useState({});
   const [flockInput, setFlockInput] = React.useState("");
   const [source, setSource] = React.useState({});
@@ -94,7 +96,41 @@ export default function DataViewSampleModal(props) {
     sample_type: null,
     batch_id: null,
     measurements: [],
+    rotor_lot_number : ""
   });
+
+  React.useEffect(async () => {
+    if (sampleModalVisibility) {
+      if (user.role === roles["Super_Admin"]) {
+        await getOrganizations();
+      } else {
+        setOrganization({ id: user.organization_id });
+      }
+
+      await getCartridgeTypes();
+    }
+  }, [sampleModalVisibility]);
+
+  React.useEffect(async () => {
+    if (sampleModalVisibility) {
+      await getSources();
+      await getMachines();
+    }
+  }, [organization]);
+
+
+
+  React.useEffect(async () => {
+    if (sampleModalVisibility) {
+      await getFlocks();
+    }
+  }, [source]);
+
+  React.useEffect(async () => {
+    await handleAnalytes();
+    await sampleMeasurements();
+  }, [cartridgeType]);
+
 
   const getOrganizations = async () => {
     const response = await fetch(`/api/organization/`, {
@@ -142,41 +178,54 @@ export default function DataViewSampleModal(props) {
   };
 
   const sampleMeasurements = () => {
+    const {measurements} = SampleDetails;
+    const {analytes} = cartridgeType;
     return (
       <>
         <Grid item xs={12}>
           <br></br>
-
           <Typography gutterBottom variant="button">
             Sample Measurements
           </Typography>
         </Grid>
         <Box>
-          {cartridgeType.analytes &&
-          SampleDetails.measurements &&
-          SampleDetails.measurements.length > 0 &&
-          cartridgeType.analytes.map((a, index) => {
+          {analytes &&
+          analytes.length > 0 &&
+          measurements &&
+          measurements.length > 0 &&
+          analytes.map((a, index) => {
+            const measurement = measurements.find((meas) => meas.analyte_id === a.id);
             return (
-              <>
-                <TextField
-                  label={a.abbreviation}
-                  style={{ margin: 4 }}
-                  value={SampleDetails.measurements[index].value}
-                  onChange={(e) => {
-                    const measurements = SampleDetails.measurements;
-                    measurements[index].value = e.target.value;
-                    setSampleDetails((prevState) => {
-                      return { ...prevState, measurements: measurements };
-                    });
-                  }}
-                />
-              </>
+              renderMeasurement(measurement, a)
             );
+
           })}
         </Box>
       </>
     );
-  };
+  }
+
+  const renderMeasurement = (measurement, analyte) => {
+    if (measurement && analyte  ) {
+      return (
+        <>
+          <TextField
+            label={analyte.abbreviation}
+            style={{ margin: 4 }}
+            value={measurement.value}
+            onChange={(e) => {
+              const measurements = SampleDetails.measurements;
+              const measurement = measurements.find((meas) => meas.analyte_id === analyte.id);
+              measurement.value = e.target.value;
+              setSampleDetails((prevState) => {
+                return { ...prevState, measurements: measurements };
+              });
+            }}
+          />
+        </>
+      );
+    }
+  }
 
   const getSources = async () => {
     await fetch(`/api/source/organization/${organization.id}`, {
@@ -203,9 +252,8 @@ export default function DataViewSampleModal(props) {
         setCartridgeType(data[0]);
         const measurements = data[0].analytes.map((analyte) => ({
           analyte_id: analyte.id,
-          value: null,
+          value: '',
         }));
-        console.log(measurements);
         setSampleDetails((prevState) => {
           return {
             ...prevState,
@@ -215,29 +263,21 @@ export default function DataViewSampleModal(props) {
       });
   };
 
-  React.useEffect(async () => {
-    if (sampleModalVisibility) {
-      if (user.role === roles["Super_Admin"]) {
-        await getOrganizations();
-      } else {
-        setOrganization({ id: user.organization_id });
-      }
+  const getMachines = async () => {
+    await fetch(`/api/machine/organization/${organization.id}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then(checkResponseAuth)
+    .then((data) => {
+      setMachines(data);
+      setMachine(data[0]);
+    });
+  };
 
-      await getCartridgeTypes();
-    }
-  }, [sampleModalVisibility]);
 
-  React.useEffect(async () => {
-    if (sampleModalVisibility) {
-      await getSources();
-    }
-  }, [organization]);
 
-  React.useEffect(async () => {
-    if (sampleModalVisibility) {
-      await getFlocks();
-    }
-  }, [source]);
+
 
   function handleFlockInputChange(event, value) {
     setFlockInput(value);
@@ -266,6 +306,14 @@ export default function DataViewSampleModal(props) {
   };
 
   let onSubmit = async () => {
+    const newSampleDetails = SampleDetails;
+    const measurements = newSampleDetails.measurements;
+    measurements.forEach(meas => {
+      if (meas.value === '') {
+        meas.value = null;
+      }
+    })
+
     let payload = {
       comments: SampleDetails.comments,
       flock_age: SampleDetails.flock_age,
@@ -274,10 +322,12 @@ export default function DataViewSampleModal(props) {
       batch_id: SampleDetails.batch_id,
       flock_id: flock.id,
       cartridge_type_id: cartridgeType.id,
-      machine_id: SampleDetails.machine_id,
-      measurements: SampleDetails.measurements,
+      rotor_lot_number: SampleDetails.rotor_lot_number,
+      machine_id: machine.id,
+      measurements: measurements,
       organization_id: organization.id,
     };
+
     console.log("Submitting!", payload);
     setSampleLoading(true);
     await fetch(`/api/sample/`, {
@@ -305,24 +355,17 @@ export default function DataViewSampleModal(props) {
       });
   };
 
-  const handleAnalytes = (e) => {
+  const handleAnalytes = () => {
     console.log("changing analytes");
-    console.log(e.target.value.analytes);
-
-    const measurements = e.target.value.analytes.map((analyte) => ({
+    const {analytes} = cartridgeType;
+    const measurements = analytes.map((analyte) => ({
       analyte_id: analyte.id,
-      value: null,
+      value: "",
     }));
-
-    setSampleDetails((prevState) => {
-      console.log("setting new analytes");
-      return {
-        ...prevState,
-        measurements: measurements,
-      };
+    setSampleDetails({
+      ...SampleDetails,
+      measurements: measurements
     });
-
-    console.log("new measurements", SampleDetails.measurements);
   };
 
   return (
@@ -364,8 +407,6 @@ export default function DataViewSampleModal(props) {
                       label="Cartridge Type"
                       onChange={(e) => {
                         setCartridgeType(e.target.value);
-                        console.log("cartridge type", e.target.value);
-                        handleAnalytes(e);
                       }}
                     >
                       {cartridgeTypes.map((ct) => {
@@ -479,6 +520,38 @@ export default function DataViewSampleModal(props) {
               </Grid>
             </Box>
 
+            <></>
+            <br />
+
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={8}>
+                  <TextField
+                    label="Rotor Lot Number"
+                    value={SampleDetails.rotor_lot_number}
+                    onChange={handleSampleDetailsChange("rotor_lot_number")}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <FormControl sx={{ width: "100%" }} required>
+                    <InputLabel>Machine</InputLabel>
+                    <Select
+                      value={machine}
+                      label="Machine"
+                      onChange={(e) => setMachine(e.target.value)}
+                    >
+                      {machines.filter((m) => m.machine_type_id === cartridgeType.machine_type_id).map((m, index) => {
+                        return (
+                          <MenuItem value={m} key={index}>
+                            {m.serial_number}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </Box>
             <Grid>{sampleMeasurements()}</Grid>
             <br></br>
             <Grid className={classes.container}>
