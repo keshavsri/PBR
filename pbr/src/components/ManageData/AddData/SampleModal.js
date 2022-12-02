@@ -340,17 +340,17 @@ export default function DataViewSampleModal(props) {
     setCartridgeType(cartridgeTypes[0]);
   };
 
-  if (sampleModalVisibility) {
-    document.onclick = function (event) {
-      if (event === undefined) event = window.event;
-      if (validateSample()) {
-        onSampleChange();
-        setErrorSubmission(false);
-      } else {
-        setErrorSubmission(true);
-      }
-    };
-  }
+  // if (sampleModalVisibility) {
+  //   document.onclick = function (event) {
+  //     if (event === undefined) event = window.event;
+  //     if (validateSample()) {
+  //       onSampleChange();
+  //       setErrorSubmission(false);
+  //     } else {
+  //       setErrorSubmission(true);
+  //     }
+  //   };
+  // }
 
   const onSampleChange = async () => {
     console.log("on sample change");

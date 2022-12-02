@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import useAuth from "../../../services/useAuth";
 import { sampleTypes, ageUnits } from "../../../models/enums";
@@ -21,6 +22,7 @@ import {
   Modal,
   ListItemText,
   ListItem,
+  CardActionArea,
 } from "@mui/material";
 
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -72,6 +74,7 @@ export default function EditSampleModal(props) {
   const classes = useStyles();
 
   const [loading, setLoading] = React.useState(false);
+  const [cancelSampleEdit, setCancelSampleEdit] = React.useState(false);
 
   const { checkResponseAuth, user } = useAuth();
 
@@ -118,6 +121,36 @@ export default function EditSampleModal(props) {
     return values;
   };
 
+  const restoreSample = async () => {
+    let payload = {
+      comments: lastSavedSample.comments,
+      flock_age: lastSavedSample.flock_age,
+      flock_age_unit: lastSavedSample.flock_age_unit,
+      sample_type: lastSavedSample.sample_type,
+      // measurements: lastSavedSample.measurements,
+    };
+
+    console.log("the last saved save sample is", lastSavedSample);
+    console.log("resotring sample", payload);
+
+    await fetch(`/api/sample/${SampleToEdit.id}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        if (!response.ok) {
+          setErrorSubmission(true);
+        } else {
+          return response.json();
+        }
+      });
+    return true;
+  };
+
   const editSample = async () => {
     setLoading(true);
     let newMeasurements = passMesearments();
@@ -154,15 +187,20 @@ export default function EditSampleModal(props) {
           return response.json();
         }
       });
+
+    return true;
   };
 
-  const closeEditModal = () => {
-    editSample();
-    setEditSampleModalVisibility(false);
-    setSelected([]);
-    setErrorSubmissionMessages([]);
-    setErrorSubmission(false);
-    getData();
+  const closeEditModal = async () => {
+    const result = await editSample();
+
+    if (result) {
+      setSelected([]);
+      setErrorSubmissionMessages([]);
+      setErrorSubmission(false);
+      getData();
+      setEditSampleModalVisibility(false);
+    }
   };
 
   const handleSampleDetailsChange = (prop) => (event) => {
@@ -212,17 +250,20 @@ export default function EditSampleModal(props) {
     );
   };
 
-  if (editSampleModalVisiblity) {
-    document.onclick = function (event) {
-      if (event === undefined) event = window.event;
-      if (validateSample()) {
-        editSample();
-        setErrorSubmission(false);
-      } else {
-        setErrorSubmission(true);
-      }
-    };
-  }
+  // if (editSampleModalVisiblity && !cancelSampleEdit) {
+  //   document.onclick = function (event) {
+  //     console.log("CancelSampleEdit", cancelSampleEdit);
+  //     if (event === undefined) event = window.event;
+  //     if (validateSample() ) {
+
+  //       console.log(" window clicked");
+  //       editSample();
+  //       setErrorSubmission(false);
+  //     } else {
+  //       setErrorSubmission(true);
+  //     }
+  //   };
+  // }
 
   const getFlocks = async () => {
     await fetch(`/api/flock/source/${source.id}`, {
@@ -287,7 +328,6 @@ export default function EditSampleModal(props) {
 
   const validateSample = () => {
     console.log("validating sample");
-    console.log(SampleDetails);
     let errors = [];
     let valid = true;
     setErrorSubmission(false);
@@ -611,6 +651,47 @@ export default function EditSampleModal(props) {
         </Grid>
 
         <br />
+      </>
+    );
+  };
+
+  return (
+    <Modal
+      open={editSampleModalVisiblity}
+      onClose={closeEditModal}
+      aria-labelledby="Edit Sample Modal"
+      aria-describedby="Modal Used to Edit a Sample"
+    >
+      <div style={modalStyle} className={classes.paper}>
+        <Card>
+          <CardActionArea
+            onClick={() => {
+              console.log("clicked");
+              editSample();
+            }}
+            disableRipple
+            classes={{
+              root: classes.actionArea,
+              focusHighlight: classes.focusHighlight,
+            }}
+            style={{
+              cursor: "default",
+              backgroundColor: "white",
+            }}
+          >
+            <Grid container spacing={2} sx={{ padding: "15px" }}>
+              <Grid item xs={12} sm={12}>
+                <Typography gutterBottom variant="h4">
+                  Edit Sample
+                </Typography>
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                {selectedSample()}
+              </Grid>
+            </Grid>
+          </CardActionArea>
+        </Card>
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2} columns={16}>
@@ -619,8 +700,14 @@ export default function EditSampleModal(props) {
                 variant="contained"
                 color="secondary"
                 style={{ width: 200 }}
-                onClick={() => {
-                  setEditSampleModalVisibility(false);
+                onClick={async () => {
+                  console.log("cancel pressed");
+                  setCancelSampleEdit(true);
+                  let reuslt = await restoreSample();
+                  if (reuslt) {
+                    setEditSampleModalVisibility(false);
+                    getData();
+                  }
                 }}
               >
                 Cancel
@@ -667,32 +754,6 @@ export default function EditSampleModal(props) {
             </Grid>
           </Grid>
         </Box>
-      </>
-    );
-  };
-
-  return (
-    <Modal
-      open={editSampleModalVisiblity}
-      onClose={closeEditModal}
-      aria-labelledby="Edit Sample Modal"
-      aria-describedby="Modal Used to Edit a Sample"
-      //ref={myRef}
-    >
-      <div style={modalStyle} className={classes.paper}>
-        <Card>
-          <Grid container spacing={2} sx={{ padding: "15px" }}>
-            <Grid item xs={12} sm={12}>
-              <Typography gutterBottom variant="h4">
-                Edit Sample
-              </Typography>
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              {selectedSample()}
-            </Grid>
-          </Grid>
-        </Card>
 
         <Box sx={{ flexGrow: 1 }} style={{ padding: "15px" }}>
           {errorSubmission ? (
@@ -707,13 +768,6 @@ export default function EditSampleModal(props) {
                 <ErrorIcon />
                 <ListItemText primary="   Fix Error before saving Sample" />
               </ListItem>
-
-              {/* {errorSubmissionMessages.map((message) => (
-                <ListItem>
-                  <ErrorIcon />
-                  <ListItemText primary={message} />
-                </ListItem>
-              ))} */}
             </Typography>
           ) : null}
         </Box>
