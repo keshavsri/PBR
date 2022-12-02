@@ -341,30 +341,23 @@ export default function DataViewSampleModal(props) {
     setCartridgeType(cartridgeTypes[0]);
   };
 
-  const passMesearments = () => {
-    let values = [];
-    SampleDetails.measurements.forEach((measurement) => {
-      values.push({
-        analyte_id: measurement.analyte.id,
-        value: measurement.value,
-      });
-    });
-
-    return values;
-  };
 
   if (sampleModalVisibility) {
     document.onclick = function (event) {
       if (event === undefined) event = window.event;
-
-      onSampleChange();
+      if (validateSample()) {
+        onSampleChange();
+        setErrorSubmission(false);
+      }
+      else {
+        setErrorSubmission(true);
+      }
     };
   }
 
   const onSampleChange = async () => {
     console.log("on sample change");
     setLoading(true);
-
     console.log(SampleDetails);
     console.log("updated measurements");
 
@@ -470,8 +463,8 @@ export default function DataViewSampleModal(props) {
             description: `There was an error while deleting the sample. Try again.`,
           });
         } else {
-          
           resetSampleDetails();
+
           getData();
         }
       });
@@ -794,6 +787,7 @@ export default function DataViewSampleModal(props) {
                       onClick={() => {
                         if (validateSample()) {
                           onSampleChange();
+                          closeModal();
                         } else {
                           setErrorSubmission(true);
                         }
