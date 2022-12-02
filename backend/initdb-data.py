@@ -1,6 +1,7 @@
 from src.models import User, Organization, Source, Flock, Sample, Measurement, Analyte, CartridgeType, db
-from src.enums import AgeUnits, ValidationTypes, SampleTypes
+from src.enums import AgeUnits, ValidationTypes, SampleTypes, States
 from src import app
+from datetime import datetime, timedelta
 import pandas as pd
 import math
 
@@ -10,44 +11,79 @@ def determine_sample_type(val):
 
 
 def capitalize(val):
-    return val.capitalize()
+    return val.title()
 
 
-def determine_flock_age_unit(val):
-    if val == "D":
+def determine_flock_age_unit(age_unit):
+    if age_unit == "D":
         return AgeUnits.Days
-    elif val == "W":
+    elif age_unit == "W":
         return AgeUnits.Weeks
-    elif val == "M":
+    elif age_unit == "M":
         return AgeUnits.Months
-    elif val == "Y":
+    elif age_unit == "Y":
         return AgeUnits.Years
+
+
+def determine_age_in_days(age_val, age_unit):
+    if age_unit == "D":
+        return age_val
+    elif age_unit == "W":
+        return age_val * 7
+    elif age_unit == "M":
+        return age_val * 30
+    elif age_unit == "Y":
+        return age_val * 365
 
 
 def insert_records(df, abbrvs, cartridge_type_id, machine_type_id):
     for row in df.itertuples():
-        user = User.query.get(1)
-        organization = Organization.query.get(1)
 
-        source = Source.query.filter_by(name=row.source).first()
+        source_zip = None
+        if not math.isnan(getattr(row, 'zip')):
+            source_zip = row.zip
+
+        source_name = ""
+        if row.source_name is None:
+            source_name = row.source
+        else:
+            source_name = row.source_name
+
+        source = Source.query.filter_by(name=source_name).first()
         if source is None:
             source = Source(
-                name = row.source,
-                organization_id = organization.id
+                name = source_name,
+                street_address = row.street_address,
+                city = row.city,
+                state = row.state.replace(" ", ""),
+                zip = source_zip,
+                organization_id = 1
             )
-        db.session.add(source)
-        db.session.commit()
-        db.session.refresh(source)
+            db.session.add(source)
+            db.session.commit()
+            db.session.refresh(source)
 
-        flock = Flock(
-            species = row.species,
-            gender = row.gender,
-            production_type = row.production_type,
-            source_id = source.id
-        )
-        db.session.add(flock)
-        db.session.commit()
-        db.session.refresh(flock)
+        flock_name = ""
+        if row.flock_name is None:
+            flock_name = row.gender + row.species + row.strain + row.production_type
+            flock_name = flock_name.replace(" ", "")
+        else:
+            flock_name = row.flock_name
+
+        flock = Flock.query.filter_by(name=flock_name).first()
+        if flock is None:
+            flock = Flock(
+                name = flock_name,
+                species = row.species,
+                strain = row.strain,
+                gender = row.gender,
+                production_type = row.production_type,
+                birthday = datetime.strptime(row.date_tested, "%d-%b-%y") - timedelta(days=determine_age_in_days(row.age, row.age_unit)),
+                source_id = source.id
+            )
+            db.session.add(flock)
+            db.session.commit()
+            db.session.refresh(flock)
 
         sample = Sample(
             comments = row.comments,
@@ -55,7 +91,7 @@ def insert_records(df, abbrvs, cartridge_type_id, machine_type_id):
             flock_age_unit = determine_flock_age_unit(row.age_unit),
             validation_status = ValidationTypes.Accepted,
             sample_type = row.sample_type,
-            user_id = user.id,
+            user_id = 1,
             flock_id = flock.id,
             cartridge_type_id = cartridge_type_id
         )
@@ -84,23 +120,24 @@ bird_df = pd.read_csv("initdb_bird.csv", engine="python")
 istat_df = pd.read_csv("initdb_istat.csv", engine="python")
 vetscan_df = pd.read_csv("initdb_vetscan.csv", engine="python")
 
-
 # Wrangling I
 bird_df["gender"] = bird_df.gender.apply(capitalize)
+bird_df["strain"] = bird_df.strain.apply(capitalize)
 bird_df["species"] = bird_df.species.apply(capitalize)
 bird_df["age_unit"] = bird_df.age_unit.apply(capitalize)
 bird_df["production_type"] = bird_df.production_type.apply(capitalize)
 bird_df["sample_type"] = bird_df.healthy.apply(determine_sample_type)
 
-bird_df = bird_df.drop(columns=["strain"])
+bird_df = bird_df[bird_df['age'].notna()]
 bird_df = bird_df.drop(columns=["healthy"])
-bird_df = bird_df.drop(columns=["date_tested"])
 istat_df = istat_df.drop(columns=["ID"])
 vetscan_df = vetscan_df.drop(columns=["ID"])
 
-bird_df = bird_df.replace("Not reported", "Unknown")
-bird_df = bird_df.replace("Broiler breeder", "Broiler")
-bird_df = bird_df.replace("Byp, layer", "BYP")
+bird_df = bird_df.replace("Not Reported", "Unknown")
+bird_df = bird_df.replace("Not Recorded", "Unknown")
+bird_df = bird_df.replace("Select Genetis", "Select Genetics")
+bird_df = bird_df.replace("Broiler Breeder", "Broiler")
+bird_df = bird_df.replace("Byp, Layer", "BYP")
 bird_df = bird_df.rename(columns={"bird_ID" : "flock_ID"})
 istat_df = istat_df.rename(columns={"bird_ID" : "flock_ID"})
 vetscan_df = vetscan_df.rename(columns={"bird_ID" : "flock_ID"})

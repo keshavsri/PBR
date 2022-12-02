@@ -106,7 +106,7 @@ class Source(db.Model):
     name: str = db.Column(db.String(120))
     street_address: str = db.Column(db.String(120), nullable=True)
     city: str = db.Column(db.String(120), nullable=True)
-    state: States = db.Column(db.Enum(States), nullable=True)
+    state: States = db.Column(db.Enum(States))
     zip: int = db.Column(db.Integer, nullable=True)
     is_deleted: bool = db.Column(db.Boolean, server_default="0")
 
@@ -133,12 +133,12 @@ class Flock(db.Model):
 
     __tablename__ = 'flock_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name: str = db.Column(db.String(255), unique=True, nullable=True)
-    strain: str = db.Column(db.String(120), nullable=True)
+    name: str = db.Column(db.String(255), unique=True)
+    strain: str = db.Column(db.String(120))
     species: Species = db.Column(db.Enum(Species))
     gender: BirdGenders = db.Column(db.Enum(BirdGenders))
     production_type: ProductionTypes = db.Column(db.Enum(ProductionTypes))
-    birthday = db.Column(db.DateTime, nullable=True)
+    birthday = db.Column(db.DateTime)
     is_deleted: bool = db.Column(db.Boolean, server_default="0")
 
     # References to Foreign Objects
