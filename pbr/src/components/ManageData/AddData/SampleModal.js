@@ -325,6 +325,11 @@ export default function DataViewSampleModal(props) {
     console.log("new measurements", SampleDetails.measurements);
   };
 
+  const closeAddSampleModal = () => {
+    resetSampleDetails();
+    closeSampleModal();
+  };
+
   return (
     <>
       <Modal
@@ -332,7 +337,7 @@ export default function DataViewSampleModal(props) {
         icon={<SampleIcon />}
         title="Sample"
         subtitle="Add"
-        onClose={closeSampleModal}
+        onClose={closeAddSampleModal}
       >
         <div style={modalStyle} className={classes.paper}>
           <Card
@@ -536,8 +541,7 @@ export default function DataViewSampleModal(props) {
                     color="secondary"
                     style={{ width: 200 }}
                     onClick={() => {
-                      closeSampleModal();
-                      resetSampleDetails();
+                      closeAddSampleModal();
                     }}
                   >
                     Cancel
