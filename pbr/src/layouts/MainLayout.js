@@ -386,13 +386,6 @@ export default function MainLayout(props) {
       >
         <DrawerHeader />
         <Box sx={{ width: "100%", backgroundColor: "grey" }}>
-          <CustomDialog
-            open={recredentialize}
-            handleClose={() => {}}
-            maxWidth="sm"
-          >
-            <LoginCard />
-          </CustomDialog>
           <Box>{props.children}</Box>
         </Box>
       </Box>

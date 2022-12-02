@@ -80,10 +80,10 @@ export default function HealthyRanges() {
         "Content-Type": "application/json",
       },
       })
+      .then(checkResponseAuth)
       .then((response) => {
         return response.json();
       })
-      .then(checkResponseAuth)
   }
 
 
@@ -94,10 +94,10 @@ export default function HealthyRanges() {
         "Content-Type": "application/json",
       },
       })
+      .then(checkResponseAuth)
       .then((response) => {
         return response.json();
       })
-      .then(checkResponseAuth)
       .then((data) => {
         setSpeciesEnum(data);
       });
@@ -110,10 +110,10 @@ export default function HealthyRanges() {
         "Content-Type": "application/json",
       },
       })
+      .then(checkResponseAuth)
       .then((response) => {
         return response.json();
       })
-      .then(checkResponseAuth)
       .then((data) => {
         delete data.Mixed
         delete data.Unknown
@@ -130,10 +130,10 @@ export default function HealthyRanges() {
         "Content-Type": "application/json",
       },
       })
+      .then(checkResponseAuth)
       .then((response) => {
         return response.json();
       })
-      .then(checkResponseAuth)
       .then((data) => {
         setAgeGroupEnum(data);
       });
@@ -146,10 +146,10 @@ export default function HealthyRanges() {
         "Content-Type": "application/json",
       },
       })
+      .then(checkResponseAuth)
       .then((response) => {
         return response.json();
       })
-      .then(checkResponseAuth)
       .then((data) => {
         setMethodEnum(data);
       });
@@ -162,10 +162,10 @@ export default function HealthyRanges() {
         "Content-Type": "application/json",
       },
       })
+      .then(checkResponseAuth)
       .then((response) => {
         return response.json();
       })
-      .then(checkResponseAuth)
       .then((data) => {
         setRoleEnum(data);
       });
@@ -178,10 +178,10 @@ export default function HealthyRanges() {
         "Content-Type": "application/json",
       },
       })
+      .then(checkResponseAuth)
       .then((response) => {
         return response.json();
       })
-      .then(checkResponseAuth)
       .then((data) => {
         setCartridgeTypeList(data);
       });
@@ -195,10 +195,10 @@ export default function HealthyRanges() {
         "Content-Type": "application/json",
       },
       })
+      .then(checkResponseAuth)
       .then((response) => {
         return response.json();
       })
-      .then(checkResponseAuth)
       .then((data) => {
         setHealthyRanges(data);
         setNoHealthyRanges(data.length === 0);
