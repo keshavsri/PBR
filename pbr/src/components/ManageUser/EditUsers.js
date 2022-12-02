@@ -128,6 +128,7 @@ export default function EditUsers(props) {
       aria-describedby="Modal used for editing an existing user's information"
       open={openEditUsersModal}
       onClose={() => {
+        setUserDetails(user);
         setOpenEditUsersModal(false);
       }}
     >
@@ -221,6 +222,7 @@ export default function EditUsers(props) {
           <Grid item xs={12} sm={2}>
             <Button
               onClick={() => {
+                setUserDetails(user);
                 setOpenEditUsersModal(false);
               }}
             >
