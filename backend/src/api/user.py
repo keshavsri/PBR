@@ -7,7 +7,7 @@ from functools import wraps
 from src import models, schemas
 from src.enums import Roles, LogActions
 from src.helpers import log
-
+from src.models import db, engine
 
 userBlueprint = Blueprint('user', __name__)
 
@@ -173,10 +173,10 @@ def register():
         models.db.session.rollback()
         return jsonify({"message": "Invalid Request!"}), 400
 
-    if models.User.query.filter_by(email=data["email"]).first():
+    if models.User.query.filter_by(email=data["email"], is_deleted = False).first():
         print("USER ALREADY EXISTS.")
         models.db.session.rollback()
-        return jsonify({"message": "User Already Exists with this Email"}), 422
+        return jsonify({"message": "User Already Exists with this Email"}), 409
 
     user_org = models.Organization.query.filter_by(
         organization_code=data["orgCode"]).first()
@@ -318,28 +318,33 @@ def update_user(access_allowed, current_user, user_id):
               if current_user.role >= existing_user.role or current_user.role == Roles.Data_Collector:
                 return jsonify({'message': 'Role not allowed'}), 403
 
-            # These fields cannot be edited
-            # Should maybe allow password change on self edit
-            edited_user.update(
-                {
-                    'id': existing_user.id,
-                    'password': existing_user.password,
-                    'organization_id': existing_user.organization_id,
-                    'is_deleted': existing_user.is_deleted
-                }
-            )
+            if models.User.query.filter_by(email=request.json.get('email'), is_deleted = False).first() is None:
+                # These fields cannot be edited
+                # Should maybe allow password change on self edit
+                edited_user.update(
+                    {
+                        'id': existing_user.id,
+                        'password': existing_user.password,
+                        'organization_id': existing_user.organization_id,
+                        'is_deleted': existing_user.is_deleted
+                    }
+                )
 
-            # SQLAlchemy update and log action
-            models.User.query.filter_by(
-                id=edited_user.get("id")).update(edited_user)
-            models.db.session.commit()
-            log.create_log(current_user, LogActions.EDIT_USER,'Edited user: ' + str(edited_user.get("id")))
+                # SQLAlchemy update and log action
+                models.User.query.filter_by(
+                    id=edited_user.get("id")).update(edited_user)
+                models.db.session.commit()
+                
 
-            # Return updated user object, retreived via db query (confirmation)
-            updated_user = schemas.User.from_orm(
-                models.User.query.filter_by(id=edited_user.get("id")).first()
-            ).dict()
-            return jsonify(updated_user), 200
+                log.create_log(current_user, LogActions.EDIT_USER,'Edited user: ' + str(edited_user.get("id")))
+
+                # Return updated user object, retreived via db query (confirmation)
+                updated_user = schemas.User.from_orm(
+                    models.User.query.filter_by(id=edited_user.get("id")).first()
+                ).dict()
+                return jsonify(updated_user), 200
+            else:
+                return jsonify({'message': 'User with same email already exists', "existing user": schemas.User.from_orm(models.User.query.filter_by(email=request.json.get('email')).first()).dict()}), 409
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 

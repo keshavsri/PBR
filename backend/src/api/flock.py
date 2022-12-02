@@ -108,7 +108,7 @@ def post_flock(access_allowed, current_user):
     """
     if access_allowed:
         # checks if the Flock already exists in the database
-        if FlockORM.query.filter_by(name=request.json.get('name')).first() is None:
+        if FlockORM.query.filter_by(name=request.json.get('name'), is_deleted = False).first() is None:
             # builds the Flock from the request json
             flock: FlockORM = FlockORM()
             for name, value in Flock.parse_obj(request.json):
@@ -120,7 +120,7 @@ def post_flock(access_allowed, current_user):
             return jsonify(Flock.from_orm(flock).dict()), 201
         # if the Flock already exists then return a 409 conflict
         else:
-            return jsonify({'message': 'Flock already exists', "existing organization": Flock.from_orm(FlockORM.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
+            return jsonify({'message': 'Flock with this name already exists', "existing flock name": Flock.from_orm(FlockORM.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
     else:
         return jsonify({'message': 'Role not allowed'}), 403
     
@@ -144,11 +144,16 @@ def put_flock(access_allowed, current_user, item_id):
         flock_model = FlockORM.query.get(item_id)
         if flock_model is None:
             return jsonify({'message': 'Flock does not exist'}), 404
-        FlockORM.query.filter_by(id=item_id).update(request.json)
-        db.session.commit()
-        edited_flock = FlockORM.query.get(item_id)
-        create_log(current_user, LogActions.EDIT_FLOCK, 'Edited Flock: ' + edited_flock.name)
-        return jsonify(Flock.from_orm(edited_flock).dict()), 200
+
+        if FlockORM.query.filter_by(name=request.json.get('name'), is_deleted = False).first() is None:
+            FlockORM.query.filter_by(id=item_id).update(request.json)
+            db.session.commit()
+            edited_flock = FlockORM.query.get(item_id)
+            create_log(current_user, LogActions.EDIT_FLOCK, 'Edited Flock: ' + edited_flock.name)
+            return jsonify(Flock.from_orm(edited_flock).dict()), 200
+        else:
+            return jsonify({'message': 'Flock with this name already exists', "existing flock name": Flock.from_orm(FlockORM.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
+
     else:
         return jsonify({'message': 'Role not allowed'}), 403
     

@@ -80,7 +80,7 @@ def create_machine(access_allowed, current_user):
     """
 
     if access_allowed:
-        if models.Machine.query.filter_by(serial_number=request.json.get('serial_number')).first() is None:
+        if models.Machine.query.filter_by(serial_number=request.json.get('serial_number'), is_deleted = False).first() is None:
             new_machine: models.Machine = models.Machine()
             for name, value in request.json.items():
                 setattr(new_machine, name, value)
@@ -96,7 +96,7 @@ def create_machine(access_allowed, current_user):
             return jsonify(
                 {
                     'message': 'Machine already exists',
-                    "existing machine": schemas.Machine.from_orm(
+                    "existing machine serial number": schemas.Machine.from_orm(
                         models.Machine.query.filter_by(
                             serial_number=request.json.get(
                                 'serial_number')
@@ -131,11 +131,11 @@ def edit_machine(access_allowed, current_user, item_id):
             return jsonify({'message': 'Machine does not exist'}), 404
         elif (
             existing_machine_by_serial_number is not None and
+            existing_machine_by_serial_number.is_deleted != False and
             existing_machine_by_serial_number.id is not item_id
         ):
             return jsonify({'message': 'Serial number must be unique'}), 400
         else:
-            models.Machine.query.filter_by(serial_number=request.json)
             models.Machine.query.filter_by(id=item_id).update(request.json)
             models.db.session.commit()
             edited_machine = models.Machine.query.get(item_id)
