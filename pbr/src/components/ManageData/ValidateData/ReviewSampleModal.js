@@ -49,10 +49,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ReviewSampleModal({
   openReviewSampleModal,
   setOpenReviewSampleModal,
-  pendingSamples,
-  setPendingSamples,
-  // setModifiedSamples,
-  // modifiedSamples,
+  selectedSamples,
   acceptSample,
   rejectSample,
   turnPendingFilterOff,
@@ -61,15 +58,20 @@ export default function ReviewSampleModal({
   const [modalStyle] = React.useState(getModalStyle);
   useTheme();
   const [expanded, setExpanded] = React.useState(false);
+  const [editedSamples, setEditedSamples] = React.useState(selectedSamples);
   const { checkResponseAuth, user } = useAuth();
+
+  React.useEffect(() => {
+    setEditedSamples(selectedSamples);
+  }, [selectedSamples])
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
   const removeFromPending = (sample) => {
-    let newSelected = pendingSamples.filter((s) => s !== sample);
-    setPendingSamples(newSelected);
+    let newSelected = editedSamples.filter((s) => s !== sample);
+    setEditedSamples(newSelected);
     if (newSelected.length === 0) {
       setOpenReviewSampleModal(false);
     }
@@ -86,7 +88,7 @@ export default function ReviewSampleModal({
   const editSample = async (sample) => {
 
     let payload = {
-      comments: pendingSamples.find((s) => s.id === sample.id).comments,
+      comments: editedSamples.find((s) => s.id === sample.id).comments,
     };
 
 
@@ -107,13 +109,18 @@ export default function ReviewSampleModal({
   };
 
   const handleSampleDetailsChange = (prop) => (event) => {
-    let newModifiedSamples = pendingSamples.map((sample) => {
+
+    // Shallow copy
+    const newModifiedSamples = JSON.parse(JSON.stringify(editedSamples));
+
+    newModifiedSamples.map((sample) => {
       if (sample.id === expanded) {
         sample.comments = event.target.value;
       }
       return sample;
     });
-    setPendingSamples(newModifiedSamples);
+    setEditedSamples(newModifiedSamples);
+
   };
 
   const fillMachineData = (sample) => {
@@ -128,8 +135,9 @@ export default function ReviewSampleModal({
     ));
   };
 
-  const listPendingSamples = () => {
-    return pendingSamples.map((sample) => (
+  const listSelectedSamples = () => {
+
+    return editedSamples.map((sample) => (
       <Accordion
         expanded={expanded === sample.id}
         onChange={handleChange(sample.id)}
@@ -253,13 +261,13 @@ export default function ReviewSampleModal({
             </Typography>
           </Grid>
 
-          {pendingSamples.length > 0 ? (
+          {editedSamples.length > 0 ? (
             <Grid item xs={12} sm={12}>
               <TextField
                 fullWidth
                 label="Comments"
                 value={
-                  pendingSamples.find(
+                  editedSamples.find(
                     (modifiedSample) => modifiedSample.id === sample.id
                   ).comments
                 }
@@ -307,6 +315,7 @@ export default function ReviewSampleModal({
       aria-describedby="Modal used for reviewing a sample and accepting/rejecting it"
       open={openReviewSampleModal}
       onClose={() => {
+        setEditedSamples(selectedSamples);
         setOpenReviewSampleModal(false);
       }}
     >
@@ -320,7 +329,7 @@ export default function ReviewSampleModal({
             </Grid>
 
             <Grid item xs={12} sm={12}>
-              {listPendingSamples()}
+              {listSelectedSamples()}
             </Grid>
 
             <Grid item xs={12} sm={2}>
@@ -332,6 +341,7 @@ export default function ReviewSampleModal({
                   bottom: 50,
                 }}
                 onClick={() => {
+                  setEditedSamples(selectedSamples)
                   setOpenReviewSampleModal(false);
                 }}
               >
