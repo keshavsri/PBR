@@ -138,12 +138,19 @@ export default function EditSampleModal(props) {
         if (!response.ok) {
           setErrorSubmission(true);
         } else {
-          setEditSampleModalVisibility(false);
-          setSelected([]);
-          getData();
+          
           return response.json();
         }
       });
+  };
+
+  const closeEditModal = () => {
+    editSample();
+    setEditSampleModalVisibility(false);
+    setSelected([]);
+    setErrorSubmissionMessages([]);
+    setErrorSubmission(false);
+    getData();
   };
 
   const handleSampleDetailsChange = (prop) => (event) => {
@@ -192,6 +199,18 @@ export default function EditSampleModal(props) {
       </>
     );
   };
+
+  if (editSampleModalVisiblity) {
+    document.onclick = function (event) {
+      if (event === undefined) event = window.event;
+      if (validateSample()) {
+        editSample();
+        setErrorSubmission(false);
+      } else {
+        setErrorSubmission(true);
+      }
+    };
+  }
 
   const getFlocks = async () => {
     await fetch(`/api/flock/source/${source.id}`, {
@@ -621,7 +640,7 @@ export default function EditSampleModal(props) {
   return (
     <Modal
       open={editSampleModalVisiblity}
-      onClose={() => setEditSampleModalVisibility(false)}
+      onClose={closeEditModal}
       aria-labelledby="Edit Sample Modal"
       aria-describedby="Modal Used to Edit a Sample"
       //ref={myRef}

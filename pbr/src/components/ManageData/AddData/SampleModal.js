@@ -18,7 +18,6 @@ import {
   FormControl,
   ListItemText,
   ListItem,
-  CircularProgress,
 } from "@mui/material";
 import SampleIcon from "@mui/icons-material/Science";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -341,15 +340,13 @@ export default function DataViewSampleModal(props) {
     setCartridgeType(cartridgeTypes[0]);
   };
 
-
   if (sampleModalVisibility) {
     document.onclick = function (event) {
       if (event === undefined) event = window.event;
       if (validateSample()) {
         onSampleChange();
         setErrorSubmission(false);
-      }
-      else {
+      } else {
         setErrorSubmission(true);
       }
     };
@@ -383,12 +380,11 @@ export default function DataViewSampleModal(props) {
       .then((response) => {
         if (!response.ok) {
           console.log("error");
-          // setErrorSubmission(true);
         } else {
           console.log("success");
-          setTimeout(() => {
-            setLoading(false);
-          }, 1000);
+          // setTimeout(() => {
+          //   setLoading(false);
+          // }, 1000);
           return response.json();
         }
       });
@@ -436,8 +432,6 @@ export default function DataViewSampleModal(props) {
             description: `There was an error while uploading the sample. Try again.`,
           });
         } else {
-          // closeSampleModal();
-          // resetSampleDetails();
           getData();
           return response.json();
         }
@@ -482,10 +476,6 @@ export default function DataViewSampleModal(props) {
       measurements: measurements,
     });
   };
-
-  const [focused, setFocused] = React.useState(false);
-  const onFocus = () => setFocused(true);
-  const onBlur = () => setFocused(false);
 
   return (
     <>
@@ -619,8 +609,6 @@ export default function DataViewSampleModal(props) {
                         SampleDetails.flock_age <= 0 &&
                         SampleDetails.flock_age != null)
                     }
-                    onFocus={onFocus}
-                    onBlur={onBlur}
                     label="Age *"
                     value={SampleDetails.flock_age}
                     onChange={handleSampleDetailsChange("flock_age")}
