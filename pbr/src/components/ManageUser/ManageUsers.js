@@ -88,6 +88,11 @@ export default function ManageUsers() {
       body: JSON.stringify(editedUser),
       headers: { "Content-Type": "application/json" },
     })
+      .catch((error) => {
+        console.log(error);
+        // Need to display error to user
+        return;
+      })
       .then((response) => {
         return response.json();
       })
@@ -95,9 +100,6 @@ export default function ManageUsers() {
         setOpenEditUsersModal(false);
         getUsers();
         setSelected([]);
-      })
-      .catch((error) => {
-        console.log(error);
       });
   };
 

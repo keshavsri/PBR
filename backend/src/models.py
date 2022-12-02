@@ -29,8 +29,7 @@ class User(db.Model):
 
     __tablename__ = 'user_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    email: str = db.Column(db.String(120), index=True,
-                           unique=True, nullable=False)
+    email: str = db.Column(db.String(120), index=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     first_name: str = db.Column(db.String(120), nullable=False)
     last_name: str = db.Column(db.String(120), nullable=False)
@@ -68,7 +67,7 @@ class Organization(db.Model):
     __tablename__ = 'organization_table'
     # The fields below are stored in the database, they are assigned both a python and a database type
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name: str = db.Column(db.String(120), unique=True)
+    name: str = db.Column(db.String(120))
     street_address: str = db.Column(db.String(120))
     city: str = db.Column(db.String(120))
     state: States = db.Column(db.Enum(States))
@@ -133,7 +132,7 @@ class Flock(db.Model):
 
     __tablename__ = 'flock_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name: str = db.Column(db.String(255), unique=True, nullable=True)
+    name: str = db.Column(db.String(255), nullable=True)
     strain: str = db.Column(db.String(120), nullable=True)
     species: Species = db.Column(db.Enum(Species))
     gender: BirdGenders = db.Column(db.Enum(BirdGenders))
@@ -276,7 +275,7 @@ class Machine(db.Model):
     """
     __tablename__ = 'machine_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    serial_number: str = db.Column(db.String(120), unique=True)
+    serial_number: str = db.Column(db.String(120))
     is_deleted: bool = db.Column(db.Boolean, server_default="0")
 
     # References to Foreign Objects
