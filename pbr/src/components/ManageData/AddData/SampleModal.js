@@ -358,16 +358,20 @@ export default function DataViewSampleModal(props) {
     console.log(SampleDetails);
     console.log("updated measurements");
 
-    let payload = {
-      cartridge_type_id: cartridgeType.id,
-      comments: SampleDetails.comments,
-      sample_type: SampleDetails.sample_type,
-      flock_age: SampleDetails.flock_age,
-      flock_age_unit: SampleDetails.flock_age_unit,
-      organization_id: organization.id,
-      flock_id: flock.id,
-      measurements: SampleDetails.measurements,
-    };
+    let payload = {};
+
+    if (validateSample()) {
+      payload = {
+        cartridge_type_id: cartridgeType.id,
+        comments: SampleDetails.comments,
+        sample_type: SampleDetails.sample_type,
+        flock_age: SampleDetails.flock_age,
+        flock_age_unit: SampleDetails.flock_age_unit,
+        organization_id: organization.id,
+        flock_id: flock.id,
+        measurements: SampleDetails.measurements,
+      };
+    }
 
     await fetch(`/api/sample/${createdSample}`, {
       method: "PUT",
@@ -382,9 +386,9 @@ export default function DataViewSampleModal(props) {
           console.log("error");
         } else {
           console.log("success");
-          // setTimeout(() => {
-          //   setLoading(false);
-          // }, 1000);
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
           return response.json();
         }
       });

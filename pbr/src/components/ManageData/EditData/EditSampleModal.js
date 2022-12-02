@@ -23,6 +23,9 @@ import {
   ListItem,
 } from "@mui/material";
 
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
+
 import { makeStyles } from "@mui/styles";
 
 function getModalStyle() {
@@ -67,6 +70,8 @@ export default function EditSampleModal(props) {
   } = props;
 
   const classes = useStyles();
+
+  const [loading, setLoading] = React.useState(false);
 
   const { checkResponseAuth, user } = useAuth();
 
@@ -114,17 +119,22 @@ export default function EditSampleModal(props) {
   };
 
   const editSample = async () => {
+    setLoading(true);
     let newMeasurements = passMesearments();
 
-    let payload = {
-      comments: SampleDetails.comments,
-      sample_type: SampleDetails.sample_type,
-      flock_age: SampleDetails.flock_age,
-      flock_age_unit: SampleDetails.flock_age_unit,
-      organization_id: organization.id,
-      flock_id: flock.id,
-      measurements: newMeasurements,
-    };
+    let payload = {};
+
+    if (validateSample()) {
+      payload = {
+        comments: SampleDetails.comments,
+        sample_type: SampleDetails.sample_type,
+        flock_age: SampleDetails.flock_age,
+        flock_age_unit: SampleDetails.flock_age_unit,
+        organization_id: organization.id,
+        flock_id: flock.id,
+        measurements: newMeasurements,
+      };
+    }
 
     await fetch(`/api/sample/${SampleToEdit.id}`, {
       method: "PUT",
@@ -138,7 +148,9 @@ export default function EditSampleModal(props) {
         if (!response.ok) {
           setErrorSubmission(true);
         } else {
-          
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
           return response.json();
         }
       });
@@ -615,21 +627,43 @@ export default function EditSampleModal(props) {
               </Button>
             </Grid>
             <Grid item xs={8}>
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ width: 200 }}
-                onClick={() => {
-                  if (validateSample()) {
-                    editSample();
-                    setEditSampleModalVisibility(false);
-                  } else {
-                    setErrorSubmission(true);
-                  }
-                }}
-              >
-                Save
-              </Button>
+              {loading ? (
+                <LoadingButton
+                  loading
+                  loadingPosition="start"
+                  startIcon={<SaveIcon />}
+                  variant="outlined"
+                  style={{ width: 200, border: "1px solid red" }}
+                  color="primary"
+                >
+                  <Typography
+                    gutterBottom
+                    variant="button"
+                    style={{
+                      color: "red",
+                    }}
+                  >
+                    {" "}
+                    Saving ...
+                  </Typography>
+                </LoadingButton>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ width: 200 }}
+                  onClick={() => {
+                    if (validateSample()) {
+                      editSample();
+                      closeEditModal();
+                    } else {
+                      setErrorSubmission(true);
+                    }
+                  }}
+                >
+                  Save
+                </Button>
+              )}
             </Grid>
           </Grid>
         </Box>
