@@ -61,7 +61,7 @@ def get_organization(access_allowed, current_user, item_id):
 
     if access_allowed:
         if current_user.organization_id == item_id or current_user.role == Roles.Super_Admin:
-            org_model = OrganizationORM.query.filter_by(is_deleted=False).first()
+            org_model = OrganizationORM.query.filter_by(id = item_id, is_deleted=False).first()
             if org_model is not None:
                 org = Organization.from_orm(org_model).dict()
 

@@ -38,7 +38,6 @@ export default function DataView() {
     React.useState(false);
 
   const [selectedSamples, setSelectedSamples] = React.useState([]);
-  const [pendingSamples, setPendingSamples] = React.useState([]);
   const [organization, setOrganization] = React.useState({});
   const [organizations, setOrganizations] = React.useState([]);
 
@@ -355,7 +354,6 @@ export default function DataView() {
             selected={selected}
             setSelected={setSelected}
             setSelectedSamples={setSelectedSamples}
-            setPendingSamples={setPendingSamples}
             onDelete={onDelete}
             isSample={isSample}
             setOpenReviewSampleModal={setOpenReviewSampleModal}
@@ -412,8 +410,7 @@ export default function DataView() {
         <ReviewSampleModal
           openReviewSampleModal={openReviewSampleModal}
           setOpenReviewSampleModal={setOpenReviewSampleModal}
-          pendingSamples={pendingSamples}
-          setPendingSamples={setPendingSamples}
+          selectedSamples={selectedSamples}
           acceptSample={acceptSample}
           rejectSample={rejectSample}
           turnPendingFilterOff={turnPendingFilterOff}
