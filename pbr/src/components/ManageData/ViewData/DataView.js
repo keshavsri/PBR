@@ -149,21 +149,7 @@ export default function DataView() {
   const getData = async () => {
     setSampleList([]);
     getHeadCells();
-    const uri = `/api/sample/org_cartridge_type?organization_id=${organization.id}&cartridge_type_id=${currentCartridgeType.id}`;
-    await fetch(uri, { method: "GET" })
-      .then((response) => {
-        setLoading(false);
-        return response.json();
-      })
-      .then(checkResponseAuth)
-      .then((data) => {
-        console.log(data);
-        data.forEach((sample) => {
-          sample.measurements.map((meas) => {
-            sample[meas.analyte.abbreviation] = meas.value;
-          });
-          sample["flock_name"] = sample.flock.name;
-        });
+
 
     const promise = new Promise(async (resolve) => {
       setLoading(true);
