@@ -136,14 +136,16 @@ export default function DataViewSampleModal(props) {
 
   const [createdSample, setCreatedSample] = React.useState(null);
 
-  const closeModal = () => {
-    onSampleChange();
-    getData();
-    setErrorSubmission(false);
-    resetSampleDetails();
-    setErrorSubmissionMessages([]);
-    setSampleModalVisibility(false);
-    setCreatedSample(null);
+  const closeModal = async () => {
+    let result = await onSampleChange();
+    if (result) {
+      getData();
+      setErrorSubmission(false);
+      resetSampleDetails();
+      setErrorSubmissionMessages([]);
+      setSampleModalVisibility(false);
+      setCreatedSample(null);
+    }
   };
 
   const getOrganizations = async () => {
@@ -286,8 +288,6 @@ export default function DataViewSampleModal(props) {
   }
 
   const validateSample = () => {
-    console.log("validating sample");
-    console.log(SampleDetails);
     let valid = true;
     let errors = [];
 
@@ -312,10 +312,7 @@ export default function DataViewSampleModal(props) {
     }
 
     if (valid === false) {
-      console.log(errors);
       setErrorSubmissionMessages(errors);
-    } else {
-      console.log("valid");
     }
 
     return valid;
@@ -340,23 +337,20 @@ export default function DataViewSampleModal(props) {
     setCartridgeType(cartridgeTypes[0]);
   };
 
-  // if (sampleModalVisibility) {
-  //   document.onclick = function (event) {
-  //     if (event === undefined) event = window.event;
-  //     if (validateSample()) {
-  //       onSampleChange();
-  //       setErrorSubmission(false);
-  //     } else {
-  //       setErrorSubmission(true);
-  //     }
-  //   };
-  // }
+  if (sampleModalVisibility) {
+    document.onclick = function (event) {
+      if (event === undefined) event = window.event;
+      if (validateSample()) {
+        onSampleChange();
+        setErrorSubmission(false);
+      } else {
+        setErrorSubmission(true);
+      }
+    };
+  }
 
   const onSampleChange = async () => {
-    console.log("on sample change");
     setLoading(true);
-    console.log(SampleDetails);
-    console.log("updated measurements");
 
     let payload = {};
 
@@ -383,15 +377,14 @@ export default function DataViewSampleModal(props) {
       .then(checkResponseAuth)
       .then((response) => {
         if (!response.ok) {
-          console.log("error");
         } else {
-          console.log("success");
           setTimeout(() => {
             setLoading(false);
           }, 1000);
           return response.json();
         }
       });
+    return true;
   };
 
   let onSubmit = async () => {
@@ -429,7 +422,6 @@ export default function DataViewSampleModal(props) {
       .then(checkResponseAuth)
       .then((response) => {
         setSampleLoading(false);
-        console.log(response);
         if (!response.ok) {
           setError({
             title: `${response.status} - ${response.statusText}`,
@@ -446,7 +438,6 @@ export default function DataViewSampleModal(props) {
   };
 
   const deleteSample = async () => {
-    console.log("deleting sample");
     await fetch(`/api/sample/permanent/${createdSample}`, {
       method: "DELETE",
       headers: {

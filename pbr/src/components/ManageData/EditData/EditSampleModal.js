@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import useAuth from "../../../services/useAuth";
 import { sampleTypes, ageUnits } from "../../../models/enums";
@@ -22,7 +21,6 @@ import {
   Modal,
   ListItemText,
   ListItem,
-  CardActionArea,
 } from "@mui/material";
 
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -74,7 +72,6 @@ export default function EditSampleModal(props) {
   const classes = useStyles();
 
   const [loading, setLoading] = React.useState(false);
-  const [cancelSampleEdit, setCancelSampleEdit] = React.useState(false);
 
   const { checkResponseAuth, user } = useAuth();
 
@@ -97,8 +94,6 @@ export default function EditSampleModal(props) {
     []
   );
 
-  const [ageError, setAgeError] = React.useState(false);
-
   const [SampleDetails, setSampleDetails] = React.useState({
     comments: SampleToEdit.comments,
     sample_type: SampleToEdit.sample_type,
@@ -119,36 +114,6 @@ export default function EditSampleModal(props) {
     });
 
     return values;
-  };
-
-  const restoreSample = async () => {
-    let payload = {
-      comments: lastSavedSample.comments,
-      flock_age: lastSavedSample.flock_age,
-      flock_age_unit: lastSavedSample.flock_age_unit,
-      sample_type: lastSavedSample.sample_type,
-      // measurements: lastSavedSample.measurements,
-    };
-
-    console.log("the last saved save sample is", lastSavedSample);
-    console.log("resotring sample", payload);
-
-    await fetch(`/api/sample/${SampleToEdit.id}`, {
-      method: "PUT",
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(checkResponseAuth)
-      .then((response) => {
-        if (!response.ok) {
-          setErrorSubmission(true);
-        } else {
-          return response.json();
-        }
-      });
-    return true;
   };
 
   const editSample = async () => {
@@ -192,14 +157,13 @@ export default function EditSampleModal(props) {
   };
 
   const closeEditModal = async () => {
-    const result = await editSample();
-
+    let result = await editSample();
     if (result) {
+      setEditSampleModalVisibility(false);
       setSelected([]);
       setErrorSubmissionMessages([]);
       setErrorSubmission(false);
       getData();
-      setEditSampleModalVisibility(false);
     }
   };
 
@@ -250,20 +214,17 @@ export default function EditSampleModal(props) {
     );
   };
 
-  // if (editSampleModalVisiblity && !cancelSampleEdit) {
-  //   document.onclick = function (event) {
-  //     console.log("CancelSampleEdit", cancelSampleEdit);
-  //     if (event === undefined) event = window.event;
-  //     if (validateSample() ) {
-
-  //       console.log(" window clicked");
-  //       editSample();
-  //       setErrorSubmission(false);
-  //     } else {
-  //       setErrorSubmission(true);
-  //     }
-  //   };
-  // }
+  if (editSampleModalVisiblity) {
+    document.onclick = function (event) {
+      if (event === undefined) event = window.event;
+      if (validateSample()) {
+        editSample();
+        setErrorSubmission(false);
+      } else {
+        setErrorSubmission(true);
+      }
+    };
+  }
 
   const getFlocks = async () => {
     await fetch(`/api/flock/source/${source.id}`, {
@@ -327,7 +288,6 @@ export default function EditSampleModal(props) {
   };
 
   const validateSample = () => {
-    console.log("validating sample");
     let errors = [];
     let valid = true;
     setErrorSubmission(false);
@@ -651,47 +611,6 @@ export default function EditSampleModal(props) {
         </Grid>
 
         <br />
-      </>
-    );
-  };
-
-  return (
-    <Modal
-      open={editSampleModalVisiblity}
-      onClose={closeEditModal}
-      aria-labelledby="Edit Sample Modal"
-      aria-describedby="Modal Used to Edit a Sample"
-    >
-      <div style={modalStyle} className={classes.paper}>
-        <Card>
-          <CardActionArea
-            onClick={() => {
-              console.log("clicked");
-              editSample();
-            }}
-            disableRipple
-            classes={{
-              root: classes.actionArea,
-              focusHighlight: classes.focusHighlight,
-            }}
-            style={{
-              cursor: "default",
-              backgroundColor: "white",
-            }}
-          >
-            <Grid container spacing={2} sx={{ padding: "15px" }}>
-              <Grid item xs={12} sm={12}>
-                <Typography gutterBottom variant="h4">
-                  Edit Sample
-                </Typography>
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                {selectedSample()}
-              </Grid>
-            </Grid>
-          </CardActionArea>
-        </Card>
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2} columns={16}>
@@ -700,14 +619,8 @@ export default function EditSampleModal(props) {
                 variant="contained"
                 color="secondary"
                 style={{ width: 200 }}
-                onClick={async () => {
-                  console.log("cancel pressed");
-                  setCancelSampleEdit(true);
-                  let reuslt = await restoreSample();
-                  if (reuslt) {
-                    setEditSampleModalVisibility(false);
-                    getData();
-                  }
+                onClick={() => {
+                  setEditSampleModalVisibility(false);
                 }}
               >
                 Cancel
@@ -754,6 +667,31 @@ export default function EditSampleModal(props) {
             </Grid>
           </Grid>
         </Box>
+      </>
+    );
+  };
+
+  return (
+    <Modal
+      open={editSampleModalVisiblity}
+      onClose={closeEditModal}
+      aria-labelledby="Edit Sample Modal"
+      aria-describedby="Modal Used to Edit a Sample"
+    >
+      <div style={modalStyle} className={classes.paper}>
+        <Card>
+          <Grid container spacing={2} sx={{ padding: "15px" }}>
+            <Grid item xs={12} sm={12}>
+              <Typography gutterBottom variant="h4">
+                Edit Sample
+              </Typography>
+            </Grid>
+
+            <Grid item xs={12} sm={12}>
+              {selectedSample()}
+            </Grid>
+          </Grid>
+        </Card>
 
         <Box sx={{ flexGrow: 1 }} style={{ padding: "15px" }}>
           {errorSubmission ? (
