@@ -152,7 +152,6 @@ export default function DataView() {
     setSampleList([]);
     getHeadCells();
 
-
     const promise = new Promise(async (resolve) => {
       setLoading(true);
       abortController.current = new AbortController();
@@ -167,6 +166,7 @@ export default function DataView() {
       // setSampleList(data);
       assignRowHtml(data);
       setLoading(false);
+      console.log("data", data);
       resolve(data);
     });
 
@@ -194,13 +194,13 @@ export default function DataView() {
 
   const getMachines = async () => {
     await fetch(`api/machines/${organization.id}`)
-    .then((response) => {
-      return response.json();
-    })
-    .then(checkResponseAuth)
-    .then((data) => {
-      setMachines(data);
-    });
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        setMachines(data);
+      });
   };
 
   const getHeadCells = () => {
@@ -249,8 +249,6 @@ export default function DataView() {
         disablePadding: true,
         label: "Rotor Lot Number",
       },
-
-
 
       {
         id: "validation_status",

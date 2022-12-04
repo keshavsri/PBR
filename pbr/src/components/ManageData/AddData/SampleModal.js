@@ -102,6 +102,11 @@ export default function DataViewSampleModal(props) {
     rotor_lot_number: "",
   });
 
+  const [errorSubmission, setErrorSubmission] = React.useState(false);
+  const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
+    []
+  );
+
   React.useEffect(async () => {
     if (sampleModalVisibility) {
       if (user.role === roles["Super_Admin"]) {
@@ -138,14 +143,18 @@ export default function DataViewSampleModal(props) {
 
   const closeModal = async () => {
     let result = await onSampleChange();
-    if (result) {
-      getData();
-      setErrorSubmission(false);
-      resetSampleDetails();
-      setErrorSubmissionMessages([]);
-      setSampleModalVisibility(false);
-      setCreatedSample(null);
-    }
+    setSampleModalVisibility(false);
+    setCreatedSample(null);
+
+    getData();
+    setErrorSubmission(false);
+    resetSampleDetails();
+    setErrorSubmissionMessages([]);
+
+    console.log("closeModal");
+    console.log(result);
+    console.log(createdSample);
+    console.log(sampleModalVisibility);
   };
 
   const getOrganizations = async () => {
@@ -283,6 +292,12 @@ export default function DataViewSampleModal(props) {
       });
   };
 
+  React.useEffect(async () => {
+    if (sampleModalVisibility && createdSample === null) {
+      onSubmit();
+    }
+  }, [flock]);
+
   function handleFlockInputChange(event, value) {
     setFlockInput(value);
   }
@@ -339,8 +354,11 @@ export default function DataViewSampleModal(props) {
 
   if (sampleModalVisibility) {
     document.onclick = function (event) {
+      console.log("click detected");
+      console.log(sampleModalVisibility);
       if (event === undefined) event = window.event;
-      if (validateSample()) {
+      if (validateSample() && sampleModalVisibility) {
+        console.log("change due to click");
         onSampleChange();
         setErrorSubmission(false);
       } else {
@@ -350,22 +368,38 @@ export default function DataViewSampleModal(props) {
   }
 
   const onSampleChange = async () => {
+    console.log("onSampleChange");
+    console.log(createdSample);
+    let cartridgeTypeId = cartridgeType.id;
+    const newSampleDetails = SampleDetails;
+    const measurements = newSampleDetails.measurements;
+    measurements.forEach((meas) => {
+      if (meas.value === "") {
+        meas.value = null;
+      }
+    });
+
     setLoading(true);
 
     let payload = {};
 
     if (validateSample()) {
       payload = {
-        cartridge_type_id: cartridgeType.id,
+        cartridge_type_id: cartridgeTypeId,
         comments: SampleDetails.comments,
         sample_type: SampleDetails.sample_type,
         flock_age: SampleDetails.flock_age,
         flock_age_unit: SampleDetails.flock_age_unit,
         organization_id: organization.id,
+        rotor_lot_number: SampleDetails.rotor_lot_number,
+        machine_id: machine.id,
         flock_id: flock.id,
-        measurements: SampleDetails.measurements,
+        measurements: measurements,
       };
     }
+
+    console.log("updating now with payload");
+    console.log(payload);
 
     await fetch(`/api/sample/${createdSample}`, {
       method: "PUT",
@@ -381,6 +415,7 @@ export default function DataViewSampleModal(props) {
           setTimeout(() => {
             setLoading(false);
           }, 1000);
+
           return response.json();
         }
       });
@@ -771,6 +806,8 @@ export default function DataViewSampleModal(props) {
                         if (validateSample()) {
                           onSampleChange();
                           closeModal();
+                          setSampleModalVisibility(false);
+                          setCreatedSample(null);
                         } else {
                           setErrorSubmission(true);
                         }
