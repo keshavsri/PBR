@@ -100,6 +100,7 @@ export default function EditSampleModal(props) {
     flock_age: SampleToEdit.flock_age,
     flock_age_unit: SampleToEdit.flock_age_unit,
     measurements: [],
+    rotor_lot_number: SampleToEdit.rotor_lot_number,
   });
 
   useTheme();
@@ -131,6 +132,7 @@ export default function EditSampleModal(props) {
         organization_id: organization.id,
         flock_id: flock.id,
         measurements: newMeasurements,
+        rotor_lot_number: SampleDetails.rotor_lot_number,
       };
     }
 
@@ -540,6 +542,13 @@ export default function EditSampleModal(props) {
                 </Select>
               </FormControl>
             </Grid>
+            <Grid item xs={8}>
+              <TextField
+                label="Rotor Lot Number"
+                value={SampleDetails.rotor_lot_number}
+                onChange={handleSampleDetailsChange("rotor_lot_number")}
+              />
+            </Grid>
           </Grid>
         </Box>
 
@@ -623,7 +632,7 @@ export default function EditSampleModal(props) {
                   setEditSampleModalVisibility(false);
                 }}
               >
-                Cancel
+                Close
               </Button>
             </Grid>
             <Grid item xs={8}>
