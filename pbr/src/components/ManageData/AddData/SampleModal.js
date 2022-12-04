@@ -151,10 +151,7 @@ export default function DataViewSampleModal(props) {
     resetSampleDetails();
     setErrorSubmissionMessages([]);
 
-    console.log("closeModal");
-    console.log(result);
-    console.log(createdSample);
-    console.log(sampleModalVisibility);
+
   };
 
   const getOrganizations = async () => {
@@ -354,11 +351,9 @@ export default function DataViewSampleModal(props) {
 
   if (sampleModalVisibility) {
     document.onclick = function (event) {
-      console.log("click detected");
-      console.log(sampleModalVisibility);
+
       if (event === undefined) event = window.event;
       if (validateSample() && sampleModalVisibility) {
-        console.log("change due to click");
         onSampleChange();
         setErrorSubmission(false);
       } else {
@@ -368,8 +363,6 @@ export default function DataViewSampleModal(props) {
   }
 
   const onSampleChange = async () => {
-    console.log("onSampleChange");
-    console.log(createdSample);
     let cartridgeTypeId = cartridgeType.id;
     const newSampleDetails = SampleDetails;
     const measurements = newSampleDetails.measurements;
@@ -398,8 +391,7 @@ export default function DataViewSampleModal(props) {
       };
     }
 
-    console.log("updating now with payload");
-    console.log(payload);
+
 
     await fetch(`/api/sample/${createdSample}`, {
       method: "PUT",
@@ -445,7 +437,6 @@ export default function DataViewSampleModal(props) {
       organization_id: organization.id,
     };
 
-    console.log("Submitting!", payload);
     setSampleLoading(true);
     await fetch(`/api/sample/`, {
       method: "POST",
@@ -495,7 +486,6 @@ export default function DataViewSampleModal(props) {
   };
 
   const handleAnalytes = (e) => {
-    console.log("changing analytes");
     const { analytes } = cartridgeType;
     const measurements = analytes.map((analyte) => ({
       analyte_id: analyte.id,
