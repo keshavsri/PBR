@@ -2,6 +2,7 @@ import * as React from "react";
 import { useTheme } from "@mui/material/styles";
 import useAuth from "../../../services/useAuth";
 import { sampleTypes, ageUnits } from "../../../models/enums";
+import ErrorIcon from "@mui/icons-material/Error";
 
 import {
   Typography,
@@ -18,6 +19,8 @@ import {
   Select,
   MenuItem,
   Modal,
+  ListItemText,
+  ListItem,
 } from "@mui/material";
 
 import { makeStyles } from "@mui/styles";
@@ -82,6 +85,9 @@ export default function EditSampleModal(props) {
   const [cartridgeTypes, setCartridgeTypes] = React.useState([]);
 
   const [errorSubmission, setErrorSubmission] = React.useState(false);
+  const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
+    []
+  );
 
   const [SampleDetails, setSampleDetails] = React.useState({
     comments: SampleToEdit.comments,
@@ -156,9 +162,19 @@ export default function EditSampleModal(props) {
               return (
                 <>
                   <TextField
+                    error={
+                      isNaN(SampleDetails.measurements[index].value) &&
+                      SampleDetails.measurements[index].value != ""
+                    }
                     label={a.abbreviation}
                     style={{ margin: 4 }}
                     value={SampleDetails.measurements[index].value}
+                    helperText={
+                      isNaN(SampleDetails.measurements[index].value) &&
+                      SampleDetails.measurements[index].value !== ""
+                        ? "Please enter a number"
+                        : ""
+                    }
                     onChange={(e) => {
                       const measurements = SampleDetails.measurements;
                       measurements[index].value = e.target.value;
@@ -234,6 +250,42 @@ export default function EditSampleModal(props) {
     const data = await response.json();
     setOrganizations(data);
     setOrganization(data.filter((org) => org.id === currentOrganization.id)[0]);
+  };
+
+  const validateSample = () => {
+    console.log("validating sample");
+    console.log(SampleDetails);
+    let errors = [];
+    let valid = true;
+    setErrorSubmission(false);
+
+    if (
+      (isNaN(SampleDetails.flock_age) && SampleDetails.flock_age != null) ||
+      (!isNaN(SampleDetails.flock_age) &&
+        SampleDetails.flock_age <= 0 &&
+        SampleDetails.flock_age != null)
+    ) {
+      errors.push("Flock age is number only");
+      valid = false;
+    }
+
+    SampleDetails.measurements.forEach((measurement) => {
+      if (isNaN(measurement.value) && measurement.value != "") {
+        let err =
+          "Measurement for" +
+          " " +
+          measurement.analyte.abbreviation +
+          " must be a number";
+        errors.push(err);
+        valid = false;
+      }
+    });
+
+    if (valid === false) {
+      setErrorSubmissionMessages(errors);
+    }
+
+    return valid;
   };
 
   React.useEffect(async () => {
@@ -415,9 +467,25 @@ export default function EditSampleModal(props) {
           >
             <Grid item xs={8}>
               <TextField
+                error={
+                  (isNaN(SampleDetails.flock_age) &&
+                    SampleDetails.flock_age != null) ||
+                  (!isNaN(SampleDetails.flock_age) &&
+                    SampleDetails.flock_age <= 0 &&
+                    SampleDetails.flock_age != null)
+                }
                 label="Age"
                 value={SampleDetails.flock_age}
                 onChange={handleSampleDetailsChange("flock_age")}
+                helperText={
+                  (isNaN(SampleDetails.flock_age) &&
+                    SampleDetails.flock_age != null) ||
+                  (!isNaN(SampleDetails.flock_age) &&
+                    SampleDetails.flock_age <= 0 &&
+                    SampleDetails.flock_age != null)
+                    ? "Age must be positive number"
+                    : ""
+                }
               />
             </Grid>
 
@@ -473,12 +541,12 @@ export default function EditSampleModal(props) {
           >
             <FormControlLabel
               value={sampleTypes.SURVEILLANCE}
-              label={`${sampleTypes.SURVEILLANCE} Sample (Healthy)`}
+              label={`${sampleTypes.SURVEILLANCE} Sample`}
               control={<Radio />}
             />
             <FormControlLabel
               value={sampleTypes.DIAGNOSTIC}
-              label={`${sampleTypes.DIAGNOSTIC} Sample (Sick)`}
+              label={`${sampleTypes.DIAGNOSTIC} Sample`}
               control={<Radio />}
             />
           </RadioGroup>
@@ -531,7 +599,12 @@ export default function EditSampleModal(props) {
                 color="primary"
                 style={{ width: 200 }}
                 onClick={() => {
-                  editSample();
+                  if (validateSample()) {
+                    editSample();
+                    setEditSampleModalVisibility(false);
+                  } else {
+                    setErrorSubmission(true);
+                  }
                 }}
               >
                 Save
@@ -566,23 +639,29 @@ export default function EditSampleModal(props) {
           </Grid>
         </Card>
 
-        <Grid>
+        <Box sx={{ flexGrow: 1 }} style={{ padding: "15px" }}>
           {errorSubmission ? (
             <Typography
               gutterBottom
               variant="button"
               style={{
                 color: "red",
-                position: "absolute",
-                bottom: 50,
-                left: 280,
-                padding: "15px",
               }}
             >
-              The Machine Data associated to the sample is incomplete.
+              <ListItem>
+                <ErrorIcon />
+                <ListItemText primary="   Fix Error before saving Sample" />
+              </ListItem>
+
+              {/* {errorSubmissionMessages.map((message) => (
+                <ListItem>
+                  <ErrorIcon />
+                  <ListItemText primary={message} />
+                </ListItem>
+              ))} */}
             </Typography>
           ) : null}
-        </Grid>
+        </Box>
       </div>
     </Modal>
   );
