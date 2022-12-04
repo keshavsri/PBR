@@ -23,7 +23,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-password}
     ports:
-      - "3306:3306" #Expose the port so that you can connect to it directly, like from HeidiSQL
+      - "3307:3306" #Expose the port so that you can connect to it directly, like from HeidiSQL
 
 volumes:
   dbdata: 
