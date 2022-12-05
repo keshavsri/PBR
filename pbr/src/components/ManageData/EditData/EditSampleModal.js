@@ -23,6 +23,9 @@ import {
   ListItem,
 } from "@mui/material";
 
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
+
 import { makeStyles } from "@mui/styles";
 
 function getModalStyle() {
@@ -68,6 +71,8 @@ export default function EditSampleModal(props) {
 
   const classes = useStyles();
 
+  const [loading, setLoading] = React.useState(false);
+
   const { checkResponseAuth, user } = useAuth();
 
   const [modalStyle] = React.useState(getModalStyle);
@@ -95,6 +100,7 @@ export default function EditSampleModal(props) {
     flock_age: SampleToEdit.flock_age,
     flock_age_unit: SampleToEdit.flock_age_unit,
     measurements: [],
+    rotor_lot_number: SampleToEdit.rotor_lot_number,
   });
 
   useTheme();
@@ -112,17 +118,23 @@ export default function EditSampleModal(props) {
   };
 
   const editSample = async () => {
+    setLoading(true);
     let newMeasurements = passMesearments();
 
-    let payload = {
-      comments: SampleDetails.comments,
-      sample_type: SampleDetails.sample_type,
-      flock_age: SampleDetails.flock_age,
-      flock_age_unit: SampleDetails.flock_age_unit,
-      organization_id: organization.id,
-      flock_id: flock.id,
-      measurements: newMeasurements,
-    };
+    let payload = {};
+
+    if (validateSample()) {
+      payload = {
+        comments: SampleDetails.comments,
+        sample_type: SampleDetails.sample_type,
+        flock_age: SampleDetails.flock_age,
+        flock_age_unit: SampleDetails.flock_age_unit,
+        organization_id: organization.id,
+        flock_id: flock.id,
+        measurements: newMeasurements,
+        rotor_lot_number: SampleDetails.rotor_lot_number,
+      };
+    }
 
     await fetch(`/api/sample/${SampleToEdit.id}`, {
       method: "PUT",
@@ -136,12 +148,25 @@ export default function EditSampleModal(props) {
         if (!response.ok) {
           setErrorSubmission(true);
         } else {
-          setEditSampleModalVisibility(false);
-          setSelected([]);
-          getData();
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
           return response.json();
         }
       });
+
+    return true;
+  };
+
+  const closeEditModal = async () => {
+    let result = await editSample();
+    if (result) {
+      setEditSampleModalVisibility(false);
+      setSelected([]);
+      setErrorSubmissionMessages([]);
+      setErrorSubmission(false);
+      getData();
+    }
   };
 
   const handleSampleDetailsChange = (prop) => (event) => {
@@ -190,6 +215,18 @@ export default function EditSampleModal(props) {
       </>
     );
   };
+
+  if (editSampleModalVisiblity) {
+    document.onclick = function (event) {
+      if (event === undefined) event = window.event;
+      if (validateSample()) {
+        editSample();
+        setErrorSubmission(false);
+      } else {
+        setErrorSubmission(true);
+      }
+    };
+  }
 
   const getFlocks = async () => {
     await fetch(`/api/flock/source/${source.id}`, {
@@ -253,8 +290,6 @@ export default function EditSampleModal(props) {
   };
 
   const validateSample = () => {
-    console.log("validating sample");
-    console.log(SampleDetails);
     let errors = [];
     let valid = true;
     setErrorSubmission(false);
@@ -507,6 +542,13 @@ export default function EditSampleModal(props) {
                 </Select>
               </FormControl>
             </Grid>
+            <Grid item xs={8}>
+              <TextField
+                label="Rotor Lot Number"
+                value={SampleDetails.rotor_lot_number}
+                onChange={handleSampleDetailsChange("rotor_lot_number")}
+              />
+            </Grid>
           </Grid>
         </Box>
 
@@ -590,25 +632,47 @@ export default function EditSampleModal(props) {
                   setEditSampleModalVisibility(false);
                 }}
               >
-                Cancel
+                Close
               </Button>
             </Grid>
             <Grid item xs={8}>
-              <Button
-                variant="contained"
-                color="primary"
-                style={{ width: 200 }}
-                onClick={() => {
-                  if (validateSample()) {
-                    editSample();
-                    setEditSampleModalVisibility(false);
-                  } else {
-                    setErrorSubmission(true);
-                  }
-                }}
-              >
-                Save
-              </Button>
+              {loading ? (
+                <LoadingButton
+                  loading
+                  loadingPosition="start"
+                  startIcon={<SaveIcon />}
+                  variant="outlined"
+                  style={{ width: 200, border: "1px solid red" }}
+                  color="primary"
+                >
+                  <Typography
+                    gutterBottom
+                    variant="button"
+                    style={{
+                      color: "red",
+                    }}
+                  >
+                    {" "}
+                    Saving ...
+                  </Typography>
+                </LoadingButton>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ width: 200 }}
+                  onClick={() => {
+                    if (validateSample()) {
+                      editSample();
+                      closeEditModal();
+                    } else {
+                      setErrorSubmission(true);
+                    }
+                  }}
+                >
+                  Save
+                </Button>
+              )}
             </Grid>
           </Grid>
         </Box>
@@ -619,10 +683,9 @@ export default function EditSampleModal(props) {
   return (
     <Modal
       open={editSampleModalVisiblity}
-      onClose={() => setEditSampleModalVisibility(false)}
+      onClose={closeEditModal}
       aria-labelledby="Edit Sample Modal"
       aria-describedby="Modal Used to Edit a Sample"
-      //ref={myRef}
     >
       <div style={modalStyle} className={classes.paper}>
         <Card>
@@ -652,13 +715,6 @@ export default function EditSampleModal(props) {
                 <ErrorIcon />
                 <ListItemText primary="   Fix Error before saving Sample" />
               </ListItem>
-
-              {/* {errorSubmissionMessages.map((message) => (
-                <ListItem>
-                  <ErrorIcon />
-                  <ListItemText primary={message} />
-                </ListItem>
-              ))} */}
             </Typography>
           ) : null}
         </Box>
