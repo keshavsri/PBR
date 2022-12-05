@@ -355,6 +355,27 @@ export default function DataView() {
     await getMachines();
   }, [organization]);
 
+
+  React.useEffect(() => {
+    setSelected([]);
+    setSelectedSamples([]);
+    console.log("Full Row List");
+  }, [fullRowList]);
+
+  React.useEffect(() => {
+    setSelected([]);
+    setSelectedSamples([]);
+    console.log("Pending Row List");
+  }, [pendingRowList]);
+
+  React.useEffect(() => {
+    setSelected([]);
+    setSelectedSamples([]);
+    console.log("Sample List");
+  }, [sampleList]);
+
+
+
   return (
     <>
       <DataViewProvider>
