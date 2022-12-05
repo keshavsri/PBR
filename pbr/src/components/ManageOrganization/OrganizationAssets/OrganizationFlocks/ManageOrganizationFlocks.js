@@ -105,9 +105,6 @@ export default function ManageOrganizationFlocks({
     <>
       <Paper>
 
-        <Grid item xs={12} sm={12}>
-        </Grid>
-
         {
           user.role != roles["Guest"] && (
           <Grid item xs={12} sm={12}>
