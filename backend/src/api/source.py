@@ -79,7 +79,7 @@ def create_source(access_allowed, current_user):
         # source name must different is posted for the same organization
         if current_user.role == Roles.Super_Admin or current_user.organization_id == request.json['organization_id']:
 
-            if models.Source.query.filter_by(organization_id=request.json.get('organization_id'),name=request.json.get('name')).first() is None:
+            if models.Source.query.filter_by(organization_id=request.json.get('organization_id'), name=request.json.get('name'), is_deleted = False).first() is None:
                 models.db.session.add(models.Source(name=request.json.get('name'), street_address=request.json.get('street_address'), city=request.json.get('city'), state=request.json.get('state'), zip=request.json.get('zip'), organization_id=request.json.get('organization_id')))
                 models.db.session.commit()
                 return jsonify({'message': 'Source created successfully'}), 201
@@ -100,9 +100,12 @@ def update_source(access_allowed, current_user, item_id):
         if source is None:
             return jsonify({'message': 'Source not found'}), 404
         else:
-            models.Source.query.filter_by(id=item_id).update(request.json)
-            models.db.session.commit()
-            return jsonify({'message': 'Source updated successfully'}), 200
+            if models.Source.query.filter_by(organization_id=request.json.get('organization_id'), name=request.json.get('name'), is_deleted = False).first() is None:
+                models.Source.query.filter_by(id=item_id).update(request.json)
+                models.db.session.commit()
+                return jsonify({'message': 'Source updated successfully'}), 200
+            else:
+                return jsonify({'message': 'Source already exists with the same name in the organization'}), 400
     else:
         return jsonify({'message': 'Role not allowed'}), 403
 
