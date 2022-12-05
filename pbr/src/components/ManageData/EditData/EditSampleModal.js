@@ -89,6 +89,9 @@ export default function EditSampleModal(props) {
   const [cartridgeType, setCartridgeType] = React.useState({});
   const [cartridgeTypes, setCartridgeTypes] = React.useState([]);
 
+  const [machines, setMachines] = React.useState([]);
+  // const [machine, setMachine] = React.useState({});
+
   const [errorSubmission, setErrorSubmission] = React.useState(false);
   const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
     []
@@ -101,6 +104,7 @@ export default function EditSampleModal(props) {
     flock_age_unit: SampleToEdit.flock_age_unit,
     measurements: [],
     rotor_lot_number: SampleToEdit.rotor_lot_number,
+    machine_id: SampleToEdit.machine_id,
   });
 
   useTheme();
@@ -133,6 +137,7 @@ export default function EditSampleModal(props) {
         flock_id: flock.id,
         measurements: newMeasurements,
         rotor_lot_number: SampleDetails.rotor_lot_number,
+        machine_id: SampleDetails.machine_id,
       };
     }
 
@@ -215,7 +220,7 @@ export default function EditSampleModal(props) {
       </>
     );
   };
-
+  console.log(editSampleModalVisiblity)
   if (editSampleModalVisiblity) {
     document.onclick = function (event) {
       if (event === undefined) event = window.event;
@@ -280,6 +285,18 @@ export default function EditSampleModal(props) {
       });
   };
 
+  const getMachines = async () => {
+    await fetch(`/api/machine/organization/${organization.id}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        setMachines(data);
+        // setMachine(data[0]);
+      });
+  };
+
   const getOrganizations = async () => {
     const response = await fetch(`/api/organization/`, {
       method: "GET",
@@ -338,6 +355,7 @@ export default function EditSampleModal(props) {
   React.useEffect(async () => {
     if (editSampleModalVisiblity) {
       await getSources();
+      await getMachines();
     }
   }, [organization]);
 
@@ -549,6 +567,29 @@ export default function EditSampleModal(props) {
                 onChange={handleSampleDetailsChange("rotor_lot_number")}
               />
             </Grid>
+            <Grid item xs={4}>
+                  <FormControl sx={{ width: "100%" }} required>
+                    <InputLabel>Machine</InputLabel>
+                    <Select
+                      value={SampleDetails.machine_id}
+                      label="Machine"
+                      onChange={handleSampleDetailsChange("machine_id")}
+                    >
+                      {machines
+                        .filter(
+                          (m) =>
+                            m.machine_type_id === cartridgeType.machine_type_id
+                        )
+                        .map((m, index) => {
+                          return (
+                            <MenuItem value={m.id} key={index}>
+                              {m.serial_number}
+                            </MenuItem>
+                          );
+                        })}
+                    </Select>
+                  </FormControl>
+                </Grid>
           </Grid>
         </Box>
 

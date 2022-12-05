@@ -164,7 +164,7 @@ export default function DataView() {
       });
 
       const data = await response.json();
-
+      console.log(data);
       assignRowHtml(data);
       setLoading(false);
       resolve(data);
