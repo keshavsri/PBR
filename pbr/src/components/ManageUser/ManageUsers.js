@@ -30,7 +30,6 @@ export default function ManageUsers() {
 
   React.useEffect( async () => {
      getRoles();
-     getUsers();
      getHeadCells();
   }, []);
 

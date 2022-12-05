@@ -407,7 +407,6 @@ export default function DataView() {
   React.useEffect(() => {
     setSelected([]);
     setSelectedSamples([]);
-    console.log("Full Row List");
   }, [fullRowList]);
 
   React.useEffect(() => {
