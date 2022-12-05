@@ -15,6 +15,7 @@ export default function ManageUsers() {
   const [rowList, setRowList] = React.useState([]);
   const [headCellList, setHeadCellList] = React.useState([]);
   const [selected, setSelected] = React.useState([]);
+  const [roles, setRoles] = React.useState({});
   const [organizations, setOrganizations] = React.useState([]);
   const [openEditUsersModal, setOpenEditUsersModal] = React.useState(false);
   const [organization, setOrganization] = React.useState(user.organization_id);
@@ -27,19 +28,33 @@ export default function ManageUsers() {
     4: "Guest",
   };
 
-  React.useEffect(async () => {
-    await getOrganizations();
-    await getUsers();
-    getHeadCells();
+  React.useEffect( async () => {
+     getRoles();
+     getUsers();
+     getHeadCells();
   }, []);
 
-  React.useEffect(async () => {
-    await getUsers();
+  React.useEffect( () => {
+     getUsers();
+     getRoles();
   }, [organization]);
+
+  React.useEffect( () => {
+    getOrganizations();
+  }, [roles]);
+
+  const getRoles = async () => {
+    const response = await fetch(`/api/enum/roles`, {
+      method: "GET",
+    }).then(checkResponseAuth);
+    const data = await response.json();
+    console.log(data);
+    setRoles(data);
+  };
 
   const getUsers = async () => {
     let orgId = user.organization_id;
-    if (user.role === 0) {
+    if (user.role === roles["Super_Admin"]) {
       orgId = organization;
     }
     await fetch(`/api/user/organization/${orgId}`, { method: "GET" })
@@ -55,8 +70,10 @@ export default function ManageUsers() {
       });
   };
 
+
+
   const getOrganizations = async () => {
-    if (user.role === 0) {
+    if (user.role === roles["Super_Admin"]) {
       await fetch(`/api/organization`, { method: "GET" })
         .then((response) => {
           return response.json();
@@ -102,7 +119,7 @@ export default function ManageUsers() {
   };
 
   const onDelete = async () => {
-    if (user.role === 0 || user.role === 1) {
+    if (user.role === roles["Super_Admin"] || user.role === roles["Super_Admin"]) {
       selected.map((deletedUserId) => {
         deleteUser(deletedUserId);
       });
@@ -122,13 +139,13 @@ export default function ManageUsers() {
   const assignRowHtml = (rows) => {
     rows.map((row, index) => {
       row.role_id = row.role;
-      row.role = roleMap[Number(row.role)];
+      row.role = Object.keys(roles).find(key => roles[key] === user.role);
       row.deletable = isDeletable(row);
     });
   };
 
   const isDeletable = (row) => {
-    if (user.role < row.role_id && user.role != 3) {
+    if (user.role < row.role_id && user.role === roles["Data_Collector"]) {
       return true;
     } else if (user.id === row.id) {
       return true;
@@ -215,6 +232,7 @@ export default function ManageUsers() {
     );
   };
 
+
   return (
     <>
       <Paper>
@@ -222,7 +240,7 @@ export default function ManageUsers() {
           headCells={headCellList}
           rows={rowList}
           onDelete={onDelete}
-          toolbarButtons={<>{user.role === 0 && <OrganizationDropdown />}</>}
+          toolbarButtons={<>{user.role === roles["Super_Admin"] && <OrganizationDropdown />}</>}
           onEdit={onEdit}
           selected={selected}
           setSelected={setSelected}
@@ -233,6 +251,7 @@ export default function ManageUsers() {
             {openEditUsersModal ? (
               <EditUsers
                 roleMap={roleMap}
+                roles={roles}
                 currentUser={user}
                 user={rowList.find((user) => user.id === selected[0])}
                 editUser={editUser}
