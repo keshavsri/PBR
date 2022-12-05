@@ -1,6 +1,13 @@
 import * as React from "react";
+import { useRef } from "react";
 
-import { Paper, Chip } from "@mui/material";
+import {
+  Paper,
+  Chip,
+  CircularProgress,
+  Typography,
+  Button,
+} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import SavedToPendingModal from "../ValidateData/SavedToPendingModal";
 
@@ -50,8 +57,27 @@ export default function DataView() {
   const openSavedToPendingVisibility = () => setSavedToPendingVisibility(true);
   const openEditSampleVisibility = () => setEditSampleModalVisibility(true);
 
+  const [loading, setLoading] = React.useState(false);
+
+  const abortController = useRef(null);
+
   const assignRowHtml = (rows) => {
-    rows.map((row, index) => {
+    rows.map((row) => {
+      row.measurements.map((meas) => {
+        row[meas.analyte.abbreviation] = meas.value;
+      });
+      row["flock_name"] = row.flock.name;
+
+      let newDate = row;
+      newDate.timestamp_added = new Date(row.timestamp_added).toLocaleString();
+      // remove seconds from date
+      let seconds = ":" + newDate.timestamp_added.slice(-5, -3);
+      // remove comma from date
+      newDate.timestamp_added = newDate.timestamp_added.replace(",", "");
+      newDate.timestamp_added = newDate.timestamp_added.replace(seconds, "");
+
+      setSampleList((sampleList) => [...sampleList, newDate]);
+
       row.status = (
         // NEED TO ADD CONDITIONAL FOR COLOR
         <>
@@ -70,12 +96,7 @@ export default function DataView() {
       //     </IconButton>
       //   </>
       // );
-      row.timestamp_added = new Date(row.timestamp_added).toLocaleString(
-        "en-US",
-        {
-          timeZone: "America/New_York",
-        }
-      );
+
       // TEMPORARY
       row.deletable = true;
     });
@@ -126,24 +147,35 @@ export default function DataView() {
   };
 
   const getData = async () => {
+    setSampleList([]);
     getHeadCells();
-    const uri = `/api/sample/org_cartridge_type?organization_id=${organization.id}&cartridge_type_id=${currentCartridgeType.id}`;
-    await fetch(uri, { method: "GET" })
-      .then((response) => {
-        return response.json();
-      })
-      .then(checkResponseAuth)
-      .then((data) => {
-        console.log(data);
-        data.forEach((sample) => {
-          sample.measurements.map((meas) => {
-            sample[meas.analyte.abbreviation] = meas.value;
-          });
-          sample["flock_name"] = sample.flock.name;
-        });
-        setSampleList(data);
-        assignRowHtml(data);
+
+
+    const promise = new Promise(async (resolve) => {
+      setLoading(true);
+      abortController.current = new AbortController();
+      const uri = `/api/sample/org_cartridge_type?organization_id=${organization.id}&cartridge_type_id=${currentCartridgeType.id}`;
+      const response = await fetch(uri, {
+        signal: abortController.current.signal,
+        method: "GET",
       });
+
+      const data = await response.json();
+
+      // setSampleList(data);
+      assignRowHtml(data);
+      setLoading(false);
+      resolve(data);
+    });
+
+    return promise;
+  };
+
+  const cancelGetData = () => {
+    if (abortController.current) {
+      abortController.current.abort();
+      setLoading(false);
+    }
   };
 
   const getCartridgeTypes = async () => {
@@ -177,6 +209,13 @@ export default function DataView() {
         disablePadding: true,
         label: "ID",
       },
+      {
+        id: "timestamp_added",
+        numeric: false,
+        disablePadding: true,
+        label: "Date Added",
+      },
+
       {
         id: "buttons",
       },
@@ -268,6 +307,7 @@ export default function DataView() {
     await fetch(temp, { method: "PUT" })
       .then((response) => {})
       .then(() => {
+        setLoading(true);
         getData();
       });
 
@@ -281,6 +321,7 @@ export default function DataView() {
       await fetch(temp, { method: "PUT" })
         .then((response) => {})
         .then(() => {
+          setLoading(true);
           getData();
         });
     });
@@ -294,6 +335,7 @@ export default function DataView() {
     await fetch(temp, { method: "PUT" })
       .then((response) => {})
       .then(() => {
+        setLoading(true);
         getData();
       });
 
@@ -309,6 +351,7 @@ export default function DataView() {
         console.log(response.json());
       })
       .then(() => {
+        setLoading(true);
         getData();
       });
 
@@ -322,6 +365,7 @@ export default function DataView() {
       await fetch(temp, { method: "DELETE" })
         .then((response) => {})
         .then(() => {
+          setLoading(true);
           getData();
         });
     });
@@ -343,6 +387,10 @@ export default function DataView() {
 
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
   React.useEffect(async () => {
+    setLoading(true);
+    // setTimeout(() => {
+    //   setLoading(false);
+    // }, 8000);
     setSelected([]);
     await getData();
   }, [organization, currentCartridgeType]);
@@ -359,34 +407,55 @@ export default function DataView() {
     <>
       <DataViewProvider>
         <Paper>
-          <EnhancedTable
-            headCells={headCellList}
-            rows={sampleList}
-            toolbarButtons={
-              <DVTableToolbar
-                filterPendingSamples={filterPendingSamples}
-                showOnlyPendingSamples={showOnlyPendingSamples}
-                turnPendingFilterOff={turnPendingFilterOff}
-                cartridgeTypes={cartridgeTypes}
-                organizations={organizations}
-                setCurrentOrganization={setOrganization}
-                currentOrganization={organization}
-                user={user}
-                roles={roles}
-                currentCartridgeType={currentCartridgeType}
-                setCurrentCartridgeType={setCurrentCartridgeType}
-              />
-            }
-            selected={selected}
-            setSelected={setSelected}
-            setSelectedSamples={setSelectedSamples}
-            onDelete={onDelete}
-            isSample={isSample}
-            setOpenReviewSampleModal={setOpenReviewSampleModal}
-            onSubmit={onSubmit}
-            onEdit={onEdit}
-            selectedSample={selectedSamples[0]}
-          />
+          {loading ? (
+            <Grid
+              container
+              direction="column"
+              display="flex"
+              justify="center"
+              alignItems="center"
+              style={{ padding: "25px", border: "3px solid black" }}
+            >
+              <Grid item>
+                <CircularProgress />
+              </Grid>
+
+              <Grid item>
+                <Typography variant="h6">Loading...</Typography>
+              </Grid>
+              <Button onClick={() => cancelGetData()}>Stop Loading</Button>
+            </Grid>
+          ) : (
+            <EnhancedTable
+              headCells={headCellList}
+              rows={sampleList}
+              toolbarButtons={
+                <DVTableToolbar
+                  filterPendingSamples={filterPendingSamples}
+                  showOnlyPendingSamples={showOnlyPendingSamples}
+                  turnPendingFilterOff={turnPendingFilterOff}
+                  cartridgeTypes={cartridgeTypes}
+                  organizations={organizations}
+                  setCurrentOrganization={setOrganization}
+                  currentOrganization={organization}
+                  user={user}
+                  roles={roles}
+                  currentCartridgeType={currentCartridgeType}
+                  setCurrentCartridgeType={setCurrentCartridgeType}
+                />
+              }
+              selected={selected}
+              setSelected={setSelected}
+              setSelectedSamples={setSelectedSamples}
+              setPendingSamples={setPendingSamples}
+              onDelete={onDelete}
+              isSample={isSample}
+              setOpenReviewSampleModal={setOpenReviewSampleModal}
+              onSubmit={onSubmit}
+              onEdit={onEdit}
+              selectedSample={selectedSamples[0]}
+            />
+          )}
 
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>

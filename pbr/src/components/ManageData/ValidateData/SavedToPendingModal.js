@@ -5,7 +5,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-
+import ErrorIcon from "@mui/icons-material/Error";
 import {
   Typography,
   Grid,
@@ -14,6 +14,8 @@ import {
   Box,
   Card,
   Modal,
+  ListItemText,
+  ListItem,
 } from "@mui/material";
 
 import { makeStyles } from "@mui/styles";
@@ -53,6 +55,13 @@ export default function SavedToPendingModal(props) {
 
   const [expanded, setExpanded] = React.useState(false);
   const [errorSubmission, setErrorSubmission] = React.useState(false);
+  const [errorSubmissionAll, setErrorSubmissionAll] = React.useState(false);
+
+  const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
+    []
+  );
+
+  const [submitAllErrors, setSubmitAllErrors] = React.useState([]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -79,6 +88,7 @@ export default function SavedToPendingModal(props) {
   const onSubmitAll = async () => {
     await submitAll();
     setSavedToPendingVisibility(false);
+    setErrorSubmissionAll(false);
   };
 
   const onSubmitOne = async (sample) => {
@@ -88,20 +98,64 @@ export default function SavedToPendingModal(props) {
     setErrorSubmission(false);
   };
 
-  const IstatORVescan = (sample) => {
-    if (sample.measurement_values.length === 13) {
-      return (
-        <Typography gutterBottom variant="body1">
-          Istat Data:
-        </Typography>
-      );
-    } else if (sample.measurement_values.length === 17) {
-      return (
-        <Typography gutterBottom variant="body1">
-          VetScan Data:
-        </Typography>
-      );
+  const validateSample = (sample) => {
+    let errors = [];
+    console.log("Validating sample", sample.id);
+    console.log(sample);
+    let valid = true;
+    setErrorSubmission(false);
+    setErrorSubmissionAll(false);
+
+    if (sample.flock_age === null) {
+      let err = "Sample " + sample.id + ": " + "Flock age is required";
+      errors.push(err);
+      setSubmitAllErrors((submitAllErrors) => [...submitAllErrors, err]);
+      valid = false;
     }
+
+    if (sample.flock_age <= 0) {
+      let err =
+        "Sample " + sample.id + ": " + "Flock age cannot be negative or zero";
+      errors.push(err);
+      setSubmitAllErrors((submitAllErrors) => [...submitAllErrors, err]);
+      valid = false;
+    }
+
+    if (sample.flock_age_unit === null) {
+      let err = "Sample " + sample.id + ": " + "Flock age unit is required";
+      errors.push(err);
+      setSubmitAllErrors((submitAllErrors) => [...submitAllErrors, err]);
+      valid = false;
+    }
+
+    if (sample.sample_type === null) {
+      let err = "Sample " + sample.id + ": " + "Sample type is required";
+      errors.push(err);
+      setSubmitAllErrors((submitAllErrors) => [...submitAllErrors, err]);
+      valid = false;
+    }
+
+    sample.measurements.forEach((measurement) => {
+      if (measurement.value === null) {
+        let err =
+          "Sample " +
+          sample.id +
+          ": " +
+          "Measurement for" +
+          " " +
+          measurement.analyte.abbreviation +
+          " is required";
+        errors.push(err);
+        setSubmitAllErrors((submitAllErrors) => [...submitAllErrors, err]);
+        valid = false;
+      }
+    });
+
+    if (valid === false) {
+      setErrorSubmissionMessages(errors);
+    }
+
+    return valid;
   };
 
   const fillMachineData = (sample) => {
@@ -143,26 +197,9 @@ export default function SavedToPendingModal(props) {
 
           <Box sx={{ flexGrow: 1 }}>
             <Grid container direction="row" alignItems="center" spacing={3}>
-              {/* <Grid item xs={6}>
-                <TextField
-                  fullWidth
-                  label="Organization"
-                  value={sample.organization.name}
-                  disabled
-                />
-              </Grid> */}
-
               <Grid item xs>
                 <TextField label="Flock" value={sample.flock.name} disabled />
               </Grid>
-
-              {/* <Grid item xs>
-                <TextField
-                  label="Source"
-                  value={sample.organization.sources[0].name}
-                  disabled
-                />
-              </Grid> */}
 
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -254,7 +291,11 @@ export default function SavedToPendingModal(props) {
             <Button
               variant="contained"
               onClick={() => {
-                onSubmitOne(sample);
+                if (validateSample(sample)) {
+                  onSubmitOne(sample);
+                } else {
+                  setErrorSubmission(true);
+                }
               }}
             >
               Submit
@@ -286,57 +327,90 @@ export default function SavedToPendingModal(props) {
               {listSamples()}
             </Grid>
           </Grid>
+
+          <Box sx={{ flexGrow: 1 }} style={{ padding: "15px" }}>
+            <Grid container spacing={2} columns={16}>
+              <Grid item xs={8}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  style={{ width: 200 }}
+                  onClick={() => {
+                    setSavedToPendingVisibility(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+              </Grid>
+              <Grid item xs={8}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  style={{ width: 200 }}
+                  onClick={() => {
+                    let valid = true;
+                    setSubmitAllErrors([]);
+
+
+                    selectedSamples.forEach((sample) => {
+                      if (!validateSample(sample)) {
+                        setErrorSubmissionAll(true);
+                        valid = false;
+                      }
+                    });
+
+                    if (valid) {
+                      onSubmitAll();
+                    }
+
+                  }}
+                >
+                  Submit All
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+
+          <Box sx={{ flexGrow: 1 }} style={{ padding: "15px" }}>
+            {errorSubmission ? (
+              <Typography
+                gutterBottom
+                variant="button"
+                style={{
+                  color: "red",
+                }}
+              >
+                Fix Error before Submitting:
+                {errorSubmissionMessages.map((message) => (
+                  <ListItem>
+                    <ErrorIcon />
+                    <ListItemText primary={message} />
+                  </ListItem>
+                ))}
+              </Typography>
+            ) : null}
+          </Box>
+
+          <Box sx={{ flexGrow: 1 }} style={{ padding: "15px" }}>
+            {errorSubmissionAll ? (
+              <Typography
+                gutterBottom
+                variant="button"
+                style={{
+                  color: "red",
+                }}
+              >
+                Fix Errors before Submitting
+                {submitAllErrors.map((message) => (
+                  <ListItem>
+                    <ErrorIcon />
+                    <ListItemText primary={message} />
+                  </ListItem>
+                ))}
+              </Typography>
+            ) : null}
+          </Box>
         </Card>
-
-        <Grid item xs={12} sm={2}>
-          <Button
-            variant="contained"
-            color="secondary"
-            style={{
-              position: "absolute",
-              bottom: 50,
-            }}
-            onClick={() => {
-              setSavedToPendingVisibility(false);
-            }}
-          >
-            Cancel
-          </Button>
-        </Grid>
-
-        <Grid item xs={12} sm={2}>
-          <Button
-            variant="contained"
-            style={{
-              position: "absolute",
-              bottom: 50,
-              left: 150,
-            }}
-            onClick={() => {
-              onSubmitAll();
-            }}
-          >
-            Submit All
-          </Button>
-        </Grid>
-
-        <Grid>
-          <br />
-          {errorSubmission ? (
-            <Typography
-              gutterBottom
-              variant="button"
-              style={{
-                color: "red",
-                position: "absolute",
-                bottom: 50,
-                left: 280,
-              }}
-            >
-              The Machine Data associated to the sample is incomplete.
-            </Typography>
-          ) : null}
-        </Grid>
       </div>
     </Modal>
   );
