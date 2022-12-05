@@ -82,7 +82,6 @@ export default function EnhancedTable(props) {
     selected,
     setSelected,
     setSelectedSamples,
-    setPendingSamples,
     onDelete,
     onSubmit,
     onEdit,
@@ -145,9 +144,6 @@ export default function EnhancedTable(props) {
           }
         }
 
-        if (pendingFlag) {
-          setPendingSamples(rows);
-        }
         setSelectedSamples(rows);
       }
 
@@ -167,7 +163,6 @@ export default function EnhancedTable(props) {
 
     let newSelected = [];
     let selectedSamples = [];
-    let pendingSamples = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, name);
@@ -193,30 +188,28 @@ export default function EnhancedTable(props) {
           if (newSelected[j] === rows[i].id) {
             if (selectedSamples.indexOf(rows[i]) === -1) {
               selectedSamples.push(rows[i]);
-              pendingSamples.push(rows[i]);
             }
           }
         }
       }
+
+      setSelectedSamples(selectedSamples);
+
   
       if (selectedSamples.length > 0) {
         for (let i = 0; i < selectedSamples.length; i++) {
           if (selectedSamples[i].validation_status != "Saved") {
             setSavedFlag(false);
           }
-  
-          setSelectedSamples(selectedSamples);
         }
       }
   
-      if (pendingSamples.length > 0) {
-        for (let i = 0; i < pendingSamples.length; i++) {
-          if (pendingSamples[i].validation_status != "Pending") {
+      if (selectedSamples.length > 0) {
+        for (let i = 0; i < selectedSamples.length; i++) {
+          if (selectedSamples[i].validation_status != "Pending") {
             setPendingFlag(false);
             break;
           }
-  
-          setPendingSamples(pendingSamples);
         }
       }
     }

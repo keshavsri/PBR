@@ -505,8 +505,7 @@ export default function DataView() {
         <ReviewSampleModal
           openReviewSampleModal={openReviewSampleModal}
           setOpenReviewSampleModal={setOpenReviewSampleModal}
-          pendingSamples={pendingSamples}
-          setPendingSamples={setPendingSamples}
+          selectedSamples={selectedSamples}
           acceptSample={acceptSample}
           rejectSample={rejectSample}
           turnPendingFilterOff={turnPendingFilterOff}

@@ -157,9 +157,9 @@ export default function AddOrganization({
           if (successfulPost) {
             setOrganization(data);
             getAdminContact(data.id);
-            getSources(data);
-            getFlocks(data);
-            getMachines(data);
+            getSources(data.id);
+            getFlocks(data.id);
+            getMachines(data.id);
           }
         });
 
