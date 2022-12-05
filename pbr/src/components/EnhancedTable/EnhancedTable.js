@@ -98,6 +98,7 @@ export default function EnhancedTable(props) {
   const [loading, setLoading] = React.useState(false);
   const [savedFlag, setSavedFlag] = React.useState(true);
   const [pendingFlag, setPendingFlag] = React.useState(true);
+  const [allSelected, setAllSelected] = React.useState(false);
 
   // let rowComponents = generateRows();
 
@@ -146,6 +147,7 @@ export default function EnhancedTable(props) {
 
         setSelectedSamples(rows);
       }
+      setAllSelected(true);
 
       
 
@@ -154,6 +156,7 @@ export default function EnhancedTable(props) {
     setSavedFlag(true);
     setPendingFlag(true);
     setSelected([]);
+    setAllSelected(false);
   };
 
   const handleClick = (event, name) => {
@@ -277,6 +280,7 @@ export default function EnhancedTable(props) {
               rowCount={rows.length}
               headCells={headCells}
               deletableRowCount={rows.filter((n) => n.deletable).length}
+              allSelected={allSelected}
             />
             <TableBody>
               {stableSort(rows, getComparator(order, orderBy))
