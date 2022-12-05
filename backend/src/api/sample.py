@@ -128,8 +128,8 @@ def get_samples(access_allowed, current_user):
                 AND sample.is_deleted = 0
                 AND source.organization_id = :organization_id
                 AND sample.cartridge_type_id = :cartridge_type_id
-                AND CASE 
-                        WHEN sample.validation_status = "Saved" 
+                AND CASE
+                        WHEN sample.validation_status = "Saved"
                             THEN sample.user_id = :current_user_id
                         ELSE TRUE
                     END
@@ -171,6 +171,42 @@ def get_samples(access_allowed, current_user):
                 results.append(Sample.from_orm(sample).dict())
 
             return jsonify(results), 200
+
+    else:
+        return jsonify({'message': 'Role not allowed'}), 403
+
+
+# delete sample permanently
+@sampleBlueprint.route('/permanent/<int:sample_id>', methods=['DELETE'])
+@token_required
+@allowed_roles([0, 1, 2, 3])
+def delete_sample_permanently(access_allowed, current_user, sample_id):
+    """
+    This function deletes a sample permanently.
+    :param access_allowed: True if user has access, False otherwise Check the decorator for more info.
+    :param current_user: The user who is currently logged in. Check the decorator for more info.
+    :param sample_id: The id of the sample to delete
+    :return: A json response containing a message
+
+
+    """
+
+    if access_allowed:
+
+        sample = SampleORM.query.get(sample_id)
+
+        if sample is None:
+            return jsonify({'message': 'Sample not found'}), 404
+
+        # Delete the sample
+        MeasurementORM.query.filter_by(sample_id=sample_id).delete()
+        SampleORM.query.filter_by(id=sample_id).delete()
+        models.db.session.commit()
+
+        create_log(current_user, LogActions.DELETE_SAMPLE,
+                   'Deleted sample: ' + str(sample.id))
+
+        return jsonify({'message': 'Sample deleted'}), 200
 
     else:
         return jsonify({'message': 'Role not allowed'}), 403

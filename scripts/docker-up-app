@@ -6,7 +6,7 @@ Starting all docker containers except testing.
 =======================================================
 "
 
-docker-compose up -d db
-docker-compose up -d api
-docker-compose up -d app
-docker-compose up -d nginx
+docker-compose up -d db --build
+docker-compose up -d api --build
+docker-compose up -d app --build
+docker-compose up -d nginx --build
