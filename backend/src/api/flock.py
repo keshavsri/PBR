@@ -129,7 +129,7 @@ def post_flock(access_allowed, current_user):
 
 @flockBlueprint.route('/<int:item_id>', methods=['PUT'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2])
 def put_flock(access_allowed, current_user, item_id):
     """
     This function handles the PUT request for updating a specific flock.
@@ -164,7 +164,7 @@ def put_flock(access_allowed, current_user, item_id):
 
 @flockBlueprint.route('/<int:item_id>', methods=['DELETE'])
 @token_required
-@allowed_roles([0, 1, 2, 3])
+@allowed_roles([0, 1, 2])
 def delete_flock(access_allowed, current_user, item_id):
 
     """
