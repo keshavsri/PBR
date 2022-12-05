@@ -544,17 +544,25 @@ export default function DataViewSampleModal(props) {
             </Box>
 
             <br/>
-            <Box>
-              <Button  component={"label"} variant={'contained'}>
-                <Typography>
-                  Upload measurements from a file
-                </Typography>
-                <UploadFileIcon/>
-                <input onChange={onFileChange} type={"file"} hidden/>
-              </Button>
+
+            {cartridgeType.machine_type_id === 2 &&
+
+            <>
+              <Box>
+                <Button  component={"label"} variant={'contained'}>
+                  <Typography>
+                    Upload measurements from a file
+                  </Typography>
+                  <UploadFileIcon/>
+                  <input onChange={onFileChange} type={"file"} hidden/>
+                </Button>
 
 
-            </Box>
+              </Box>
+            </>
+            }
+
+
 
             <Grid>{sampleMeasurements()}</Grid>
             <br></br>
