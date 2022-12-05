@@ -181,9 +181,6 @@ def delete_sample_permanently(access_allowed, current_user, sample_id):
         if sample is None:
             return jsonify({'message': 'Sample not found'}), 404
 
-        if sample.user_id != current_user.id and current_user.role != Roles.Super_Admin:
-            return jsonify({'message': 'Role not allowed'}), 403
-
         # Delete the sample
         MeasurementORM.query.filter_by(sample_id=sample_id).delete()
         SampleORM.query.filter_by(id=sample_id).delete()

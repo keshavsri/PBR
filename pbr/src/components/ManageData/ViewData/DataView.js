@@ -163,10 +163,8 @@ export default function DataView() {
 
       const data = await response.json();
 
-      // setSampleList(data);
       assignRowHtml(data);
       setLoading(false);
-      console.log("data", data);
       resolve(data);
     });
 
