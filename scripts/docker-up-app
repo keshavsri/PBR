@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "
+=======================================================
+Starting all docker containers except testing.
+=======================================================
+"
+
+docker-compose up -d db
+docker-compose up -d api
+docker-compose up -d app
+docker-compose up -d nginx

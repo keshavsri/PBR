@@ -88,6 +88,7 @@ export default function EnhancedTable(props) {
     isSample,
     setOpenReviewSampleModal,
     selectedSample,
+    setReportModalVisibility,
   } = props;
 
   const [order, setOrder] = React.useState("");
@@ -261,6 +262,7 @@ export default function EnhancedTable(props) {
           onSubmit={onSubmit}
           isSample={isSample}
           setOpenReviewSampleModal={setOpenReviewSampleModal}
+          setReportModalVisibility={setReportModalVisibility}
         />
         <TableContainer>
           <Table
