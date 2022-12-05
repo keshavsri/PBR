@@ -110,7 +110,12 @@ def post_flock(access_allowed, current_user):
 
         org_id = SourceORM.query.get(request.json.get('source_id')).organization_id
         # checks if the Flock already exists in the database
-        if FlockORM.query.filter_by(name=request.json.get('name'), organization_id=org_id, is_deleted = False).first() is None:
+        flocks_same_name = FlockORM.query.filter_by(name=request.json.get('name'), is_deleted = False).all()
+
+        # Finds all existing flocks with same name as one being created that exist is the created flock's organization
+        flocks_same_name_and_org = [flock for flock in flocks_same_name if SourceORM.query.get(flock.source_id).organization_id == org_id]
+
+        if not flocks_same_name_and_org:
             # builds the Flock from the request json
             flock: FlockORM = FlockORM()
             for name, value in Flock.parse_obj(request.json):
@@ -122,7 +127,7 @@ def post_flock(access_allowed, current_user):
             return jsonify(Flock.from_orm(flock).dict()), 201
         # if the Flock already exists then return a 409 conflict
         else:
-            return jsonify({'message': 'Flock with this name already exists within current org', "existing flock name": Flock.from_orm(FlockORM.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
+            return jsonify({'message': 'Flock with this name already exists within current org', "existing flock name": request.json.get('name')}), 409
     else:
         return jsonify({'message': 'Role not allowed'}), 403
     
@@ -148,8 +153,13 @@ def put_flock(access_allowed, current_user, item_id):
             return jsonify({'message': 'Flock does not exist'}), 404
 
         org_id = SourceORM.query.get(request.json.get('source_id')).organization_id
+        # checks if the Flock already exists in the database
+        flocks_same_name = FlockORM.query.filter_by(name=request.json.get('name'), is_deleted = False).all()
 
-        if FlockORM.query.filter_by(name=request.json.get('name'), organization_id=org_id, is_deleted = False).first() is None:
+        # Finds all existing flocks with same name as one being created that exist is the created flock's organization
+        flocks_same_name_and_org = [flock for flock in flocks_same_name if SourceORM.query.get(flock.source_id).organization_id == org_id]
+
+        if not flocks_same_name_and_org:
             FlockORM.query.filter_by(id=item_id).update(request.json)
             db.session.commit()
             edited_flock = FlockORM.query.get(item_id)

@@ -84,7 +84,7 @@ def create_source(access_allowed, current_user):
                 models.db.session.commit()
                 return jsonify({'message': 'Source created successfully'}), 201
             else:
-                return jsonify({'message': 'Source already exists with the same name in the organization'}), 400
+                return jsonify({'message': 'Source already exists with the same name in the organization'}), 409
     else:
         return jsonify({'message': 'Access denied'}), 403
 

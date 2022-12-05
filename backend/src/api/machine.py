@@ -135,7 +135,7 @@ def edit_machine(access_allowed, current_user, item_id):
             existing_machine_by_serial_number.organization_id == request.json.get('organization_id') and
             existing_machine_by_serial_number.id is not item_id
         ):
-            return jsonify({'message': 'Serial number must be unique within an organization'}), 400
+            return jsonify({'message': 'Serial number must be unique within an organization'}), 409
         else:
             models.Machine.query.filter_by(id=item_id).update(request.json)
             models.db.session.commit()

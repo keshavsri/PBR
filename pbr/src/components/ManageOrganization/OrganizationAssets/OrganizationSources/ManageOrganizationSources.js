@@ -20,7 +20,7 @@ export default function ManageOrganizationSources({
   const [openAddOrganizationSourceModal, setOpenAddOrganizationSourceModal] = React.useState(false);
 
   React.useEffect(async () => {
-    await (getSources.id);
+    await getSources(organization.id);
 
     getHeadCells();
   }, []);
