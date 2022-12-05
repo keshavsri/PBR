@@ -90,7 +90,7 @@ export default function OrganizationView() {
   };
 
   const isDeletable = () => {
-    if (user.role == roles["Super_Admin"] || user.role == roles["Admin"]) {
+    if (user.role == roles["Super_Admin"] || user.role == roles["Admin"] || user.role == roles["Supervisor"]) {
       return true;
     } else {
       return false;
