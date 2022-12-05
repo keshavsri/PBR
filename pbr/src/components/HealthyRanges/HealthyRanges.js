@@ -14,6 +14,8 @@ import {
   TableHead,
   TableRow,
   Alert,
+  IconButton,
+  Popover
 } from "@mui/material";
 
 import CircularProgress from "@mui/material/CircularProgress";
@@ -26,6 +28,7 @@ import Box from "@mui/material/Box";
 import { tableCellClasses } from "@mui/material/TableCell";
 
 import CalculateIcon from "@mui/icons-material/Calculate";
+import InfoIcon from '@mui/icons-material/Info';
 
 import useAuth from "../../services/useAuth";
 
@@ -245,6 +248,20 @@ export default function HealthyRanges() {
       clearTimeout(timer.current);
     };
   }, []);
+  
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const openInfoPopover = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const closeInfoPopover = () => {
+    setAnchorEl(null);
+  };
+
+  const popoverOpen = Boolean(anchorEl);
+  const popoverId = popoverOpen ? 'simple-popover' : undefined;
+
 
   return (
     <Paper>
@@ -390,11 +407,52 @@ export default function HealthyRanges() {
           </Grid>
         </Grid>
         <Grid container item gutterbottom spacing={2} xs={12} sm={12}>
-          <Grid item xs={12} sm={5}>
-            <Button variant="contained" onClick={getHealthyRanges}>
-              Display Healthy Ranges
-            </Button>
-          </Grid>
+          <Grid item xs={12} sm={12}>
+            <Button
+                variant="contained"
+                onClick={getHealthyRanges}
+              >
+                Display Healthy Ranges
+              </Button>
+              <IconButton
+                aria-describedby={popoverId}
+                variant="contained"
+                onClick={openInfoPopover}
+              >
+                <InfoIcon />
+              </IconButton>
+              <Popover
+                id={popoverId}
+                open={popoverOpen}
+                anchorEl={anchorEl}
+                onClose={closeInfoPopover}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+              >
+                <div>
+                  <Typography sx={{ pt: 2, pl: 2, pr: 2, pb: 1 }} variant="h6">Healthy Ranges are claculated using the data in the system that match the selected criteria.</Typography>
+                  <Typography sx={{ pl: 2, pr: 2}} variant="h5">Gender</Typography>
+                  <Typography sx={{ pl: 2, pr: 2, pb: 1 }}>Male, Female, or All. The All option uses all sample data whose Gender is Male, Female, Mixed, or Unknown.</Typography>
+                  <Typography sx={{ pl: 2, pr: 2 }} variant="h5">Age</Typography>
+                  <Typography sx={{ pl: 2, pr: 2 }} variant="h6">Chickens</Typography>
+                  <Typography sx={{ pl: 2, pr: 2 }}>Brooder: 1-5 days</Typography>
+                  <Typography sx={{ pl: 2, pr: 2 }}>Growing: 6-100 days</Typography>
+                  <Typography sx={{ pl: 2, pr: 2 }}>Prelay: 101-150 days</Typography>
+                  <Typography sx={{ pl: 2, pr: 2, pb: 1 }}>Lay: `{'>'}`150 days</Typography>
+                  <Typography sx={{ pl: 2, pr: 2 }} variant="h6">Turkeys</Typography>
+                  <Typography sx={{ pl: 2, pr: 2 }}>Brooder: 1-7 days</Typography>
+                  <Typography sx={{ pl: 2, pr: 2 }}>Growing: 8-195 days</Typography>
+                  <Typography sx={{ pl: 2, pr: 2 }}>Prelay: 196-215 days</Typography>
+                  <Typography sx={{ pl: 2, pr: 2, pb: 1 }}>Lay: `{'>'}`215 days</Typography>
+                  <Typography sx={{ pl: 2, pr: 2 }} variant="h5">Method</Typography>
+                  <Typography sx={{ pl: 2, pr: 2, fontStyle: 'italic' }}>The statistical method used to calculate the ranges.</Typography>
+                  <Typography sx={{ pl: 2, pr: 2, pb: 2 }}>Standard: 95% reference interval. Assumes data distribussion is Gaussian.</Typography>
+
+                </div>
+              </Popover>
+            </Grid>
         </Grid>
         <Grid container item gutterbottom spacing={2} xs={12} sm={12}>
           {noHealthyRanges ? (
@@ -408,7 +466,7 @@ export default function HealthyRanges() {
         </Grid>
         <Grid container item spacing={2} xs={12} sm={12}>
           <Grid item xs={12} sm={12}>
-            <Table sx={{ minWidth: 650 }} aria-label="Healty Range table">
+            <Table sx={{ minWidth: 650 }} aria-label="Healthy Range table">
               <TableHead>
                 <StyledTableRow>
                   <StyledTableCell>Analyte (units)</StyledTableCell>
