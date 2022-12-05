@@ -107,8 +107,10 @@ def post_flock(access_allowed, current_user):
     :return: A new flock if the request is valid, a 400 bad request otherwise.
     """
     if access_allowed:
+
+        org_id = SourceORM.query.get(request.json.get('source_id')).organization_id
         # checks if the Flock already exists in the database
-        if FlockORM.query.filter_by(name=request.json.get('name'), is_deleted = False).first() is None:
+        if FlockORM.query.filter_by(name=request.json.get('name'), organization_id=org_id, is_deleted = False).first() is None:
             # builds the Flock from the request json
             flock: FlockORM = FlockORM()
             for name, value in Flock.parse_obj(request.json):
@@ -120,7 +122,7 @@ def post_flock(access_allowed, current_user):
             return jsonify(Flock.from_orm(flock).dict()), 201
         # if the Flock already exists then return a 409 conflict
         else:
-            return jsonify({'message': 'Flock with this name already exists', "existing flock name": Flock.from_orm(FlockORM.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
+            return jsonify({'message': 'Flock with this name already exists within current org', "existing flock name": Flock.from_orm(FlockORM.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
     else:
         return jsonify({'message': 'Role not allowed'}), 403
     
@@ -145,7 +147,9 @@ def put_flock(access_allowed, current_user, item_id):
         if flock_model is None:
             return jsonify({'message': 'Flock does not exist'}), 404
 
-        if FlockORM.query.filter_by(name=request.json.get('name'), is_deleted = False).first() is None:
+        org_id = SourceORM.query.get(request.json.get('source_id')).organization_id
+
+        if FlockORM.query.filter_by(name=request.json.get('name'), organization_id=org_id, is_deleted = False).first() is None:
             FlockORM.query.filter_by(id=item_id).update(request.json)
             db.session.commit()
             edited_flock = FlockORM.query.get(item_id)
