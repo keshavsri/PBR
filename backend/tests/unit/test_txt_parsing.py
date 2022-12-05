@@ -45,13 +45,3 @@ def test_parse_file(client):
 
     except requests.exceptions.RequestException:
         print('HTTP Request failed')
-    
-# def test_parse_file2(app):
-#     try:
-#         path = "/api/sample/parse"
-#         files={'upload_file': open(str(os.path.abspath(os.path.join(os.path.dirname(__file__)))) + '/test_data/vetstat-machine-data/vetstat2.txt','rb')}
-#         response = requests.post(url=baseUrl+path, files=files)
-#         responseJson = json.loads(response.text)
-#         assert response.status_code == 200
-#     except requests.exceptions.RequestException:
-#         print('HTTP Request failed')

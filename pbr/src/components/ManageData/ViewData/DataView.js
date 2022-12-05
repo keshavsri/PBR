@@ -1,6 +1,13 @@
 import * as React from "react";
+import { useRef } from "react";
 
-import { Paper, Chip } from "@mui/material";
+import {
+  Paper,
+  Chip,
+  CircularProgress,
+  Typography,
+  Button,
+} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import SavedToPendingModal from "../ValidateData/SavedToPendingModal";
 
@@ -14,6 +21,7 @@ import { makeStyles } from "@mui/styles";
 import { DataViewProvider } from "../../../services/useDataView";
 import useAuth from "../../../services/useAuth";
 import ReviewSampleModal from "../ValidateData/ReviewSampleModal";
+import EditSampleModal from "../EditData/EditSampleModal";
 
 const useStyles = makeStyles({});
 
@@ -21,7 +29,6 @@ export default function DataView() {
   const [sampleList, setSampleList] = React.useState([]);
   const { checkResponseAuth, user } = useAuth();
 
-  const [analytes, setAnalytes] = React.useState([]);
   const [currentCartridgeType, setCurrentCartridgeType] = React.useState({});
   const [cartridgeTypes, setCartridgeTypes] = React.useState([]);
   const [pendingRowList, setPendingRowList] = React.useState([]);
@@ -32,26 +39,45 @@ export default function DataView() {
   const [selected, setSelected] = React.useState([]);
   const [roles, setRoles] = React.useState([]);
 
-
   const [isSample] = React.useState(true);
   const [openReviewSampleModal, setOpenReviewSampleModal] =
     React.useState(false);
 
   const [selectedSamples, setSelectedSamples] = React.useState([]);
+  const [machines, setMachines] = React.useState([]);
   const [pendingSamples, setPendingSamples] = React.useState([]);
   const [organization, setOrganization] = React.useState({});
   const [organizations, setOrganizations] = React.useState([]);
 
   const [SavedToPendingVisibility, setSavedToPendingVisibility] =
     React.useState(false);
+  const [editSampleModalVisiblity, setEditSampleModalVisibility] =
+    React.useState(false);
 
   const openSavedToPendingVisibility = () => setSavedToPendingVisibility(true);
+  const openEditSampleVisibility = () => setEditSampleModalVisibility(true);
 
-  const closeSavedToPendingVisibility = () =>
-    setSavedToPendingVisibility(false);
+  const [loading, setLoading] = React.useState(false);
+
+  const abortController = useRef(null);
 
   const assignRowHtml = (rows) => {
-    rows.map((row, index) => {
+    rows.map((row) => {
+      row.measurements.map((meas) => {
+        row[meas.analyte.abbreviation] = meas.value;
+      });
+      row["flock_name"] = row.flock.name;
+
+      let newDate = row;
+      newDate.timestamp_added = new Date(row.timestamp_added).toLocaleString();
+      // remove seconds from date
+      let seconds = ":" + newDate.timestamp_added.slice(-5, -3);
+      // remove comma from date
+      newDate.timestamp_added = newDate.timestamp_added.replace(",", "");
+      newDate.timestamp_added = newDate.timestamp_added.replace(seconds, "");
+
+      setSampleList((sampleList) => [...sampleList, newDate]);
+
       row.status = (
         // NEED TO ADD CONDITIONAL FOR COLOR
         <>
@@ -70,12 +96,7 @@ export default function DataView() {
       //     </IconButton>
       //   </>
       // );
-      row.timestamp_added = new Date(row.timestamp_added).toLocaleString(
-        "en-US",
-        {
-          timeZone: "America/New_York",
-        }
-      );
+
       // TEMPORARY
       row.deletable = true;
     });
@@ -126,23 +147,35 @@ export default function DataView() {
   };
 
   const getData = async () => {
+    setSampleList([]);
     getHeadCells();
-    const uri = `/api/sample/org_cartridge_type?organization_id=${organization.id}&cartridge_type_id=${currentCartridgeType.id}`;
-    await fetch(uri, { method: "GET" })
-      .then((response) => {
-        return response.json();
-      })
-      .then(checkResponseAuth)
-      .then((data) => {
-        data.forEach((sample) => {
-          sample.measurements.map((meas) => {
-            sample[meas.analyte.abbreviation] = meas.value;
-          });
-          sample["flock_name"] = sample.flock.name;
-        });
-        setSampleList(data);
-        assignRowHtml(data);
+
+
+    const promise = new Promise(async (resolve) => {
+      setLoading(true);
+      abortController.current = new AbortController();
+      const uri = `/api/sample/org_cartridge_type?organization_id=${organization.id}&cartridge_type_id=${currentCartridgeType.id}`;
+      const response = await fetch(uri, {
+        signal: abortController.current.signal,
+        method: "GET",
       });
+
+      const data = await response.json();
+
+      // setSampleList(data);
+      assignRowHtml(data);
+      setLoading(false);
+      resolve(data);
+    });
+
+    return promise;
+  };
+
+  const cancelGetData = () => {
+    if (abortController.current) {
+      abortController.current.abort();
+      setLoading(false);
+    }
   };
 
   const getCartridgeTypes = async () => {
@@ -157,6 +190,17 @@ export default function DataView() {
       });
   };
 
+  const getMachines = async () => {
+    await fetch(`api/machines/${organization.id}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then(checkResponseAuth)
+    .then((data) => {
+      setMachines(data);
+    });
+  };
+
   const getHeadCells = () => {
     const headCells = [
       {
@@ -165,6 +209,13 @@ export default function DataView() {
         disablePadding: true,
         label: "ID",
       },
+      {
+        id: "timestamp_added",
+        numeric: false,
+        disablePadding: true,
+        label: "Date Added",
+      },
+
       {
         id: "buttons",
       },
@@ -184,6 +235,22 @@ export default function DataView() {
       },
 
       {
+        id: "flock_age_unit",
+        numeric: false,
+        disablePadding: true,
+        label: "Flock Age Unit",
+      },
+
+      {
+        id: "rotor_lot_number",
+        numeric: false,
+        disablePadding: true,
+        label: "Rotor Lot Number",
+      },
+
+
+
+      {
         id: "validation_status",
         numeric: false,
         disablePadding: true,
@@ -195,6 +262,13 @@ export default function DataView() {
         headCells.push(createHeadCell(analyte, "", index));
       });
     }
+
+    headCells.push({
+      id: "comments",
+      numeric: false,
+      disablePadding: true,
+      label: "Comments",
+    });
     setHeadCellList(headCells);
   };
 
@@ -219,6 +293,10 @@ export default function DataView() {
     };
   }
 
+  const onEdit = () => {
+    openEditSampleVisibility();
+  };
+
   const onSubmit = () => {
     openSavedToPendingVisibility();
   };
@@ -229,6 +307,7 @@ export default function DataView() {
     await fetch(temp, { method: "PUT" })
       .then((response) => {})
       .then(() => {
+        setLoading(true);
         getData();
       });
 
@@ -242,6 +321,7 @@ export default function DataView() {
       await fetch(temp, { method: "PUT" })
         .then((response) => {})
         .then(() => {
+          setLoading(true);
           getData();
         });
     });
@@ -255,6 +335,7 @@ export default function DataView() {
     await fetch(temp, { method: "PUT" })
       .then((response) => {})
       .then(() => {
+        setLoading(true);
         getData();
       });
 
@@ -270,6 +351,7 @@ export default function DataView() {
         console.log(response.json());
       })
       .then(() => {
+        setLoading(true);
         getData();
       });
 
@@ -283,6 +365,7 @@ export default function DataView() {
       await fetch(temp, { method: "DELETE" })
         .then((response) => {})
         .then(() => {
+          setLoading(true);
           getData();
         });
     });
@@ -304,6 +387,10 @@ export default function DataView() {
 
   // Data manipulation is contained in the getData and getHeadCells calls - is this ok?
   React.useEffect(async () => {
+    setLoading(true);
+    // setTimeout(() => {
+    //   setLoading(false);
+    // }, 8000);
     setSelected([]);
     await getData();
   }, [organization, currentCartridgeType]);
@@ -312,70 +399,118 @@ export default function DataView() {
     await getOrganizations();
   }, [roles]);
 
-  return (
-    <DataViewProvider>
-      <Paper>
-        <EnhancedTable
-          headCells={headCellList}
-          rows={sampleList}
-          toolbarButtons={
-            <DVTableToolbar
-              filterPendingSamples={filterPendingSamples}
-              showOnlyPendingSamples={showOnlyPendingSamples}
-              turnPendingFilterOff={turnPendingFilterOff}
-              cartridgeTypes={cartridgeTypes}
-              organizations={organizations}
-              setCurrentOrganization={setOrganization}
-              currentOrganization={organization}
-              user={user}
-              currentCartridgeType={currentCartridgeType}
-              setCurrentCartridgeType={setCurrentCartridgeType}
-              roles={roles}
-            />
-          }
-          selected={selected}
-          setSelected={setSelected}
-          setSelectedSamples={setSelectedSamples}
-          setPendingSamples={setPendingSamples}
-          onDelete={onDelete}
-          isSample={isSample}
-          setOpenReviewSampleModal={setOpenReviewSampleModal}
-          onSubmit={onSubmit}
-        />
+  React.useEffect(async () => {
+    await getMachines();
+  }, [organization]);
 
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={12}>
-            {SavedToPendingVisibility ? (
-              <SavedToPendingModal
-                selected={selected}
-                submitAll={submitAll}
-                submitOne={submitOne}
-                rows={sampleList}
-                selectedSamples={selectedSamples}
-                setSelectedSamples={setSelectedSamples}
-                SavedToPendingVisibility={SavedToPendingVisibility}
-                setSavedToPendingVisibility={setSavedToPendingVisibility}
-              />
-            ) : null}
+  return (
+    <>
+      <DataViewProvider>
+        <Paper>
+          {loading ? (
+            <Grid
+              container
+              direction="column"
+              display="flex"
+              justify="center"
+              alignItems="center"
+              style={{ padding: "25px", border: "3px solid black" }}
+            >
+              <Grid item>
+                <CircularProgress />
+              </Grid>
+
+              <Grid item>
+                <Typography variant="h6">Loading...</Typography>
+              </Grid>
+              <Button onClick={() => cancelGetData()}>Stop Loading</Button>
+            </Grid>
+          ) : (
+            <EnhancedTable
+              headCells={headCellList}
+              rows={sampleList}
+              toolbarButtons={
+                <DVTableToolbar
+                  filterPendingSamples={filterPendingSamples}
+                  showOnlyPendingSamples={showOnlyPendingSamples}
+                  turnPendingFilterOff={turnPendingFilterOff}
+                  cartridgeTypes={cartridgeTypes}
+                  organizations={organizations}
+                  setCurrentOrganization={setOrganization}
+                  currentOrganization={organization}
+                  user={user}
+                  roles={roles}
+                  currentCartridgeType={currentCartridgeType}
+                  setCurrentCartridgeType={setCurrentCartridgeType}
+                />
+              }
+              selected={selected}
+              setSelected={setSelected}
+              setSelectedSamples={setSelectedSamples}
+              setPendingSamples={setPendingSamples}
+              onDelete={onDelete}
+              isSample={isSample}
+              setOpenReviewSampleModal={setOpenReviewSampleModal}
+              onSubmit={onSubmit}
+              onEdit={onEdit}
+              selectedSample={selectedSamples[0]}
+            />
+          )}
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12}>
+              {SavedToPendingVisibility ? (
+                <SavedToPendingModal
+                  selected={selected}
+                  submitAll={submitAll}
+                  submitOne={submitOne}
+                  rows={sampleList}
+                  selectedSamples={selectedSamples}
+                  setSelectedSamples={setSelectedSamples}
+                  SavedToPendingVisibility={SavedToPendingVisibility}
+                  setSavedToPendingVisibility={setSavedToPendingVisibility}
+                />
+              ) : null}
+            </Grid>
           </Grid>
-        </Grid>
-      </Paper>
-      <DataViewFilterModal
-        setRowList={setSampleList}
-        setHeadCellList={setHeadCellList}
-        getData={getData}
-        rows={sampleList}
-      />
-      <DataViewSampleModal getData={getData} roles={roles}/>
-      <ReviewSampleModal
-        openReviewSampleModal={openReviewSampleModal}
-        setOpenReviewSampleModal={setOpenReviewSampleModal}
-        pendingSamples={pendingSamples}
-        setPendingSamples={setPendingSamples}
-        acceptSample={acceptSample}
-        rejectSample={rejectSample}
-        turnPendingFilterOff={turnPendingFilterOff}
-      />
-    </DataViewProvider>
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12}>
+              {editSampleModalVisiblity ? (
+                <EditSampleModal
+                  selected={selected}
+                  SampleToEdit={selectedSamples[0]}
+                  editSampleModalVisiblity={editSampleModalVisiblity}
+                  setEditSampleModalVisibility={setEditSampleModalVisibility}
+                  roles={roles}
+                  getData={getData}
+                  currentCartridgeType={currentCartridgeType}
+                  setSelectedSamples={setSelectedSamples}
+                  selectedSamples={selectedSamples}
+                  setSelected={setSelected}
+                  currentOrganization={organization}
+                />
+              ) : null}
+            </Grid>
+          </Grid>
+        </Paper>
+
+        <DataViewFilterModal
+          setRowList={setSampleList}
+          setHeadCellList={setHeadCellList}
+          getData={getData}
+          rows={sampleList}
+        />
+        <DataViewSampleModal getData={getData} roles={roles} />
+        <ReviewSampleModal
+          openReviewSampleModal={openReviewSampleModal}
+          setOpenReviewSampleModal={setOpenReviewSampleModal}
+          selectedSamples={selectedSamples}
+          acceptSample={acceptSample}
+          rejectSample={rejectSample}
+          turnPendingFilterOff={turnPendingFilterOff}
+        />
+      </DataViewProvider>
+    </>
   );
 }

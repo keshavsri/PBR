@@ -1,6 +1,6 @@
 from pydantic import BaseModel, constr
 from typing import Optional, List
-from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup
+from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup, HealthyRangeMethod
 from datetime import datetime
 from src.models import *
 
@@ -68,10 +68,10 @@ class Source(PydanticModel):
     """
     id: Optional[int]
     name: constr(max_length=120)
-    street_address: constr(max_length=120)
-    city: constr(max_length=120)
-    state: States
-    zip: constr(regex=r'^[0-9]{5}(?:-[0-9]{4})?$')
+    street_address: Optional[constr(max_length=120)]
+    city: Optional[constr(max_length=120)]
+    state: Optional[States]
+    zip: Optional[constr(regex=r'^[0-9]{5}(?:-[0-9]{4})?$')]
     organization_id: int
 
 
@@ -93,8 +93,8 @@ class Flock(PydanticModel):
         timestamp_added (datetime): The timestamp the flock was added, set as Optional to allow for creation of new flocks without a timestamp as it is set by the DB
     """
     id: Optional[int]
-    name: str
-    strain: str
+    name: Optional[str]
+    strain: Optional[str]
     species: Species
     production_type: ProductionTypes
     gender: BirdGenders
@@ -144,6 +144,7 @@ class Sample(PydanticModel):
     flock_age_unit: Optional[AgeUnits]
     flock: Optional[Flock]
     comments: Optional[str]
+    rotor_lot_number: Optional[str]
     measurements: Optional[List[Measurement]]
     validation_status: Optional[ValidationTypes]
     sample_type: Optional[SampleTypes]
@@ -175,8 +176,11 @@ class HealthyRange(PydanticModel):
     lower_bound: float
     upper_bound: float
     species: Species
-    gender: BirdGenders
+    gender: Optional[BirdGenders]
     age_group: AgeGroup
+    method: HealthyRangeMethod
+    generated: datetime
+    current: bool
     analyte: Analyte
 
 

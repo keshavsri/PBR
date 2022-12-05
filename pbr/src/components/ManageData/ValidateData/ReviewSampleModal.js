@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useTheme } from "@mui/material/styles";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import useAuth from "../../../services/useAuth";
 
 import {
   Typography,
@@ -48,8 +49,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ReviewSampleModal({
   openReviewSampleModal,
   setOpenReviewSampleModal,
-  pendingSamples,
-  setPendingSamples,
+  selectedSamples,
   acceptSample,
   rejectSample,
   turnPendingFilterOff,
@@ -58,32 +58,22 @@ export default function ReviewSampleModal({
   const [modalStyle] = React.useState(getModalStyle);
   useTheme();
   const [expanded, setExpanded] = React.useState(false);
+  const [editedSamples, setEditedSamples] = React.useState(selectedSamples);
+  const { checkResponseAuth, user } = useAuth();
+
+  React.useEffect(() => {
+    setEditedSamples(selectedSamples);
+  }, [selectedSamples])
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
   const removeFromPending = (sample) => {
-    let newSelected = pendingSamples.filter((s) => s !== sample);
-    setPendingSamples(newSelected);
+    let newSelected = editedSamples.filter((s) => s !== sample);
+    setEditedSamples(newSelected);
     if (newSelected.length === 0) {
       setOpenReviewSampleModal(false);
-    }
-  };
-
-  const IstatORVescan = (sample) => {
-    if (sample.measurement_values.length === 13) {
-      return (
-        <Typography gutterBottom variant="body1">
-          Istat Data:
-        </Typography>
-      );
-    } else if (sample.measurement_values.length === 17) {
-      return (
-        <Typography gutterBottom variant="body1">
-          VetScan Data:
-        </Typography>
-      );
     }
   };
 
@@ -93,6 +83,44 @@ export default function ReviewSampleModal({
 
   const onRejectSample = async (id) => {
     await rejectSample(id);
+  };
+
+  const editSample = async (sample) => {
+
+    let payload = {
+      comments: editedSamples.find((s) => s.id === sample.id).comments,
+    };
+
+
+    await fetch(`/api/sample/${sample.id}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        if (!response.ok) {
+        } else {
+          return response.json();
+        }
+      });
+  };
+
+  const handleSampleDetailsChange = (prop) => (event) => {
+
+    // Shallow copy
+    const newModifiedSamples = JSON.parse(JSON.stringify(editedSamples));
+
+    newModifiedSamples.map((sample) => {
+      if (sample.id === expanded) {
+        sample.comments = event.target.value;
+      }
+      return sample;
+    });
+    setEditedSamples(newModifiedSamples);
+
   };
 
   const fillMachineData = (sample) => {
@@ -107,8 +135,9 @@ export default function ReviewSampleModal({
     ));
   };
 
-  const listPendingSamples = () => {
-    return pendingSamples.map((sample) => (
+  const listSelectedSamples = () => {
+
+    return editedSamples.map((sample) => (
       <Accordion
         expanded={expanded === sample.id}
         onChange={handleChange(sample.id)}
@@ -232,20 +261,27 @@ export default function ReviewSampleModal({
             </Typography>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
-            <TextField
-              fullWidth
-              label="Comments"
-              value={sample.comments}
-              disabled
-            />
-          </Grid>
+          {editedSamples.length > 0 ? (
+            <Grid item xs={12} sm={12}>
+              <TextField
+                fullWidth
+                label="Comments"
+                value={
+                  editedSamples.find(
+                    (modifiedSample) => modifiedSample.id === sample.id
+                  ).comments
+                }
+                onChange={handleSampleDetailsChange("comments")}
+              />
+            </Grid>
+          ) : null}
 
           <Grid container spacing={2} sx={{ padding: "15px" }}>
             <Grid item xs={12} sm={2}>
               <Button
                 variant="contained"
                 onClick={() => {
+                  editSample(sample);
                   onAcceptSample(sample.id);
                   turnPendingFilterOff();
                   removeFromPending(sample);
@@ -258,6 +294,7 @@ export default function ReviewSampleModal({
               <Button
                 variant="contained"
                 onClick={() => {
+                  editSample(sample);
                   onRejectSample(sample.id);
                   turnPendingFilterOff();
                   removeFromPending(sample);
@@ -278,6 +315,7 @@ export default function ReviewSampleModal({
       aria-describedby="Modal used for reviewing a sample and accepting/rejecting it"
       open={openReviewSampleModal}
       onClose={() => {
+        setEditedSamples(selectedSamples);
         setOpenReviewSampleModal(false);
       }}
     >
@@ -291,7 +329,7 @@ export default function ReviewSampleModal({
             </Grid>
 
             <Grid item xs={12} sm={12}>
-              {listPendingSamples()}
+              {listSelectedSamples()}
             </Grid>
 
             <Grid item xs={12} sm={2}>
@@ -303,6 +341,7 @@ export default function ReviewSampleModal({
                   bottom: 50,
                 }}
                 onClick={() => {
+                  setEditedSamples(selectedSamples)
                   setOpenReviewSampleModal(false);
                 }}
               >

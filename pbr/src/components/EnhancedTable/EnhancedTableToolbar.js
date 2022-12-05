@@ -2,9 +2,9 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import { alpha } from "@mui/material/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import AssessmentIcon from '@mui/icons-material/Assessment';
+import AssessmentIcon from "@mui/icons-material/Assessment";
 import { makeStyles } from "@mui/styles";
 import useAuth from "../../services/useAuth";
 
@@ -35,10 +35,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function EnhancedTableToolbar(props) {
-  const { numSelected, toolbarButtons, onDelete, onEdit, onSubmit, savedFlag, pendingFlag, isSample, setOpenReviewSampleModal} = props;
+  const {
+    numSelected,
+    toolbarButtons,
+    onDelete,
+    onEdit,
+    onSubmit,
+    savedFlag,
+    pendingFlag,
+    isSample,
+    setOpenReviewSampleModal,
+  } = props;
   let classes = useStyles();
 
-  const {user} = useAuth();
+  const { user } = useAuth();
 
   const handleOpenReviewSampleModal = () => {
     setOpenReviewSampleModal(true);
@@ -79,7 +89,7 @@ export default function EnhancedTableToolbar(props) {
 
       {numSelected === 0 ? toolbarButtons : <></>}
 
-      {numSelected === 1 ? (
+      {numSelected === 1 && (!isSample || savedFlag) ? (
         <Tooltip title="Edit">
           <IconButton sx={{ ml: 1 }} onClick={onEdit}>
             <EditIcon />
@@ -89,7 +99,7 @@ export default function EnhancedTableToolbar(props) {
         <></>
       )}
 
-      {(numSelected > 0 && savedFlag == true) ? (
+      {numSelected > 0 && isSample && savedFlag == true ? (
         <Tooltip title="Submit">
           <IconButton sx={{ ml: 1 }} onClick={onSubmit}>
             <ArrowUpwardIcon />
@@ -99,7 +109,7 @@ export default function EnhancedTableToolbar(props) {
         <></>
       )}
 
-      {numSelected > 0  ? (
+      {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton sx={{ ml: 1 }} onClick={onDelete}>
             <DeleteIcon />
@@ -111,30 +121,29 @@ export default function EnhancedTableToolbar(props) {
 
       {numSelected == 1 && isSample && user.role < 3 && pendingFlag ? (
         <Tooltip title="Review Sample">
-        <Button
-          variant="contained"
-          onClick={handleOpenReviewSampleModal}
-          startIcon={<AssessmentIcon />}
-          sx={{ ml: 1 }}
-        >
-          Review Sample
-        </Button>
-      </Tooltip>
+          <Button
+            variant="contained"
+            onClick={handleOpenReviewSampleModal}
+            startIcon={<AssessmentIcon />}
+            sx={{ ml: 1 }}
+          >
+            Review Sample
+          </Button>
+        </Tooltip>
       ) : null}
 
-      {numSelected > 1 && isSample && user.role < 3&& pendingFlag ? (
+      {numSelected > 1 && isSample && user.role < 3 && pendingFlag ? (
         <Tooltip title="Review Samples">
-        <Button
-          variant="contained"
-          onClick={handleOpenReviewSampleModal}
-          startIcon={<AssessmentIcon />}
-          sx={{ ml: 1 }}
-        >
-          Review Samples
-        </Button>
-      </Tooltip>
+          <Button
+            variant="contained"
+            onClick={handleOpenReviewSampleModal}
+            startIcon={<AssessmentIcon />}
+            sx={{ ml: 1 }}
+          >
+            Review Samples
+          </Button>
+        </Tooltip>
       ) : null}
-
     </Toolbar>
   );
 }

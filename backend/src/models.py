@@ -1,5 +1,5 @@
 from email.policy import default
-from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup
+from src.enums import Roles, States, AgeUnits, ValidationTypes, SampleTypes, LogActions, Species, BirdGenders, ProductionTypes, AgeGroup, HealthyRangeMethod
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from typing import List, Optional
@@ -29,8 +29,7 @@ class User(db.Model):
 
     __tablename__ = 'user_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    email: str = db.Column(db.String(120), index=True,
-                           unique=True, nullable=False)
+    email: str = db.Column(db.String(120), index=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
     first_name: str = db.Column(db.String(120), nullable=False)
     last_name: str = db.Column(db.String(120), nullable=False)
@@ -68,7 +67,7 @@ class Organization(db.Model):
     __tablename__ = 'organization_table'
     # The fields below are stored in the database, they are assigned both a python and a database type
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name: str = db.Column(db.String(120), unique=True)
+    name: str = db.Column(db.String(120))
     street_address: str = db.Column(db.String(120))
     city: str = db.Column(db.String(120))
     state: States = db.Column(db.Enum(States))
@@ -104,10 +103,10 @@ class Source(db.Model):
     # The fields below are stored in the database, they are assigned both a python and a database type
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name: str = db.Column(db.String(120))
-    street_address: str = db.Column(db.String(120))
-    city: str = db.Column(db.String(120))
+    street_address: str = db.Column(db.String(120), nullable=True)
+    city: str = db.Column(db.String(120), nullable=True)
     state: States = db.Column(db.Enum(States))
-    zip: int = db.Column(db.Integer)
+    zip: int = db.Column(db.Integer, nullable=True)
     is_deleted: bool = db.Column(db.Boolean, server_default="0")
 
     # References to Foreign Objects
@@ -133,12 +132,12 @@ class Flock(db.Model):
 
     __tablename__ = 'flock_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name: str = db.Column(db.String(255), unique=True)
+    name: str = db.Column(db.String(255))
     strain: str = db.Column(db.String(120))
     species: Species = db.Column(db.Enum(Species))
     gender: BirdGenders = db.Column(db.Enum(BirdGenders))
     production_type: ProductionTypes = db.Column(db.Enum(ProductionTypes))
-    birthday = db.Column(db.DateTime, nullable=True)
+    birthday = db.Column(db.DateTime)
     is_deleted: bool = db.Column(db.Boolean, server_default="0")
 
     # References to Foreign Objects
@@ -237,8 +236,8 @@ class Measurement(db.Model):
 cartridge_types_analytes_table = db.Table(
     'cartridge_types_analytes_table',
     db.Model.metadata,
-    db.Column('cartridge_type_id', db.ForeignKey('cartridge_type_table.id')),
-    db.Column('analyte_id', db.ForeignKey('analyte_table.id'))
+    db.Column('cartridge_type_id', db.ForeignKey('cartridge_type_table.id'), primary_key=True),
+    db.Column('analyte_id', db.ForeignKey('analyte_table.id'), primary_key=True)
 )
 
 
@@ -259,8 +258,7 @@ class Analyte(db.Model):
     units: str = db.Column(db.String(12))
 
     # References to Foreign Objects
-    machine_type_id: int = db.Column(
-        db.Integer, db.ForeignKey('machine_type_table.id'))
+    machine_type_id: int = db.Column(db.Integer, db.ForeignKey('machine_type_table.id'))
 
 
 class Machine(db.Model):
@@ -277,7 +275,7 @@ class Machine(db.Model):
     """
     __tablename__ = 'machine_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    serial_number: str = db.Column(db.String(120), unique=True)
+    serial_number: str = db.Column(db.String(120))
     is_deleted: bool = db.Column(db.Boolean, server_default="0")
 
     # References to Foreign Objects
@@ -327,15 +325,17 @@ class HealthyRange(db.Model):
                 gender: Gender we are constructing the healthy range for
                 age_group: Age Group we are constructing the healthy range for
                 analyte_id: Analyte we are constructing the healthy range for
-                cartridge_type_id: Cartridge Type used in measuring the analytes in this healthyh range object
     """
     __tablename__ = 'healthy_range_table'
     id: int = db.Column(db.Integer, primary_key=True, autoincrement=True)
     lower_bound: float = db.Column(db.Float)
     upper_bound: float = db.Column(db.Float)
     species: Species = db.Column(db.Enum(Species))
-    gender: BirdGenders = db.Column(db.Enum(BirdGenders))
+    gender: BirdGenders = db.Column(db.Enum(BirdGenders), nullable=True)
     age_group: AgeGroup = db.Column(db.Enum(AgeGroup))
+    method: HealthyRangeMethod = db.Column(db.Enum(HealthyRangeMethod))
+    generated: datetime = db.Column(db.DateTime, server_default=db.func.now())
+    current: bool = db.Column(db.Boolean, server_default="1")
 
     # References to Foreign Objects
     analyte_id: int = db.Column(db.Integer, db.ForeignKey('analyte_table.id'))

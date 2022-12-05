@@ -2,9 +2,7 @@ import * as React from "react";
 
 import {
   Button,
-  Stack,
   Box,
-  CircularProgress,
   Grid,
   Select,
   MenuItem,
@@ -18,8 +16,12 @@ import {
   RadioGroup,
   Autocomplete,
   FormControl,
+  ListItemText,
+  ListItem,
 } from "@mui/material";
 import SampleIcon from "@mui/icons-material/Science";
+import ErrorIcon from "@mui/icons-material/Error";
+
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import { sampleTypes, ageUnits } from "../../../models/enums";
 import { makeStyles } from "@mui/styles";
@@ -72,6 +74,7 @@ export default function DataViewSampleModal(props) {
     closeSampleModal,
     setError,
     setSampleType,
+    setSampleModalVisibility,
     setSampleLoading,
   } = useDataView();
 
@@ -82,12 +85,12 @@ export default function DataViewSampleModal(props) {
   const [sources, setSources] = React.useState([]);
   const [cartridgeTypes, setCartridgeTypes] = React.useState([]);
   const [cartridgeType, setCartridgeType] = React.useState({});
+  const [machines, setMachines] = React.useState([]);
+  const [machine, setMachine] = React.useState({});
   const [flock, setFlock] = React.useState({});
   const [flockInput, setFlockInput] = React.useState("");
   const [source, setSource] = React.useState({});
   const [organization, setOrganization] = React.useState({});
-  const [expanded, setExpanded] = React.useState(true);
-  const [errorSubmission, setErrorSubmission] = React.useState(false);
   const [SampleDetails, setSampleDetails] = React.useState({
     comments: "",
     flock_age: null,
@@ -95,9 +98,52 @@ export default function DataViewSampleModal(props) {
     sample_type: null,
     batch_id: null,
     measurements: [],
+    rotor_lot_number: "",
   });
   const [selectedFile, setSelectedFile] = React.useState();
   const [isFilePicked, setIsFilePicked] = React.useState(false);
+
+  React.useEffect(async () => {
+    if (sampleModalVisibility) {
+      if (user.role === roles["Super_Admin"]) {
+        await getOrganizations();
+      } else {
+        setOrganization({ id: user.organization_id });
+      }
+
+      await getCartridgeTypes();
+    }
+  }, [sampleModalVisibility]);
+
+  React.useEffect(async () => {
+    if (sampleModalVisibility) {
+      await getSources();
+      await getMachines();
+    }
+  }, [organization]);
+
+  React.useEffect(async () => {
+    if (sampleModalVisibility) {
+      await getFlocks();
+    }
+  }, [source]);
+
+  React.useEffect(async () => {
+    await handleAnalytes();
+    await sampleMeasurements();
+  }, [cartridgeType]);
+
+  const [errorSubmission, setErrorSubmission] = React.useState(false);
+  const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
+    []
+  );
+
+  const closeModal = () => {
+    setErrorSubmission(false);
+    resetSampleDetails();
+    setErrorSubmissionMessages([]);
+    setSampleModalVisibility(false);
+  };
 
   const getOrganizations = async () => {
     const response = await fetch(`/api/organization/`, {
@@ -107,8 +153,6 @@ export default function DataViewSampleModal(props) {
     setOrganizations(data);
     setOrganization(data[0]);
   };
-
-
 
   const getFlocks = async () => {
     await fetch(`/api/flock/source/${source.id}`, {
@@ -134,54 +178,58 @@ export default function DataViewSampleModal(props) {
     });
   };
 
-  const handleSampleTypeChange = (event) => {
-    setSampleType(event.target.value);
-  };
-
   const clearSampleType = () => {
     setSampleType("");
   };
 
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
-
   const sampleMeasurements = () => {
+    const { measurements } = SampleDetails;
+    const { analytes } = cartridgeType;
     return (
       <>
         <Grid item xs={12}>
           <br></br>
-
           <Typography gutterBottom variant="button">
             Sample Measurements
           </Typography>
         </Grid>
         <Box>
-          {cartridgeType.analytes &&
-          SampleDetails.measurements &&
-          SampleDetails.measurements.length > 0 &&
-          cartridgeType.analytes.map((a, index) => {
-            return (
-              <>
-                <TextField
-                  InputLabelProps={{ shrink: true }}
-                  label={a.abbreviation}
-                  style={{ margin: 4 }}
-                  value={SampleDetails.measurements[index].value}
-                  onChange={(e) => {
-                    const measurements = SampleDetails.measurements;
-                    measurements[index].value = e.target.value;
-                    setSampleDetails((prevState) => {
-                      return { ...prevState, measurements: measurements };
-                    });
-                  }}
-                />
-              </>
-            );
-          })}
+          {analytes &&
+            analytes.length > 0 &&
+            measurements &&
+            measurements.length > 0 &&
+            analytes.map((a, index) => {
+              const measurement = measurements.find(
+                (meas) => meas.analyte_id === a.id
+              );
+              return renderMeasurement(measurement, a);
+            })}
         </Box>
       </>
     );
+  };
+  const renderMeasurement = (measurement, analyte) => {
+    if (measurement && analyte) {
+      return (
+        <>
+          <TextField
+            label={analyte.abbreviation}
+            style={{ margin: 4 }}
+            value={measurement.value}
+            onChange={(e) => {
+              const measurements = SampleDetails.measurements;
+              const measurement = measurements.find(
+                (meas) => meas.analyte_id === analyte.id
+              );
+              measurement.value = e.target.value;
+              setSampleDetails((prevState) => {
+                return { ...prevState, measurements: measurements };
+              });
+            }}
+          />
+        </>
+      );
+    }
   };
 
   const getSources = async () => {
@@ -209,9 +257,8 @@ export default function DataViewSampleModal(props) {
         setCartridgeType(data[0]);
         const measurements = data[0].analytes.map((analyte) => ({
           analyte_id: analyte.id,
-          value: null,
+          value: "",
         }));
-        console.log(measurements);
         setSampleDetails((prevState) => {
           return {
             ...prevState,
@@ -221,29 +268,17 @@ export default function DataViewSampleModal(props) {
       });
   };
 
-  React.useEffect(async () => {
-    if (sampleModalVisibility) {
-      if (user.role === roles["Super_Admin"]) {
-        await getOrganizations();
-      } else {
-        setOrganization({ id: user.organization_id });
-      }
-
-      await getCartridgeTypes();
-    }
-  }, [sampleModalVisibility]);
-
-  React.useEffect(async () => {
-    if (sampleModalVisibility) {
-      await getSources();
-    }
-  }, [organization]);
-
-  React.useEffect(async () => {
-    if (sampleModalVisibility) {
-      await getFlocks();
-    }
-  }, [source]);
+  const getMachines = async () => {
+    await fetch(`/api/machine/organization/${organization.id}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        setMachines(data);
+        setMachine(data[0]);
+      });
+  };
 
   React.useEffect(async () => {
     console.log("selected new file");
@@ -258,6 +293,42 @@ export default function DataViewSampleModal(props) {
     setFlock(value);
   }
 
+  const validateSample = () => {
+    console.log("validating sample");
+    console.log(SampleDetails);
+    let valid = true;
+    let errors = [];
+
+    if (
+      (isNaN(SampleDetails.flock_age) && SampleDetails.flock_age != null) ||
+      (!isNaN(SampleDetails.flock_age) &&
+        SampleDetails.flock_age <= 0 &&
+        SampleDetails.flock_age != null)
+    ) {
+      errors.push("Flock age is positive number only");
+      valid = false;
+    }
+
+    for (let i = 0; i < SampleDetails.measurements.length; i++) {
+      if (
+        isNaN(SampleDetails.measurements[i].value) &&
+        SampleDetails.measurements[i].value != null
+      ) {
+        errors.push("Sample measurements must be numbers");
+        valid = false;
+      }
+    }
+
+    if (valid === false) {
+      console.log(errors);
+      setErrorSubmissionMessages(errors);
+    } else {
+      console.log("valid");
+    }
+
+    return valid;
+  };
+
   const resetSampleDetails = () => {
     setSampleDetails({
       comments: "",
@@ -265,6 +336,7 @@ export default function DataViewSampleModal(props) {
       flock_age_unit: null,
       sample_type: null,
       measurements: [],
+      rotor_lot_number: "",
     });
     if (user.role === roles["Super_Admin"]) {
       setOrganization(organizations[0]);
@@ -277,6 +349,14 @@ export default function DataViewSampleModal(props) {
   };
 
   let onSubmit = async () => {
+    const newSampleDetails = SampleDetails;
+    const measurements = newSampleDetails.measurements;
+    measurements.forEach((meas) => {
+      if (meas.value === "") {
+        meas.value = null;
+      }
+    });
+
     let payload = {
       comments: SampleDetails.comments,
       flock_age: SampleDetails.flock_age,
@@ -285,10 +365,12 @@ export default function DataViewSampleModal(props) {
       batch_id: SampleDetails.batch_id,
       flock_id: flock.id,
       cartridge_type_id: cartridgeType.id,
-      machine_id: SampleDetails.machine_id,
-      measurements: SampleDetails.measurements,
+      rotor_lot_number: SampleDetails.rotor_lot_number,
+      machine_id: machine.id,
+      measurements: measurements,
       organization_id: organization.id,
     };
+
     console.log("Submitting!", payload);
     setSampleLoading(true);
     await fetch(`/api/sample/`, {
@@ -316,24 +398,17 @@ export default function DataViewSampleModal(props) {
       });
   };
 
-  const handleAnalytes = (e) => {
+  const handleAnalytes = () => {
     console.log("changing analytes");
-    console.log(e.target.value.analytes);
-
-    const measurements = e.target.value.analytes.map((analyte) => ({
+    const { analytes } = cartridgeType;
+    const measurements = analytes.map((analyte) => ({
       analyte_id: analyte.id,
-      value: null,
+      value: "",
     }));
-
-    setSampleDetails((prevState) => {
-      console.log("setting new analytes");
-      return {
-        ...prevState,
-        measurements: measurements,
-      };
+    setSampleDetails({
+      ...SampleDetails,
+      measurements: measurements,
     });
-
-    console.log("new measurements", SampleDetails.measurements);
   };
 
   const onFileChange = (event) => {
@@ -396,7 +471,7 @@ export default function DataViewSampleModal(props) {
         icon={<SampleIcon />}
         title="Sample"
         subtitle="Add"
-        onClose={closeSampleModal}
+        onClose={closeModal}
       >
         <div style={modalStyle} className={classes.paper}>
           <Card
@@ -428,8 +503,6 @@ export default function DataViewSampleModal(props) {
                       label="Cartridge Type"
                       onChange={(e) => {
                         setCartridgeType(e.target.value);
-                        console.log("cartridge type", e.target.value);
-                        handleAnalytes(e);
                       }}
                     >
                       {cartridgeTypes.map((ct) => {
@@ -516,10 +589,25 @@ export default function DataViewSampleModal(props) {
               <Grid container spacing={2}>
                 <Grid item xs={8}>
                   <TextField
+                    error={
+                      (isNaN(SampleDetails.flock_age) &&
+                        SampleDetails.flock_age != null) ||
+                      (!isNaN(SampleDetails.flock_age) &&
+                        SampleDetails.flock_age <= 0 &&
+                        SampleDetails.flock_age != null)
+                    }
                     label="Age *"
                     value={SampleDetails.flock_age}
-                    type="number"
                     onChange={handleSampleDetailsChange("flock_age")}
+                    helperText={
+                      (isNaN(SampleDetails.flock_age) &&
+                        SampleDetails.flock_age != null) ||
+                      (!isNaN(SampleDetails.flock_age) &&
+                        SampleDetails.flock_age <= 0 &&
+                        SampleDetails.flock_age != null)
+                        ? "Age must be positive number"
+                        : ""
+                    }
                   />
                 </Grid>
                 <Grid item xs={4}>
@@ -562,7 +650,43 @@ export default function DataViewSampleModal(props) {
             </>
             }
 
+            <></>
+            <br />
 
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={8}>
+                  <TextField
+                    label="Rotor Lot Number"
+                    value={SampleDetails.rotor_lot_number}
+                    onChange={handleSampleDetailsChange("rotor_lot_number")}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <FormControl sx={{ width: "100%" }} required>
+                    <InputLabel>Machine</InputLabel>
+                    <Select
+                      value={machine}
+                      label="Machine"
+                      onChange={(e) => setMachine(e.target.value)}
+                    >
+                      {machines
+                        .filter(
+                          (m) =>
+                            m.machine_type_id === cartridgeType.machine_type_id
+                        )
+                        .map((m, index) => {
+                          return (
+                            <MenuItem value={m} key={index}>
+                              {m.serial_number}
+                            </MenuItem>
+                          );
+                        })}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </Box>
 
             <Grid>{sampleMeasurements()}</Grid>
             <br></br>
@@ -577,12 +701,12 @@ export default function DataViewSampleModal(props) {
               >
                 <FormControlLabel
                   value={sampleTypes.SURVEILLANCE}
-                  label={`${sampleTypes.SURVEILLANCE} Sample (Healthy)`}
+                  label={`${sampleTypes.SURVEILLANCE} Sample`}
                   control={<Radio />}
                 />
                 <FormControlLabel
                   value={sampleTypes.DIAGNOSTIC}
-                  label={`${sampleTypes.DIAGNOSTIC} Sample (Sick)`}
+                  label={`${sampleTypes.DIAGNOSTIC} Sample`}
                   control={<Radio />}
                 />
               </RadioGroup>
@@ -621,8 +745,7 @@ export default function DataViewSampleModal(props) {
                     color="secondary"
                     style={{ width: 200 }}
                     onClick={() => {
-                      closeSampleModal();
-                      resetSampleDetails();
+                      closeModal();
                     }}
                   >
                     Cancel
@@ -634,7 +757,11 @@ export default function DataViewSampleModal(props) {
                     color="primary"
                     style={{ width: 200 }}
                     onClick={() => {
-                      onSubmit();
+                      if (validateSample()) {
+                        onSubmit();
+                      } else {
+                        setErrorSubmission(true);
+                      }
                     }}
                   >
                     Save
@@ -642,32 +769,24 @@ export default function DataViewSampleModal(props) {
                 </Grid>
               </Grid>
             </Box>
+
+            <Box sx={{ flexGrow: 1 }} style={{ padding: "15px" }}>
+              {errorSubmission ? (
+                <Typography
+                  gutterBottom
+                  variant="button"
+                  style={{
+                    color: "red",
+                  }}
+                >
+                  <ListItem>
+                    <ErrorIcon />
+                    <ListItemText primary=" Fix Error before saving Sample" />
+                  </ListItem>
+                </Typography>
+              ) : null}
+            </Box>
           </Card>
-
-          <br></br>
-
-          <Grid item xs={12} sm={2}></Grid>
-          <br></br>
-          <Grid item xs={12} sm={2}></Grid>
-          <br></br>
-
-          <Grid>
-            <br />
-            {errorSubmission ? (
-              <Typography
-                gutterBottom
-                variant="button"
-                style={{
-                  color: "red",
-                  position: "relative",
-                  // bottom: 50,
-                  // left: 280,
-                }}
-              >
-                Sample has missing fields.
-              </Typography>
-            ) : null}
-          </Grid>
         </div>
       </Modal>
     </>

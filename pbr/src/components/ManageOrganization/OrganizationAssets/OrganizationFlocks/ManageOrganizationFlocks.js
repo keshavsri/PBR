@@ -104,9 +104,6 @@ export default function ManageOrganizationFlocks({
   return (
     <>
       <Paper>
-        <Grid item sm={12}>
-          <Typography variant="h1" align="center">Flocks</Typography>
-        </Grid>
 
         <Grid item xs={12} sm={3}>
           <Button variant="contained" onClick={handleOpenAddOrganizationFlocksModal}>Create New Flock</Button>

@@ -79,7 +79,7 @@ def get_flock(access_allowed, current_user, item_id):
     :return: A specific flock if it exists, a 404 not found otherwise.
     """
     if access_allowed:
-        sql_text = db.text("SELECT s.organization_id FROM flock_table f, source_table s WHERE f.source_id = s.id AND is_deleted = 0;")
+        sql_text = db.text("SELECT s.organization_id FROM flock_table f, source_table s WHERE f.source_id = s.id AND f.is_deleted = 0 AND s.is_deleted = 0;")
         with engine.connect() as connection:
             flock_organization_id = connection.execute(sql_text)
         if current_user.role == Roles.Super_Admin or flock_organization_id == current_user.organization_id:
@@ -107,8 +107,10 @@ def post_flock(access_allowed, current_user):
     :return: A new flock if the request is valid, a 400 bad request otherwise.
     """
     if access_allowed:
+
+        org_id = SourceORM.query.get(request.json.get('source_id')).organization_id
         # checks if the Flock already exists in the database
-        if FlockORM.query.filter_by(name=request.json.get('name')).first() is None:
+        if FlockORM.query.filter_by(name=request.json.get('name'), organization_id=org_id, is_deleted = False).first() is None:
             # builds the Flock from the request json
             flock: FlockORM = FlockORM()
             for name, value in Flock.parse_obj(request.json):
@@ -120,7 +122,7 @@ def post_flock(access_allowed, current_user):
             return jsonify(Flock.from_orm(flock).dict()), 201
         # if the Flock already exists then return a 409 conflict
         else:
-            return jsonify({'message': 'Flock already exists', "existing organization": Flock.from_orm(FlockORM.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
+            return jsonify({'message': 'Flock with this name already exists within current org', "existing flock name": Flock.from_orm(FlockORM.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
     else:
         return jsonify({'message': 'Role not allowed'}), 403
     
@@ -144,11 +146,18 @@ def put_flock(access_allowed, current_user, item_id):
         flock_model = FlockORM.query.get(item_id)
         if flock_model is None:
             return jsonify({'message': 'Flock does not exist'}), 404
-        FlockORM.query.filter_by(id=item_id).update(request.json)
-        db.session.commit()
-        edited_flock = FlockORM.query.get(item_id)
-        create_log(current_user, LogActions.EDIT_FLOCK, 'Edited Flock: ' + edited_flock.name)
-        return jsonify(Flock.from_orm(edited_flock).dict()), 200
+
+        org_id = SourceORM.query.get(request.json.get('source_id')).organization_id
+
+        if FlockORM.query.filter_by(name=request.json.get('name'), organization_id=org_id, is_deleted = False).first() is None:
+            FlockORM.query.filter_by(id=item_id).update(request.json)
+            db.session.commit()
+            edited_flock = FlockORM.query.get(item_id)
+            create_log(current_user, LogActions.EDIT_FLOCK, 'Edited Flock: ' + edited_flock.name)
+            return jsonify(Flock.from_orm(edited_flock).dict()), 200
+        else:
+            return jsonify({'message': 'Flock with this name already exists', "existing flock name": Flock.from_orm(FlockORM.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
+
     else:
         return jsonify({'message': 'Role not allowed'}), 403
     

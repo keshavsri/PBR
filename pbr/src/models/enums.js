@@ -25,7 +25,7 @@ export const productionTypes = Object.freeze({
   MEAT: "Meat",
   LAYER: "Layer",
   BREEDER: "Breeder",
-  BROILER_BREEDER: "Broiler Breeder",
+  BROILER: "Broiler",
   BYP: "BYP",
 });
 

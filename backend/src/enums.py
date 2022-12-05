@@ -77,11 +77,13 @@ class AgeUnits(str, Enum):
     Months = "Months"
     Years = "Years"
 
+
 class AgeGroup(str, Enum):
-    Brooder = "Brooder (1-5 days)"
-    Growing = "Growing (1-12 weeks)"
-    Prelay = "Pre-lay (12-20 weeks)"
-    Lay = "Lay (20+ weeks)"
+    Brooder = "Brooder"
+    Growing = "Growing"
+    Prelay = "Prelay"
+    Lay = "Lay"
+
 
 class ValidationTypes(str, Enum):
     Saved = "Saved"
@@ -91,9 +93,9 @@ class ValidationTypes(str, Enum):
 
 
 class SampleTypes(str, Enum):
-    # Healthy
+    # Known Healthy
     Surveillance = "Surveillance"
-    # Unhealthy
+    # Unknown
     Diagnostic = "Diagnostic"
 
 
@@ -101,23 +103,63 @@ class Species(str, Enum):
     Turkey = "Turkey"
     Chicken = "Chicken"
 
+
 class ChickenStrain(str, Enum):
-    Ross_308 = "Ross 308"
-    Ross_708 = "Ross 708"
-    Ross_308_AP = "Ross 308 AP"
+    Americana = "Americana"
+    Ancona = "Ancona"
+    Andalusian = "Andalusian"
+    Arbor_Acres_Plus = "Arbor Acres Plus"
+    Auracauna = "Auracauna"
+    Australorp = "Australorp"
+    Bantam_Cochin = "Bantam Cochin"
+    Barnvelder = "Barnvelder"
+    Barred_Rock = "Barred Rock"
+    Black_Australorp = "Black Australorp"
+    Black_Frizzle_Cochin = "Black Frizzle Cochin"
+    Black_Star = "Black Star"
+    Blue_Andalusion = "Blue Andalusion"
+    Brown = "Brown"
+    Buff_Brahma = "Buff Brahma"
+    Buff_Orpington = "Buff Orpington"
+    Cobb = "Cobb"
+    Cobb_500 = "Cobb 500"
+    Cobb_700 = "Cobb 700"
+    Cochin = "Cochin"
+    Cuckoo_Maran = "Cuckoo Maran"
+    Delaware = "Delaware"
+    Easter_Egger = "Easter Egger"
+    Egyptian_Fayoumis = "Egyptian Fayoumis"
+    Frizzle_Bantam = "Frizzle Bantam"
+    Hubbard = "Hubbard"
+    Java = "Java"
+    Legbar = "Legbar"
+    Leghorn = "Leghorn"
+    LSL = "LSL"
+    Maran = "Maran"
+    Naked_Neck_Turken = "Naked Neck Turken"
+    New_Hampshire = "New Hampshire"
     Ranger_Premium = "Ranger Premium"
     Ranger_Classic = "Ranger Classic"
     Ranger_Gold = "Ranger Gold"
-    Cobb500 = "Cobb500"
-    Cobb700 = "Cobb700"
-    Arbor_Acres_Plus = "Arbor Acres Plus"
-    Hubbard = "Hubbard"
-    Brown = "Brown"
-    LSL = "LSL"
+    Red_Sexlink = "Red Sexlink"
+    Rhode_Island_Red = "Rhode Island Red"
+    Ross_16 = "Ross 16"
+    Ross_308 = "Ross 308"
+    Ross_308_AP = "Ross 308 AP"
+    Ross_708 = "Ross 708"
+    Salmon_Faverolle = "Salmon Faverolle"
     Sandy = "Sandy"
     Silver = "Silver"
+    Silver_Gray_Dorking = "Silver Gray Dorking"
+    Speckled_Sussex = "Speckled Sussex"
+    Sussex = "Sussex"
     Tradition = "Tradition"
+    Unknown = "Unknown"
+    Welsummer = "Welsummer"
     White = "White"
+    White_Leghorn = "White Leghorn"
+    Wyandotte = "Wyandotte"
+
 
 class TurkeyStrain(str, Enum):
     Nicholas_Select = "Nicholas Select"
@@ -126,6 +168,8 @@ class TurkeyStrain(str, Enum):
     Grade_Maker = "Grade Maker"
     Optima = "Optima"
     ConverterNOVO = "ConverterNOVO"
+    Select_Genetics = "Select Genetics"
+    Unknown = "Unknown"
 
 
 class ProductionTypes(str, Enum):
@@ -171,6 +215,8 @@ class LogActions(IntEnum):
     
     # Report
     GENERATE_REPORT = 401
+    GENERATE_HEALTHY_RANGES = 411
+    REGENERATE_HEALTHY_RANGES = 412
     
     # Settings
     EDIT_ACCOUNT = 503
@@ -197,3 +243,6 @@ class LogActions(IntEnum):
     ADD_FLOCK = 901
     EDIT_FLOCK = 903
     DELETE_FLOCK = 904
+
+class HealthyRangeMethod(str, Enum):
+    Standard = "Standard"

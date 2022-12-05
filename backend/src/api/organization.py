@@ -6,14 +6,13 @@ from src.api.user import token_required, allowed_roles
 from flask import Blueprint, jsonify, request
 from itsdangerous import json
 from src.helpers.log import create_log
-
-
 from src import models, schemas
 from src.enums import Roles, LogActions
 import src.helpers.log as log_helper
 from src.models import Organization as OrganizationORM
 from random import randint
 from datetime import datetime
+from src.models import db, engine
 
 
 # Flask blueprint for the organization routes, this is the blueprint that is registered in the app.py file with a prefix of /organization
@@ -35,7 +34,7 @@ def get_organizations(access_allowed, current_user):
     """
 
     if access_allowed:
-        organizations = OrganizationORM.query.all()
+        organizations = OrganizationORM.query.filter_by(is_deleted=False).all()
         ret = []
         for organization in organizations:
             ret.append(Organization.from_orm(organization).dict())
@@ -62,7 +61,7 @@ def get_organization(access_allowed, current_user, item_id):
 
     if access_allowed:
         if current_user.organization_id == item_id or current_user.role == Roles.Super_Admin:
-            org_model = OrganizationORM.query.get(item_id)
+            org_model = OrganizationORM.query.filter_by(id = item_id, is_deleted=False).first()
             if org_model is not None:
                 org = Organization.from_orm(org_model).dict()
 
@@ -87,14 +86,17 @@ def put_organization(access_allowed, current_user, item_id):
         if org_model is None:
             return jsonify({'message': 'Organization does not exist'}), 404
         else:
-            models.Organization.query.filter_by(
-                id=item_id).update(request.json)
-            models.db.session.commit()
-            editedOrganization_model = models.Organization.query.get(item_id)
-            editedOrg = Organization.from_orm(editedOrganization_model).dict()
-            # add log
-            create_log(current_user, LogActions.EDIT_ORGANIZATION,'Edited Organization: ' + editedOrg["name"])
-            return editedOrg, 200
+            if models.Organization.query.filter_by(name=request.json.get('name'), is_deleted = False).first() is None:
+                models.Organization.query.filter_by(
+                    id=item_id).update(request.json)
+                models.db.session.commit()
+                editedOrganization_model = models.Organization.query.get(item_id)
+                editedOrg = Organization.from_orm(editedOrganization_model).dict()
+                # add log
+                create_log(current_user, LogActions.EDIT_ORGANIZATION,'Edited Organization: ' + editedOrg["name"])
+                return editedOrg, 200
+            else:
+                return jsonify({'message': 'Organization with same name already exists', "existing organization": schemas.Organization.from_orm(models.Organization.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
 
     else:
         return jsonify({'message': 'Access denied'}), 403
@@ -107,7 +109,7 @@ def delete_organization(access_allowed, current_user, item_id):
     if access_allowed:
         org_model = OrganizationORM.query.get(item_id)
         # check if the organization exists in the database if it does then update the organization
-        if org_model is None:
+        if org_model is None or org_model.is_deleted == True:
             return jsonify({'message': 'Organization does not exist'}), 404
         else:
             deleted_organization = models.Organization.query.filter_by(
@@ -128,7 +130,7 @@ def delete_organization(access_allowed, current_user, item_id):
 @allowed_roles([0])
 def post_organization(access_allowed, current_user):
     if access_allowed:
-        if models.Organization.query.filter_by(name=request.json.get('name')).first() is None:
+        if models.Organization.query.filter_by(name=request.json.get('name'), is_deleted = False).first() is None:
             org: OrganizationORM = OrganizationORM()
             for name, value in Organization.parse_obj(request.json):
                 if name != 'notes':
@@ -158,7 +160,7 @@ def post_organization(access_allowed, current_user):
             # add log here after merging
             return schemas.Organization.from_orm(org).dict(), 201
         else:
-            return jsonify({'message': 'Organization already exists', "existing organization": schemas.Organization.from_orm(models.Organization.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
+            return jsonify({'message': 'Organization with same name already exists', "existing organization": schemas.Organization.from_orm(models.Organization.query.filter_by(name=request.json.get('name')).first()).dict()}), 409
 
     else:
         return jsonify({'message': 'Access denied'}), 403

@@ -12,23 +12,31 @@ import RegisterCard from "./components/HandleLogin/RegisterCard";
 import RecoveryCard from "./components/HandleLogin/RecoveryCard";
 import ManageUsers from "./components/ManageUser/ManageUsers";
 import useAuth from "./services/useAuth";
+import HealthyRanges from "./components/HealthyRanges/HealthyRanges";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDatabase } from "@fortawesome/free-solid-svg-icons";
+import HealthyRangesIcon from "@mui/icons-material/Assessment";
+import UsersIcon from "@mui/icons-material/Group";
+import OrganizationIcon from "@mui/icons-material/Apartment";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 function RequireAuth({ children }) {
-  const { user, recredentialize } = useAuth();
-  const location = useLocation();
-  console.log("requireauth");
-  return user || recredentialize ? (
-    children
-  ) : (
-    <Navigate to="/login" replace state={{ path: location.pathname }} />
-  );
+  const { user, recredentialize, logout } = useAuth();
+  if (!user || recredentialize) {
+    logout()
+    return (<Navigate to="/login" replace/>)
+  }
+  else {
+    return (children)
+  }
 }
 
 function NonAuth({ children }) {
-  const { user } = useAuth();
+  const { user, recredentialize } = useAuth();
   const location = useLocation();
-  console.log("nonauth");
-  return user ? (
+  return user && !recredentialize ? (
     <Navigate to="/data-view" replace state={{ path: location.pathname }} />
   ) : (
     children
@@ -70,25 +78,27 @@ const routes = [
     path: "/data-view",
     element: (
       <RequireAuth>
-        <MainLayout>
+        <MainLayout title="Data View" icon={<FontAwesomeIcon icon={faDatabase} style={{ height: "24px", width: "24px", padding: "3px" }}/>}>
           <DataView />
         </MainLayout>
       </RequireAuth>
     ),
   },
   {
-    path: "/generate-reports",
+    path: "/healthy-ranges",
     element: (
       <RequireAuth>
-        <MainLayout />
+        <MainLayout  title="Healthy Ranges" icon={<HealthyRangesIcon />}>
+          <HealthyRanges/>
+        </MainLayout>
       </RequireAuth>
-    ),
+    )
   },
   {
     path: "/manage-users",
     element: (
       <RequireAuth>
-        <MainLayout>
+        <MainLayout title="Manage Users" icon={<UsersIcon />}>
           <ManageUsers />
         </MainLayout>
       </RequireAuth>
@@ -98,7 +108,7 @@ const routes = [
     path: "/manage-organization",
     element: (
       <RequireAuth>
-        <MainLayout>
+        <MainLayout title="Manage Organization" icon={<OrganizationIcon />}>
           <ManageOrganization />
         </MainLayout>
       </RequireAuth>
@@ -108,7 +118,7 @@ const routes = [
     path: "/logging-view",
     element: (
       <RequireAuth>
-        <MainLayout>
+        <MainLayout title="System Logs" icon={<PendingActionsIcon />}>
           <LoggingView />
         </MainLayout>
       </RequireAuth>
@@ -118,7 +128,7 @@ const routes = [
     path: "/settings",
     element: (
       <RequireAuth>
-        <MainLayout />
+        <MainLayout title="Settings" icon={<SettingsIcon />}/>
       </RequireAuth>
     ),
   },

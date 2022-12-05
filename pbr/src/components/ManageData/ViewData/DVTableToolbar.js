@@ -34,16 +34,12 @@ export default function DVTableToolbar({
   setCurrentCartridgeType,
   setCurrentOrganization,
   cartridgeTypes,
-  roles
+  roles,
 }) {
-  const {
-    openSampleModal,
-    handleOpenFilterModal,
-  } = useDataView();
+  const { openSampleModal, handleOpenFilterModal } = useDataView();
   const classes = useStyles();
 
   useTheme();
-
 
   return (
     <>
@@ -110,7 +106,7 @@ export default function DVTableToolbar({
         <Button
           variant="contained"
           color="secondary"
-          style={{ width: 275, marginTop: 10, marginBottom: 10 }}
+          style={{ width: 1600, marginTop: 10, marginBottom: 10 }}
           startIcon={<ReportIcon />}
           sx={{ ml: 1 }}
           // onClick={}
@@ -123,7 +119,7 @@ export default function DVTableToolbar({
         <Button
           variant="contained"
           color="secondary"
-          style={{ width: 275, marginTop: 10, marginBottom: 10 }}
+          style={{ width: 1600, marginTop: 10, marginBottom: 10 }}
           startIcon={<FilterListIcon />}
           sx={{ ml: 1 }}
           // onClick={handleOpenFilterModal}
@@ -135,7 +131,7 @@ export default function DVTableToolbar({
       <Tooltip title="Batch Import">
         <Button
           variant="contained"
-          style={{ width: 275, marginTop: 10, marginBottom: 10 }}
+          style={{ width: 1600, marginTop: 10, marginBottom: 10 }}
           startIcon={<BulkIcon />}
           sx={{ ml: 1 }}
         >
@@ -145,7 +141,7 @@ export default function DVTableToolbar({
       <Tooltip title="Add Sample Entry">
         <Button
           variant="contained"
-          style={{ width: 275, marginTop: 10, marginBottom: 10 }}
+          style={{ width: 1600, marginTop: 10, marginBottom: 10 }}
           onClick={openSampleModal}
           startIcon={<SampleIcon />}
           sx={{ ml: 1 }}
@@ -156,12 +152,18 @@ export default function DVTableToolbar({
       {showOnlyPendingSamples ? (
         <Tooltip title="Show All Samples">
           <Button
+            style={{ width: 1600, marginTop: 10, marginBottom: 10 }}
             variant="contained"
             onClick={turnPendingFilterOff}
             startIcon={
               <FontAwesomeIcon
                 icon={faDatabase}
-                style={{ height: "24px", width: "24px", padding: "3px" }}
+                style={{
+                  height: "24px",
+                  width: "24px",
+                  padding: "3px",
+                  fontSize: "10px",
+                }}
               />
             }
             sx={{ ml: 1 }}
@@ -172,18 +174,23 @@ export default function DVTableToolbar({
       ) : (
         <Tooltip title="Show Pending Samples">
           <Button
-            style={{ width: 275, marginTop: 10, marginBottom: 10 }}
+            style={{ width: 1600, marginTop: 10, marginBottom: 10 }}
             variant="contained"
             onClick={filterPendingSamples}
             startIcon={
               <FontAwesomeIcon
                 icon={faDatabase}
-                style={{ height: "24px", width: "24px", padding: "3px" }}
+                style={{
+                  height: "24px",
+                  width: "24px",
+                  padding: "3px",
+                  fontSize: "10px",
+                }}
               />
             }
             sx={{ ml: 1 }}
           >
-            Pending Samples
+            Show Pending Samples
           </Button>
         </Tooltip>
       )}
