@@ -22,7 +22,7 @@ baseUrl = "https:/"
 def test_parse_file(app):
     try:
         path = "/api/sample/parse"
-        files={'upload_file': open(str(os.path.abspath(os.path.join(os.path.dirname(__file__)))) + '/test_data/vetstat-machine-data/vetstat1.txt','rb')}
+        files={'upload_file': open(str(os.path.abspath(os.path.join(os.path.dirname(__file__)))) + '/mock_data/vetstat-machine-data/vetstat1.txt','rb')}
         print(os.getcwd(), flush=True)
         response = requests.post(url=baseUrl+path, files=files)
         responseJson = json.loads(response.text)
@@ -33,7 +33,7 @@ def test_parse_file(app):
 def test_parse_file2(app):
     try:
         path = "/api/sample/parse"
-        files={'upload_file': open(str(os.path.abspath(os.path.join(os.path.dirname(__file__)))) + '/test_data/vetstat-machine-data/vetstat2.txt','rb')}
+        files={'upload_file': open(str(os.path.abspath(os.path.join(os.path.dirname(__file__)))) + '/mock_data/vetstat-machine-data/vetstat2.txt','rb')}
         response = requests.post(url=baseUrl+path, files=files)
         responseJson = json.loads(response.text)
         assert response.status_code == 200
