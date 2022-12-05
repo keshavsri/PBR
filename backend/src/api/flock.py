@@ -112,7 +112,7 @@ def post_flock(access_allowed, current_user):
         # checks if the Flock already exists in the database
         flocks_same_name = FlockORM.query.filter_by(name=request.json.get('name'), is_deleted = False).all()
 
-        # Finds all existing flocks with same name as one being created that exist is the created flock's organization
+        # Finds all existing flocks, with same name as the one being created,that exist in the created flock's organization
         flocks_same_name_and_org = [flock for flock in flocks_same_name if SourceORM.query.get(flock.source_id).organization_id == org_id]
 
         if not flocks_same_name_and_org:
@@ -156,7 +156,7 @@ def put_flock(access_allowed, current_user, item_id):
         # checks if the Flock already exists in the database
         flocks_same_name = FlockORM.query.filter_by(name=request.json.get('name'), is_deleted = False).all()
 
-        # Finds all existing flocks with same name as one being created that exist is the created flock's organization
+        # Finds all existing flocks, with same name as the one being created,that exist in the created flock's organization
         flocks_same_name_and_org = [flock for flock in flocks_same_name if SourceORM.query.get(flock.source_id).organization_id == org_id]
 
         if not flocks_same_name_and_org:
