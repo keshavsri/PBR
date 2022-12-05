@@ -22,6 +22,7 @@ import { DataViewProvider } from "../../../services/useDataView";
 import useAuth from "../../../services/useAuth";
 import ReviewSampleModal from "../ValidateData/ReviewSampleModal";
 import EditSampleModal from "../EditData/EditSampleModal";
+import ReportModal from "../Report/ReportModal";
 
 const useStyles = makeStyles({});
 
@@ -42,6 +43,7 @@ export default function DataView() {
   const [isSample] = React.useState(true);
   const [openReviewSampleModal, setOpenReviewSampleModal] =
     React.useState(false);
+  const [reportModalVisibility, setReportModalVisibility] = React.useState(false);
 
   const [selectedSamples, setSelectedSamples] = React.useState([]);
   const [machines, setMachines] = React.useState([]);
@@ -454,6 +456,7 @@ export default function DataView() {
               onSubmit={onSubmit}
               onEdit={onEdit}
               selectedSample={selectedSamples[0]}
+              setReportModalVisibility={setReportModalVisibility}
             />
           )}
 
@@ -500,6 +503,11 @@ export default function DataView() {
           setHeadCellList={setHeadCellList}
           getData={getData}
           rows={sampleList}
+        />
+        <ReportModal
+          visibility={reportModalVisibility}
+          setVisibility={setReportModalVisibility}
+          selected={selected}
         />
         <DataViewSampleModal getData={getData} roles={roles} />
         <ReviewSampleModal

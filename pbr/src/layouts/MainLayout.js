@@ -31,7 +31,6 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDatabase } from "@fortawesome/free-solid-svg-icons";
-import ReportsIcon from "@mui/icons-material/Summarize"
 import HealthyRangesIcon from "@mui/icons-material/Assessment";
 
 import UsersIcon from "@mui/icons-material/Group";
