@@ -49,7 +49,8 @@ export default function EditUsers(props) {
     user,
     editUser,
     openEditUsersModal,
-    setOpenEditUsersModal
+    setOpenEditUsersModal,
+    roles
   } = props;
 
   const filteredOrganizationRoles = Object.fromEntries(
@@ -182,8 +183,8 @@ export default function EditUsers(props) {
             />
           </Grid>
 
-          { currentUser.role === 3 ||
-            currentUser.role === 4 ||
+          { currentUser.role === roles["Data_Collector"] ||
+            currentUser.role === roles["Guest"] ||
             Object.keys(roleMap).find(key => roleMap[key] === user.role) <= currentUser.role ? null : (
           <Grid item xs={12} sm={6}>
             <TextField
