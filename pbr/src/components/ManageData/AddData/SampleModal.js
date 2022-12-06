@@ -97,7 +97,11 @@ export default function DataViewSampleModal(props) {
     sample_type: null,
     batch_id: null,
     measurements: [],
+<<<<<<< HEAD
     rotor_lot_number: "",
+=======
+    rotor_lot_number : ""
+>>>>>>> e1d7872bd676f7e0717e42b72ba0d63f317e1c03
   });
 
   React.useEffect(async () => {
@@ -141,6 +145,7 @@ export default function DataViewSampleModal(props) {
     setErrorSubmissionMessages([]);
     setSampleModalVisibility(false);
   };
+
 
   const getOrganizations = async () => {
     const response = await fetch(`/api/organization/`, {
@@ -192,21 +197,23 @@ export default function DataViewSampleModal(props) {
         </Grid>
         <Box>
           {analytes &&
-            analytes.length > 0 &&
-            measurements &&
-            measurements.length > 0 &&
-            analytes.map((a, index) => {
-              const measurement = measurements.find(
-                (meas) => meas.analyte_id === a.id
-              );
-              return renderMeasurement(measurement, a);
-            })}
+          analytes.length > 0 &&
+          measurements &&
+          measurements.length > 0 &&
+          analytes.map((a, index) => {
+            const measurement = measurements.find((meas) => meas.analyte_id === a.id);
+            return (
+              renderMeasurement(measurement, a)
+            );
+
+          })}
         </Box>
       </>
     );
-  };
+  }
+
   const renderMeasurement = (measurement, analyte) => {
-    if (measurement && analyte) {
+    if (measurement && analyte  ) {
       return (
         <>
           <TextField
@@ -215,9 +222,7 @@ export default function DataViewSampleModal(props) {
             value={measurement.value}
             onChange={(e) => {
               const measurements = SampleDetails.measurements;
-              const measurement = measurements.find(
-                (meas) => meas.analyte_id === analyte.id
-              );
+              const measurement = measurements.find((meas) => meas.analyte_id === analyte.id);
               measurement.value = e.target.value;
               setSampleDetails((prevState) => {
                 return { ...prevState, measurements: measurements };
@@ -227,7 +232,7 @@ export default function DataViewSampleModal(props) {
         </>
       );
     }
-  };
+  }
 
   const getSources = async () => {
     await fetch(`/api/source/organization/${organization.id}`, {
@@ -254,7 +259,7 @@ export default function DataViewSampleModal(props) {
         setCartridgeType(data[0]);
         const measurements = data[0].analytes.map((analyte) => ({
           analyte_id: analyte.id,
-          value: "",
+          value: '',
         }));
         setSampleDetails((prevState) => {
           return {
@@ -267,15 +272,17 @@ export default function DataViewSampleModal(props) {
 
   const getMachines = async () => {
     await fetch(`/api/machine/organization/${organization.id}`)
-      .then((response) => {
-        return response.json();
-      })
-      .then(checkResponseAuth)
-      .then((data) => {
-        setMachines(data);
-        setMachine(data[0]);
-      });
+    .then((response) => {
+      return response.json();
+    })
+    .then(checkResponseAuth)
+    .then((data) => {
+      setMachines(data);
+      setMachine(data[0]);
+    });
   };
+
+
 
   function handleFlockInputChange(event, value) {
     setFlockInput(value);
@@ -343,11 +350,11 @@ export default function DataViewSampleModal(props) {
   let onSubmit = async () => {
     const newSampleDetails = SampleDetails;
     const measurements = newSampleDetails.measurements;
-    measurements.forEach((meas) => {
-      if (meas.value === "") {
+    measurements.forEach(meas => {
+      if (meas.value === '') {
         meas.value = null;
       }
-    });
+    })
 
     let payload = {
       comments: SampleDetails.comments,
@@ -392,7 +399,7 @@ export default function DataViewSampleModal(props) {
 
   const handleAnalytes = () => {
     console.log("changing analytes");
-    const { analytes } = cartridgeType;
+    const {analytes} = cartridgeType;
     const measurements = analytes.map((analyte) => ({
       analyte_id: analyte.id,
       value: "",
@@ -406,6 +413,7 @@ export default function DataViewSampleModal(props) {
   const closeAddSampleModal = () => {
     resetSampleDetails();
     closeSampleModal();
+
   };
 
   return (
@@ -595,18 +603,13 @@ export default function DataViewSampleModal(props) {
                       label="Machine"
                       onChange={(e) => setMachine(e.target.value)}
                     >
-                      {machines
-                        .filter(
-                          (m) =>
-                            m.machine_type_id === cartridgeType.machine_type_id
-                        )
-                        .map((m, index) => {
-                          return (
-                            <MenuItem value={m} key={index}>
-                              {m.serial_number}
-                            </MenuItem>
-                          );
-                        })}
+                      {machines.filter((m) => m.machine_type_id === cartridgeType.machine_type_id).map((m, index) => {
+                        return (
+                          <MenuItem value={m} key={index}>
+                            {m.serial_number}
+                          </MenuItem>
+                        );
+                      })}
                     </Select>
                   </FormControl>
                 </Grid>

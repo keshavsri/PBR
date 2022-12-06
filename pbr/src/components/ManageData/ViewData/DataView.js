@@ -150,7 +150,6 @@ export default function DataView() {
     setSampleList([]);
     getHeadCells();
 
-
     const promise = new Promise(async (resolve) => {
       setLoading(true);
       abortController.current = new AbortController();
