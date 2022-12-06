@@ -126,6 +126,9 @@ export default function DataViewSampleModal(props) {
     }
   }, [organization]);
 
+
+
+
   React.useEffect(async () => {
     if (sampleModalVisibility) {
       await getFlocks();
@@ -192,8 +195,8 @@ export default function DataViewSampleModal(props) {
   };
 
   const sampleMeasurements = () => {
-    const { measurements } = SampleDetails;
-    const { analytes } = cartridgeType;
+    const {measurements} = SampleDetails;
+    const {analytes} = cartridgeType;
     return (
       <>
         <Grid item xs={12}>
@@ -239,7 +242,7 @@ export default function DataViewSampleModal(props) {
         </>
       );
     }
-  };
+  }
 
   const getSources = async () => {
     await fetch(`/api/source/organization/${organization.id}`, {
@@ -294,6 +297,7 @@ export default function DataViewSampleModal(props) {
       onSubmit();
     }
   }, [flock]);
+
 
   function handleFlockInputChange(event, value) {
     setFlockInput(value);
@@ -417,11 +421,11 @@ export default function DataViewSampleModal(props) {
   let onSubmit = async () => {
     const newSampleDetails = SampleDetails;
     const measurements = newSampleDetails.measurements;
-    measurements.forEach((meas) => {
-      if (meas.value === "") {
+    measurements.forEach(meas => {
+      if (meas.value === '') {
         meas.value = null;
       }
-    });
+    })
 
     let payload = {
       comments: SampleDetails.comments,
@@ -495,6 +499,11 @@ export default function DataViewSampleModal(props) {
       ...SampleDetails,
       measurements: measurements,
     });
+  };
+
+  const closeAddSampleModal = () => {
+    resetSampleDetails();
+    closeSampleModal();
   };
 
   return (

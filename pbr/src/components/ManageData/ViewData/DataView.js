@@ -187,8 +187,20 @@ export default function DataView() {
       })
       .then(checkResponseAuth)
       .then((data) => {
+<<<<<<< HEAD
         setCartridgeTypes(data);
         setCurrentCartridgeType(data[0]);
+=======
+        console.log(data);
+        data.forEach((sample) => {
+          sample.measurements.map((meas) => {
+            sample[meas.analyte.abbreviation] = meas.value;
+          });
+          sample["flock_name"] = sample.flock.name;
+        });
+        setSampleList(data);
+        assignRowHtml(data);
+>>>>>>> fixed merge conflicts
       });
   };
 
@@ -201,6 +213,17 @@ export default function DataView() {
       .then((data) => {
         setMachines(data);
       });
+  };
+
+  const getMachines = async () => {
+    await fetch(`api/machines/${organization.id}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then(checkResponseAuth)
+    .then((data) => {
+      setMachines(data);
+    });
   };
 
   const getHeadCells = () => {
@@ -250,6 +273,11 @@ export default function DataView() {
         label: "Rotor Lot Number",
       },
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> fixed merge conflicts
       {
         id: "validation_status",
         numeric: false,
