@@ -97,11 +97,8 @@ export default function DataViewSampleModal(props) {
     sample_type: null,
     batch_id: null,
     measurements: [],
-<<<<<<< HEAD
-    rotor_lot_number: "",
-=======
     rotor_lot_number : ""
->>>>>>> e1d7872bd676f7e0717e42b72ba0d63f317e1c03
+
   });
 
   React.useEffect(async () => {
