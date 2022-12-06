@@ -852,4 +852,4 @@ export default function DataViewSampleModal(props) {
       </Modal>
     </>
   );
-}
+}}
