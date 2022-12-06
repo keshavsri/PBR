@@ -22,7 +22,6 @@ export default function DataView() {
   const [sampleList, setSampleList] = React.useState([]);
   const { checkResponseAuth, user } = useAuth();
 
-  const [analytes, setAnalytes] = React.useState([]);
   const [currentCartridgeType, setCurrentCartridgeType] = React.useState({});
   const [cartridgeTypes, setCartridgeTypes] = React.useState([]);
   const [pendingRowList, setPendingRowList] = React.useState([]);
@@ -38,6 +37,8 @@ export default function DataView() {
     React.useState(false);
 
   const [selectedSamples, setSelectedSamples] = React.useState([]);
+  const [machines, setMachines] = React.useState([]);
+  const [pendingSamples, setPendingSamples] = React.useState([]);
   const [organization, setOrganization] = React.useState({});
   const [organizations, setOrganizations] = React.useState([]);
 
@@ -133,6 +134,7 @@ export default function DataView() {
       })
       .then(checkResponseAuth)
       .then((data) => {
+        console.log(data);
         data.forEach((sample) => {
           sample.measurements.map((meas) => {
             sample[meas.analyte.abbreviation] = meas.value;
@@ -154,6 +156,17 @@ export default function DataView() {
         setCartridgeTypes(data);
         setCurrentCartridgeType(data[0]);
       });
+  };
+
+  const getMachines = async () => {
+    await fetch(`api/machines/${organization.id}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then(checkResponseAuth)
+    .then((data) => {
+      setMachines(data);
+    });
   };
 
   const getHeadCells = () => {
@@ -188,6 +201,15 @@ export default function DataView() {
         disablePadding: true,
         label: "Flock Age Unit",
       },
+
+      {
+        id: "rotor_lot_number",
+        numeric: false,
+        disablePadding: true,
+        label: "Rotor Lot Number",
+      },
+
+
 
       {
         id: "validation_status",
@@ -328,6 +350,10 @@ export default function DataView() {
   React.useEffect(async () => {
     await getOrganizations();
   }, [roles]);
+
+  React.useEffect(async () => {
+    await getMachines();
+  }, [organization]);
 
   return (
     <>
