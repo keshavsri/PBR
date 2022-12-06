@@ -20,7 +20,7 @@ export default function ManageOrganizationSources({
   const [openAddOrganizationSourceModal, setOpenAddOrganizationSourceModal] = React.useState(false);
 
   React.useEffect(async () => {
-    await (getSources.id);
+    await getSources(organization.id);
 
     getHeadCells();
   }, []);
@@ -94,18 +94,22 @@ export default function ManageOrganizationSources({
     <>
       <Paper>
 
-        <Grid item xs={12} sm={3}>
-          <Button variant="contained" onClick={handleOpenAddOrganizationSourcesModal}>Create New Source</Button>
-        </Grid>
+        {
+          user.role != roles["Guest"] && (
 
-        <Grid item xs={12} sm={12}>
-            <AddOrganizationSources
-              getSources={getSources}
-              openAddOrganizationSourceModal={openAddOrganizationSourceModal}
-              setOpenAddOrganizationSourceModal={setOpenAddOrganizationSourceModal}
-              organization={organization}
-            />
-          </Grid>
+            <Grid item xs={12} sm={12}>
+
+              <Button variant="contained" onClick={handleOpenAddOrganizationSourcesModal}>Create New Source</Button>
+
+              <AddOrganizationSources
+                getSources={getSources}
+                openAddOrganizationSourceModal={openAddOrganizationSourceModal}
+                setOpenAddOrganizationSourceModal={setOpenAddOrganizationSourceModal}
+                organization={organization}
+              />
+            </Grid>
+          
+        )}
 
         <EnhancedTable
           headCells={headCellList}
