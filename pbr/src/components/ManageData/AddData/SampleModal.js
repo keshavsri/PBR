@@ -588,22 +588,6 @@ export default function DataViewSampleModal(props) {
                       })}
                     </Select>
                   </Grid>
-                  {/*<Grid item xs={4}>*/}
-                  {/*  <InputLabel id="label-select-flock">Flock</InputLabel>*/}
-                  {/*  <Autocomplete*/}
-                  {/*    disablePortal*/}
-                  {/*    id="combo-box-demo"*/}
-                  {/*    options={flocks}*/}
-                  {/*    sx={{ width: 300 }}*/}
-                  {/*    value={SampleDetails.flock_id}*/}
-                  {/*    onChange={handleSampleDetailsChange("flock_id")}*/}
-                  {/*    getOptionLabel={(option) => `${option.name}`}*/}
-                  {/*    inputValue={flockInput}*/}
-                  {/*    // defaultValue={flock}*/}
-                  {/*    onInputChange={handleFlockInputChange}*/}
-                  {/*    renderInput={(params) => <TextField {...params} />}*/}
-                  {/*  />*/}
-                  {/*</Grid>*/}
 
                   <Grid item xs={4}>
                     <InputLabel id="label-select-flocks">Flocks</InputLabel>
@@ -614,6 +598,7 @@ export default function DataViewSampleModal(props) {
                       label="flock"
                       onChange={(e) => {
                         setFlock(e.target.value);
+                        onSampleChange();
                       }}
                     >
                       {flocks.map((f) => {

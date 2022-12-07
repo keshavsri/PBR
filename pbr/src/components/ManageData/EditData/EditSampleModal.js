@@ -167,7 +167,7 @@ export default function EditSampleModal(props) {
     setSelected([]);
     setErrorSubmissionMessages([]);
     setErrorSubmission(false);
-    // getData();
+    
     setTimeout(() => {
       getData();
     }, 1000);
