@@ -90,7 +90,6 @@ export default function EditSampleModal(props) {
   const [cartridgeTypes, setCartridgeTypes] = React.useState([]);
 
   const [machines, setMachines] = React.useState([]);
-  // const [machine, setMachine] = React.useState({});
 
   const [errorSubmission, setErrorSubmission] = React.useState(false);
   const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
@@ -156,29 +155,32 @@ export default function EditSampleModal(props) {
           setTimeout(() => {
             setLoading(false);
           }, 1000);
+          console.log("Sample updated");
           return response.json();
         }
       });
-
-    return true;
   };
 
   const closeEditModal = async () => {
-    let result = await editSample();
-    if (result) {
-      setEditSampleModalVisibility(false);
-      setSelected([]);
-      setErrorSubmissionMessages([]);
-      setErrorSubmission(false);
+    editSample();
+    setEditSampleModalVisibility(false);
+    setSelected([]);
+    setErrorSubmissionMessages([]);
+    setErrorSubmission(false);
+    // getData();
+    setTimeout(() => {
       getData();
-    }
+    }, 1000);
   };
 
   const handleSampleDetailsChange = (prop) => (event) => {
-    setSampleDetails({
-      ...SampleDetails,
-      [prop]: event.target.value,
-    });
+    setSampleDetails(
+      {
+        ...SampleDetails,
+        [prop]: event.target.value,
+      },
+      editSample()
+    );
   };
 
   const sampleMeasurements = () => {
@@ -211,6 +213,8 @@ export default function EditSampleModal(props) {
                       setSampleDetails((prevState) => {
                         return { ...prevState, measurements: measurements };
                       });
+
+                      editSample();
                     }}
                   />
                 </>
@@ -220,18 +224,6 @@ export default function EditSampleModal(props) {
       </>
     );
   };
-  console.log(editSampleModalVisiblity)
-  if (editSampleModalVisiblity) {
-    document.onclick = function (event) {
-      if (event === undefined) event = window.event;
-      if (validateSample()) {
-        editSample();
-        setErrorSubmission(false);
-      } else {
-        setErrorSubmission(true);
-      }
-    };
-  }
 
   const getFlocks = async () => {
     await fetch(`/api/flock/source/${source.id}`, {
@@ -293,7 +285,6 @@ export default function EditSampleModal(props) {
       .then(checkResponseAuth)
       .then((data) => {
         setMachines(data);
-        // setMachine(data[0]);
       });
   };
 
@@ -397,6 +388,7 @@ export default function EditSampleModal(props) {
                     onChange={(e) => {
                       setFlocks([]);
                       setOrganization(e.target.value);
+                      editSample();
                     }}
                   >
                     {organizations.map((org) => {
@@ -442,6 +434,7 @@ export default function EditSampleModal(props) {
                 label="flock"
                 onChange={(e) => {
                   setFlock(e.target.value);
+                  editSample();
                 }}
               >
                 {flocks.map((f) => {
@@ -463,6 +456,7 @@ export default function EditSampleModal(props) {
                 label="Source"
                 onChange={(e) => {
                   setSource(e.target.value);
+                  editSample();
                 }}
               >
                 {sources.map((s) => {
@@ -568,28 +562,27 @@ export default function EditSampleModal(props) {
               />
             </Grid>
             <Grid item xs={4}>
-                  <FormControl sx={{ width: "100%" }} required>
-                    <InputLabel>Machine</InputLabel>
-                    <Select
-                      value={SampleDetails.machine_id}
-                      label="Machine"
-                      onChange={handleSampleDetailsChange("machine_id")}
-                    >
-                      {machines
-                        .filter(
-                          (m) =>
-                            m.machine_type_id === cartridgeType.machine_type_id
-                        )
-                        .map((m, index) => {
-                          return (
-                            <MenuItem value={m.id} key={index}>
-                              {m.serial_number}
-                            </MenuItem>
-                          );
-                        })}
-                    </Select>
-                  </FormControl>
-                </Grid>
+              <FormControl sx={{ width: "100%" }} required>
+                <InputLabel>Machine</InputLabel>
+                <Select
+                  value={SampleDetails.machine_id}
+                  label="Machine"
+                  onChange={handleSampleDetailsChange("machine_id")}
+                >
+                  {machines
+                    .filter(
+                      (m) => m.machine_type_id === cartridgeType.machine_type_id
+                    )
+                    .map((m, index) => {
+                      return (
+                        <MenuItem value={m.id} key={index}>
+                          {m.serial_number}
+                        </MenuItem>
+                      );
+                    })}
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
         </Box>
 

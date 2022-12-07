@@ -146,12 +146,14 @@ export default function DataViewSampleModal(props) {
     setSampleModalVisibility(false);
     setCreatedSample(null);
 
-    getData();
     setErrorSubmission(false);
     resetSampleDetails();
     setErrorSubmissionMessages([]);
 
-
+    getData();
+    // setTimeout(() => {
+    //   getData();
+    // }, 1000);
   };
 
   const getOrganizations = async () => {
@@ -185,6 +187,8 @@ export default function DataViewSampleModal(props) {
       ...SampleDetails,
       [prop]: event.target.value,
     });
+
+    onSampleChange();
   };
 
   const clearSampleType = () => {
@@ -234,6 +238,7 @@ export default function DataViewSampleModal(props) {
               setSampleDetails((prevState) => {
                 return { ...prevState, measurements: measurements };
               });
+              onSampleChange();
             }}
           />
         </>
@@ -350,19 +355,6 @@ export default function DataViewSampleModal(props) {
     setCartridgeType(cartridgeTypes[0]);
   };
 
-  if (sampleModalVisibility) {
-    document.onclick = function (event) {
-
-      if (event === undefined) event = window.event;
-      if (validateSample() && sampleModalVisibility) {
-        onSampleChange();
-        setErrorSubmission(false);
-      } else {
-        setErrorSubmission(true);
-      }
-    };
-  }
-
   const onSampleChange = async () => {
     console.log(flocks);
     let cartridgeTypeId = cartridgeType.id;
@@ -393,8 +385,6 @@ export default function DataViewSampleModal(props) {
       };
     }
 
-
-
     await fetch(`/api/sample/${createdSample}`, {
       method: "PUT",
       body: JSON.stringify(payload),
@@ -409,11 +399,10 @@ export default function DataViewSampleModal(props) {
           setTimeout(() => {
             setLoading(false);
           }, 1000);
-
+          console.log("Sample updated");
           return response.json();
         }
       });
-    return true;
   };
 
   let onSubmit = async () => {
@@ -537,6 +526,7 @@ export default function DataViewSampleModal(props) {
                       label="Cartridge Type"
                       onChange={(e) => {
                         setCartridgeType(e.target.value);
+                        onSampleChange();
                       }}
                     >
                       {cartridgeTypes.map((ct) => {
@@ -561,6 +551,7 @@ export default function DataViewSampleModal(props) {
                           label="Source"
                           onChange={(e) => {
                             setOrganization(e.target.value);
+                            onSampleChange();
                           }}
                         >
                           {organizations.map((org) => {
@@ -585,6 +576,7 @@ export default function DataViewSampleModal(props) {
                       label="Source"
                       onChange={(e) => {
                         setSource(e.target.value);
+                        onSampleChange();
                       }}
                     >
                       {sources.map((s) => {
