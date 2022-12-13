@@ -281,7 +281,6 @@ export default function DataViewSampleModal(props) {
   };
 
   React.useEffect(async () => {
-    console.log("selected new file");
     await onFileUpload();
   }, [selectedFile]);
 
@@ -294,8 +293,6 @@ export default function DataViewSampleModal(props) {
   }
 
   const validateSample = () => {
-    console.log("validating sample");
-    console.log(SampleDetails);
     let valid = true;
     let errors = [];
 
@@ -320,10 +317,10 @@ export default function DataViewSampleModal(props) {
     }
 
     if (valid === false) {
-      console.log(errors);
+
       setErrorSubmissionMessages(errors);
     } else {
-      console.log("valid");
+
     }
 
     return valid;
@@ -371,7 +368,6 @@ export default function DataViewSampleModal(props) {
       organization_id: organization.id,
     };
 
-    console.log("Submitting!", payload);
     setSampleLoading(true);
     await fetch(`/api/sample/`, {
       method: "POST",
@@ -383,7 +379,7 @@ export default function DataViewSampleModal(props) {
       .then(checkResponseAuth)
       .then((response) => {
         setSampleLoading(false);
-        console.log(response);
+
         if (!response.ok) {
           setError({
             title: `${response.status} - ${response.statusText}`,
@@ -399,7 +395,7 @@ export default function DataViewSampleModal(props) {
   };
 
   const handleAnalytes = () => {
-    console.log("changing analytes");
+
     const { analytes } = cartridgeType;
     const measurements = analytes.map((analyte) => ({
       analyte_id: analyte.id,
@@ -414,7 +410,6 @@ export default function DataViewSampleModal(props) {
   const onFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
     setIsFilePicked(true);
-    console.log(event.target.files[0])
   };
 
   const onFileUpload = () => {
@@ -430,7 +425,6 @@ export default function DataViewSampleModal(props) {
       )
     .then(checkResponseAuth)
     .then((response) => {
-      console.log(response);
       return response.json();
     })
     .then((json) => {
@@ -445,8 +439,8 @@ export default function DataViewSampleModal(props) {
         abbrevToMeasurements[analyte.abbreviation] = formMeasurements.find((measurement) => measurement.analyte_id === analyte.id);
       })
 
-      console.log(abbrevToMeasurements);
 
+      
       fileMeasurements.forEach((fileMeasurement) => {
         const measurement = abbrevToMeasurements[fileMeasurement.key];
         if (measurement) {
@@ -455,7 +449,6 @@ export default function DataViewSampleModal(props) {
 
       })
 
-      console.log(formMeasurements);
 
       setSampleDetails((prevState) => {
         return { ...prevState, measurements: formMeasurements };
