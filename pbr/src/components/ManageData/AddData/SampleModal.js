@@ -22,6 +22,9 @@ import {
 import SampleIcon from "@mui/icons-material/Science";
 import ErrorIcon from "@mui/icons-material/Error";
 
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
+
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import { sampleTypes, ageUnits } from "../../../models/enums";
 import { makeStyles } from "@mui/styles";
@@ -71,7 +74,6 @@ export default function DataViewSampleModal(props) {
 
   const {
     sampleModalVisibility,
-    closeSampleModal,
     setError,
     setSampleType,
     setSampleModalVisibility,
@@ -98,10 +100,15 @@ export default function DataViewSampleModal(props) {
     sample_type: null,
     batch_id: null,
     measurements: [],
-    rotor_lot_number: "",
+    rotor_lot_number: ""
   });
   const [selectedFile, setSelectedFile] = React.useState();
   const [isFilePicked, setIsFilePicked] = React.useState(false);
+
+  const [errorSubmission, setErrorSubmission] = React.useState(false);
+  const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
+    []
+  );
 
   React.useEffect(async () => {
     if (sampleModalVisibility) {
@@ -133,16 +140,21 @@ export default function DataViewSampleModal(props) {
     await sampleMeasurements();
   }, [cartridgeType]);
 
-  const [errorSubmission, setErrorSubmission] = React.useState(false);
-  const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
-    []
-  );
+  const [loading, setLoading] = React.useState(false);
 
-  const closeModal = () => {
+  const [createdSample, setCreatedSample] = React.useState(null);
+
+  const closeModal = async () => {
+    let result = await onSampleChange();
+    setSampleModalVisibility(false);
+    setCreatedSample(null);
+
+    getData();
     setErrorSubmission(false);
     resetSampleDetails();
     setErrorSubmissionMessages([]);
-    setSampleModalVisibility(false);
+
+
   };
 
   const getOrganizations = async () => {
@@ -283,13 +295,17 @@ export default function DataViewSampleModal(props) {
   React.useEffect(async () => {
     await onFileUpload();
   }, [selectedFile]);
+  
+  React.useEffect(async () => {
+    if (sampleModalVisibility && createdSample === null) {
+      console.log(flock);
+      onSubmit();
+    }
+  }, [flock]);
+  
 
   function handleFlockInputChange(event, value) {
     setFlockInput(value);
-  }
-
-  function handleFlockChange(event, value) {
-    setFlock(value);
   }
 
   const validateSample = () => {
@@ -317,10 +333,7 @@ export default function DataViewSampleModal(props) {
     }
 
     if (valid === false) {
-
       setErrorSubmissionMessages(errors);
-    } else {
-
     }
 
     return valid;
@@ -343,6 +356,72 @@ export default function DataViewSampleModal(props) {
     setSource(sources[0]);
     setFlock(flocks[0]);
     setCartridgeType(cartridgeTypes[0]);
+  };
+
+  if (sampleModalVisibility) {
+    document.onclick = function (event) {
+
+      if (event === undefined) event = window.event;
+      if (validateSample() && sampleModalVisibility) {
+        onSampleChange();
+        setErrorSubmission(false);
+      } else {
+        setErrorSubmission(true);
+      }
+    };
+  }
+
+  const onSampleChange = async () => {
+    console.log(flocks);
+    let cartridgeTypeId = cartridgeType.id;
+    const newSampleDetails = SampleDetails;
+    const measurements = newSampleDetails.measurements;
+    measurements.forEach((meas) => {
+      if (meas.value === "") {
+        meas.value = null;
+      }
+    });
+
+    setLoading(true);
+
+    let payload = {};
+
+    if (validateSample()) {
+      payload = {
+        cartridge_type_id: cartridgeTypeId,
+        comments: SampleDetails.comments,
+        sample_type: SampleDetails.sample_type,
+        flock_age: SampleDetails.flock_age,
+        flock_age_unit: SampleDetails.flock_age_unit,
+        organization_id: organization.id,
+        rotor_lot_number: SampleDetails.rotor_lot_number,
+        machine_id: machine.id,
+        flock_id: flock.id,
+        measurements: measurements,
+      };
+    }
+
+
+
+    await fetch(`/api/sample/${createdSample}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        if (!response.ok) {
+        } else {
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
+
+          return response.json();
+        }
+      });
+    return true;
   };
 
   let onSubmit = async () => {
@@ -379,23 +458,43 @@ export default function DataViewSampleModal(props) {
       .then(checkResponseAuth)
       .then((response) => {
         setSampleLoading(false);
-
         if (!response.ok) {
           setError({
             title: `${response.status} - ${response.statusText}`,
             description: `There was an error while uploading the sample. Try again.`,
           });
         } else {
-          closeSampleModal();
-          resetSampleDetails();
-          getData();
           return response.json();
+        }
+      })
+      .then((data) => {
+        setCreatedSample(data.id);
+      });
+  };
+
+  const deleteSample = async () => {
+    await fetch(`/api/sample/permanent/${createdSample}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(checkResponseAuth)
+      .then((response) => {
+        if (!response.ok) {
+          setError({
+            title: `${response.status} - ${response.statusText}`,
+            description: `There was an error while deleting the sample. Try again.`,
+          });
+        } else {
+          resetSampleDetails();
+
+          getData();
         }
       });
   };
 
-  const handleAnalytes = () => {
-
+  const handleAnalytes = (e) => {
     const { analytes } = cartridgeType;
     const measurements = analytes.map((analyte) => ({
       analyte_id: analyte.id,
@@ -555,21 +654,42 @@ export default function DataViewSampleModal(props) {
                       })}
                     </Select>
                   </Grid>
+                  {/*<Grid item xs={4}>*/}
+                  {/*  <InputLabel id="label-select-flock">Flock</InputLabel>*/}
+                  {/*  <Autocomplete*/}
+                  {/*    disablePortal*/}
+                  {/*    id="combo-box-demo"*/}
+                  {/*    options={flocks}*/}
+                  {/*    sx={{ width: 300 }}*/}
+                  {/*    value={SampleDetails.flock_id}*/}
+                  {/*    onChange={handleSampleDetailsChange("flock_id")}*/}
+                  {/*    getOptionLabel={(option) => `${option.name}`}*/}
+                  {/*    inputValue={flockInput}*/}
+                  {/*    // defaultValue={flock}*/}
+                  {/*    onInputChange={handleFlockInputChange}*/}
+                  {/*    renderInput={(params) => <TextField {...params} />}*/}
+                  {/*  />*/}
+                  {/*</Grid>*/}
+
                   <Grid item xs={4}>
-                    <InputLabel id="label-select-flock">Flock</InputLabel>
-                    <Autocomplete
-                      disablePortal
-                      id="combo-box-demo"
-                      options={flocks}
-                      sx={{ width: 300 }}
-                      value={SampleDetails.flock_id}
-                      onChange={handleSampleDetailsChange("flock_id")}
-                      getOptionLabel={(option) => `${option.name}`}
-                      inputValue={flockInput}
-                      // defaultValue={flock}
-                      onInputChange={handleFlockInputChange}
-                      renderInput={(params) => <TextField {...params} />}
-                    />
+                    <InputLabel id="label-select-flocks">Flocks</InputLabel>
+                    <Select
+                      labelId="label-select-flocks"
+                      id="select-flocks"
+                      value={flock}
+                      label="flock"
+                      onChange={(e) => {
+                        setFlock(e.target.value);
+                      }}
+                    >
+                      {flocks.map((f) => {
+                        return (
+                          <MenuItem key={f.id} value={f}>
+                            {f.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
                   </Grid>
                 </Grid>
               </Box>
@@ -738,27 +858,54 @@ export default function DataViewSampleModal(props) {
                     color="secondary"
                     style={{ width: 200 }}
                     onClick={() => {
+                      deleteSample();
                       closeModal();
                     }}
                   >
                     Cancel
                   </Button>
                 </Grid>
+
                 <Grid item xs={8}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    style={{ width: 200 }}
-                    onClick={() => {
-                      if (validateSample()) {
-                        onSubmit();
-                      } else {
-                        setErrorSubmission(true);
-                      }
-                    }}
-                  >
-                    Save
-                  </Button>
+                  {loading ? (
+                    <LoadingButton
+                      loading
+                      loadingPosition="start"
+                      startIcon={<SaveIcon />}
+                      variant="outlined"
+                      style={{ width: 200, border: "1px solid red" }}
+                      color="primary"
+                    >
+                      <Typography
+                        gutterBottom
+                        variant="button"
+                        style={{
+                          color: "red",
+                        }}
+                      >
+                        {" "}
+                        Saving ...
+                      </Typography>
+                    </LoadingButton>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      style={{ width: 200 }}
+                      onClick={() => {
+                        if (validateSample()) {
+                          onSampleChange();
+                          closeModal();
+                          setSampleModalVisibility(false);
+                          setCreatedSample(null);
+                        } else {
+                          setErrorSubmission(true);
+                        }
+                      }}
+                    >
+                      Save
+                    </Button>
+                  )}
                 </Grid>
               </Grid>
             </Box>

@@ -4,7 +4,8 @@ import { alpha } from "@mui/material/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import AssessmentIcon from "@mui/icons-material/Assessment";
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import ReportIcon from "@mui/icons-material/Summarize";
 import { makeStyles } from "@mui/styles";
 import useAuth from "../../services/useAuth";
 
@@ -45,6 +46,7 @@ export default function EnhancedTableToolbar(props) {
     pendingFlag,
     isSample,
     setOpenReviewSampleModal,
+    setReportModalVisibility
   } = props;
   let classes = useStyles();
 
@@ -114,6 +116,21 @@ export default function EnhancedTableToolbar(props) {
           <IconButton sx={{ ml: 1 }} onClick={onDelete}>
             <DeleteIcon />
           </IconButton>
+        </Tooltip>
+      ) : (
+        <></>
+      )}
+
+      {(numSelected > 0 && isSample) ? (
+        <Tooltip title="Generate Report">
+          <Button
+            variant="contained"
+            onClick={() => {setReportModalVisibility(true)}}
+            startIcon={<ReportIcon />}
+            sx={{ ml: 1 }}
+          >
+            Generate Report
+          </Button>
         </Tooltip>
       ) : (
         <></>

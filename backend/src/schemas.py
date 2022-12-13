@@ -145,6 +145,7 @@ class Sample(PydanticModel):
     flock: Optional[Flock]
     comments: Optional[str]
     rotor_lot_number: Optional[str]
+    machine_id: Optional[int]
     measurements: Optional[List[Measurement]]
     validation_status: Optional[ValidationTypes]
     sample_type: Optional[SampleTypes]

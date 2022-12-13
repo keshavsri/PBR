@@ -15,7 +15,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDatabase } from "@fortawesome/free-solid-svg-icons";
 import { makeStyles } from "@mui/styles";
 import BulkIcon from "@mui/icons-material/UploadFile";
-import ReportIcon from "@mui/icons-material/Assessment";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import SampleIcon from "@mui/icons-material/Science";
 import useDataView from "../../../services/useDataView";
@@ -36,7 +35,10 @@ export default function DVTableToolbar({
   cartridgeTypes,
   roles,
 }) {
-  const { openSampleModal, handleOpenFilterModal } = useDataView();
+  const {
+    openSampleModal,
+    handleOpenFilterModal,
+  } = useDataView();
   const classes = useStyles();
 
   useTheme();
@@ -101,19 +103,6 @@ export default function DVTableToolbar({
           })}
         </Select>
       </>
-
-      <Tooltip title="Generate Report for Sample(s)">
-        <Button
-          variant="contained"
-          color="secondary"
-          style={{ width: 1600, marginTop: 10, marginBottom: 10 }}
-          startIcon={<ReportIcon />}
-          sx={{ ml: 1 }}
-          // onClick={}
-        >
-          Generate Report
-        </Button>
-      </Tooltip>
 
       <Tooltip title="Filter Samples">
         <Button
