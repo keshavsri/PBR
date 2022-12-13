@@ -25,6 +25,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 
+
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import { sampleTypes, ageUnits } from "../../../models/enums";
 import { makeStyles } from "@mui/styles";
@@ -93,6 +94,7 @@ export default function DataViewSampleModal(props) {
   const [source, setSource] = React.useState({});
   const [organization, setOrganization] = React.useState({});
   const [expanded, setExpanded] = React.useState(true);
+
   const [SampleDetails, setSampleDetails] = React.useState({
     comments: "",
     flock_age: null,
@@ -100,7 +102,7 @@ export default function DataViewSampleModal(props) {
     sample_type: null,
     batch_id: null,
     measurements: [],
-    rotor_lot_number: "",
+    rotor_lot_number : ""
   });
 
   const [errorSubmission, setErrorSubmission] = React.useState(false);
@@ -127,9 +129,6 @@ export default function DataViewSampleModal(props) {
     }
   }, [organization]);
 
-
-
-
   React.useEffect(async () => {
     if (sampleModalVisibility) {
       await getFlocks();
@@ -155,12 +154,17 @@ export default function DataViewSampleModal(props) {
     resetSampleDetails();
     setErrorSubmissionMessages([]);
 
-
   const [errorSubmission, setErrorSubmission] = React.useState(false);
   const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
     []
   );
 
+  const closeModal = () => {
+    setErrorSubmission(false);
+    resetSampleDetails();
+    setErrorSubmissionMessages([]);
+    setSampleModalVisibility(false);
+  };
 
 
   const getOrganizations = async () => {
@@ -201,8 +205,8 @@ export default function DataViewSampleModal(props) {
   };
 
   const sampleMeasurements = () => {
-    const {measurements} = SampleDetails;
-    const {analytes} = cartridgeType;
+    const { measurements } = SampleDetails;
+    const { analytes } = cartridgeType;
     return (
       <>
         <Grid item xs={12}>
@@ -304,7 +308,6 @@ export default function DataViewSampleModal(props) {
     }
   }, [flock]);
 
-
   function handleFlockInputChange(event, value) {
     setFlockInput(value);
   }
@@ -338,6 +341,42 @@ export default function DataViewSampleModal(props) {
 
     if (valid === false) {
       setErrorSubmissionMessages(errors);
+    }
+
+    return valid;
+  };
+
+  const validateSample = () => {
+    console.log("validating sample");
+    console.log(SampleDetails);
+    let valid = true;
+    let errors = [];
+
+    if (
+      (isNaN(SampleDetails.flock_age) && SampleDetails.flock_age != null) ||
+      (!isNaN(SampleDetails.flock_age) &&
+        SampleDetails.flock_age <= 0 &&
+        SampleDetails.flock_age != null)
+    ) {
+      errors.push("Flock age is positive number only");
+      valid = false;
+    }
+
+    for (let i = 0; i < SampleDetails.measurements.length; i++) {
+      if (
+        isNaN(SampleDetails.measurements[i].value) &&
+        SampleDetails.measurements[i].value != null
+      ) {
+        errors.push("Sample measurements must be numbers");
+        valid = false;
+      }
+    }
+
+    if (valid === false) {
+      console.log(errors);
+      setErrorSubmissionMessages(errors);
+    } else {
+      console.log("valid");
     }
 
     return valid;

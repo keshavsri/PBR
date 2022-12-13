@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import { useRef } from "react";
 
 import {
@@ -9,7 +8,6 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-
 import Grid from "@mui/material/Grid";
 import SavedToPendingModal from "../ValidateData/SavedToPendingModal";
 
@@ -175,13 +173,6 @@ export default function DataView() {
     return promise;
   };
 
-  const cancelGetData = () => {
-    if (abortController.current) {
-      abortController.current.abort();
-      setLoading(false);
-    }
-  };
-
   const getCartridgeTypes = async () => {
     await fetch(`api/cartridge-type`)
       .then((response) => {
@@ -193,18 +184,16 @@ export default function DataView() {
         setCartridgeTypes(data);
         setCurrentCartridgeType(data[0]);
       });
+
   };
 
-  const getMachines = async () => {
-    await fetch(`api/machines/${organization.id}`)
-      .then((response) => {
-        return response.json();
-      })
-      .then(checkResponseAuth)
-      .then((data) => {
-        setMachines(data);
-      });
+  const cancelGetData = () => {
+    if (abortController.current) {
+      abortController.current.abort();
+      setLoading(false);
+    }
   };
+
 
   const getMachines = async () => {
     await fetch(`api/machines/${organization.id}`)
@@ -437,7 +426,6 @@ export default function DataView() {
 
 
 
-
   return (
     <>
       <DataViewProvider>
@@ -459,7 +447,6 @@ export default function DataView() {
                 <Typography variant="h6">Loading...</Typography>
               </Grid>
               <Button onClick={() => cancelGetData()}>Stop Loading</Button>
-
             </Grid>
           ) : (
             <EnhancedTable
@@ -491,7 +478,6 @@ export default function DataView() {
               onEdit={onEdit}
               selectedSample={selectedSamples[0]}
               setReportModalVisibility={setReportModalVisibility}
-
             />
           )}
 

@@ -31,7 +31,6 @@ import { tableCellClasses } from "@mui/material/TableCell";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import InfoIcon from '@mui/icons-material/Info';
 
-
 import useAuth from "../../services/useAuth";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -264,11 +263,7 @@ export default function HealthyRanges() {
   const popoverOpen = Boolean(anchorEl);
   const popoverId = popoverOpen ? 'simple-popover' : undefined;
 
-  React.useEffect(() => {
-    return () => {
-      clearTimeout(timer.current);
-    };
-  }, []);
+
 
   return (
     <Paper>

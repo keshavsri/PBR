@@ -307,6 +307,8 @@ export default function EditSampleModal(props) {
   };
 
   const validateSample = () => {
+    console.log("validating sample");
+    console.log(SampleDetails);
     let errors = [];
     let valid = true;
     setErrorSubmission(false);
