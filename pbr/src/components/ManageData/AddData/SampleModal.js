@@ -122,6 +122,15 @@ export default function DataViewSampleModal(props) {
     }
   }, [sampleModalVisibility]);
 
+  const getOrganizations = async () => {
+    const response = await fetch(`/api/organization/`, {
+      method: "GET",
+    }).then(checkResponseAuth);
+    const data = await response.json();
+    setOrganizations(data);
+    setOrganization(data[0]);
+  };
+
   React.useEffect(async () => {
     if (sampleModalVisibility) {
       await getSources();
@@ -153,28 +162,10 @@ export default function DataViewSampleModal(props) {
     setErrorSubmission(false);
     resetSampleDetails();
     setErrorSubmissionMessages([]);
-
-  const [errorSubmission, setErrorSubmission] = React.useState(false);
-  const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
-    []
-  );
-
-  const closeModal = () => {
-    setErrorSubmission(false);
-    resetSampleDetails();
-    setErrorSubmissionMessages([]);
-    setSampleModalVisibility(false);
-  };
+  }
 
 
-  const getOrganizations = async () => {
-    const response = await fetch(`/api/organization/`, {
-      method: "GET",
-    }).then(checkResponseAuth);
-    const data = await response.json();
-    setOrganizations(data);
-    setOrganization(data[0]);
-  };
+
 
   const getFlocks = async () => {
     await fetch(`/api/flock/source/${source.id}`, {
@@ -347,41 +338,6 @@ export default function DataViewSampleModal(props) {
     return valid;
   };
 
-  const validateSample = () => {
-    console.log("validating sample");
-    console.log(SampleDetails);
-    let valid = true;
-    let errors = [];
-
-    if (
-      (isNaN(SampleDetails.flock_age) && SampleDetails.flock_age != null) ||
-      (!isNaN(SampleDetails.flock_age) &&
-        SampleDetails.flock_age <= 0 &&
-        SampleDetails.flock_age != null)
-    ) {
-      errors.push("Flock age is positive number only");
-      valid = false;
-    }
-
-    for (let i = 0; i < SampleDetails.measurements.length; i++) {
-      if (
-        isNaN(SampleDetails.measurements[i].value) &&
-        SampleDetails.measurements[i].value != null
-      ) {
-        errors.push("Sample measurements must be numbers");
-        valid = false;
-      }
-    }
-
-    if (valid === false) {
-      console.log(errors);
-      setErrorSubmissionMessages(errors);
-    } else {
-      console.log("valid");
-    }
-
-    return valid;
-  };
 
   const resetSampleDetails = () => {
     setSampleDetails({
@@ -552,7 +508,7 @@ export default function DataViewSampleModal(props) {
 
   const closeAddSampleModal = () => {
     resetSampleDetails();
-    closeSampleModal();
+    closeModal();
   };
 
   return (
@@ -913,4 +869,4 @@ export default function DataViewSampleModal(props) {
       </Modal>
     </>
   );
-}}
+}
