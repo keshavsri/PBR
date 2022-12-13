@@ -29,6 +29,7 @@ import { createFilterOptions } from "@mui/material/Autocomplete";
 import { sampleTypes, ageUnits } from "../../../models/enums";
 import { makeStyles } from "@mui/styles";
 import { useTheme } from "@mui/material/styles";
+import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 import useAuth from "../../../services/useAuth";
 import useDataView from "../../../services/useDataView";
@@ -101,6 +102,8 @@ export default function DataViewSampleModal(props) {
     measurements: [],
     rotor_lot_number: "",
   });
+  const [selectedFile, setSelectedFile] = React.useState();
+  const [isFilePicked, setIsFilePicked] = React.useState(false);
 
   const [errorSubmission, setErrorSubmission] = React.useState(false);
   const [errorSubmissionMessages, setErrorSubmissionMessages] = React.useState(
@@ -295,11 +298,16 @@ export default function DataViewSampleModal(props) {
   };
 
   React.useEffect(async () => {
+    await onFileUpload();
+  }, [selectedFile]);
+  
+  React.useEffect(async () => {
     if (sampleModalVisibility && createdSample === null) {
       console.log(flock);
       onSubmit();
     }
   }, [flock]);
+  
 
   const validateSample = () => {
     let valid = true;
@@ -482,6 +490,56 @@ export default function DataViewSampleModal(props) {
     });
   };
 
+  const onFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+    setIsFilePicked(true);
+  };
+
+  const onFileUpload = () => {
+    const formData = new FormData();
+
+    formData.append('file', selectedFile);
+    fetch(
+      'api/sample/parse',
+      {
+        method: "POST",
+        body: formData
+      }
+      )
+    .then(checkResponseAuth)
+    .then((response) => {
+      return response.json();
+    })
+    .then((json) => {
+      const formMeasurements = [...SampleDetails.measurements];
+      const fileMeasurements = json.data.measurements;
+      const abbrevToMeasurements = {};
+      formMeasurements.forEach((measurement) => {
+        measurement.value = null;
+      })
+
+      cartridgeType.analytes.forEach((analyte) => {
+        abbrevToMeasurements[analyte.abbreviation] = formMeasurements.find((measurement) => measurement.analyte_id === analyte.id);
+      })
+
+
+      
+      fileMeasurements.forEach((fileMeasurement) => {
+        const measurement = abbrevToMeasurements[fileMeasurement.key];
+        if (measurement) {
+          measurement.value = Number(fileMeasurement.value);
+        }
+
+      })
+
+
+      setSampleDetails((prevState) => {
+        return { ...prevState, measurements: formMeasurements };
+      });
+    });
+  };
+
+
   return (
     <>
       <Modal
@@ -658,6 +716,25 @@ export default function DataViewSampleModal(props) {
               </Grid>
             </Box>
 
+            <br/>
+
+            {cartridgeType.machine_type_id === 2 &&
+
+            <>
+              <Box>
+                <Button  component={"label"} variant={'contained'}>
+                  <Typography>
+                    Upload measurements from a file
+                  </Typography>
+                  <UploadFileIcon/>
+                  <input onChange={onFileChange} type={"file"} hidden/>
+                </Button>
+
+
+              </Box>
+            </>
+            }
+
             <></>
             <br />
 
@@ -695,6 +772,7 @@ export default function DataViewSampleModal(props) {
                 </Grid>
               </Grid>
             </Box>
+
             <Grid>{sampleMeasurements()}</Grid>
             <br></br>
             <Grid className={classes.container}>
