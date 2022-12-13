@@ -99,7 +99,7 @@ export default function DataViewSampleModal(props) {
     sample_type: null,
     batch_id: null,
     measurements: [],
-    rotor_lot_number: ""
+    rotor_lot_number: "",
   });
 
   const [errorSubmission, setErrorSubmission] = React.useState(false);
@@ -146,12 +146,14 @@ export default function DataViewSampleModal(props) {
     setSampleModalVisibility(false);
     setCreatedSample(null);
 
-    getData();
     setErrorSubmission(false);
     resetSampleDetails();
     setErrorSubmissionMessages([]);
 
-
+    getData();
+    // setTimeout(() => {
+    //   getData();
+    // }, 1000);
   };
 
   const getOrganizations = async () => {
@@ -185,6 +187,8 @@ export default function DataViewSampleModal(props) {
       ...SampleDetails,
       [prop]: event.target.value,
     });
+
+    onSampleChange();
   };
 
   const clearSampleType = () => {
@@ -234,6 +238,7 @@ export default function DataViewSampleModal(props) {
               setSampleDetails((prevState) => {
                 return { ...prevState, measurements: measurements };
               });
+              onSampleChange();
             }}
           />
         </>
@@ -296,10 +301,6 @@ export default function DataViewSampleModal(props) {
     }
   }, [flock]);
 
-  function handleFlockInputChange(event, value) {
-    setFlockInput(value);
-  }
-
   const validateSample = () => {
     let valid = true;
     let errors = [];
@@ -350,19 +351,6 @@ export default function DataViewSampleModal(props) {
     setCartridgeType(cartridgeTypes[0]);
   };
 
-  if (sampleModalVisibility) {
-    document.onclick = function (event) {
-
-      if (event === undefined) event = window.event;
-      if (validateSample() && sampleModalVisibility) {
-        onSampleChange();
-        setErrorSubmission(false);
-      } else {
-        setErrorSubmission(true);
-      }
-    };
-  }
-
   const onSampleChange = async () => {
     console.log(flocks);
     let cartridgeTypeId = cartridgeType.id;
@@ -391,29 +379,25 @@ export default function DataViewSampleModal(props) {
         flock_id: flock.id,
         measurements: measurements,
       };
+
+      await fetch(`/api/sample/${createdSample}`, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then(checkResponseAuth)
+        .then((response) => {
+          if (!response.ok) {
+          } else {
+            setTimeout(() => {
+              setLoading(false);
+            }, 1000);
+            return response.json();
+          }
+        });
     }
-
-
-
-    await fetch(`/api/sample/${createdSample}`, {
-      method: "PUT",
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(checkResponseAuth)
-      .then((response) => {
-        if (!response.ok) {
-        } else {
-          setTimeout(() => {
-            setLoading(false);
-          }, 1000);
-
-          return response.json();
-        }
-      });
-    return true;
   };
 
   let onSubmit = async () => {
@@ -537,6 +521,7 @@ export default function DataViewSampleModal(props) {
                       label="Cartridge Type"
                       onChange={(e) => {
                         setCartridgeType(e.target.value);
+                        onSampleChange();
                       }}
                     >
                       {cartridgeTypes.map((ct) => {
@@ -561,6 +546,7 @@ export default function DataViewSampleModal(props) {
                           label="Source"
                           onChange={(e) => {
                             setOrganization(e.target.value);
+                            onSampleChange();
                           }}
                         >
                           {organizations.map((org) => {
@@ -585,6 +571,7 @@ export default function DataViewSampleModal(props) {
                       label="Source"
                       onChange={(e) => {
                         setSource(e.target.value);
+                        onSampleChange();
                       }}
                     >
                       {sources.map((s) => {
@@ -596,22 +583,6 @@ export default function DataViewSampleModal(props) {
                       })}
                     </Select>
                   </Grid>
-                  {/*<Grid item xs={4}>*/}
-                  {/*  <InputLabel id="label-select-flock">Flock</InputLabel>*/}
-                  {/*  <Autocomplete*/}
-                  {/*    disablePortal*/}
-                  {/*    id="combo-box-demo"*/}
-                  {/*    options={flocks}*/}
-                  {/*    sx={{ width: 300 }}*/}
-                  {/*    value={SampleDetails.flock_id}*/}
-                  {/*    onChange={handleSampleDetailsChange("flock_id")}*/}
-                  {/*    getOptionLabel={(option) => `${option.name}`}*/}
-                  {/*    inputValue={flockInput}*/}
-                  {/*    // defaultValue={flock}*/}
-                  {/*    onInputChange={handleFlockInputChange}*/}
-                  {/*    renderInput={(params) => <TextField {...params} />}*/}
-                  {/*  />*/}
-                  {/*</Grid>*/}
 
                   <Grid item xs={4}>
                     <InputLabel id="label-select-flocks">Flocks</InputLabel>
@@ -622,6 +593,7 @@ export default function DataViewSampleModal(props) {
                       label="flock"
                       onChange={(e) => {
                         setFlock(e.target.value);
+                        onSampleChange();
                       }}
                     >
                       {flocks.map((f) => {
