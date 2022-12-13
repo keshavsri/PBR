@@ -102,7 +102,7 @@ export default function DataViewSampleModal(props) {
     sample_type: null,
     batch_id: null,
     measurements: [],
-    rotor_lot_number : ""
+    rotor_lot_number: ""
   });
 
   const [errorSubmission, setErrorSubmission] = React.useState(false);
@@ -304,6 +304,7 @@ export default function DataViewSampleModal(props) {
 
   React.useEffect(async () => {
     if (sampleModalVisibility && createdSample === null) {
+      console.log(flock);
       onSubmit();
     }
   }, [flock]);
@@ -415,6 +416,7 @@ export default function DataViewSampleModal(props) {
   }
 
   const onSampleChange = async () => {
+    console.log(flocks);
     let cartridgeTypeId = cartridgeType.id;
     const newSampleDetails = SampleDetails;
     const measurements = newSampleDetails.measurements;
@@ -506,7 +508,6 @@ export default function DataViewSampleModal(props) {
             description: `There was an error while uploading the sample. Try again.`,
           });
         } else {
-          getData();
           return response.json();
         }
       })
@@ -652,21 +653,42 @@ export default function DataViewSampleModal(props) {
                       })}
                     </Select>
                   </Grid>
+                  {/*<Grid item xs={4}>*/}
+                  {/*  <InputLabel id="label-select-flock">Flock</InputLabel>*/}
+                  {/*  <Autocomplete*/}
+                  {/*    disablePortal*/}
+                  {/*    id="combo-box-demo"*/}
+                  {/*    options={flocks}*/}
+                  {/*    sx={{ width: 300 }}*/}
+                  {/*    value={SampleDetails.flock_id}*/}
+                  {/*    onChange={handleSampleDetailsChange("flock_id")}*/}
+                  {/*    getOptionLabel={(option) => `${option.name}`}*/}
+                  {/*    inputValue={flockInput}*/}
+                  {/*    // defaultValue={flock}*/}
+                  {/*    onInputChange={handleFlockInputChange}*/}
+                  {/*    renderInput={(params) => <TextField {...params} />}*/}
+                  {/*  />*/}
+                  {/*</Grid>*/}
+
                   <Grid item xs={4}>
-                    <InputLabel id="label-select-flock">Flock</InputLabel>
-                    <Autocomplete
-                      disablePortal
-                      id="combo-box-demo"
-                      options={flocks}
-                      sx={{ width: 300 }}
-                      value={SampleDetails.flock_id}
-                      onChange={handleSampleDetailsChange("flock_id")}
-                      getOptionLabel={(option) => `${option.name}`}
-                      inputValue={flockInput}
-                      // defaultValue={flock}
-                      onInputChange={handleFlockInputChange}
-                      renderInput={(params) => <TextField {...params} />}
-                    />
+                    <InputLabel id="label-select-flocks">Flocks</InputLabel>
+                    <Select
+                      labelId="label-select-flocks"
+                      id="select-flocks"
+                      value={flock}
+                      label="flock"
+                      onChange={(e) => {
+                        setFlock(e.target.value);
+                      }}
+                    >
+                      {flocks.map((f) => {
+                        return (
+                          <MenuItem key={f.id} value={f}>
+                            {f.name}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
                   </Grid>
                 </Grid>
               </Box>

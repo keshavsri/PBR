@@ -89,8 +89,9 @@ export default function OrganizationView() {
       });
   };
 
-  const isDeletable = () => {
-    if (user.role == roles["Super_Admin"] || user.role == roles["Admin"]) {
+  // This controls whether the rows in the table are clickable or not
+  const isSelectable = () => {
+    if (user.role == roles["Super_Admin"] || user.role == roles["Admin"] || user.role == roles["Supervisor"]) {
       return true;
     } else {
       return false;
@@ -99,7 +100,7 @@ export default function OrganizationView() {
 
   const assignRowHtml = (rows) => {
     rows.map((row) => {
-      row.deletable = isDeletable();
+      row.deletable = isSelectable();
       row.status = (
         <>
           <Chip label={row.status} color="primary" size="small" />
@@ -110,7 +111,7 @@ export default function OrganizationView() {
 
   const assignRowHtmlFlock = (rows) => {
     rows.map((row) => {
-      row.deletable = isDeletable();
+      row.deletable = isSelectable();
       row.status = (
         <>
           <Chip label={row.status} color="primary" size="small" />

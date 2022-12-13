@@ -105,11 +105,12 @@ export default function ManageOrganizationFlocks({
     <>
       <Paper>
 
-        <Grid item xs={12} sm={3}>
-          <Button variant="contained" onClick={handleOpenAddOrganizationFlocksModal}>Create New Flock</Button>
-        </Grid>
+        {
+          user.role != roles["Guest"] && (
+          <Grid item xs={12} sm={12}>
 
-        <Grid item xs={12} sm={12}>
+            <Button variant="contained" onClick={handleOpenAddOrganizationFlocksModal}>Create New Flock</Button>
+
             <AddOrganizationFlocks
               getFlocks={getFlocks}
               openAddOrganizationFlockModal={openAddOrganizationFlockModal}
@@ -118,6 +119,8 @@ export default function ManageOrganizationFlocks({
               organization={organization}
             />
           </Grid>
+        )}
+
 
         <EnhancedTable
           headCells={headCellList}

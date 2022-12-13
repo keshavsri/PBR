@@ -90,8 +90,8 @@ with app.app_context():
     flock = Flock(
         name="Test Flock",
         strain="Maran",
-        species="Chicken",
-        gender="Male",
+        species="Turkey",
+        gender="Female",
         production_type="Meat",
         birthday="2006-07-24 00:00:00",
         source_id=source.id

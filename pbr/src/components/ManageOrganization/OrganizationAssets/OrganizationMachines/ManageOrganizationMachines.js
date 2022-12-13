@@ -73,18 +73,22 @@ export default function ManageOrganizationMachines({
     <>
       <Paper>
 
-        <Grid item xs={12} sm={12}>
-          <Button variant="contained" onClick={handleOpenAddOrganizationMachinesModal}>Create New Machine</Button>
-        </Grid>
+      {
+          user.role != roles["Guest"] && (
 
-        <Grid item xs={12} sm={12}>
-            <AddOrganizationMachines
-              getMachines={getMachines}
-              openAddOrganizationMachineModal={openAddOrganizationMachineModal}
-              setOpenAddOrganizationMachineModal={setOpenAddOrganizationMachineModal}
-              organization={organization}
-            />
-          </Grid>
+            <Grid item xs={12} sm={12}>
+
+              <Button variant="contained" onClick={handleOpenAddOrganizationMachinesModal}>Create New Machine</Button>
+
+              <AddOrganizationMachines
+                getMachines={getMachines}
+                openAddOrganizationMachineModal={openAddOrganizationMachineModal}
+                setOpenAddOrganizationMachineModal={setOpenAddOrganizationMachineModal}
+                organization={organization}
+              />
+            </Grid>
+          
+        )}
 
         <EnhancedTable
           headCells={headCellList}
