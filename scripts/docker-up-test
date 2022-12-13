@@ -8,6 +8,7 @@ Starting all docker containers including testing.
 
 # Guide:
 # - This script is used to build and/or start Docker containers described in docker.compose.yml
+# - It is meant to build/start all containers including testing.
 # - This script is called from the command line of the host machine (your computer) and it executes
 #   the 'docker-compose up' command
 # - The 'docker-compose up' command starts all containers described in docker.compose.yml
