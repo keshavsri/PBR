@@ -69,7 +69,7 @@ def get_machine(access_allowed, current_user, item_id=None):
 
 @machineBlueprint.route('/', methods=['POST'])
 @token_required
-@allowed_roles([0, 1])
+@allowed_roles([0, 1, 2, 3])
 def create_machine(access_allowed, current_user):
     """
     This function handles POST requests for creating a machine.
@@ -109,7 +109,7 @@ def create_machine(access_allowed, current_user):
 
 @machineBlueprint.route('/<int:item_id>', methods=['PUT'])
 @token_required
-@allowed_roles([0, 1])
+@allowed_roles([0, 1, 2])
 def edit_machine(access_allowed, current_user, item_id):
     """
     This function handles PUT requests for editing a machine.
@@ -135,7 +135,7 @@ def edit_machine(access_allowed, current_user, item_id):
             existing_machine_by_serial_number.organization_id == request.json.get('organization_id') and
             existing_machine_by_serial_number.id is not item_id
         ):
-            return jsonify({'message': 'Serial number must be unique within an organization'}), 400
+            return jsonify({'message': 'Serial number must be unique within an organization'}), 409
         else:
             models.Machine.query.filter_by(id=item_id).update(request.json)
             models.db.session.commit()
@@ -149,7 +149,7 @@ def edit_machine(access_allowed, current_user, item_id):
 
 @machineBlueprint.route('/<int:item_id>', methods=['DELETE'])
 @token_required
-@allowed_roles([0, 1])
+@allowed_roles([0, 1, 2])
 def delete_machine(access_allowed, current_user, item_id):
     """
     This function handles DELETE requests for deleting a machine.

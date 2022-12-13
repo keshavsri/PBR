@@ -6,6 +6,7 @@ from src.models import (
     Analyte as AnalyteORM,
     Source as SourceORM,
     Sample as SampleORM,
+    Measurement as MeasurementORM,
     db, engine
 )
 from src.schemas import HealthyRange, Organization, Analyte, Source, Sample, Flock
@@ -78,6 +79,8 @@ def post_healthy_ranges(access_allowed, current_user):
                             continue
                         
                         lower_bound, upper_bound = reference_interval(measurements, method)
+                        if analyte.abbreviation != "BE" and lower_bound < 0:
+                            lower_bound = 0
                         healthy_range = HealthyRangeORM(
                             lower_bound=lower_bound,
                             upper_bound=upper_bound,
@@ -109,8 +112,10 @@ def post_healthy_ranges(access_allowed, current_user):
                                 measurements.append(row[0])
                             if len(measurements) < 120:
                                 continue
-                            
+
                             lower_bound, upper_bound = reference_interval(measurements, method)
+                            if analyte.abbreviation != "BE" and lower_bound < 0:
+                                lower_bound = 0
                             healthy_range = HealthyRangeORM(
                                 lower_bound=lower_bound,
                                 upper_bound=upper_bound,
@@ -203,15 +208,15 @@ def get_healthy_ranges(access_allowed, current_user):
         return jsonify({'message': 'Role not allowed'}), 403
 
 
-@healthyRangeBlueprint.route('/report', methods=['GET'])
+@healthyRangeBlueprint.route('/report/<int:sample_id>', methods=['GET'])
 @token_required
 @allowed_roles([0, 1, 2, 3, 4])
-def get_healthy_ranges_for_sample(access_allowed, current_user):
-    if True:
-        if request.args.get('sample_id') is None:
+def get_healthy_ranges_for_sample(access_allowed, current_user, sample_id):
+    if access_allowed:
+        if sample_id is None:
             return jsonify({'message': 'Sample must be specified'}), 400
 
-        sample = SampleORM.query.filter_by(id=request.args.get('sample_id'), is_deleted=0).first()
+        sample = SampleORM.query.filter_by(id=sample_id, is_deleted=0).first()
         if sample is None:
             return jsonify({'message': 'Sample not found'}), 404
 
@@ -263,7 +268,6 @@ def get_healthy_ranges_for_sample(access_allowed, current_user):
         rows = []
         with engine.connect() as connection:
             rows = connection.execute(sql_text, sql_args).all()
-
         healthy_ranges = []
         for row in rows:
             healthy_ranges.append(

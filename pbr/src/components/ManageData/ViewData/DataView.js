@@ -22,6 +22,7 @@ import { DataViewProvider } from "../../../services/useDataView";
 import useAuth from "../../../services/useAuth";
 import ReviewSampleModal from "../ValidateData/ReviewSampleModal";
 import EditSampleModal from "../EditData/EditSampleModal";
+import ReportModal from "../Report/ReportModal";
 
 const useStyles = makeStyles({});
 
@@ -42,6 +43,7 @@ export default function DataView() {
   const [isSample] = React.useState(true);
   const [openReviewSampleModal, setOpenReviewSampleModal] =
     React.useState(false);
+  const [reportModalVisibility, setReportModalVisibility] = React.useState(false);
 
   const [selectedSamples, setSelectedSamples] = React.useState([]);
   const [machines, setMachines] = React.useState([]);
@@ -62,6 +64,8 @@ export default function DataView() {
   const abortController = useRef(null);
 
   const assignRowHtml = (rows) => {
+    setSampleList([]);
+
     rows.map((row) => {
       row.measurements.map((meas) => {
         row[meas.analyte.abbreviation] = meas.value;
@@ -150,7 +154,6 @@ export default function DataView() {
     setSampleList([]);
     getHeadCells();
 
-
     const promise = new Promise(async (resolve) => {
       setLoading(true);
       abortController.current = new AbortController();
@@ -161,8 +164,7 @@ export default function DataView() {
       });
 
       const data = await response.json();
-
-      // setSampleList(data);
+      console.log(data);
       assignRowHtml(data);
       setLoading(false);
       resolve(data);
@@ -192,13 +194,13 @@ export default function DataView() {
 
   const getMachines = async () => {
     await fetch(`api/machines/${organization.id}`)
-    .then((response) => {
-      return response.json();
-    })
-    .then(checkResponseAuth)
-    .then((data) => {
-      setMachines(data);
-    });
+      .then((response) => {
+        return response.json();
+      })
+      .then(checkResponseAuth)
+      .then((data) => {
+        setMachines(data);
+      });
   };
 
   const getHeadCells = () => {
@@ -247,8 +249,6 @@ export default function DataView() {
         disablePadding: true,
         label: "Rotor Lot Number",
       },
-
-
 
       {
         id: "validation_status",
@@ -454,6 +454,7 @@ export default function DataView() {
               onSubmit={onSubmit}
               onEdit={onEdit}
               selectedSample={selectedSamples[0]}
+              setReportModalVisibility={setReportModalVisibility}
             />
           )}
 
@@ -500,6 +501,11 @@ export default function DataView() {
           setHeadCellList={setHeadCellList}
           getData={getData}
           rows={sampleList}
+        />
+        <ReportModal
+          visibility={reportModalVisibility}
+          setVisibility={setReportModalVisibility}
+          selected={selected}
         />
         <DataViewSampleModal getData={getData} roles={roles} />
         <ReviewSampleModal

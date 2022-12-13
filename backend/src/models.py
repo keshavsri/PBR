@@ -193,6 +193,7 @@ class Sample(db.Model):
     # Foreign References to this Object
     measurements: List['Measurement'] = db.relationship('Measurement')
     flock = db.relationship('Flock')
+    # machine = db.relationship('Machine')
 
 
 class Batch(db.Model):
