@@ -99,7 +99,7 @@ export default function DataViewSampleModal(props) {
     sample_type: null,
     batch_id: null,
     measurements: [],
-    rotor_lot_number: ""
+    rotor_lot_number: "",
   });
 
   const [errorSubmission, setErrorSubmission] = React.useState(false);
@@ -301,10 +301,6 @@ export default function DataViewSampleModal(props) {
     }
   }, [flock]);
 
-  function handleFlockInputChange(event, value) {
-    setFlockInput(value);
-  }
-
   const validateSample = () => {
     let valid = true;
     let errors = [];
@@ -383,26 +379,25 @@ export default function DataViewSampleModal(props) {
         flock_id: flock.id,
         measurements: measurements,
       };
-    }
 
-    await fetch(`/api/sample/${createdSample}`, {
-      method: "PUT",
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then(checkResponseAuth)
-      .then((response) => {
-        if (!response.ok) {
-        } else {
-          setTimeout(() => {
-            setLoading(false);
-          }, 1000);
-          console.log("Sample updated");
-          return response.json();
-        }
-      });
+      await fetch(`/api/sample/${createdSample}`, {
+        method: "PUT",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then(checkResponseAuth)
+        .then((response) => {
+          if (!response.ok) {
+          } else {
+            setTimeout(() => {
+              setLoading(false);
+            }, 1000);
+            return response.json();
+          }
+        });
+    }
   };
 
   let onSubmit = async () => {
