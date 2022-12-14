@@ -29,7 +29,7 @@ def parse_data_from_file(file):
         content_lines.append(line_content)
     if "vetscan vs2" in content_lines[0].lower():
         print("This is VetScan VS2!")
-        machine_data = sample_helper._parse_vetscan_vs2(content_lines)
+        machine_data = _parse_vetscan_vs2(content_lines)
         return machine_data
     else:
         raise Exception("Invalid Machine")

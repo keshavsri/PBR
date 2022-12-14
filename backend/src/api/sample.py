@@ -145,22 +145,22 @@ def get_samples(access_allowed, current_user):
 
                 for row in result:
                     sample = SampleORM(
-                            id=row[0],
-                            timestamp_added=row[1],
-                            comments=row[2],
-                            flock_age=row[3],
-                            flock_age_unit=row[4],
-                            is_deleted=row[5],
-                            validation_status=row[6],
-                            sample_type=row[7],
-                            rotor_lot_number=row[8],
-                            user_id=row[9],
-                            batch_id=row[10],
-                            flock_id=row[11],
-                            cartridge_type_id=row[12],
-                            machine_id=row[13],
-                            flock=Flock.from_orm(FlockORM.query.get(row[11]))
-                        )
+                        id=row[0],
+                        timestamp_added=row[1],
+                        comments=row[2],
+                        flock_age=row[3],
+                        flock_age_unit=row[4],
+                        is_deleted=row[5],
+                        validation_status=row[6],
+                        sample_type=row[7],
+                        rotor_lot_number=row[8],
+                        user_id=row[9],
+                        batch_id=row[10],
+                        flock_id=row[11],
+                        cartridge_type_id=row[12],
+                        machine_id=row[13],
+                        flock=Flock.from_orm(FlockORM.query.get(row[11]))
+                    )
                     samples.append(sample)
 
             results = []
@@ -231,6 +231,7 @@ def edit_sample(access_allowed, current_user, item_id):
                 new_measurements = request.json.pop('measurements')
                 # Update the list of measurements.
 
+                MeasurementORM.query.filter_by(sample_id=item_id).delete()
                 measurements = []
                 for measurement in new_measurements:
                     measurement_model: MeasurementORM = MeasurementORM()
