@@ -51,6 +51,7 @@ export default function EnhancedTableHead(props) {
     onRequestSort,
     headCells,
     deletableRowCount,
+    allSelected
   } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
@@ -63,7 +64,7 @@ export default function EnhancedTableHead(props) {
           <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === deletableRowCount}
+            checked={rowCount > 0 && numSelected === deletableRowCount && allSelected}
             onChange={onSelectAllClick}
             inputProps={{
               "aria-label": "select all rows",

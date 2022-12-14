@@ -173,16 +173,10 @@ export default function DataView() {
     return promise;
   };
 
-  const cancelGetData = () => {
-    if (abortController.current) {
-      abortController.current.abort();
-      setLoading(false);
-    }
-  };
-
   const getCartridgeTypes = async () => {
     await fetch(`api/cartridge-type`)
       .then((response) => {
+        setLoading(false);
         return response.json();
       })
       .then(checkResponseAuth)
@@ -190,17 +184,26 @@ export default function DataView() {
         setCartridgeTypes(data);
         setCurrentCartridgeType(data[0]);
       });
+
   };
+
+  const cancelGetData = () => {
+    if (abortController.current) {
+      abortController.current.abort();
+      setLoading(false);
+    }
+  };
+
 
   const getMachines = async () => {
     await fetch(`api/machines/${organization.id}`)
-      .then((response) => {
-        return response.json();
-      })
-      .then(checkResponseAuth)
-      .then((data) => {
-        setMachines(data);
-      });
+    .then((response) => {
+      return response.json();
+    })
+    .then(checkResponseAuth)
+    .then((data) => {
+      setMachines(data);
+    });
   };
 
   const getHeadCells = () => {
@@ -402,6 +405,26 @@ export default function DataView() {
   React.useEffect(async () => {
     await getMachines();
   }, [organization]);
+
+
+  React.useEffect(() => {
+    setSelected([]);
+    setSelectedSamples([]);
+  }, [fullRowList]);
+
+  React.useEffect(() => {
+    setSelected([]);
+    setSelectedSamples([]);
+    console.log("Pending Row List");
+  }, [pendingRowList]);
+
+  React.useEffect(() => {
+    setSelected([]);
+    setSelectedSamples([]);
+    console.log("Sample List");
+  }, [sampleList]);
+
+
 
   return (
     <>

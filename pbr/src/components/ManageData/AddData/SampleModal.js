@@ -25,6 +25,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 
+
 import { createFilterOptions } from "@mui/material/Autocomplete";
 import { sampleTypes, ageUnits } from "../../../models/enums";
 import { makeStyles } from "@mui/styles";
@@ -93,6 +94,8 @@ export default function DataViewSampleModal(props) {
   const [flockInput, setFlockInput] = React.useState("");
   const [source, setSource] = React.useState({});
   const [organization, setOrganization] = React.useState({});
+  const [expanded, setExpanded] = React.useState(true);
+
   const [SampleDetails, setSampleDetails] = React.useState({
     comments: "",
     flock_age: null,
@@ -121,6 +124,15 @@ export default function DataViewSampleModal(props) {
       await getCartridgeTypes();
     }
   }, [sampleModalVisibility]);
+
+  const getOrganizations = async () => {
+    const response = await fetch(`/api/organization/`, {
+      method: "GET",
+    }).then(checkResponseAuth);
+    const data = await response.json();
+    setOrganizations(data);
+    setOrganization(data[0]);
+  };
 
   React.useEffect(async () => {
     if (sampleModalVisibility) {
@@ -152,21 +164,11 @@ export default function DataViewSampleModal(props) {
     setErrorSubmission(false);
     resetSampleDetails();
     setErrorSubmissionMessages([]);
-
     getData();
-    // setTimeout(() => {
-    //   getData();
-    // }, 1000);
-  };
+  }
 
-  const getOrganizations = async () => {
-    const response = await fetch(`/api/organization/`, {
-      method: "GET",
-    }).then(checkResponseAuth);
-    const data = await response.json();
-    setOrganizations(data);
-    setOrganization(data[0]);
-  };
+
+
 
   const getFlocks = async () => {
     await fetch(`/api/flock/source/${source.id}`, {
@@ -247,7 +249,7 @@ export default function DataViewSampleModal(props) {
         </>
       );
     }
-  };
+  }
 
   const getSources = async () => {
     await fetch(`/api/source/organization/${organization.id}`, {
@@ -323,15 +325,18 @@ export default function DataViewSampleModal(props) {
       valid = false;
     }
 
-    for (let i = 0; i < SampleDetails.measurements.length; i++) {
-      if (
-        isNaN(SampleDetails.measurements[i].value) &&
-        SampleDetails.measurements[i].value != null
-      ) {
-        errors.push("Sample measurements must be numbers");
+
+    SampleDetails.measurements.forEach((measurement) => {
+      if (isNaN(measurement.value) && measurement.value != "") {
+        let err =
+          "Measurement for" +
+          " " +
+          measurement.analyte.abbreviation +
+          " must be a number";
+        errors.push(err);
         valid = false;
       }
-    }
+    });
 
     if (valid === false) {
       setErrorSubmissionMessages(errors);
@@ -339,6 +344,7 @@ export default function DataViewSampleModal(props) {
 
     return valid;
   };
+
 
   const resetSampleDetails = () => {
     setSampleDetails({
@@ -411,11 +417,11 @@ export default function DataViewSampleModal(props) {
   let onSubmit = async () => {
     const newSampleDetails = SampleDetails;
     const measurements = newSampleDetails.measurements;
-    measurements.forEach((meas) => {
-      if (meas.value === "") {
+    measurements.forEach(meas => {
+      if (meas.value === '') {
         meas.value = null;
       }
-    });
+    })
 
     let payload = {
       comments: SampleDetails.comments,
@@ -490,6 +496,11 @@ export default function DataViewSampleModal(props) {
     });
   };
 
+  const closeAddSampleModal = () => {
+    resetSampleDetails();
+    closeModal();
+  };
+
   const onFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
     setIsFilePicked(true);
@@ -538,7 +549,6 @@ export default function DataViewSampleModal(props) {
       });
     });
   };
-
 
   return (
     <>
@@ -891,10 +901,13 @@ export default function DataViewSampleModal(props) {
                     color: "red",
                   }}
                 >
-                  <ListItem>
-                    <ErrorIcon />
-                    <ListItemText primary=" Fix Error before saving Sample" />
-                  </ListItem>
+                  Fix Error before saving Sample:
+                  {errorSubmissionMessages.map((message) => (
+                    <ListItem>
+                      <ErrorIcon />
+                      <ListItemText primary={message} />
+                    </ListItem>
+                  ))}
                 </Typography>
               ) : null}
             </Box>

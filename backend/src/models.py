@@ -114,6 +114,7 @@ class Source(db.Model):
         db.Integer,  db.ForeignKey('organization_table.id'))
 
 
+
 class Flock(db.Model):
 
     """ ORM model for the Flock table
