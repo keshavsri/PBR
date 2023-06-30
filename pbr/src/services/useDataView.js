@@ -8,6 +8,8 @@ function useCreateDataView() {
   const [sampleModalVisibility, setSampleModalVisibility] =
     React.useState(false);
   const [openFilterModal, setOpenFilterModal] = React.useState(false);
+
+  
   let handleOpenFilterModal = () => {
       setOpenFilterModal(true);
     };
@@ -153,6 +155,7 @@ function useCreateDataView() {
     sampleValidationErrors,
     setSampleValidationErrors,
     sampleType,
+    setSampleModalVisibility,
     setSampleType,
     sampleLoading,
     setSampleLoading,

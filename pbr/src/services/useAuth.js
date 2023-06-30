@@ -20,9 +20,8 @@ function useCreateAuth() {
       .then((response) => response.json())
       .then((user) => {
         console.log(user);
-        setLoadingAuth(false);
-        setRecredentialize(false);
         setUser(user);
+        setLoadingAuth(false);
         setRecredentialize(false);
       })
       .catch((err) => {

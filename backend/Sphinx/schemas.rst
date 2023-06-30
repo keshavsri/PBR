@@ -1,7 +1,7 @@
-Schemas
+schemas
 ======
 
-.. automodule:: src.Schemas
+.. automodule:: src.schemas
    :members:
    :undoc-members:
    :show-inheritance:

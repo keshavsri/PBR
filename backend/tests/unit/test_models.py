@@ -5,7 +5,7 @@ import os
 import sys
 from requests import request
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-from src import Models
+from src import models
 print(os.path.abspath(os.path.join(os.path.dirname(__file__), '../')))
 from src.enums import Roles
 import bcrypt
@@ -22,11 +22,12 @@ def test_register_admin_backend():
         lastname = "dacier",
         password = hashedPW.decode(),
         role = Roles.Admin,
+        organization_id = 1
     )
     # temp2 = requests.get(url = url, params = temp)
     # data = json.load(temp2.json())
     data=temp
-    user = Models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin )
+    user = models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Admin, organization_id=data["organization_id"] )
     assert user.email == "administrator@ncsu.edu"
     assert user.first_name == "gavin"
     assert user.last_name == "dacier"
@@ -42,9 +43,10 @@ def test_register_collector_backend():
         lastname = "dacier",
         password = hashedPW.decode(),
         role = Roles.Data_Collector,
+        organization_id = 1
     )
     data=temp
-    user = Models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Data_Collector )
+    user = models.User(email=data["email"], first_name=data["firstname"], last_name=data["lastname"], password=hashedPW.decode(), role=Roles.Data_Collector, organization_id=data["organization_id"] )
     assert user.email == "collector@ncsu.edu"
     assert user.first_name == "gavin"
     assert user.last_name == "dacier"
@@ -65,7 +67,7 @@ def test_add_organization_backend():
         )
     
     data=temp
-    organization = Models.Organization(id=data["id"], name=data["name"], street_address=data["street_address"], city = data["city"], state=data["state"], zip = data["zip"], notes = data["notes"], organization_code = data["organization_code"] )
+    organization = models.Organization(id=data["id"], name=data["name"], street_address=data["street_address"], city = data["city"], state=data["state"], zip = data["zip"], notes = data["notes"], organization_code = data["organization_code"] )
     assert organization.id == 12345
     assert organization.name == "Duke University"
     assert organization.street_address == "123 Blue Devil Ave"

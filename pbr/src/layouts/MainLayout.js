@@ -31,13 +31,13 @@ import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDatabase } from "@fortawesome/free-solid-svg-icons";
-import ReportsIcon from "@mui/icons-material/Assessment";
+import HealthyRangesIcon from "@mui/icons-material/Assessment";
 
 import UsersIcon from "@mui/icons-material/Group";
 import OrganizationIcon from "@mui/icons-material/Apartment";
 
 import SettingsIcon from "@mui/icons-material/Settings";
-import LoginCard from "../components/login/LoginCard";
+import LoginCard from "../components/HandleLogin/LoginCard";
 import CustomDialog from "../components/CustomDialog";
 
 const drawerWidth = 250;
@@ -55,9 +55,9 @@ const pageData = [
       ),
     },
     {
-      path: "/generate-reports",
-      title: "Generate Reports",
-      icon: <ReportsIcon />,
+      path: "/healthy-ranges",
+      title: "Healthy Ranges",
+      icon: <HealthyRangesIcon />
     },
   ],
   [
@@ -191,12 +191,12 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MainLayout(props) {
+  const { title, icon } = props
   const theme = useTheme();
   useStyles();
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
-  const [currentPage, setCurrentPage] = React.useState(pageData[0][0]);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { user, logout, recredentialize, setRecredentialize } = AuthConsumer();
 
@@ -222,12 +222,6 @@ export default function MainLayout(props) {
     setAnchorElUser(null);
   };
 
-  // console.log(location.pathname);
-  // let page = pageData.find((page) => page.path === location.pathname);
-  // console.log(page);
-  // setCurrentPage(page);
-  // console.log(currentPage);
-
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -245,7 +239,7 @@ export default function MainLayout(props) {
           >
             <MenuIcon />
           </IconButton>
-          {currentPage.icon}
+          {icon}
           <Typography
             variant="h5"
             noWrap
@@ -257,7 +251,7 @@ export default function MainLayout(props) {
               flexGrow: 1,
             }}
           >
-            {currentPage.title}
+            {title}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -303,7 +297,7 @@ export default function MainLayout(props) {
                     return (
                       <NavLink
                         key={page.path}
-                        to={`/${page.path}`}
+                        to={`${page.path}`}
                         className={({ isActive }) =>
                           isActive ? "navbar-active" : ""
                         }
@@ -391,13 +385,6 @@ export default function MainLayout(props) {
       >
         <DrawerHeader />
         <Box sx={{ width: "100%", backgroundColor: "grey" }}>
-          <CustomDialog
-            open={recredentialize}
-            handleClose={() => {}}
-            maxWidth="sm"
-          >
-            <LoginCard />
-          </CustomDialog>
           <Box>{props.children}</Box>
         </Box>
       </Box>

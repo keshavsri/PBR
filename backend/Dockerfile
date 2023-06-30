@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.10
 
 WORKDIR /backend
 
@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-CMD [ "python", "./server.py" ]
+CMD [ "python", "server.py" ]

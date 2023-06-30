@@ -1,0 +1,36 @@
+#!/bin/bash
+
+echo "
+=================================================
+Starting all docker containers including testing.
+=================================================
+"
+
+# Guide:
+# - This script is used to build and/or start Docker containers described in docker.compose.yml
+# - It is meant to build/start all containers including testing.
+# - This script is called from the command line of the host machine (your computer) and it executes
+#   the 'docker-compose up' command
+# - The 'docker-compose up' command starts all containers described in docker.compose.yml
+# - To start individual containers, simply append the name of the container (service):
+#   'docker-compose up api'
+# - This command continously outputs the logs from the container(s) to the
+#   command line of the host machine, this can be supressed with the '-d' flag:
+#   'docker-compose up -d'
+#   'docker-compose up -d api'
+# - Another option for the 'docker-compose up' command is the '--build' tag,
+#   which [re]builds the container(s) instead of just starting them:
+#   'docker-compose up --build'
+#   'docker-compose up  api --build'
+#   'docker-compose up -d api --build'
+# - '"$@"' is how bash scripts like this can pass args to the commands they execute.
+# - It is reccomended to use '"$@"' to pass in the '--build' tag
+# - Commented out commands reflect desired behavior but was not working
+
+# docker-compose up -d db "$@"
+# docker-compose up -d api "$@" 
+# docker-compose up -d app "$@" 
+# docker-compose up -d nginx "$@"
+# docker-compose up test "$@"
+
+docker-compose up "$@"
